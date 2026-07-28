@@ -103,11 +103,29 @@ bool HookRaw(void* target, void* hook, void** trampoline)
     return true;
 }
 
+void* CreateHook(const char* name, void* detour){
+
+    void* target = ResolveSymbol(name);
+    void* original = nullptr;
+
+    printf("Creating hook for %s at %p to %p\n", name, target, detour);
+
+    HookRaw(
+        target,
+        detour,
+        &original
+    );
+
+    MH_EnableHook(target);
+
+    return original;
+}
+
 NucleusRuntimeAPI api
 {
     Log,
     ResolveSymbol,
-    AddHook
+    CreateHook
 };
 
 using ModInit = void(*)(NucleusRuntimeAPI*);

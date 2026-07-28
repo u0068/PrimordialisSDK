@@ -2,21 +2,21 @@
 
 void hooked_set_lava_walls()
 {
-    APIUtil::Log("Before the walls are lava!");
-    APIUtil::set_lava_walls(); //call original function
-    APIUtil::Log("After the walls are lava!");
+    printf("Before the walls are lava!\n");
+    // Next(); //call original function
+    // printf("After the walls are lava!\n");
 }
 void hooked_set_lava_walls2()
 {
-    APIUtil::Log("Before the walls are lava2!");
-    APIUtil::set_lava_walls(); //call original function
-    APIUtil::Log("After the walls are lava2!");
+    printf("Before the walls are lava 2!\n");
+    // Next(); //call original function
+    // printf("After the walls are lava 2!");
 }
 
 extern"C" __declspec(dllexport)
 void mod_main()
 {
-    APIUtil::Log("Hello World!\n");
+    printf("Hello World!\n");
 
     Hook("set_lava_walls", hooked_set_lava_walls);
     Hook("set_lava_walls", hooked_set_lava_walls2);
