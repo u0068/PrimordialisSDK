@@ -1,4 +1,4 @@
-#include "../include/plasmid_api.h"
+#include "plasmid_api.h"
 
 void hooked_set_lava_walls()
 {
