@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_map>
+#include <string>
 
 struct HookChainBase
 {
@@ -14,3 +16,5 @@ struct NucleusRuntimeAPI
     void* (*GetCurrentContext)();
     void (*SetCurrentContext)(void* context);
 };
+
+inline NucleusRuntimeAPI* nucleus;

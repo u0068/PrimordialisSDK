@@ -1,5 +1,5 @@
 #pragma once
-#include "plasmid_init.h"
+#include "nucleus_interface.h"
 
 template<typename T>
 T& Resolve(const char* name)

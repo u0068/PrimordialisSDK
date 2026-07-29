@@ -1,5 +1,6 @@
 #pragma once
 #include "hook_manager.h"
+#include "nucleus_interface.h"
 
 namespace APIUtil
 {
@@ -125,9 +126,7 @@ namespace APIUtil
 
     inline void AddAllCells()
     {
-        printf("Before AddAllCells\n");
         Next<void>();
-        printf("AddAllCells\n");
         int* threadsafe = static_cast<int*>(TlsGetValue(tls_index));
         if (*threadsafe == 0)
         {
@@ -222,3 +221,11 @@ namespace APIUtil
         }
     }
 };
+
+extern"C" __declspec(dllexport)
+inline void Initialise(NucleusRuntimeAPI* api)
+{
+    nucleus = api;
+    printf("Mod Initialised!\n");
+    APIUtil::APIHookAllUtil();
+}

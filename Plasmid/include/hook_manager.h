@@ -1,5 +1,6 @@
 #pragma once
-#include "plasmid_init.h"
+#include <vector>
+#include "nucleus_interface.h"
 
 // Using type erasure to be able to store chains of different HookChain types by storing them as HookChainBase instead
 template<typename Ret, typename... Args>

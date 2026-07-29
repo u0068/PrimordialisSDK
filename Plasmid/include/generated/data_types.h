@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <windows.h>
 
 typedef unsigned char   undefined;
 
