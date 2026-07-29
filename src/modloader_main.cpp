@@ -97,105 +97,13 @@ bool ReadFileToBuffer(const std::string& path, std::vector<uint8_t>& buffer)
     return file.read(reinterpret_cast<char*>(buffer.data()), size).good();
 }
 
-DWORD RvaToOffset(DWORD rva, IMAGE_NT_HEADERS* nt, uint8_t* data)
-{
-    auto section = IMAGE_FIRST_SECTION(nt);
-
-    for (int i = 0; i < nt->FileHeader.NumberOfSections; i++, section++)
-    {
-        DWORD start = section->VirtualAddress;
-        DWORD size = section->Misc.VirtualSize;
-
-        if (rva >= start && rva < start + size)
-        {
-            return section->PointerToRawData + (rva - start);
-        }
-    }
-
-    return 0;
-}
-
-DWORD GetExportRVA(std::string dllPath, std::string exportName, std::string& log)
-{
-    std::vector<uint8_t> data;
-
-    if (!ReadFileToBuffer(dllPath, data))
-    {
-        log.append("Failed to read DLL file.\n");
-        return 0;
-    }
-
-    auto dosHeader = reinterpret_cast<IMAGE_DOS_HEADER*>(data.data());
-    if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE)
-    {
-        log.append("Invalid DOS signature.\n");
-        return 0;
-    }
-
-    auto ntHeader = reinterpret_cast<IMAGE_NT_HEADERS*>(data.data() + dosHeader->e_lfanew);
-    if (ntHeader->Signature != IMAGE_NT_SIGNATURE)
-    {
-        log.append("Invalid NT signature.\n");
-        return 0;
-    }
-
-    auto& exportDirData = ntHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
-    if (exportDirData.VirtualAddress == 0)
-    {
-        log.append("No export table found.\n");
-        return 0;
-    }
-
-    DWORD exportDirOffset = RvaToOffset(exportDirData.VirtualAddress, ntHeader, data.data());
-    if (!exportDirOffset || exportDirOffset >= data.size())
-    {
-        log.append("Invalid export directory RVA.\n");
-        return 0;
-    }
-
-    auto exportDir = reinterpret_cast<IMAGE_EXPORT_DIRECTORY*>(data.data() + exportDirOffset);
-
-    DWORD namesOffset = RvaToOffset(exportDir->AddressOfNames, ntHeader, data.data());
-    DWORD ordinalsOffset = RvaToOffset(exportDir->AddressOfNameOrdinals, ntHeader, data.data());
-    DWORD funcsOffset = RvaToOffset(exportDir->AddressOfFunctions, ntHeader, data.data());
-
-    if (!namesOffset || !ordinalsOffset || !funcsOffset)
-    {
-        log.append("Invalid export tables.\n");
-        return 0;
-    }
-
-    DWORD* nameRVAs = reinterpret_cast<DWORD*>(data.data() + namesOffset);
-    WORD* ordinals = reinterpret_cast<WORD*>(data.data() + ordinalsOffset);
-    DWORD* funcRVAs = reinterpret_cast<DWORD*>(data.data() + funcsOffset);
-
-    for (DWORD i = 0; i < exportDir->NumberOfNames; ++i)
-    {
-        DWORD nameOffset = RvaToOffset(nameRVAs[i], ntHeader, data.data());
-        if (!nameOffset || nameOffset >= data.size())
-            continue;
-
-        char* name = reinterpret_cast<char*>(data.data() + nameOffset);
-        if (exportName == name)
-        {
-            WORD ordinalIndex = ordinals[i];
-            DWORD rva = funcRVAs[ordinalIndex];
-            log.append("Found Ready RVA\n");
-            return rva;
-        }
-    }
-
-    log.append("Export not found.\n");
-    return 0;
-}
-
 int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName, std::string& log, std::string& elog)
 {
     const DWORD dwProcessID = GetProcessByName(lpProcessName);
 
     if (dwProcessID == (DWORD)-1)
     {
-        elog.append("An error occured when trying to find the target process. Is Primordialis open?\n");
+        elog.append("An error occurred when trying to find the target process. Is Primordialis open?\n");
         return -1;
     }
 
@@ -217,7 +125,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const HANDLE hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
     if (hTargetProcess == INVALID_HANDLE_VALUE)
     {
-        elog.append("An error occured when trying to open the target process.\n");
+        elog.append("An error occurred when trying to open the target process.\n");
         return -1;
     }
 
@@ -251,7 +159,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const FARPROC lpFunctionAddress = GetProcAddress(hModule, "LoadLibraryA");
     if (lpFunctionAddress == nullptr)
     {
-        elog.append("An error occured when trying to get \"LoadLibraryA\" address.\n");
+        elog.append("An error occurred when trying to get \"LoadLibraryA\" address.\n");
         return -1;
     }
 
@@ -262,7 +170,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const HANDLE hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
     if (hThreadCreationResult == INVALID_HANDLE_VALUE)
     {
-        elog.append("An error occured when trying to create the thread in the target process.\n");
+        elog.append("An error occurred when trying to create the thread in the target process.\n");
         return -1;
     }
 
@@ -276,55 +184,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     if (pos != std::string::npos)
         dllFileName = dllFileName.substr(pos + 1);
 
-    HMODULE remoteModuleBase = nullptr;
-    HMODULE hMods[1024];
-    DWORD cbNeeded;
-    if (EnumProcessModules(hTargetProcess, hMods, sizeof(hMods), &cbNeeded))
-    {
-        for (unsigned int i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
-        {
-            char modName[MAX_PATH];
-            if (GetModuleBaseNameA(hTargetProcess, hMods[i], modName, sizeof(modName)))
-            {
-                if (lstrcmpiA(modName, dllFileName.c_str()) == 0)
-                {
-                    remoteModuleBase = hMods[i];
-                    break;
-                }
-            }
-        }
-    }
-
-    log.append("Finding READY RVA\n");
-    DWORD readyRVA = GetExportRVA(lpFullDLLPath, "READY", elog);
-    if (readyRVA == 0)
-    {
-        log.append("Failed to find READY RVA, mod will still load. Conflicts may occur !\n");
-        VirtualFreeEx(hTargetProcess, lpPathAddress, 0, MEM_RELEASE);
-        CloseHandle(hTargetProcess);
-        return 0;
-    }
-    log.append("READY RVA at 0x");
-    log.append(std::to_string((UINT)readyRVA));
-    log.append("\n");
-
-    if (remoteModuleBase)
-    {
-        log.append("Waiting for mod to finish loading...\n");
-        while (true)
-        {
-            bool readyFlag = false;
-            SIZE_T bytesRead;
-            if (ReadProcessMemory(hTargetProcess, (LPCVOID)((uintptr_t)remoteModuleBase + readyRVA), &readyFlag, sizeof(readyFlag), &bytesRead) && bytesRead == sizeof(readyFlag) && readyFlag)
-                break;
-            Sleep(1);
-        }
-        log.append("Mod loaded !\n");
-    }
-    else
-    {
-        log.append("Could not locate injected module, skipping READY wait.\n");
-    }
+    log.append("Mod injected !\n");
 
     VirtualFreeEx(hTargetProcess, lpPathAddress, 0, MEM_RELEASE);
     CloseHandle(hTargetProcess);
@@ -851,7 +711,7 @@ void ModManager::InjectAll()
 
     if (!IsProcessRunning(lpprocessname))
     {
-        char cmdLine[] = "primordialis.exe --steamless";
+        char cmdLine[] = "primordialis.exe --steamless --autoreload";
         ownProcess = true;
         if (!CreateProcessA(NULL, cmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &startI, &procI))
         {
@@ -864,21 +724,39 @@ void ModManager::InjectAll()
         // for now cant do that due to current method of getting the handle of mod dll when injecting
     }
 
-    // try load plasmid api.dll first before all other mods
-    if (std::filesystem::exists("mods/plasmid_api.dll"))
-    {
-       char dllpath[MAX_PATH];
-        if (Inject("mods/plasmid_api.dll", dllpath, lpprocessname, log, log) != 0)
-        {
-            log.append("Failed to inject API, major issues may occur !\n");
-            failed++;
-        }
-    }
+    HANDLE mapping =
+    CreateFileMappingA(
+        INVALID_HANDLE_VALUE,
+        nullptr,
+        PAGE_READWRITE,
+        0,
+        sizeof(ModListShared),
+        "Pilus_ModList"
+    );
+
+    auto* shared =
+    static_cast<ModListShared*>(
+        MapViewOfFile(
+            mapping,
+            FILE_MAP_ALL_ACCESS,
+            0,
+            0,
+            sizeof(ModListShared)));
+
+    HANDLE modListReadyEvent =
+    CreateEventA(
+        nullptr,
+        TRUE,
+        FALSE,
+        "Pilus_ModListReady"
+    );
+
+    shared->count = 0;
 
     for (int i = 0; i < mods.size(); i++)
     {
-        //skip plasmid api in modlist because should be already loaded
-        if (mods[i].path.filename().string() == "plasmid_api.dll")
+        //skip runtime api in modlist because should be last
+        if (mods[i].path.filename().string() == "NucleusRuntimeAPI.dll")
             continue;
 
         if (!mods[i].enabled)
@@ -918,6 +796,11 @@ void ModManager::InjectAll()
             continue;
         }
 
+        strcpy_s(
+            shared->mods[shared->count++].name,
+            mods[i].path.filename().string().c_str()
+        );
+
         Render();
     }
     if (failed)
@@ -925,6 +808,19 @@ void ModManager::InjectAll()
     else
         log.append("Mod injection finished successfully\n");
     Render();
+
+    // load nucleus api.dll last after all other mods
+    if (std::filesystem::exists("mods/NucleusRuntimeAPI.dll"))
+    {
+        char dllpath[MAX_PATH];
+        if (Inject("mods/NucleusRuntimeAPI.dll", dllpath, lpprocessname, log, log) != 0)
+        {
+            log.append("Failed to inject runtime API, major issues may occur !\n");
+            failed++;
+        }
+    }
+
+    SetEvent(modListReadyEvent);
 
     if (ownProcess)
     {
@@ -1269,7 +1165,6 @@ void run()
 {
     sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
 
-
     sf::Font font;
     sf::Text text(font);
     if (!font.openFromFile("data/CreatoDisplay-Regular.otf"))
@@ -1308,16 +1203,11 @@ void run()
 
     while (window.isOpen())
     {
-        DWORD updatestatus = WaitForSingleObject(dirchangenotif, 0);
+        WaitForSingleObject(dirchangenotif, 0);
 
-        switch (updatestatus)
-        {
-        case WAIT_OBJECT_0:
-            manager.log.clear();
-            manager.RefreshMods();
-            FindNextChangeNotification(dirchangenotif);
-            break;
-        }
+        manager.log.clear();
+        manager.RefreshMods();
+        FindNextChangeNotification(dirchangenotif);
 
         manager.Update();
     }

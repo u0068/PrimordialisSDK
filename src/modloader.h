@@ -79,3 +79,14 @@ struct ModManager
 
     ModManager() {}
 };
+
+struct ModInfo
+{
+    char name[MAX_PATH];
+};
+
+struct ModListShared
+{
+    uint32_t count;
+    ModInfo mods[256];
+};
