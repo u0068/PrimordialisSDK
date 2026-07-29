@@ -1,33 +1,25 @@
-Primordialis SDK is a modding SDK for Primordialis.
-
-It contains the Pilus Modloader, Nucleus Runtime API, and Plasmid Modding API
+Primordialis SDK is a modding SDK for Primordialis.<br>
+It contains the Pilus Modloader, Nucleus Runtime API, and Plasmid Modding API<br>
 
 # Loading Mods into Primordialis:
-
-To load mods into Primordialis, you need to download Pilus.exe, NucleusRuntimeAPI.dll and primordialis.pbd from Releases and put them into the Primordialis folder in your steam library.
-
-Then launch Pilus.exe which will create a "mods" folder in Primordialis/mods.
-
-Then, put your installed mods in the "mods" folder, configure and enable them to your liking, and launch Primordialis from Pilus by pressing "start" 
+To load mods into Primordialis, you need to download Pilus.exe, NucleusRuntimeAPI.dll and primordialis.pbd from Releases and put them into the Primordialis folder in your steam library.<br>
+Then launch Pilus.exe which will create a "mods" folder in Primordialis/mods.<br>
+Then, put your installed mods in the "mods" folder, configure and enable them to your liking, and launch Primordialis from Pilus by pressing "start".<br>
 
 # Making Mods:
-
-To make mods, you need the Plasmid Modding API source code, and any IDE that can build C++ shared libraries such as Visual Studio, VScode, or Clion.
-
-You can download Plasmid.zip from releases, clone the entire SDK repo, or use the following git commands to get only Plasmid
+To make mods, you need the Plasmid Modding API source code, and any IDE that can build C++ shared libraries such as Visual Studio, VScode, or Clion.<br>
+You can download Plasmid.zip from releases, clone the entire SDK repo, or use the following git commands to get only Plasmid:
 ```bash
 git clone --filter=blob:none --sparse https://github.com/u0068/PrimordialisSDK
 cd PrimordialisSDK
 git sparse-checkout set Plasmid
 ```
 # Contributing to the SDK
-
-To contribute, clone the entire repo
+To contribute, clone the entire repo:
 ```bash
 git clone https://github.com/you/PrimordialisSDK
 ```
-Alternatively, you can sparsely checkout only the parts you want to contribute to.
-
+Alternatively, you can sparsely checkout only the parts you want to contribute to.<br>
 For example, this is how you would only get Nucleus and Plasmid source code, without the Pilus source code:
 ```bash
 git clone --filter=blob:none --sparse https://github.com/u0068/PrimordialisSDK
