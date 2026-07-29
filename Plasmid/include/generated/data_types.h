@@ -3,21 +3,20 @@
 
 typedef unsigned char   undefined;
 
+typedef void* pointer32;
+typedef void* pointer64;
 //typedef unsigned char    bool;
 typedef unsigned char    byte;
 typedef unsigned int    dword;
-//typedef unsigned long long    GUID;
-typedef void* ImageBaseOffset32;
+// typedef unsigned long long    GUID;
+typedef pointer32 ImageBaseOffset32;
 
 typedef long long    longlong;
-typedef long long     long64;
-typedef unsigned long long     ulong64;
 typedef unsigned long long    qword;
 typedef signed char    schar;
 typedef unsigned char    uchar;
 typedef unsigned int    uint;
 typedef unsigned long    ulong;
-typedef unsigned long    unsigned_long;
 typedef unsigned long long    ulonglong;
 typedef unsigned char    undefined1;
 typedef unsigned short    undefined2;
@@ -31,6 +30,7 @@ typedef unsigned short    word;
 typedef std::string     string;
 typedef void*   pointer;
 
+typedef unsigned long long ulong64;
 
 typedef struct singing_channel singing_channel, *Psinging_channel;
 
@@ -3735,19 +3735,19 @@ struct big_lightning_vertex {
     struct real_2 x;
     struct real_4 color;
 };
-//
-// struct window_t {
-//     struct HWND__ *hwnd;
-//     struct HGLRC__ *hglrc;
-//     struct real_2 size;
-//     struct user_input input;
-//     struct user_input frame_input;
-//     union _LARGE_INTEGER timer_frequency;
-//     union _LARGE_INTEGER last_time;
-//     union _LARGE_INTEGER this_time;
-//     struct render_context rc;
-//     struct render_context ui;
-//     struct recording_buffer rb;
-//     bool clip_cursor;
-//     bool focused;
-// };
+
+struct window_t {
+    struct HWND__ *hwnd;
+    struct HGLRC__ *hglrc;
+    struct real_2 size;
+    struct user_input input;
+    struct user_input frame_input;
+    union _LARGE_INTEGER timer_frequency;
+    union _LARGE_INTEGER last_time;
+    union _LARGE_INTEGER this_time;
+    struct render_context rc;
+    struct render_context ui;
+    struct recording_buffer rb;
+    bool clip_cursor;
+    bool focused;
+};
