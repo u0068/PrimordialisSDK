@@ -13,24 +13,20 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Tutorials
   - Comments
 - Optimise if easy to do while remaining readable
-- Hook functions
-  - Simple hooks (DONE)
-  - Multiple hooks per address (DONE)
-  - Middleware
 - Helper functions
   - mod_main() (DONE)
   - Cell creation (DONE)
 - Organisation
-  - Organise directories
-  - Organise files
-    - Make file names make sense
-  - Organise code
-  - Organise function resolutions
-    - Easily find, enable/disable relevant functions to speed up build time
+  - Organise directories (DONE)
+  - Organise files (DONE)
+    - Make file names make sense (DONE)
+  - Organise code (DONE)
+  - Organise function resolutions (DONE)
+    - Easily find, enable/disable relevant functions to speed up build time (DONE)
   - Organise data label resolutions
   - Organise data types
-  - Ghidra script to output already organised stuff
-  - Separate mod dev stuff from API dev (eg CMakeLists)
+  - Ghidra script to output already organised stuff (DONE)
+  - Separate mod dev stuff from API dev (eg CMakeLists) (DONE)
   - Mod versioning
   - Plasmid API versioning
   - Nucleus API versioning
@@ -45,3 +41,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Unions (DONE)
   - Enums (DONE)
 - Make a DLL (DONE)
+- Hook functions (DONE)
+  - Simple hooks (DONE)
+  - Multiple hooks per address (DONE)
+  - Middleware (DONE)
