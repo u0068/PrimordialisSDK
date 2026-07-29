@@ -12,7 +12,8 @@ struct ConfigValue
 struct Mod
 {
     // SAVED IN PILUS.CONFIG
-    std::filesystem::path path;
+    std::filesystem::path path{};
+    std::filesystem::path dll_path{};
     bool enabled = true;
 
     // UNSAVED:
@@ -20,7 +21,7 @@ struct Mod
     std::string author = ""; // default for no info.txt
     std::string description = ""; // default for no info.txt
 
-    std::vector<ConfigValue> config;
+    std::vector<ConfigValue> config{};
 
     bool operator== (Mod& other)
     {

@@ -15,7 +15,8 @@
 #include <tchar.h>
 #include "SFML/Graphics.hpp"
 #include "modloader.h"
-#include "unzip.h"
+
+namespace fs = std::filesystem;
 
 DWORD GetProcessByName(const char* lpProcessName)
 {
@@ -71,30 +72,34 @@ bool IsDLL(const std::string& filePath, std::string& log)
     return (ntHeaders.FileHeader.Characteristics & IMAGE_FILE_DLL) != 0;
 }
 
-bool isZip(const std::string& filePath, std::string& log)
+std::string ReadFile(const fs::path& path)
 {
-    std::ifstream file(filePath, std::ios::binary);
-    if (!file.is_open())
-    {
-        log.append("Failed to open zip\n");
-        return false;
-    }
+    std::ifstream file(path);
 
-    unsigned char buffer[4];
-    file.read(reinterpret_cast<char*>(buffer), sizeof(buffer));
-    file.close();
-    return buffer[0] == 0x50 && buffer[1] == 0x4B && buffer[2] == 0x03 && buffer[3] == 0x04;
+    if (!file)
+        return {};
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+
+    return buffer.str();
 }
 
-bool ReadFileToBuffer(const std::string& path, std::vector<uint8_t>& buffer)
+std::string GetValue(const std::string& data, const std::string& key)
 {
-    std::ifstream file(path, std::ios::binary | std::ios::ate);
-    if (!file)
-        return false;
-    std::streamsize size = file.tellg();
-    file.seekg(0, std::ios::beg);
-    buffer.resize(size);
-    return file.read(reinterpret_cast<char*>(buffer.data()), size).good();
+    size_t find = data.find(key + ":");
+
+    if (find == std::string::npos)
+        return {};
+
+    find += key.length() + 1;
+
+    size_t end = data.find("\n", find);
+
+    if (end == std::string::npos)
+        end = data.length();
+
+    return data.substr(find, end - find);
 }
 
 int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName, std::string& log, std::string& elog)
@@ -135,7 +140,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const LPVOID lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr, lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (lpPathAddress == nullptr)
     {
-        elog.append("An error occured when trying to allocate memory in the target process.\n");
+        elog.append("An error occurred when trying to allocate memory in the target process.\n");
         return -1;
     }
 
@@ -146,11 +151,11 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const DWORD dwWriteResult = WriteProcessMemory(hTargetProcess, lpPathAddress, lpFullDLLPath, lstrlenA(lpFullDLLPath) + 1, nullptr);
     if (dwWriteResult == 0)
     {
-        elog.append("An error occured when trying to write the DLL path in the target process.\n");
+        elog.append("An error occurred when trying to write the DLL path in the target process.\n");
         return -1;
     }
 
-    log.append("DLL path writen successfully.\n");
+    log.append("DLL path written successfully.\n");
 
     const HMODULE hModule = GetModuleHandleA("kernel32.dll");
     if (hModule == INVALID_HANDLE_VALUE || hModule == nullptr)
@@ -595,84 +600,6 @@ void ModManager::Update()
     }
 }
 
-bool ExtractModFile(std::filesystem::path moddir, unzFile& zip, std::string& elog)
-{
-    char filename[FILENAME_MAX];
-    unz_file_info finfo;
-
-    if (unzGetCurrentFileInfo(zip, &finfo, filename, FILENAME_MAX, nullptr, 0, nullptr, 0) != UNZ_OK)
-    {
-        elog.append("Failed to get file info\n");
-        return false;
-    }
-    std::string fullPath = moddir.string();
-    fullPath.append("/");
-    fullPath.append(filename);
-
-    size_t dirEnd = fullPath.find_last_of("/\\");
-    std::string dirPath = fullPath.substr(0, dirEnd);
-
-    if (!std::filesystem::exists(dirPath))
-    {
-        std::filesystem::create_directories(dirPath);
-    }
-
-    char* buffer = new char[finfo.uncompressed_size];
-    unzReadCurrentFile(zip, buffer, finfo.uncompressed_size);
-
-    std::ofstream f(fullPath, std::ofstream::binary);
-    f.write(buffer, finfo.uncompressed_size);
-    f.close();
-
-    delete[] buffer;
-    return true;
-}
-
-bool UnzipMod(std::string& zippath, std::string& elog)
-{
-    unzFile f = unzOpen(zippath.c_str());
-    if (!f)
-    {
-        elog.append("Could not open mod.\n");
-        unzClose(f);
-        return false;
-    }
-
-    if (unzGoToFirstFile(f) != UNZ_OK)
-    {
-        elog.append("Mod zip is empty.\n");
-        unzClose(f);
-        return false;
-    }
-
-    std::filesystem::path moddir = std::filesystem::path(zippath).parent_path().append(std::filesystem::path(zippath).filename().stem().string());
-
-    do
-    {
-        if (!ExtractModFile(moddir, f, elog))
-        {
-            elog.append("Failed to extract a file\n");
-        }
-    } while (unzGoToNextFile(f) == UNZ_OK);
-
-    for (const auto& entry : std::filesystem::directory_iterator(moddir))
-    {
-        if (std::filesystem::is_regular_file(entry.path()))
-        {
-            if (lstrcmpA(entry.path().filename().extension().string().c_str(), ".dll") == 0)
-            {
-                zippath = entry.path().string();
-                unzClose(f);
-                return true;
-            }
-        }
-    }
-
-    elog.append("Could not find a mod dll in the extracted ZIP file\n");
-    unzClose(f);
-    return false;
-}
-
 bool IsProcessRunning(const char* processName) {
     PROCESSENTRY32 entry;
     entry.dwSize = sizeof(PROCESSENTRY32);
@@ -756,7 +683,7 @@ void ModManager::InjectAll()
     for (int i = 0; i < mods.size(); i++)
     {
         //skip runtime api in modlist because should be last
-        if (mods[i].path.filename().string() == "NucleusRuntimeAPI.dll")
+        if (mods[i].dll_path.filename().string() == "NucleusRuntimeAPI.dll")
             continue;
 
         if (!mods[i].enabled)
@@ -765,40 +692,26 @@ void ModManager::InjectAll()
             continue;
         }
 
-        std::string injectPath = mods[i].path.string();
+        std::string injectPath = mods[i].dll_path.string();
         char dllpath[MAX_PATH];
 
-        if (isZip(mods[i].path.string(), log))
-        {
-            log.append("Unzipping mod...\n");
-            std::string unzippedPath = injectPath;
-            if (!UnzipMod(unzippedPath, errorlog))
-            {
-                log.append("[INJECTION FAILED] (");
-                log.append(mods[i].path.filename().string());
-                log.append(") Skipped.\n");
-
-                Render();
-                failed++;
-                continue;
-            }
-            log.append("Mod unzipped!\n");
-            injectPath = unzippedPath;
-        }
         if (Inject(injectPath.c_str(), dllpath, lpprocessname, log, errorlog) != 0)
         {
             log.append("[INJECTION FAILED] (");
-            log.append(mods[i].path.filename().string().c_str());
+            log.append(mods[i].dll_path.filename().string());
             log.append(") Skipped\n");
 
             Render();
             failed++;
             continue;
         }
+        log.append("[INJECTION SUCCESS] (");
+        log.append(mods[i].dll_path.filename().string());
+        log.append(")\n");
 
         strcpy_s(
             shared->mods[shared->count++].name,
-            mods[i].path.filename().string().c_str()
+            mods[i].dll_path.filename().string().c_str()
         );
 
         Render();
@@ -831,130 +744,96 @@ void ModManager::InjectAll()
     }
 }
 
+void ParseConfig(Mod* mod, const std::string& data)
+{
+    size_t readingat = 0;
+
+    while (readingat != std::string::npos)
+    {
+        ConfigValue workingV;
+        size_t prevRead = readingat;
+        readingat = data.find(":", readingat);
+
+        if (readingat == std::string::npos)
+            break;
+
+        workingV.name = data.substr(prevRead, readingat - prevRead);
+
+        readingat++;
+        prevRead = readingat;
+
+        readingat = data.find(":", readingat);
+
+        if (readingat == std::string::npos)
+            break;
+
+        std::string type = data.substr(prevRead, readingat - prevRead);
+
+        readingat++;
+        prevRead = readingat;
+
+        readingat = data.find("\n", readingat);
+
+        if (readingat == std::string::npos)
+            readingat = data.length();
+
+        std::string value = data.substr(prevRead, readingat - prevRead);
+
+        if (type == "STRING")
+        {
+            workingV.value = value;
+        }
+        else if (type == "BOOL")
+        {
+            workingV.value = value != "0";
+        }
+        else
+        {
+            workingV.value = std::strtod(value.c_str(), nullptr);
+        }
+
+        mod->config.push_back(workingV);
+
+        if (readingat < data.length())
+            readingat++;
+        else
+            break;
+    }
+}
 void ParseModInfo(Mod* mod, std::string& log)
 {
-    if (isZip(mod->path.string(), log))
+    if (mod->path == mod->dll_path)
+        return; // Mod is raw dll so has no info
+
+    fs::path modFolder = mod->path;
+
+    for (const auto& entry : fs::recursive_directory_iterator(modFolder))
     {
-        unzFile f = unzOpen(mod->path.string().c_str());
-        if (unzGoToFirstFile(f) != UNZ_OK)
+        if (!entry.is_regular_file())
+            continue;
+
+        auto filename = entry.path().filename().string();
+
+        if (filename == "info.txt")
         {
-            unzClose(f);
-            return;
+            std::string data = ReadFile(entry.path());
+
+            mod->name = GetValue(data, "name");
+            mod->author = GetValue(data, "author");
+            mod->description = GetValue(data, "description");
         }
-        do
+
+        else if (filename == "config.txt")
         {
-            unz_file_info fileinfo;
-            char filename[FILENAME_MAX];
-            if (unzGetCurrentFileInfo(f, &fileinfo, filename, FILENAME_MAX, nullptr, 0, nullptr, 0) == UNZ_OK)
-            {
-                if (lstrcmpA(filename, "info.txt") == 0)
-                {
-                    char* data = new char[fileinfo.uncompressed_size];
-                    unzOpenCurrentFile(f);
-                    unzReadCurrentFile(f, data, fileinfo.uncompressed_size);
+            std::string data = ReadFile(entry.path());
 
-                    std::string stringdata(data, fileinfo.uncompressed_size);
+            ParseConfig(mod, data);
+        }
 
-                    size_t find = stringdata.find("name:");
-                    if (find != std::string::npos)
-                    {
-                        size_t nextline = stringdata.find("\n", find);
-                        if (nextline != std::string::npos)
-                        {
-                            mod->name = stringdata.substr(find + 5, (nextline - find - 5));
-                        }
-                        else
-                        {
-                            mod->name = stringdata.substr(find + 5, stringdata.find("\nend") - find - 5);
-                        }
-                    }
-                    find = stringdata.find("author:");
-                    if (find != std::string::npos)
-                    {
-                        size_t nextline = stringdata.find("\n", find);
-                        if (nextline != std::string::npos)
-                        {
-                            mod->author = stringdata.substr(find + 7, (nextline - find - 7));
-                        }
-                        else
-                        {
-                            mod->author = stringdata.substr(find + 7, stringdata.find("\nend") - find - 7);
-                        }
-                    }
-                    find = stringdata.find("description:");
-                    if (find != std::string::npos)
-                    {
-                        size_t nextline = stringdata.find("\n", find);
-                        if (nextline != std::string::npos)
-                        {
-                            mod->description = stringdata.substr(find + 12, (nextline - find - 12));
-                        }
-                        else
-                        {
-                            mod->description = stringdata.substr(find + 12, stringdata.find("\nend") - find - 12);
-                        }
-                    }
-                    delete[] data;
-                    break;
-                }
-                else if (lstrcmpA(filename, "config.txt") == 0)
-                {
-                    char* data = new char[fileinfo.uncompressed_size];
-                    unzOpenCurrentFile(f);
-                    unzReadCurrentFile(f, data, fileinfo.uncompressed_size);
-
-                    std::string stringdata(data, fileinfo.uncompressed_size);
-
-                    size_t readingat = 0;
-                    while (readingat != std::string::npos)
-                    {
-                        ConfigValue workingV;
-
-                        size_t prevRead = readingat;
-                        // mod config decalered as NAME:TYPE:DEFAULT_VALUE
-                        // assume current at name always
-                        readingat = stringdata.find(":", readingat); // this is the index of last character in "NAME:" segment
-                        if (readingat == std::string::npos)
-                            break;
-
-                        workingV.name = stringdata.substr(prevRead, readingat - prevRead); // - 1 to remove colon
-                        readingat++; // start next colon search after current colon
-                        prevRead = readingat;
-
-                        readingat = stringdata.find(":", readingat); // this is the index of last character in "TYPE:" segment
-                        if (readingat == std::string::npos)
-                            break;
-
-                        std::string type_temp = stringdata.substr(prevRead, readingat - prevRead);
-                        readingat++;
-                        prevRead = readingat;
-
-                        readingat = stringdata.find("\n", readingat);
-                        if (readingat == std::string::npos)
-                            readingat = stringdata.length() - 1;
-                        std::string defaultV = stringdata.substr(prevRead, readingat - prevRead);
-
-                        if (type_temp == "STRING")
-                        {
-                            workingV.value = defaultV;
-                        }
-                        else if (type_temp == "BOOL")
-                        {
-                            workingV.value = defaultV != "0";
-                        }
-                        else
-                        {
-                            char* end;
-                            workingV.value = std::strtod(defaultV.c_str(), &end);
-                        }
-                        mod->config.push_back(workingV);
-
-                        readingat++; // start of next line
-                    }
-                }
-            }
-        } while (unzGoToNextFile(f) == UNZ_OK);
-        unzClose(f);
+        else if (entry.path().extension() == ".dll")
+        {
+            mod->dll_path = entry.path();
+        }
     }
 }
 
@@ -964,25 +843,22 @@ void ModManager::RefreshMods()
     std::vector<Mod> fmods;
     for (const auto& entry : std::filesystem::directory_iterator(modpath))
     {
-        if (entry.is_regular_file())
+        log.append("Found Mod: ");
+        log.append(entry.path().filename().stem().string());
+        log.append("\n");
+
+        Mod nmod;
+        nmod.path = entry.path();
+        nmod.name = entry.path().filename().stem().string();
+
+        if (entry.path().extension() == ".dll")
         {
-            log.append("Found Mod: ");
-            log.append(entry.path().filename().stem().string());
-            log.append("\n");
-
-            Mod nmod;
-            nmod.path = entry.path();
-            nmod.name = entry.path().filename().stem().string();
-
-            fmods.push_back(nmod);
+            nmod.dll_path = entry.path();
         }
+        ParseModInfo(&nmod, log);
+        fmods.push_back(nmod);
     }
     Render();
-
-    for (int i = 0; i < fmods.size(); i++)
-    {
-        ParseModInfo(&fmods[i], log);
-    }
 
     std::vector<Mod> finalmods;
 
