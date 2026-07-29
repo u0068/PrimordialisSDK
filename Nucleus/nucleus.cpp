@@ -30,7 +30,7 @@ void* ResolveSymbol(const char* name)
         if (!SymInitialize(GetCurrentProcess(), nullptr, TRUE))
         {
             printf("SymInitialize failed: %lu\n", GetLastError());
-            return 0;
+            return nullptr;
         }
         printf("DbgHelp initialized\n");
 
@@ -58,7 +58,7 @@ void* ResolveSymbol(const char* name)
                 name,
                 GetLastError()
             );
-            return 0;
+            return nullptr;
         } else
         {
             addr = reinterpret_cast<void*>(symbol->Address);
@@ -75,7 +75,7 @@ void* ResolveSymbol(const char* name)
     return addr;
 }
 
-bool HookRaw(void* target, void* hook, void** trampoline)
+bool HookWrapper(void* target, void* hook, void** trampoline)
 {
     printf("Attempting Hooking address %p\n", target);
 
@@ -110,7 +110,7 @@ void* CreateHook(const char* name, void* detour){
 
     printf("Creating hook for %s at %p to %p\n", name, target, detour);
 
-    HookRaw(
+    HookWrapper(
         target,
         detour,
         &original
@@ -251,8 +251,6 @@ DWORD WINAPI MainThread(LPVOID)
     {
         Sleep(1000);
     }
-
-    return 0;
 }
 
 BOOL APIENTRY DllMain(
