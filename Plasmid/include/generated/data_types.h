@@ -1729,7 +1729,7 @@ struct icon_render_info {
 
 typedef struct tagSTATSTG tagSTATSTG, *PtagSTATSTG;
 
-typedef struct tagSTATSTG STATSTG;
+// typedef struct tagSTATSTG STATSTG;
 
 typedef union _ULARGE_INTEGER _ULARGE_INTEGER, *P_ULARGE_INTEGER;
 
@@ -2724,7 +2724,7 @@ struct workshop_body_plan {
 
 typedef struct _Mbstatet _Mbstatet, *P_Mbstatet;
 
-typedef struct _Mbstatet mbstate_t;
+// typedef struct _Mbstatet mbstate_t;
 
 typedef struct ring_render_info ring_render_info, *Pring_render_info;
 
@@ -3078,7 +3078,7 @@ struct audio_context {
     struct IMMDevice *device;
     struct IAudioClient *audio_client;
     struct IAudioRenderClient *render_client;
-    struct tWAVEFORMATEX *wfx;
+    tWAVEFORMATEX *wfx;
     uint buffer_frame_count;
     uint n_frames_available;
     uint n_frames_padding;
@@ -3735,19 +3735,19 @@ struct big_lightning_vertex {
     struct real_2 x;
     struct real_4 color;
 };
-
-struct window_t {
-    struct HWND__ *hwnd;
-    struct HGLRC__ *hglrc;
-    struct real_2 size;
-    struct user_input input;
-    struct user_input frame_input;
-    union _LARGE_INTEGER timer_frequency;
-    union _LARGE_INTEGER last_time;
-    union _LARGE_INTEGER this_time;
-    struct render_context rc;
-    struct render_context ui;
-    struct recording_buffer rb;
-    bool clip_cursor;
-    bool focused;
-};
+//
+// struct window_t {
+//     struct HWND__ *hwnd;
+//     struct HGLRC__ *hglrc;
+//     struct real_2 size;
+//     struct user_input input;
+//     struct user_input frame_input;
+//     union _LARGE_INTEGER timer_frequency;
+//     union _LARGE_INTEGER last_time;
+//     union _LARGE_INTEGER this_time;
+//     struct render_context rc;
+//     struct render_context ui;
+//     struct recording_buffer rb;
+//     bool clip_cursor;
+//     bool focused;
+// };
