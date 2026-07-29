@@ -8,6 +8,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
 ## TODO:
 - Lua API
 - External mod config and assets
+- Prefix mod name to log
 - Documentation
   - Examples
   - Tutorials
@@ -16,6 +17,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
 - Helper functions
   - mod_main() (DONE)
   - Cell creation (DONE)
+  - Advanced cell stuff
 - Organisation
   - Organise directories (DONE)
   - Organise files (DONE)
@@ -31,6 +33,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Plasmid API versioning
   - Nucleus API versioning
 - Fix bugs
+  - CMake find_package warning
 ## DONE:
 - Unscuff the super scuffed temporary solutions (DONE)
 - Precompute relevant symbol ~~addresses~~ resolutions (DONE)
