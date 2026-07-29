@@ -1,5 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <variant>
+
+struct ConfigValue
+{
+    std::string name = "";
+    std::variant<double, bool, std::string> value;
+};
 
 struct Mod
 {
@@ -11,6 +19,8 @@ struct Mod
     std::string name = "mod.dll"; // mod name is the filename or whatever is held in info.txt
     std::string author = ""; // default for no info.txt
     std::string description = ""; // default for no info.txt
+
+    std::vector<ConfigValue> config;
 
     bool operator== (Mod& other)
     {
@@ -33,18 +43,25 @@ struct ModManager
     sf::Font* font;
     sf::Text* text;
 
-    bool hoverup = false;
-    bool hoverdown = false;
+    bool hovertopmove = false;
     bool hovermove = false;
 
     bool m_leftPressed = false;
 
     bool hoverinject = false;
 
+    bool hovermodoptions = false;
+    bool hovertopoption = false;
+
     uint32_t modhover = -1;
     uint32_t modselected = -1;
+    uint32_t confighover = -1;
+    uint32_t configselected = -1;
+
+    std::string configtemp = "";
 
     float scroll = 0;
+    float cscroll = 0;
 
     void RefreshMods();
     void InjectAll();
@@ -56,6 +73,9 @@ struct ModManager
 
     void Render();
     void Update();
+
+    void ConfigEdit(char32_t key);
+    void ConfigEditFinish();
 
     ModManager() {}
 };
