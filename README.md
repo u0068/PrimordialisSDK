@@ -31,6 +31,10 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Organise data types
   - Ghidra script to output already organised stuff
   - Separate mod dev stuff from API dev (eg CMakeLists)
+  - Mod versioning
+  - Plasmid API versioning
+  - Nucleus API versioning
+- Fix bugs
 ## DONE:
 - Unscuff the super scuffed temporary solutions (DONE)
 - Precompute relevant symbol ~~addresses~~ resolutions (DONE)

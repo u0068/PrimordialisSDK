@@ -121,11 +121,37 @@ void* CreateHook(const char* name, void* detour){
     return original;
 }
 
+thread_local void* current_context;
+
+void* GetCurrentContext()
+{
+    return current_context;
+}
+
+void SetCurrentContext(void* context)
+{
+    current_context = context;
+}
+
 NucleusRuntimeAPI api
 {
     Log,
     ResolveSymbol,
-    CreateHook
+    CreateHook,
+    {},
+    GetCurrentContext,
+    SetCurrentContext
+};
+
+struct ModInfo
+{
+    char name[MAX_PATH];
+};
+
+struct ModListShared
+{
+    uint32_t count;
+    ModInfo mods[256];
 };
 
 using ModInit = void(*)(NucleusRuntimeAPI*);
@@ -186,12 +212,40 @@ DWORD WINAPI MainThread(LPVOID)
      }
      printf("MinHook initialized\n");
 
-    LoadMod("example_mod.dll");
+    HANDLE mapping =
+    OpenFileMappingA(
+        FILE_MAP_READ,
+        FALSE,
+        "Pilus_ModList");
 
-    // Sleep(1000);
+    auto* shared =
+    static_cast<ModListShared*>(
+        MapViewOfFile(
+            mapping,
+            FILE_MAP_READ,
+            0,
+            0,
+            sizeof(ModListShared)));
 
-    // LoadMod("example_mod - Copy.dll");
-    // LoadMod("test_mod.dll");
+    HANDLE ready =
+    OpenEventA(
+        SYNCHRONIZE,
+        FALSE,
+        "Pilus_ModListReady");
+
+    WaitForSingleObject(
+    ready,
+    INFINITE);
+
+    printf("Pilus_ModListReady\n");
+
+    printf("ModList size: %i\n", shared->count);
+
+    for (uint32_t i = 0; i < shared->count; i++)
+    {
+        ModInfo mod = shared->mods[i];
+        LoadMod(mod.name);
+    }
 
     while (true)
     {
