@@ -6,7 +6,6 @@ namespace APIUtil
     // #include "generated/resolve_functions.h"
     #include "generated/game_functions/plasmid_api.h"
     #include "generated/resolve_data.h"
-    
 
     enum InitMatAddType
     {
@@ -18,13 +17,13 @@ namespace APIUtil
     struct AddCellCallSimple
     {
         int copyFrom = 1;
+        real_4 color = { 0.f, 0.f, 0.f, 1.f };
         void (*physics_update_fn)(struct cell*) = nullptr;
         void (*force_update_fn)(struct cell*) = nullptr;
         void (*electric_update_fn)(struct cell*) = nullptr;
         void (*connection_update_fn)(struct cell*) = nullptr;
         void (*brain_fn)(struct cell*) = nullptr;
         void (*destroyed_fn)(struct cell*) = nullptr;
-        real_4_u_0_s_0 color = { 0.f, 0.f, 0.f, 1.f };
     };
 
     struct AddCellCallEx
@@ -69,19 +68,19 @@ namespace APIUtil
 
     static uint GetCellIdxdByStr(const char* cell)
     {
-        uint search = str_to_id(const_cast<char*>("MUSL"));
-        for (int i = 1; i < *n_materials; i++)
+        uint search = str_to_id(const_cast<char*>(cell));
+        for (int i = 1; i < n_materials; i++)
         {
-           if ((*materials_list)[i].id == search)
+           if (materials_list[i].id == search)
               return i;
         }
         return 0;
     }
     static uint GetCellIdxById(uint search)
     {
-        for (int i = 1; i < *n_materials; i++)
+        for (int i = 1; i < n_materials; i++)
         {
-           if ((*materials_list)[i].id == search)
+           if (materials_list[i].id == search)
               return i;
         }
         return 0;
@@ -93,7 +92,7 @@ namespace APIUtil
     }
 
     static void AddCell(
-        real_4_u_0_s_0 color,
+        real_4 color,
         int copyFrom = 1,
         void (*physics_update_fn)(struct cell*) = nullptr,
         void (*force_update_fn)(struct cell*) = nullptr,
@@ -103,25 +102,25 @@ namespace APIUtil
         void (*destroyed_fn)(struct cell*) = nullptr
     )
     {
-        if (*n_materials >= 2048)
+        if (n_materials >= 2048)
         {
            printf("Material count is at maximum !\n");
            return;
         }
 
-        (*materials_list)[*n_materials] = (*materials_list)[copyFrom];
-        (*materials_list)[*n_materials].base_cost = float(*n_materials);
-        (*materials_list)[*n_materials].movement_force = 0.5f;
-        (*materials_list)[*n_materials].base_color = real_4{real_4_u_0{color}};
+        materials_list[n_materials] = materials_list[copyFrom];
+        materials_list[n_materials].base_cost = float(n_materials);
+        materials_list[n_materials].movement_force = 0.5f;
+        materials_list[n_materials].base_color = color;
 
-        (*materials_list)[*n_materials].physics_update_fn = physics_update_fn;
-        (*materials_list)[*n_materials].force_update_fn = force_update_fn;
-        (*materials_list)[*n_materials].electric_update_fn = electric_update_fn;
-        (*materials_list)[*n_materials].connection_update_fn = connection_update_fn;
-        (*materials_list)[*n_materials].brain_fn = brain_fn;
-        (*materials_list)[*n_materials].destroyed_fn = destroyed_fn;
+        materials_list[n_materials].physics_update_fn = physics_update_fn;
+        materials_list[n_materials].force_update_fn = force_update_fn;
+        materials_list[n_materials].electric_update_fn = electric_update_fn;
+        materials_list[n_materials].connection_update_fn = connection_update_fn;
+        materials_list[n_materials].brain_fn = brain_fn;
+        materials_list[n_materials].destroyed_fn = destroyed_fn;
 
-        *n_materials = *n_materials + 1;
+        n_materials++;
     }
 
     inline void AddAllCells()
@@ -129,7 +128,7 @@ namespace APIUtil
         printf("Before AddAllCells\n");
         Next<void>();
         printf("AddAllCells\n");
-        int* threadsafe = static_cast<int*>(TlsGetValue(*tls_index));
+        int* threadsafe = static_cast<int*>(TlsGetValue(tls_index));
         if (*threadsafe == 0)
         {
            for (auto & i : cells2add)
@@ -148,7 +147,7 @@ namespace APIUtil
               }
               else if (i.type == APIUtil::InitMatAddType::complex)
               {
-                 if (*n_materials >= 2048)
+                 if (n_materials >= 2048)
                  {
                     printf("Cell count is at maximum !\n");
                     return;
@@ -158,10 +157,10 @@ namespace APIUtil
                  if (!idx)
                     continue;
 
-                 (*materials_list)[*n_materials] = (*materials_list)[i.cell.extensive.copyFrom];
-                 (*materials_list)[*n_materials].id = i.cell.extensive.newId;
-                 i.cell.extensive.overwrite(&((*materials_list)[*n_materials]));
-                 *n_materials += 1;
+                 materials_list[n_materials] = materials_list[i.cell.extensive.copyFrom];
+                 materials_list[n_materials].id = i.cell.extensive.newId;
+                 i.cell.extensive.overwrite(&(materials_list[n_materials]));
+                 n_materials++;
               }
               else
               {
@@ -174,12 +173,12 @@ namespace APIUtil
                  if (!idx)
                     continue;
 
-                 (*materials_list)[idx].physics_update_fn = i.cell.function.physics_update_fn;
-                 (*materials_list)[idx].force_update_fn = i.cell.function.force_update_fn;
-                 (*materials_list)[idx].electric_update_fn = i.cell.function.electric_update_fn;
-                 (*materials_list)[idx].connection_update_fn = i.cell.function.connection_update_fn;
-                 (*materials_list)[idx].brain_fn = i.cell.function.brain_fn;
-                 (*materials_list)[idx].destroyed_fn = i.cell.function.destroyed_fn;
+                 materials_list[idx].physics_update_fn = i.cell.function.physics_update_fn;
+                 materials_list[idx].force_update_fn = i.cell.function.force_update_fn;
+                 materials_list[idx].electric_update_fn = i.cell.function.electric_update_fn;
+                 materials_list[idx].connection_update_fn = i.cell.function.connection_update_fn;
+                 materials_list[idx].brain_fn = i.cell.function.brain_fn;
+                 materials_list[idx].destroyed_fn = i.cell.function.destroyed_fn;
               }
            }
         }

@@ -18,20 +18,35 @@ template<typename T>
 class ResolvedData
 {
     const char* name;
-    T value{};
+    T* ptr = nullptr;
+
+    T& Ref()
+    {
+        if (!ptr)
+            ptr = Resolve<T*>(name);
+
+        return *ptr;
+    }
 
 public:
 
-    explicit ResolvedData(const char* n)
-        : name(n)
+    explicit ResolvedData(const char* name)
+        : name(name)
     {}
 
-    // Leave this implicit
-    operator T()
+    operator T&()
     {
-        if (!value)
-            value = Resolve<T>(name);
+        return Ref();
+    }
 
-        return value;
+    T* operator->()
+    {
+        return &Ref();
+    }
+
+    ResolvedData& operator=(const T& value)
+    {
+        Ref() = value;
+        return *this;
     }
 };
