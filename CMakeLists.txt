@@ -3,6 +3,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(PrimordialisSDK)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 add_subdirectory(Pilus)
 
 add_subdirectory(Nucleus)

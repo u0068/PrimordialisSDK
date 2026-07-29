@@ -11,7 +11,7 @@
 #include <windows.h>
 #include <winbase.h>
 #include <tlhelp32.h>
-#include <psapi.h>
+// #include <psapi.h>
 #include <tchar.h>
 #include "SFML/Graphics.hpp"
 #include "modloader.h"
@@ -23,7 +23,7 @@ DWORD GetProcessByName(const char* lpProcessName)
     PROCESSENTRY32 ProcList{};
     ProcList.dwSize = sizeof(ProcList);
 
-    const HANDLE hProcList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    const HANDLE &hProcList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hProcList == INVALID_HANDLE_VALUE)
         return -1;
 
@@ -42,10 +42,10 @@ DWORD GetProcessByName(const char* lpProcessName)
 std::filesystem::path GetExePath()
 {
     wchar_t buffer[MAX_PATH];
-    DWORD len = GetModuleFileNameW(NULL, buffer, MAX_PATH);
+    DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
     if (len == 0)
         throw std::runtime_error("Failed to get executable path");
-    return std::filesystem::path(buffer);
+    return buffer;
 }
 
 bool IsDLL(const std::string& filePath, std::string& log)
@@ -94,7 +94,7 @@ std::string GetValue(const std::string& data, const std::string& key)
 
     find += key.length() + 1;
 
-    size_t end = data.find("\n", find);
+    size_t end = data.find('\n', find);
 
     if (end == std::string::npos)
         end = data.length();
@@ -127,7 +127,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
         return -1;
     }
 
-    const HANDLE hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
+    const HANDLE &hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
     if (hTargetProcess == INVALID_HANDLE_VALUE)
     {
         elog.append("An error occurred when trying to open the target process.\n");
@@ -137,7 +137,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     log.append("[PROCESS INJECTION]\n");
     log.append("Process opened successfully.\n");
 
-    const LPVOID lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr, lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    const LPVOID &lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr, lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (lpPathAddress == nullptr)
     {
         elog.append("An error occurred when trying to allocate memory in the target process.\n");
@@ -161,7 +161,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     if (hModule == INVALID_HANDLE_VALUE || hModule == nullptr)
         return -1;
 
-    const FARPROC lpFunctionAddress = GetProcAddress(hModule, "LoadLibraryA");
+    const FARPROC &lpFunctionAddress = GetProcAddress(hModule, "LoadLibraryA");
     if (lpFunctionAddress == nullptr)
     {
         elog.append("An error occurred when trying to get \"LoadLibraryA\" address.\n");
@@ -172,7 +172,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     log.append(std::to_string((UINT)(uintptr_t)lpFunctionAddress));
     log.append("\n");
 
-    const HANDLE hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
+    const HANDLE &hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
     if (hThreadCreationResult == INVALID_HANDLE_VALUE)
     {
         elog.append("An error occurred when trying to create the thread in the target process.\n");
@@ -184,11 +184,6 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     WaitForSingleObject(hThreadCreationResult, INFINITE);
     CloseHandle(hThreadCreationResult);
 
-    std::string dllFileName = lpFullDLLPath;
-    size_t pos = dllFileName.find_last_of("/\\");
-    if (pos != std::string::npos)
-        dllFileName = dllFileName.substr(pos + 1);
-
     log.append("Mod injected !\n");
 
     VirtualFreeEx(hTargetProcess, lpPathAddress, 0, MEM_RELEASE);
@@ -199,7 +194,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
 
 std::string WrapText(const sf::Text& text, std::string& string, int max)
 {
-    std::string nstring("");
+    std::string nstring;
     sf::Text temp = text;
     temp.setString(nstring);
     for (int i = 0; i < string.length(); i++)
@@ -220,12 +215,12 @@ void ModManager::Render()
     sf::VertexArray bline(sf::PrimitiveType::Lines, 2);
 
     window->clear(sf::Color::Black);
-    if (modselected == -1)
+    if (mod_selected == -1)
     {
         std::deque<std::string> trunc_log;
 
         int maxlines = 12;
-        std::istringstream sstream(errorlog);
+        std::istringstream sstream(error_log);
         std::string line;
         while (std::getline(sstream, line))
         {
@@ -243,9 +238,9 @@ void ModManager::Render()
         }
 
         std::string flog;
-        for (int i = 0; i < trunc_log.size(); i++)
+        for (const auto & i : trunc_log)
         {
-            flog.append(trunc_log[i]);
+            flog.append(i);
             flog.append("\n");
         }
 
@@ -264,27 +259,27 @@ void ModManager::Render()
     }
     else
     {
-        for (int i = 0; i < mods[modselected].config.size(); i++)
+        for (int i = 0; i < mods[mod_selected].config.size(); i++)
         {
             std::string configline;
 
-            if (i == configselected)
-                configline = "(" + mods[modselected].config[i].name + "): " + configtemp;
+            if (i == config_selected)
+                configline = "(" + mods[mod_selected].config[i].name + "): " + config_temp;
             else
             {
-                configline = mods[modselected].config[i].name + ": ";
+                configline = mods[mod_selected].config[i].name + ": ";
 
-                if (std::holds_alternative<double>(mods[modselected].config[i].value))
-                    configline.append(std::to_string(std::get<double>(mods[modselected].config[i].value)));
-                else if (std::holds_alternative<bool>(mods[modselected].config[i].value))
+                if (std::holds_alternative<double>(mods[mod_selected].config[i].value))
+                    configline.append(std::to_string(std::get<double>(mods[mod_selected].config[i].value)));
+                else if (std::holds_alternative<bool>(mods[mod_selected].config[i].value))
                 {
-                    if (std::get<bool>(mods[modselected].config[i].value))
+                    if (std::get<bool>(mods[mod_selected].config[i].value))
                         configline.append("Enabled");
                     else
                         configline.append("Disabled");
                 }
-                else if (std::holds_alternative<std::string>(mods[modselected].config[i].value))
-                    configline.append(std::get<std::string>(mods[modselected].config[i].value));
+                else if (std::holds_alternative<std::string>(mods[mod_selected].config[i].value))
+                    configline.append(std::get<std::string>(mods[mod_selected].config[i].value));
             }
             if (i % 2 == 1)
             {
@@ -306,12 +301,12 @@ void ModManager::Render()
 
     window->draw(bline);
 
-    if (modhover != -1 && !mods.empty())
+    if (mod_hover != -1 && !mods.empty())
     {
-        if (modselected == -1)
+        if (mod_selected == -1)
         {
-            lastdescriptiontrunc = WrapText(*text, mods[modhover].description, 400);
-            text->setString(lastdescriptiontrunc);
+            last_description_trunc = WrapText(*text, mods[mod_hover].description, 400);
+            text->setString(last_description_trunc);
             text->setPosition({ 600 - text->getLocalBounds().size.x / 2, 255 / 2 - text->getLocalBounds().size.y / 2 });
             window->draw(*text);
         }
@@ -320,57 +315,57 @@ void ModManager::Render()
         if (!m_leftPressed)
         {
             hoverhighlight.setSize({399, 100});
-            hoverhighlight.setPosition({0, 100 * modhover + scroll});
+            hoverhighlight.setPosition({0, 100 * mod_hover + scroll});
             hoverhighlight.setFillColor(sf::Color(20, 20, 20));
 
-            if (hovermove)
+            if (hover_move)
             {
                 hoverhighlight.setSize({ 31, 50 });
-                if (hovertopmove)
-                    hoverhighlight.setPosition({400 - 32, 100 * modhover + scroll});
+                if (hover_top_move)
+                    hoverhighlight.setPosition({400 - 32, 100 * mod_hover + scroll});
                 else
-                    hoverhighlight.setPosition({400 - 32, 100 * modhover + scroll + 50});
+                    hoverhighlight.setPosition({400 - 32, 100 * mod_hover + scroll + 50});
             }
-            if (hovermodoptions)
+            if (hover_mod_options)
             {
                 hoverhighlight.setSize({ 68, 50 });
-                if (hovertopoption)
-                    hoverhighlight.setPosition({ 300, 100 * modhover + scroll });
+                if (hover_top_option)
+                    hoverhighlight.setPosition({ 300, 100 * mod_hover + scroll });
                 else
-                    hoverhighlight.setPosition({ 300, 100 * modhover + scroll + 50 });
+                    hoverhighlight.setPosition({ 300, 100 * mod_hover + scroll + 50 });
             }
             window->draw(hoverhighlight);
         }
 
         text->setString("/\\");
-        text->setPosition({ 400 - 16 - (text->getLocalBounds().size.x / 2), 100 * modhover + scroll - (text->getLocalBounds().size.y / 2) + 25 });
+        text->setPosition({ 400 - 16 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 25 });
         window->draw(*text);
 
         text->setString("\\/");
-        text->setPosition({ 400 - 16 - (text->getLocalBounds().size.x / 2), 100 * modhover + scroll - (text->getLocalBounds().size.y / 2) + 50 + 25 });
+        text->setPosition({ 400 - 16 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 50 + 25 });
         window->draw(*text);
 
         text->setString("Config");
-        text->setPosition({ 300 + 34 - (text->getLocalBounds().size.x / 2), 100 * modhover + scroll - (text->getLocalBounds().size.y / 2) + 25});
+        text->setPosition({ 300 + 34 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 25});
         window->draw(*text);
 
-        if (mods[modhover].enabled)
+        if (mods[mod_hover].enabled)
             text->setString("Disable");
         else
             text->setString("Enable");
-        text->setPosition({ 300 + 34 - (text->getLocalBounds().size.x / 2), 100 * modhover + scroll - (text->getLocalBounds().size.y / 2) + 50 + 25 });
+        text->setPosition({ 300 + 34 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 50 + 25 });
         window->draw(*text);
     }
-    else if (modselected == -1)
+    else if (mod_selected == -1)
     {
-        if (hoverinject)
+        if (hover_inject)
         {
-            sf::RectangleShape hoverhighlight;
-            hoverhighlight.setSize({400, 254});
-            hoverhighlight.setPosition({400, 0});
-            hoverhighlight.setFillColor(sf::Color(20, 20, 20));
+            sf::RectangleShape hover_highlight;
+            hover_highlight.setSize({400, 254});
+            hover_highlight.setPosition({400, 0});
+            hover_highlight.setFillColor(sf::Color(20, 20, 20));
 
-            window->draw(hoverhighlight);
+            window->draw(hover_highlight);
         }
 
         text->setString("Start");
@@ -382,12 +377,12 @@ void ModManager::Render()
     {
         sf::RectangleShape hoverhighlight;
         hoverhighlight.setSize({ 399, 100 });
-        hoverhighlight.setPosition({ 0, 100 * modselected + scroll });
+        hoverhighlight.setPosition({ 0, 100 * mod_selected + scroll });
         hoverhighlight.setFillColor(sf::Color(20, 20, 20));
         window->draw(hoverhighlight);
 
         text->setString("Editing Config");
-        text->setPosition({ 320 - (text->getLocalBounds().size.x / 2), 100 * modselected + scroll - (text->getLocalBounds().size.y / 2) + 50 });
+        text->setPosition({ 320 - (text->getLocalBounds().size.x / 2), 100 * mod_selected + scroll - (text->getLocalBounds().size.y / 2) + 50 });
         window->draw(*text);
     }
 
@@ -430,32 +425,32 @@ void ModManager::ConfigEdit(char32_t key)
 {
     if (key == U'\b') // backspace
     {
-        if (configtemp.length() > 0)
+        if (!config_temp.empty())
         {
-            configtemp.pop_back();
+            config_temp.pop_back();
         }
     }
     else
     {
-        if (std::holds_alternative<std::string>(mods[modselected].config[configselected].value))
+        if (std::holds_alternative<std::string>(mods[mod_selected].config[config_selected].value))
         {
-            configtemp.push_back(key);
+            config_temp.push_back(key);
         }
         else
         {
             if ((key >= U'0' && key <= U'9') || key == U'.')
-                configtemp.push_back(key);
+                config_temp.push_back(key);
         }
     }
 }
 void ModManager::ConfigEditFinish()
 {
     char* end;
-    if (std::holds_alternative<std::string>(mods[modselected].config[configselected].value))
-        mods[modselected].config[configselected].value = configtemp;
+    if (std::holds_alternative<std::string>(mods[mod_selected].config[config_selected].value))
+        mods[mod_selected].config[config_selected].value = config_temp;
     else
-        mods[modselected].config[configselected].value = std::strtod(configtemp.c_str(), &end);
-    configtemp.clear();
+        mods[mod_selected].config[config_selected].value = std::strtod(config_temp.c_str(), &end);
+    config_temp.clear();
 }
 
 void ModManager::Update()
@@ -474,37 +469,37 @@ void ModManager::Update()
             if (event->getIf<sf::Event::MouseButtonPressed>()->button == sf::Mouse::Button::Left)
                 m_leftPressed = true;
 
-            if (modhover != -1 && !mods.empty())
+            if (mod_hover != -1 && !mods.empty())
             {
-                if (hovermodoptions && !hovertopoption)
+                if (hover_mod_options && !hover_top_option)
                 {
-                    mods[modhover].enabled = !mods[modhover].enabled;
+                    mods[mod_hover].enabled = !mods[mod_hover].enabled;
                 }
-                else if (hovermodoptions && hovertopoption)
+                else if (hover_mod_options && hover_top_option)
                 {
-                    if (modselected != modhover)
+                    if (mod_selected != mod_hover)
                     {
-                        modselected = modhover;
+                        mod_selected = mod_hover;
                         cscroll = 0;
-                        configselected = -1;
+                        config_selected = -1;
                     }
                     else
-                        modselected = -1;
+                        mod_selected = -1;
                 }
-                else if (hovermove)
+                else if (hover_move)
                 {
-                    if (hovertopmove)
+                    if (hover_top_move)
                     {
-                        if (modhover > 0)
+                        if (mod_hover > 0)
                         {
-                            std::swap(mods[modhover], mods[modhover - 1]);
+                            std::swap(mods[mod_hover], mods[mod_hover - 1]);
                         }
                     }
                     else
                     {
-                        if (modhover < mods.size() - 1)
+                        if (mod_hover < mods.size() - 1)
                         {
-                            std::swap(mods[modhover], mods[modhover + 1]);
+                            std::swap(mods[mod_hover], mods[mod_hover + 1]);
                         }
                     }
                     SaveModOrder();
@@ -512,28 +507,28 @@ void ModManager::Update()
             }
             else
             {
-                if (modselected != -1) // enter config mode
+                if (mod_selected != -1) // enter config mode
                 {
-                    if (confighover != -1)
+                    if (config_hover != -1)
                     {
-                        if (std::holds_alternative<bool>(mods[modselected].config[confighover].value))
+                        if (std::holds_alternative<bool>(mods[mod_selected].config[config_hover].value))
                         {
-                            mods[modselected].config[confighover].value = !std::get<bool>(mods[modselected].config[confighover].value);
-                            configselected = -1;
+                            mods[mod_selected].config[config_hover].value = !std::get<bool>(mods[mod_selected].config[config_hover].value);
+                            config_selected = -1;
                         }
                         else
                         {
-                            if (std::holds_alternative<double>(mods[modselected].config[confighover].value))
-                                configtemp = std::to_string(std::get<double>(mods[modselected].config[confighover].value));
+                            if (std::holds_alternative<double>(mods[mod_selected].config[config_hover].value))
+                                config_temp = std::to_string(std::get<double>(mods[mod_selected].config[config_hover].value));
                             else
-                                configtemp = std::get<std::string>(mods[modselected].config[confighover].value);
-                            configselected = confighover;
+                                config_temp = std::get<std::string>(mods[mod_selected].config[config_hover].value);
+                            config_selected = config_hover;
                         }
                     }
                 }
                 else
                 {
-                    if (hoverinject)
+                    if (hover_inject)
                         InjectAll();
                 }
             }
@@ -552,7 +547,7 @@ void ModManager::Update()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
             {
                 std::ofstream file("loader_log.txt");
-                file << errorlog << "\n" << log;
+                file << error_log << "\n" << log;
                 file.close();
                 log.clear();
                 log.append("Printed log to \"loader_log.txt\"\n");
@@ -562,12 +557,12 @@ void ModManager::Update()
         }
         if (event->is<sf::Event::TextEntered>())
         {
-            if (configselected != -1)
+            if (config_selected != -1)
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
                 {
                     ConfigEditFinish();
-                    configselected = -1;
+                    config_selected = -1;
                 }
                 else
                 {
@@ -625,7 +620,7 @@ bool IsProcessRunning(const char* processName) {
 void ModManager::InjectAll()
 {
     log.clear();
-    errorlog.clear();
+    error_log.clear();
 
     constexpr const char *lpprocessname = "primordialis.exe";
     int failed = 0;
@@ -634,13 +629,13 @@ void ModManager::InjectAll()
 
     bool ownProcess = false;
     STARTUPINFO startI{0};
-    PROCESS_INFORMATION procI{0};
+    PROCESS_INFORMATION procI{nullptr};
 
     if (!IsProcessRunning(lpprocessname))
     {
         char cmdLine[] = "primordialis.exe --steamless --autoreload";
         ownProcess = true;
-        if (!CreateProcessA(NULL, cmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &startI, &procI))
+        if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &startI, &procI))
         {
             log.append("Failed to start primordialis: ");
             log.append(std::to_string(GetLastError()));
@@ -680,25 +675,25 @@ void ModManager::InjectAll()
 
     shared->count = 0;
 
-    for (int i = 0; i < mods.size(); i++)
+    for (auto & mod : mods)
     {
         //skip runtime api in modlist because should be last
-        if (mods[i].dll_path.filename().string() == "NucleusRuntimeAPI.dll")
+        if (mod.dll_path.filename().string() == "NucleusRuntimeAPI.dll")
             continue;
 
-        if (!mods[i].enabled)
+        if (!mod.enabled)
         {
             log.append("Encountered disabled mod, skipping...\n");
             continue;
         }
 
-        std::string injectPath = mods[i].dll_path.string();
+        std::string injectPath = mod.dll_path.string();
         char dllpath[MAX_PATH];
 
-        if (Inject(injectPath.c_str(), dllpath, lpprocessname, log, errorlog) != 0)
+        if (Inject(injectPath.c_str(), dllpath, lpprocessname, log, error_log) != 0)
         {
             log.append("[INJECTION FAILED] (");
-            log.append(mods[i].dll_path.filename().string());
+            log.append(mod.dll_path.filename().string());
             log.append(") Skipped\n");
 
             Render();
@@ -706,12 +701,12 @@ void ModManager::InjectAll()
             continue;
         }
         log.append("[INJECTION SUCCESS] (");
-        log.append(mods[i].dll_path.filename().string());
+        log.append(mod.dll_path.filename().string());
         log.append(")\n");
 
         strcpy_s(
             shared->mods[shared->count++].name,
-            mods[i].dll_path.filename().string().c_str()
+            mod.dll_path.filename().string().c_str()
         );
 
         Render();
@@ -752,7 +747,7 @@ void ParseConfig(Mod* mod, const std::string& data)
     {
         ConfigValue workingV;
         size_t prevRead = readingat;
-        readingat = data.find(":", readingat);
+        readingat = data.find(':', readingat);
 
         if (readingat == std::string::npos)
             break;
@@ -762,7 +757,7 @@ void ParseConfig(Mod* mod, const std::string& data)
         readingat++;
         prevRead = readingat;
 
-        readingat = data.find(":", readingat);
+        readingat = data.find(':', readingat);
 
         if (readingat == std::string::npos)
             break;
@@ -772,7 +767,7 @@ void ParseConfig(Mod* mod, const std::string& data)
         readingat++;
         prevRead = readingat;
 
-        readingat = data.find("\n", readingat);
+        readingat = data.find('\n', readingat);
 
         if (readingat == std::string::npos)
             readingat = data.length();
@@ -862,23 +857,23 @@ void ModManager::RefreshMods()
 
     std::vector<Mod> finalmods;
 
-    for (int i = 0; i < mods.size(); i++)
+    for (auto & mod : mods)
     {
-        for (int j = 0; j < fmods.size(); j++)
+        for (const auto & fmod : fmods)
         {
-            if (mods[i] == fmods[j])
+            if (mod == fmod)
             {
-                finalmods.push_back(fmods[j]);
-                finalmods[finalmods.size() - 1].enabled = mods[i].enabled;
+                finalmods.push_back(fmod);
+                finalmods[finalmods.size() - 1].enabled = mod.enabled;
             }
         }
     }
-    for (int i = 0; i < fmods.size(); i++)
+    for (const auto & fmod : fmods)
     {
         bool addthismod = true;
-        for (int j = 0; j < finalmods.size(); j++)
+        for (const auto & finalmod : finalmods)
         {
-            if (fmods[i] == finalmods[j])
+            if (fmod == finalmod)
             {
                 addthismod = false;
                 break;
@@ -886,7 +881,7 @@ void ModManager::RefreshMods()
         }
         if (addthismod)
         {
-            finalmods.push_back(fmods[i]);
+            finalmods.push_back(fmod);
         }
     }
 
@@ -928,12 +923,12 @@ void ModManager::SaveModOrder()
 
     uint32_t num_mods = mods.size();
     file.write(reinterpret_cast<char*>(&num_mods), sizeof(uint32_t));
-    for (int i = 0; i < mods.size(); i++)
+    for (auto & mod : mods)
     {
-        file.write(reinterpret_cast<char*>(&(mods[i].enabled)), sizeof(bool));
-        uint32_t pathlength = mods[i].path.string().size();
+        file.write(reinterpret_cast<char*>(&(mod.enabled)), sizeof(bool));
+        uint32_t pathlength = mod.path.string().size();
         file.write(reinterpret_cast<char*>(&pathlength), sizeof(uint32_t));
-        file.write(mods[i].path.string().data(), mods[i].path.string().size());
+        file.write(mod.path.string().data(), mod.path.string().size());
     }
 
     file.close();
@@ -948,43 +943,43 @@ bool ModManager::CheckSignificantMouseMovement()
     {
         if (mods.empty())
         {
-            if (modhover != -1)
+            if (mod_hover != -1)
             {
-                modhover = -1;
+                mod_hover = -1;
                 change = true;
             }
         }
         else
         {
 
-            if (hovermove != (mouse.x > 368))
+            if (hover_move != (mouse.x > 368))
             {
-                hovermove = !hovermove;
+                hover_move = !hover_move;
                 change = true;
             }
-            if (hovermodoptions != (mouse.x > 300 && mouse.x < 368))
+            if (hover_mod_options != (mouse.x > 300 && mouse.x < 368))
             {
-                hovermodoptions = !hovermodoptions;
+                hover_mod_options = !hover_mod_options;
                 change = true;
             }
 
             int hoveridxnoclamp = int(mouse.y - scroll) / 100;
             int hoveridx = std::max(0, std::min(hoveridxnoclamp, (int)mods.size() - 1));
-            if (modhover != hoveridx)
+            if (mod_hover != hoveridx)
             {
-                modhover = hoveridx;
+                mod_hover = hoveridx;
                 change = true;
             }
             if (mouse.x > 368 && hoveridxnoclamp == hoveridx)
             {
-                if (!hovermove)
+                if (!hover_move)
                 {
-                    hovermove = true;
+                    hover_move = true;
                     change = true;
                 }
-                if (hovertopmove != ((mouse.y - int(scroll)) % 100 < 50))
+                if (hover_top_move != ((mouse.y - int(scroll)) % 100 < 50))
                 {
-                    hovertopmove = !hovertopmove;
+                    hover_top_move = !hover_top_move;
                     change = true;
                 }
             }
@@ -992,44 +987,44 @@ bool ModManager::CheckSignificantMouseMovement()
             {
                 if (mouse.x > 300)
                 {
-                    if (hovertopoption != ((mouse.y - int(scroll)) % 100 < 50))
+                    if (hover_top_option != ((mouse.y - int(scroll)) % 100 < 50))
                     {
-                        hovertopoption = !hovertopoption;
+                        hover_top_option = !hover_top_option;
                         change = true;
                     }
                 }
             }
         }
 
-        if (confighover != -1)
+        if (config_hover != -1)
         {
-            confighover = -1;
+            config_hover = -1;
             change = true;
         }
     }
     else
     {
-        if (modselected != -1)
+        if (mod_selected != -1)
         {
             int hoveridxnoclamp = int(mouse.y - cscroll) / 50;
-            int hoveridx = std::max(0, std::min(hoveridxnoclamp, (int)mods[modselected].config.size() - 1));
+            int hoveridx = std::max(0, std::min(hoveridxnoclamp, (int)mods[mod_selected].config.size() - 1));
 
-            if (confighover != hoveridx)
+            if (config_hover != hoveridx)
             {
-                confighover = hoveridx;
+                config_hover = hoveridx;
                 change = true;
             }
         }
 
-        if (modhover != -1)
+        if (mod_hover != -1)
         {
-            modhover = -1;
+            mod_hover = -1;
             change = true;
         }
 
-        if (hoverinject != mouse.y < 255)
+        if (hover_inject != mouse.y < 255)
         {
-            hoverinject = mouse.y < 255;
+            hover_inject = mouse.y < 255;
             change = true;
         }
     }

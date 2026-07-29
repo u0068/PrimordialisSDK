@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 20)
 
-project(Plasmid)
-
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 add_library(Plasmid INTERFACE
         include/hook_manager.h
         include/symbol_resolver.h)

@@ -5,7 +5,7 @@
 
 struct ConfigValue
 {
-    std::string name = "";
+    std::string name{};
     std::variant<double, bool, std::string> value;
 };
 
@@ -18,12 +18,12 @@ struct Mod
 
     // UNSAVED:
     std::string name = "mod.dll"; // mod name is the filename or whatever is held in info.txt
-    std::string author = ""; // default for no info.txt
-    std::string description = ""; // default for no info.txt
+    std::string author{}; // default for no info.txt
+    std::string description{}; // default for no info.txt
 
     std::vector<ConfigValue> config{};
 
-    bool operator== (Mod& other)
+    bool operator== (const Mod& other) const
     {
         if (std::filesystem::weakly_canonical(path) == std::filesystem::weakly_canonical(other.path)) // path is the only thing that matters
             return true;
@@ -35,31 +35,31 @@ struct ModManager
 {
     sf::RenderWindow* window;
     std::vector<Mod> mods;
-    std::string errorlog;
+    std::string error_log;
     std::string log;
 
     std::filesystem::path modpath;
-    std::string lastdescriptiontrunc = "";
+    std::string last_description_trunc;
 
     sf::Font* font;
     sf::Text* text;
 
-    bool hovertopmove = false;
-    bool hovermove = false;
+    bool hover_top_move = false;
+    bool hover_move = false;
 
     bool m_leftPressed = false;
 
-    bool hoverinject = false;
+    bool hover_inject = false;
 
-    bool hovermodoptions = false;
-    bool hovertopoption = false;
+    bool hover_mod_options = false;
+    bool hover_top_option = false;
 
-    uint32_t modhover = -1;
-    uint32_t modselected = -1;
-    uint32_t confighover = -1;
-    uint32_t configselected = -1;
+    uint32_t mod_hover = -1;
+    uint32_t mod_selected = -1;
+    uint32_t config_hover = -1;
+    uint32_t config_selected = -1;
 
-    std::string configtemp = "";
+    std::string config_temp{};
 
     float scroll = 0;
     float cscroll = 0;
