@@ -1,4 +1,5 @@
 #pragma once
+#include "hook_manager.h"
 
 namespace APIUtil
 {

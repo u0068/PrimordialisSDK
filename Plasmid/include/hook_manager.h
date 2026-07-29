@@ -1,35 +1,5 @@
 #pragma once
-#include <cstdint>
-#include <string>
-#include <unordered_map>
-// #include <tlhelp32.h>
-#include <windows.h>
-#include <vcruntime_typeinfo.h>
-#include <vector>
-#include "nucleus_interface.h"
-#include "generated/data_types.h"
-
-inline NucleusRuntimeAPI* nucleus;
-
-extern"C" __declspec(dllexport)
-inline void Initialise(NucleusRuntimeAPI* api)
-{
-    nucleus = api;
-    printf("Mod Initialised!\n");
-}
-
-template<typename T>
-T& Resolve(const char* name)
-{
-    static std::unordered_map<std::string, T> cache;
-
-    auto& addr = cache[name];
-
-    if (!addr)
-        addr = reinterpret_cast<T>(nucleus->ResolveSymbol(name));
-
-    return addr;
-}
+#include "plasmid_init.h"
 
 // Using type erasure to be able to store chains of different HookChain types by storing them as HookChainBase instead
 template<typename Ret, typename... Args>
@@ -201,30 +171,7 @@ void Hook(
             reinterpret_cast<Ret(*)(Args...)>
             (nucleus->CreateHook(
                 name,
-                (void*)&Disp::Dispatch
+                static_cast<void*>(&Disp::Dispatch)
             ));
     }
 }
-
-template<typename T>
-class ResolvedData
-{
-    const char* name;
-    T value{};
-
-public:
-
-    explicit ResolvedData(const char* n)
-        : name(n)
-    {}
-
-    operator T()
-    {
-        if (!value)
-            value = Resolve<T>(name);
-
-        return value;
-    }
-};
-
-#include "plasmid_utils.h"

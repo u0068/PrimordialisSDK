@@ -5,7 +5,9 @@ project(Plasmid)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-add_library(Plasmid INTERFACE)
+add_library(Plasmid INTERFACE
+        include/hook_manager.h
+        include/symbol_resolver.h)
 
 target_include_directories(Plasmid
         INTERFACE
