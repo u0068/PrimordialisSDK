@@ -18,7 +18,6 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - mod_main() (DONE)
   - Cell creation (DONE)
   - Advanced cell stuff
-  - Make Next() not require <data_type>
   - Make thread safety trivial (DONE)
 - Organisation
   - Organise directories (DONE)

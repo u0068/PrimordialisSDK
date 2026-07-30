@@ -143,10 +143,12 @@ namespace APIUtil
                     return;
                 }
 
-                int index = cell.replace.GetIndex();
-                index = index == -1 ? n_materials : index;
                 int copy_from_index = cell.copyFrom.GetIndex();
-                copy_from_index = copy_from_index == -1 ? 1 : copy_from_index;
+                int index = cell.replace.GetIndex();
+                copy_from_index = copy_from_index == -1 ? (
+                    index == -1 ? 1 : index
+                    ) : copy_from_index;
+                index = index == -1 ? n_materials : index;
 
                 materials_list[index] = materials_list[copy_from_index];
                 printf("copy idx: %i\n",copy_from_index);

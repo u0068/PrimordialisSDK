@@ -54,6 +54,7 @@ struct material_t_properties
     std::optional<real_2> uv;
     std::optional<int> combine_material_index1;
     std::optional<int> combine_material_index2;
+
     std::optional<bool> attach_to_cells;
     std::optional<bool> attach_to_walls;
     std::optional<bool> poison_immune;
@@ -67,6 +68,13 @@ struct material_t_properties
     std::optional<bool> is_hard;
     std::optional<bool> play_note;
     std::optional<bool> no_recolor;
+
+    void (*physics_update_fn)(struct cell *){nullptr};
+    void (*force_update_fn)(struct cell *){nullptr};
+    void (*electric_update_fn)(struct cell *){nullptr};
+    void (*connection_update_fn)(struct cell *){nullptr};
+    void (*brain_fn)(struct cell *){nullptr};
+    void (*destroyed_fn)(struct cell *){nullptr};
 };
 
 inline void ApplyProperties(
@@ -217,6 +225,7 @@ inline void ApplyProperties(
     if (props.combine_material_index2)
         target.combine_material_index2 = *props.combine_material_index2;
 
+
     if (props.attach_to_cells)
         target.field14_0x4c._s_0.attach_to_cells = *props.attach_to_cells;
 
@@ -255,4 +264,24 @@ inline void ApplyProperties(
 
     if (props.no_recolor)
         target.field14_0x4c._s_0.no_recolor = *props.no_recolor;
+
+
+    if (props.physics_update_fn)
+        target.physics_update_fn = *props.physics_update_fn;
+
+    if (props.force_update_fn)
+        target.force_update_fn = *props.force_update_fn;
+
+    if (props.electric_update_fn)
+        target.electric_update_fn = *props.electric_update_fn;
+
+    if (props.brain_fn)
+        target.brain_fn = *props.brain_fn;
+
+    if (props.destroyed_fn)
+        target.destroyed_fn = *props.destroyed_fn;
+
+    if (props.connection_update_fn)
+        target.connection_update_fn = *props.connection_update_fn;
+
 }
