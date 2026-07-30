@@ -18,6 +18,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - mod_main() (DONE)
   - Cell creation (DONE)
   - Advanced cell stuff
+  - Make Next() not require <data_type>
 - Organisation
   - Organise directories (DONE)
   - Organise files (DONE)
@@ -32,6 +33,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Mod versioning
   - Plasmid API versioning
   - Nucleus API versioning
+  - Collapse generated data types like field_0x1234 and _s_0
 - Fix bugs
   - CMake find_package warning
 ## DONE:

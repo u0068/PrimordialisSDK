@@ -40,3 +40,9 @@ cd PrimordialisSDK
 git sparse-checkout set Plasmid
 git sparse-checkout set Nucleus
 ```
+# TO-DO:
+- Put Ghidra scripts in SDK repo
+- Make tutorials for setting up the mod loader and SDK
+
+See the README.md's inside the projects for their TO-DO lists.
+# DONE:
