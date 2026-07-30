@@ -11,3 +11,4 @@ inline void update_cells(render_context* param_1, render_context* param_2, user_
 inline void init_materials_list() { return Resolve<void(*)()>("init_materials_list")(); }
 inline void update_game(render_context* param_1, render_context* param_2, user_input* param_3) { return Resolve<void(*)(render_context*, render_context*, user_input*)>("update_game")(param_1, param_2, param_3); }
 inline uint str_to_id(char* param_1) { return Resolve<uint(*)(char*)>("str_to_id")(param_1); }
+inline uint add_entry(translation_map* param_1, char* param_2, translation_list* param_3) { return Resolve<uint(*)(translation_map*, char*, translation_list*)>("add_entry")(param_1, param_2, param_3); }

@@ -11,11 +11,6 @@
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
 
-void Log(const char* message)
-{
-    printf("[Plasmid] %s\n", message);
-}
-
 std::unordered_map<std::string, void*> symbol_cache;
 void* ResolveSymbol(const char* name)
 {
@@ -98,27 +93,25 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
         return false;
     }
 
-    printf("Hooking successful!\n");
+    printf("Hooking successful!\nTarget: %p\nHook: %p\nTrampoline: %p\n", target, hook, trampoline);
 
     return true;
 }
 
-void* CreateHook(const char* name, void* detour){
+void* CreateHook(const char* name, void* hook){
 
     void* target = ResolveSymbol(name);
-    void* original = nullptr;
+    void* trampoline = nullptr;
 
-    printf("Creating hook for %s at %p to %p\n", name, target, detour);
+    printf("Creating hook for %s at %p to %p\n", name, target, hook);
 
     HookWrapper(
         target,
-        detour,
-        &original
+        hook,
+        &trampoline
     );
 
-    MH_EnableHook(target);
-
-    return original;
+    return trampoline;
 }
 
 thread_local void* current_context;
@@ -133,9 +126,9 @@ void SetCurrentContext(void* context)
     current_context = context;
 }
 
+
 NucleusRuntimeAPI api
 {
-    Log,
     ResolveSymbol,
     CreateHook,
     {},

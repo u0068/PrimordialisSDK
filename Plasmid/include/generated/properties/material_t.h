@@ -12,10 +12,10 @@ struct material_t_properties
     std::optional<uint> tags;
     std::optional<uint> tier;
     std::optional<float> drop_weight;
+    std::optional<int> spawn_with_0;
     std::optional<int> spawn_with_1;
     std::optional<int> spawn_with_2;
     std::optional<int> spawn_with_3;
-    std::optional<int> spawn_with_4;
     std::optional<float> base_cost;
     std::optional<float> random_cost;
     std::optional<float> genome_size;
@@ -91,6 +91,9 @@ inline void ApplyProperties(
     if (props.drop_weight)
         target.drop_weight = *props.drop_weight;
 
+    if (props.spawn_with_0)
+        target.spawn_with[0] = *props.spawn_with_0;
+
     if (props.spawn_with_1)
         target.spawn_with[1] = *props.spawn_with_1;
 
@@ -99,9 +102,6 @@ inline void ApplyProperties(
 
     if (props.spawn_with_3)
         target.spawn_with[3] = *props.spawn_with_3;
-
-    if (props.spawn_with_4)
-        target.spawn_with[4] = *props.spawn_with_4;
 
     if (props.base_cost)
         target.base_cost = *props.base_cost;

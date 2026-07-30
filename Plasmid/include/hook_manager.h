@@ -2,6 +2,17 @@
 #include <vector>
 #include "nucleus_interface.h"
 
+template<size_t N>
+struct FixedString
+{
+    char data[N];
+
+    constexpr FixedString(const char (&str)[N])
+    {
+        std::copy_n(str, N, data);
+    }
+};
+
 // Using type erasure to be able to store chains of different HookChain types by storing them as HookChainBase instead
 template<typename Ret, typename... Args>
 struct HookChain : HookChainBase
@@ -78,7 +89,7 @@ Ret Next(Args... args)
     return ctx->InvokeNext(args...);
 }
 
-template<typename Ret, typename... Args>
+template<FixedString name, typename Ret, typename... Args>
 struct Dispatcher
 {
     static HookChain<Ret, Args...>* chain;
@@ -101,11 +112,11 @@ struct Dispatcher
         return result;
     }
 };
-template<typename Ret, typename... Args>
-HookChain<Ret, Args...>* Dispatcher<Ret, Args...>::chain = nullptr;
+template<FixedString name, typename Ret, typename... Args>
+HookChain<Ret, Args...>* Dispatcher<name, Ret, Args...>::chain = nullptr;
 
-template<typename... Args>
-struct Dispatcher<void, Args...>
+template<FixedString name, typename... Args>
+struct Dispatcher<name, void, Args...>
 {
     static HookChain<void, Args...>* chain;
 
@@ -125,8 +136,8 @@ struct Dispatcher<void, Args...>
         nucleus->SetCurrentContext(nullptr);
     }
 };
-template<typename... Args>
-HookChain<void, Args...>* Dispatcher<void, Args...>::chain = nullptr;
+template<FixedString name, typename... Args>
+HookChain<void, Args...>* Dispatcher<name, void, Args...>::chain = nullptr;
 
 template<typename Chain>
 Chain* GetOrCreateChain(const char* name)
@@ -151,16 +162,15 @@ Chain* GetOrCreateChain(const char* name)
     return chain;
 }
 
-template<typename Ret, typename... Args>
+template<FixedString name, typename Ret, typename... Args>
 void Hook(
-    const char* name,
     Ret(*function)(Args...)
 )
 {
     using Chain = HookChain<Ret, Args...>;
-    using Disp = Dispatcher<Ret, Args...>;
+    using Disp = Dispatcher<name, Ret, Args...>;
 
-    auto chain = GetOrCreateChain<Chain>(name);
+    auto chain = GetOrCreateChain<Chain>((const char*)name.data);
 
     chain->hooks.push_back(function);
 
@@ -171,7 +181,7 @@ void Hook(
         chain->original =
             reinterpret_cast<Ret(*)(Args...)>
             (nucleus->CreateHook(
-                name,
+                (const char*)name.data,
                 static_cast<void*>(&Disp::Dispatch)
             ));
     }

@@ -519,7 +519,6 @@ inline uint djb2(int param_1) { return Resolve<uint(*)(int)>("djb2")(param_1); }
 inline uint djb2(id_t* param_1) { return Resolve<uint(*)(id_t*)>("djb2")(param_1); }
 inline uchar* stalloc_clear(ulong64 param_1) { return Resolve<uchar*(*)(ulong64)>("stalloc_clear")(param_1); }
 inline uint hash_index(translation_map* param_1, char* param_2) { return Resolve<uint(*)(translation_map*, char*)>("hash_index")(param_1, param_2); }
-inline uint add_entry(translation_map* param_1, char* param_2, translation_list* param_3) { return Resolve<uint(*)(translation_map*, char*, translation_list*)>("add_entry")(param_1, param_2, param_3); }
 inline uint remove_entry(translation_map* param_1, char* param_2) { return Resolve<uint(*)(translation_map*, char*)>("remove_entry")(param_1, param_2); }
 inline void init_noise_table() { return Resolve<void(*)()>("init_noise_table")(); }
 inline uchar get_modifier_state(user_input* param_1) { return Resolve<uchar(*)(user_input*)>("get_modifier_state")(param_1); }
