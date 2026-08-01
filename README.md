@@ -7,11 +7,11 @@ Primordialis SDK is a modding SDK for Primordialis.<br>
 
 # Loading Mods into Primordialis:
 To load mods into Primordialis, you need to download Pilus.exe, NucleusRuntimeAPI.dll 
-and primordialis.pbd from [Releases](https://github.com/u0068/PrimordialisSDK/releases) and
-put them into the Primordialis folder in your steam library.<br>
+and primordialis_avx.pbd from [Releases](https://github.com/u0068/PrimordialisSDK/releases).<br>
+Pilus.exe and primordialis_avx.pbd go in the Primordialis folder in your steam library.<br>
 Then launch Pilus.exe which will create a "mods" folder in Primordialis/mods.<br>
-Then, put your installed mods in the "mods" folder, configure and enable them to your liking,
-and launch Primordialis from Pilus by pressing "start".<br>
+Then, put NucleusRuntimeAPI.dll and your installed mods in the "mods" folder, configure and
+enable them to your liking, and launch Primordialis from Pilus by pressing "start".<br>
 
 # Making Mods:
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build

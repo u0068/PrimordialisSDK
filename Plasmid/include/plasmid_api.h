@@ -12,12 +12,12 @@ namespace APIUtil
 
     struct CellRef
     {
-        mutable int index = -1;
+        mutable int index{-1};
 
         union
         {
             mutable uint numeric{0};
-            char string[5];
+            mutable char string[5];
         };
 
         CellRef() = default;
@@ -32,7 +32,12 @@ namespace APIUtil
 
         CellRef(const char id[5])
         {
-            memcpy(string, id, 5);
+            strcpy_s(string, id);
+        }
+
+        bool IsInitialised()
+        {
+            return index >= 0 or numeric > 0;
         }
 
         int GetIndex() const
@@ -81,10 +86,11 @@ namespace APIUtil
                 if (index == -1)
                 {
                     printf("CellRef not initialised\n");
-                    return string;
+                    return nullptr;
                 }
                 numeric = materials_list[index].id;
             }
+            string[4] = *"\0";
             return string;
         }
 
@@ -106,7 +112,7 @@ namespace APIUtil
 
     struct AddCellCall
     {
-        material_t_properties properties;
+        material_t_props props;
         CellRef replace{};
         CellRef copyFrom{};
     };
@@ -151,14 +157,28 @@ namespace APIUtil
                 index = index == -1 ? n_materials : index;
 
                 materials_list[index] = materials_list[copy_from_index];
+                materials_list[index].max_health = (float)index; // For debugging
+                ApplyProperties(materials_list[index], cell.props);
+
+                CellRef cell_ref = CellRef{index};
                 printf("copy idx: %i\n",copy_from_index);
                 printf("cell idx: %i\n",index);
-                printf("int id: %u\n",CellRef{index}.GetNumeric());
-                printf("str id: %s\n", CellRef{index}.GetString());
-                materials_list[index].max_health = (float)index; // For debugging
-                ApplyProperties(materials_list[index], cell.properties);
-                if (cell.replace.GetIndex() == -1)
+                printf("int id: %u\n",cell_ref.GetNumeric());
+                printf("str id: %s\n", cell_ref.GetString());
+
+                if (!cell.replace.IsInitialised())
                     n_materials++;
+
+                if (cell.props.desc)
+                {
+                    char* key = new char[15];
+                    sprintf_s(key, 15, "cell_%s_desc", cell_ref.GetString());
+                    translation_list t_list{};
+                    t_list.text = &*cell.props.desc;
+                    t_list.formatted = nullptr;
+                    t_list.max_formatted = 0;
+                    add_entry(&w->translations, key, &t_list);
+                }
             }
         }
     }
