@@ -4,7 +4,8 @@ set(CMAKE_CXX_STANDARD 20)
 add_library(Plasmid INTERFACE
         include/hook_manager.h
         include/symbol_resolver.h
-        include/generated/typedefs.h)
+        include/generated/typedefs.h
+        include/generated/game_functions/essential.h)
 
 target_include_directories(Plasmid
         INTERFACE
