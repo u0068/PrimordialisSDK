@@ -23,7 +23,7 @@ public class ExportFunctions extends GhidraScript {
         File outDir = askDirectory("Output directory", "Save");
 
         String[] categories = {
-            "plasmid_api",
+            "essential",
             "lua",
             "cells",
             "creatures",
@@ -35,6 +35,7 @@ public class ExportFunctions extends GhidraScript {
             "ui",
             "brains",
             "particles",
+            "math",
             "misc"
         };
 
@@ -229,9 +230,10 @@ public class ExportFunctions extends GhidraScript {
             "init_materials_list",
             "str_to_id",
             "update_game",
-            "update_cells"
+            "update_cells",
+            "add_entry"
             ))
-            return "plasmid_api";
+            return "essential";
 
 
         if (containsAny(name,
@@ -242,7 +244,8 @@ public class ExportFunctions extends GhidraScript {
 
         if (containsAny(name,
             "cell",
-            "material"
+            "material",
+            "pickup"
             ))
             return "cells";
 
@@ -254,7 +257,15 @@ public class ExportFunctions extends GhidraScript {
             "player",
             "creature",
             "piece",
-            "material"
+            "material",
+            "element",
+            "give_",
+            "regen",
+            "death",
+            "spawn",
+            "growth",
+            "avoid",
+            "aggro"
             ))
             return "creatures";
 
@@ -286,7 +297,8 @@ public class ExportFunctions extends GhidraScript {
             "gravity",
             "torque",
             "integrate",
-            "oscilator"
+            "oscillator",
+            "connections"
             ))
             return "physics";
 
@@ -307,14 +319,19 @@ public class ExportFunctions extends GhidraScript {
 
         if (containsAny(name,
             "slider",
-            "button"
+            "button",
+            "text",
+            "translation",
+            "menu",
+            "do_"
             ))
             return "ui";
 
 
         if (containsAny(name,
             "sound",
-            "audio"
+            "audio",
+            "music"
             ))
             return "sound";
 
@@ -329,6 +346,53 @@ public class ExportFunctions extends GhidraScript {
             "entrance"
             ))
             return "world";
+
+
+        if (containsAny(name,
+            "max",
+            "min",
+            "mod",
+            "abs",
+            "pow",
+            "dot",
+            "sum",
+            "norm",
+            "sin",
+            "cos",
+            "tan",
+            "proj",
+            "rej",
+            "mult",
+            "div",
+            "lerp",
+            "clamp",
+            "less_than",
+            "invert_components",
+            "sign",
+            "floor",
+            "ceil",
+            "round",
+            "product",
+            "transpose",
+            "identity",
+            "tr",
+            "det",
+            "conjugate",
+            "cast",
+            "cross",
+            "complex",
+            "rand",
+            "perp",
+            "moment",
+            "hex",
+            "sd_",
+            "sdsq",
+            "gradient",
+            "exp",
+            "log",
+            "sqrt"
+            ))
+            return "math";
 
 
         return "misc";

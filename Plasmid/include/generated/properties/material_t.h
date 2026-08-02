@@ -228,43 +228,43 @@ inline void ApplyProperties(
 
 
     if (props.attach_to_cells)
-        target.field14_0x4c._s_0.attach_to_cells = *props.attach_to_cells;
+        target.attach_to_cells = *props.attach_to_cells;
 
     if (props.attach_to_walls)
-        target.field14_0x4c._s_0.attach_to_walls = *props.attach_to_walls;
+        target.attach_to_walls = *props.attach_to_walls;
 
     if (props.poison_immune)
-        target.field14_0x4c._s_0.poison_immune = *props.poison_immune;
+        target.poison_immune = *props.poison_immune;
 
     if (props.no_electric_growth)
-        target.field14_0x4c._s_0.no_electric_growth = *props.no_electric_growth;
+        target.no_electric_growth = *props.no_electric_growth;
 
     if (props.penetrate_walls)
-        target.field14_0x4c._s_0.penetrate_walls = *props.penetrate_walls;
+        target.penetrate_walls = *props.penetrate_walls;
 
     if (props.self_touching)
-        target.field14_0x4c._s_0.self_touching = *props.self_touching;
+        target.self_touching = *props.self_touching;
 
     if (props.is_cancer)
-        target.field14_0x4c._s_0.is_cancer = *props.is_cancer;
+        target.is_cancer = *props.is_cancer;
 
     if (props.is_directional)
-        target.field14_0x4c._s_0.is_directional = *props.is_directional;
+        target.is_directional = *props.is_directional;
 
     if (props.show_adjacency)
-        target.field14_0x4c._s_0.show_adjacency = *props.show_adjacency;
+        target.show_adjacency = *props.show_adjacency;
 
     if (props.show_direction)
-        target.field14_0x4c._s_0.show_direction = *props.show_direction;
+        target.show_direction = *props.show_direction;
 
     if (props.is_hard)
-        target.field14_0x4c._s_0.is_hard = *props.is_hard;
+        target.is_hard = *props.is_hard;
 
     if (props.play_note)
-        target.field14_0x4c._s_0.play_note = *props.play_note;
+        target.play_note = *props.play_note;
 
     if (props.no_recolor)
-        target.field14_0x4c._s_0.no_recolor = *props.no_recolor;
+        target.no_recolor = *props.no_recolor;
 
 
     if (props.physics_update_fn)
