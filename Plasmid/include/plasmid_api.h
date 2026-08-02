@@ -3,11 +3,12 @@
 #include "hook_manager.h"
 #include "nucleus_interface.h"
 #include "generated/properties/material_t.h"
+#include <windows.h>
 
 namespace APIUtil
 {
     // #include "generated/resolve_functions.h"
-    #include "generated/game_functions/plasmid_api.h"
+    #include "generated/game_functions/essential.h"
     #include "generated/resolve_data.h"
 
     struct CellRef
