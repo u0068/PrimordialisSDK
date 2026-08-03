@@ -206,3 +206,26 @@ class CppEmitter:
         #
 
         self.emit_field(dt, field_name, level)
+
+    def emit_printer(self, dt):
+        # This is pretty scuffed, output requires alterations to use
+        # That was acceptable because the printer was a single-use script
+        # If you plan on using this again in the future, consider fixing it first
+
+        if isinstance(dt, (Structure, Union)):
+            for component in dt.getComponents():
+                self.emit_printer(component)
+            return
+
+        data_type = dt.getDataType()
+
+        if isinstance(data_type, (Structure, Union)):
+            for component in data_type.getComponents():
+                self.emit_printer(component)
+            return
+
+        type_format = ""
+        if data_type.getName == "float":
+            type_format = ":.2g"
+
+        self.emit("""outFile << std::format("%s: {%s}\\n", material.%s);""" % (dt.getFieldName(), type_format, dt.getFieldName()), 0)
