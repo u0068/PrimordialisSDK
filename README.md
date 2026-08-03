@@ -25,7 +25,10 @@ git sparse-checkout set Plasmid
 ```
 To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).<br>
 Load the Primordialis PDB before decompiling, by following the steps given in the
-Ghidra Docs (or just search it up).
+Ghidra Docs (or just search it up).<br>
+Some decompiled functions are already in PrimordialisSDK/Decompiled.<br>
+Share your decompiled functions by putting them in there and pushing to the repo.<br>
+**Warning: Interpreting decompiled code is not for the faint of heart!** 
 # Contributing to the SDK
 To contribute, clone the entire repo:
 ```bash
