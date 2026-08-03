@@ -2,7 +2,6 @@
 
 #include "hook_manager.h"
 #include "nucleus_interface.h"
-#include "generated/properties/material_t.h"
 #include <windows.h>
 
 namespace APIUtil
@@ -172,69 +171,13 @@ namespace APIUtil
         }
     }
 
-    struct AddCellCall
-    {
-        material_t_props props;
-        CellRef replace{};
-        CellRef copyFrom{};
-    };
-
     struct UpdateWorkCall
     {
         char* traceName = const_cast<char*>("no trace name");
         void(*call)(){};
     };
 
-    static std::vector<AddCellCall> cells2add;
     static std::vector<UpdateWorkCall> update_cells_work_append;
-
-    static void QueueAddCell(const AddCellCall& add_cell)
-    {
-        cells2add.push_back(add_cell);
-    }
-
-    inline void AddAllCells()
-    {
-        Next<void>();
-        if (IsThreadSafe())
-        {
-            for (auto & cell : cells2add)
-            {
-                if (n_materials >= 2048)
-                {
-                    printf("Cell count is at maximum !\n");
-                    return;
-                }
-
-                int copy_from_index = cell.copyFrom.GetIndex();
-                int index = cell.replace.GetIndex();
-                copy_from_index = copy_from_index == -1 ? (
-                    index == -1 ? 1 : index
-                    ) : copy_from_index;
-                index = index == -1 ? n_materials : index;
-
-                materials_list[index] = materials_list[copy_from_index];
-                materials_list[index].max_health = (float)index; // For debugging
-                ApplyProperties(materials_list[index], cell.props);
-
-                CellRef cell_ref = CellRef{index};
-                printf("copy idx: %i\n",copy_from_index);
-                printf("cell idx: %i\n",index);
-                printf("int id: %u\n",cell_ref.GetNumeric());
-                printf("str id: %s\n", cell_ref.GetString());
-
-                if (!cell.replace.IsInitialised())
-                    n_materials++;
-
-                if (cell.props.desc)
-                {
-                    char key[15];
-                    sprintf_s(key, "cell_%s_desc", cell_ref.GetString());
-                    AddTranslation(key, *cell.props.desc);
-                }
-            }
-        }
-    }
 
     inline void DoAllUpdateCellsWork() // called after vanilla cell-related update functions
     {
@@ -245,10 +188,6 @@ namespace APIUtil
         }
     }
 
-    static void AddAllCellsHook()
-    {
-        AddAllCells();
-    }
     static void AddAllWorkHook(render_context* param_1, render_context* param_2, user_input* param_3)
     {
         Next<void>(param_1, param_2, param_3);
@@ -258,7 +197,6 @@ namespace APIUtil
     static void APIHookAllUtil()
     {
         Hook<"init_materials_list">(InitMaterialsHook);
-        Hook<"init_materials_list">(AddAllCellsHook);
         // Hook("update_cells", AddAllWorkHook);
     };
 };
