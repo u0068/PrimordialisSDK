@@ -13,11 +13,8 @@ namespace APIUtil
     template<typename... Args>
     void Log(Args... args)
     {
-        char buffer[2048];
-        sprintf_s(buffer,  args...);
-        printf("[%s]\n  %s", MOD_NAME, buffer);
+        LogTemplate(MOD_NAME, args...);
     }
-
 
     inline uint32_t HashCellId(
         const char *cell

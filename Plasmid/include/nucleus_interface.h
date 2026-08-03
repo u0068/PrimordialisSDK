@@ -17,3 +17,11 @@ struct NucleusRuntimeAPI
 };
 
 inline NucleusRuntimeAPI* nucleus;
+
+template<typename... Args>
+void LogTemplate(const char* name, Args... args)
+{
+    char buffer[2048];
+    sprintf_s(buffer,  args...);
+    printf("[%s]\n  %s", name, buffer);
+}

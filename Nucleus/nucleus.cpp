@@ -12,9 +12,7 @@
 template<typename... Args>
 void Log(Args... args)
 {
-    char buffer[2048];
-    sprintf_s(buffer,  args...);
-    printf("[NUCLEUS]\n  %s", buffer);
+    LogTemplate("NUCLEUS", args...);
 }
 
 std::unordered_map<std::string, void*> symbol_cache;
