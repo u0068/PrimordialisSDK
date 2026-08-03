@@ -14,6 +14,7 @@ namespace APIUtil
     struct CellRef
     {
         mutable int index{-1};
+        // mutable const char* name{nullptr};
 
         union
         {
@@ -31,9 +32,12 @@ namespace APIUtil
             : numeric(id)
         {}
 
-        CellRef(const char id[5])
+        CellRef(const char* id)
         {
-            strcpy_s(string, id);
+            // if (strlen(id) == 4)
+                strcpy_s(string, id);
+            // else
+            //     name = id;
         }
 
         bool IsInitialised()
@@ -61,6 +65,12 @@ namespace APIUtil
                     index = i;
                     return i;
                 }
+                // if (materials_list[i].name == name)
+                // {
+                //     printf("Found cell %s with name %s at index %i\n", string, name, i);
+                //     index = i;
+                //     return i;
+                // }
             }
             printf("Failed to find cell %s with id %u\n", string, numeric);
             return -1;
@@ -71,10 +81,9 @@ namespace APIUtil
             if (numeric == 0)
             {
                 if (index == -1)
-                {
-                    printf("CellRef not initialised\n");
+                    index = GetIndex();
+                if (index == -1)
                     return 0;
-                }
                 numeric = materials_list[index].id;
             }
             return numeric;
@@ -85,15 +94,27 @@ namespace APIUtil
             if (numeric == 0)
             {
                 if (index == -1)
-                {
-                    printf("CellRef not initialised\n");
+                    index = GetIndex();
+                if (index == -1)
                     return nullptr;
-                }
                 numeric = materials_list[index].id;
             }
             string[4] = *"\0";
             return string;
         }
+
+        // const char* GetName() const
+        // {
+        //     if (name==0)
+        //     {
+        //         if (index == -1)
+        //             index = GetIndex();
+        //         if (index == -1)
+        //             return nullptr;
+        //         name = materials_list[index].name;
+        //     }
+        //     return name;
+        // }
 
         operator int() const
         {
@@ -110,6 +131,46 @@ namespace APIUtil
             return GetNumeric();
         }
     };
+
+    static std::vector<char*> translation_values;
+
+    inline void AddTranslation(char* _key, char* _value)
+    {
+        char* key = new char[strlen(_key)+1]{};
+        memcpy_s(key, strlen(_key)+1, _key, strlen(_key));
+
+        translation_values.push_back(_value);
+        char** value = &translation_values.back();
+
+        translation_list t_list{};
+        t_list.text = value;
+        t_list.formatted = nullptr;
+        t_list.max_formatted = 0;
+        add_entry(&w->translations, key, &t_list);
+    }
+
+    inline void AddCellDescription(const char* id, char* desc)
+    {
+        char key[15];
+        sprintf_s(key, "cell_%s_desc", id);
+        AddTranslation(key, desc);
+    }
+
+    inline bool IsThreadSafe()
+    {
+        return *static_cast<int*>(TlsGetValue(tls_index)) == 0;
+    }
+
+    void OnInitMaterials();
+
+    inline void InitMaterialsHook()
+    {
+        Next<void>();
+        if (IsThreadSafe())
+        {
+            OnInitMaterials();
+        }
+    }
 
     struct AddCellCall
     {
@@ -130,11 +191,6 @@ namespace APIUtil
     static void QueueAddCell(const AddCellCall& add_cell)
     {
         cells2add.push_back(add_cell);
-    }
-
-    inline bool IsThreadSafe()
-    {
-        return *static_cast<int*>(TlsGetValue(tls_index)) == 0;
     }
 
     inline void AddAllCells()
@@ -172,13 +228,9 @@ namespace APIUtil
 
                 if (cell.props.desc)
                 {
-                    char* key = new char[15];
-                    sprintf_s(key, 15, "cell_%s_desc", cell_ref.GetString());
-                    translation_list t_list{};
-                    t_list.text = &*cell.props.desc;
-                    t_list.formatted = nullptr;
-                    t_list.max_formatted = 0;
-                    add_entry(&w->translations, key, &t_list);
+                    char key[15];
+                    sprintf_s(key, "cell_%s_desc", cell_ref.GetString());
+                    AddTranslation(key, *cell.props.desc);
                 }
             }
         }
@@ -205,6 +257,7 @@ namespace APIUtil
 
     static void APIHookAllUtil()
     {
+        Hook<"init_materials_list">(InitMaterialsHook);
         Hook<"init_materials_list">(AddAllCellsHook);
         // Hook("update_cells", AddAllWorkHook);
     };
@@ -216,4 +269,5 @@ inline void Initialise(NucleusRuntimeAPI* api)
     nucleus = api;
     printf("Mod Initialised!\n");
     APIUtil::APIHookAllUtil();
+    APIUtil::translation_values.reserve(2048);
 }
