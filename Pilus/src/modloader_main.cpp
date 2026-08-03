@@ -635,7 +635,7 @@ void ModManager::InjectAll()
     {
         char cmdLine[] = "primordialis.exe --steamless --autoreload";
         ownProcess = true;
-        if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &startI, &procI))
+        if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE, CREATE_SUSPENDED, nullptr, nullptr, &startI, &procI))
         {
             log.append("Failed to start primordialis: ");
             log.append(std::to_string(GetLastError()));
@@ -722,7 +722,7 @@ void ModManager::InjectAll()
 
     if (ownProcess)
     {
-        //ResumeThread(procI.hThread);
+        ResumeThread(procI.hThread);
 
         CloseHandle(procI.hThread);
         CloseHandle(procI.hProcess);
