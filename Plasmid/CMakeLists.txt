@@ -5,7 +5,8 @@ add_library(Plasmid INTERFACE
         include/hook_manager.h
         include/symbol_resolver.h
         include/generated/typedefs.h
-        include/generated/game_functions/essential.h)
+        include/generated/game_functions/essential.h
+        include/plasmid_log.h)
 
 target_include_directories(Plasmid
         INTERFACE

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "nucleus_interface.h"
+#include "plasmid_log.h"
 
 template<size_t N>
 struct FixedString
@@ -41,16 +42,16 @@ struct HookContext : HookContextBase
         if(index < chain->hooks.size())
         {
             auto hook = chain->hooks[index++];
-            printf("HookChain %s: Invoking hook at %p\n", chain->name, hook);
+            PlasmidLog("HookChain %s: Invoking hook at %p\n", chain->name, hook);
             Ret result = hook(args...);
-            printf("HookChain %s: Returning from hook at %p\n", chain->name, hook);
+            PlasmidLog("HookChain %s: Returning from hook at %p\n", chain->name, hook);
             return result;
         }
 
         auto original = chain->original;
-        printf("HookChain %s: Invoking original at %p\n", chain->name, original);
+        PlasmidLog("HookChain %s: Invoking original at %p\n", chain->name, original);
         Ret result = original(args...);
-        printf("HookChain %s: Returning from original at %p\n", chain->name, original);
+        PlasmidLog("HookChain %s: Returning from original at %p\n", chain->name, original);
         return result;
     }
 };
@@ -66,16 +67,16 @@ struct HookContext<void, Args...> : HookContextBase
         if(index < chain->hooks.size())
         {
             auto hook = chain->hooks[index++];
-            printf("HookChain %s: Invoking hook at %p\n", chain->name, hook);
+            PlasmidLog("HookChain %s: Invoking hook at %p\n", chain->name, hook);
             hook(args...);
-            printf("HookChain %s: Returning from hook at %p\n", chain->name, hook);
+            PlasmidLog("HookChain %s: Returning from hook at %p\n", chain->name, hook);
         }
         else
         {
             auto original = chain->original;
-            printf("HookChain %s: Invoking original at %p\n", chain->name, original);
+            PlasmidLog("HookChain %s: Invoking original at %p\n", chain->name, original);
             original(args...);
-            printf("HookChain %s: Returning from original at %p\n", chain->name, original);
+            PlasmidLog("HookChain %s: Returning from original at %p\n", chain->name, original);
         }
     }
 };
@@ -96,7 +97,7 @@ struct Dispatcher
 
     static Ret Dispatch(Args... args)
     {
-        printf("Dispatching HookChain %s\n", chain->name);
+        PlasmidLog("Dispatching HookChain %s\n", chain->name);
 
         HookContext<Ret, Args...> context;
 
@@ -122,7 +123,7 @@ struct Dispatcher<name, void, Args...>
 
     static void Dispatch(Args... args)
     {
-        printf("Dispatching HookChain %s\n", chain->name);
+        PlasmidLog("Dispatching HookChain %s\n", chain->name);
 
         HookContext<void, Args...> context;
 
@@ -142,17 +143,17 @@ HookChain<void, Args...>* Dispatcher<name, void, Args...>::chain = nullptr;
 template<typename Chain>
 Chain* GetOrCreateChain(const char* name)
 {
-    printf("GetOrCreateChain: %s\n", name);
+    PlasmidLog("GetOrCreateChain: %s\n", name);
 
     auto it = nucleus->chains.find(name);
 
     if(it != nucleus->chains.end())
     {
-        printf("Getting existing chain for %s\n", name);
+        PlasmidLog("Getting existing chain for %s\n", name);
         return static_cast<Chain*>(it->second);
     }
 
-    printf("Existing chain not found, creating new chain for %s\n", name);
+    PlasmidLog("Existing chain not found, creating new chain for %s\n", name);
 
     auto chain = new Chain();
 

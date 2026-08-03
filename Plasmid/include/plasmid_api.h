@@ -10,10 +10,44 @@ namespace APIUtil
     #include "generated/game_functions/essential.h"
     #include "generated/resolve_data.h"
 
+    template<typename... Args>
+    void Log(Args... args)
+    {
+        char buffer[2048];
+        sprintf_s(buffer,  args...);
+        printf("[%s]\n  %s", MOD_NAME, buffer);
+    }
+
+
+    inline uint32_t HashCellId(
+        const char *cell
+    )
+    {
+        uint32_t hash = 2166136261;
+
+        auto hash_byte = [&](uint8_t c)
+        {
+            hash ^= c;
+            hash *= 16777619;
+        };
+
+        for (char c : (std::string_view)MOD_NAME)
+            hash_byte(c);
+
+        hash_byte(':');
+
+        for (char c : (std::string_view)cell)
+            hash_byte(c);
+
+        PlasmidLog("Generated '%s' id: %u\n", cell, hash);
+
+        return hash;
+    }
+
     struct CellRef
     {
         mutable int index{-1};
-        // mutable const char* name{nullptr};
+        mutable const char* name{nullptr};
 
         union
         {
@@ -33,10 +67,14 @@ namespace APIUtil
 
         CellRef(const char* id)
         {
-            // if (strlen(id) == 4)
+            if (strlen(id) == 4)
+            {
                 strcpy_s(string, id);
-            // else
-            //     name = id;
+            } else
+            {
+                name = id;
+            }
+
         }
 
         bool IsInitialised()
@@ -49,29 +87,29 @@ namespace APIUtil
             if (index >= 0)
                 return index;
 
-            if (numeric == 0)
+            if (numeric == 0 && name == nullptr)
             {
-                printf("CellRef not initialised\n");
+                PlasmidLog("CellRef not initialised\n");
                 return -1;
             }
 
-            printf("Searching for cell %s with id %u\n", string, numeric);
+            PlasmidLog("Searching for cell type '%s' with id %u\n", name, numeric);
             for (int i = 1; i < n_materials; i++)
             {
                 if (materials_list[i].id == numeric)
                 {
-                    printf("Found cell %s with id %u at index %i\n", string, numeric, i);
+                    PlasmidLog("Found cell type '%s' with id %u at index %i\n", name, numeric, i);
                     index = i;
                     return i;
                 }
-                // if (materials_list[i].name == name)
-                // {
-                //     printf("Found cell %s with name %s at index %i\n", string, name, i);
-                //     index = i;
-                //     return i;
-                // }
+                if (strcmp(materials_list[i].name, name) == 0)
+                {
+                    PlasmidLog("Found cell type '%s' with index %i\n", name, i);
+                    index = i;
+                    return i;
+                }
             }
-            printf("Failed to find cell %s with id %u\n", string, numeric);
+            PlasmidLog("Failed to find cell type '%s' with id %u\n", name, numeric);
             return -1;
         }
 
@@ -102,18 +140,19 @@ namespace APIUtil
             return string;
         }
 
-        // const char* GetName() const
-        // {
-        //     if (name==0)
-        //     {
-        //         if (index == -1)
-        //             index = GetIndex();
-        //         if (index == -1)
-        //             return nullptr;
-        //         name = materials_list[index].name;
-        //     }
-        //     return name;
-        // }
+        const char* GetName() const
+        {
+            if (name == nullptr)
+            {
+                if (index == -1)
+                    index = GetIndex();
+                if (index == -1)
+                    return nullptr;
+                name = materials_list[index].name;
+                return name;
+            }
+            return name;
+        }
 
         operator int() const
         {
@@ -130,6 +169,20 @@ namespace APIUtil
             return GetNumeric();
         }
     };
+
+    inline int GetCellIndexFromName(const char* name)
+    {
+        for (int i = 1; i < n_materials; i++)
+        {
+            if (strcmp(materials_list[i].name, name) == 0)
+            {
+                PlasmidLog("Found cell '%s' with index %i\n", name, i);
+                return i;
+            }
+        }
+        PlasmidLog("Cell '%s' not found, fallback to index 1\n", name);
+        return 1;
+    }
 
     static std::vector<char*> translation_values;
 
@@ -205,7 +258,7 @@ extern"C" __declspec(dllexport)
 inline void Initialise(NucleusRuntimeAPI* api)
 {
     nucleus = api;
-    printf("Mod Initialised!\n");
+    PlasmidLog("Mod Initialised!\n");
     APIUtil::APIHookAllUtil();
     APIUtil::translation_values.reserve(2048);
 }

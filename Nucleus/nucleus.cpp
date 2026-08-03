@@ -4,12 +4,18 @@
 #include <string>
 #include <unordered_map>
 #include <tlhelp32.h>
-// #include <vector>
-// #include "../include/generated/data_types.h"
 #include "../Plasmid/include/nucleus_interface.h"
 
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
+
+template<typename... Args>
+void Log(Args... args)
+{
+    char buffer[2048];
+    sprintf_s(buffer,  args...);
+    printf("[NUCLEUS]\n  %s", buffer);
+}
 
 std::unordered_map<std::string, void*> symbol_cache;
 void* ResolveSymbol(const char* name)
@@ -24,19 +30,19 @@ void* ResolveSymbol(const char* name)
 
         if (!SymInitialize(GetCurrentProcess(), nullptr, TRUE))
         {
-            printf("SymInitialize failed: %lu\n", GetLastError());
+            Log("SymInitialize failed: %lu\n", GetLastError());
             return nullptr;
         }
-        printf("DbgHelp initialized\n");
+        Log("DbgHelp initialized\n");
 
         initialized = true;
     }
 
-    printf("Resolving symbol '%s'\n", name);
+    Log("Resolving symbol '%s'\n", name);
     void* addr = symbol_cache[name];
     if (!addr)
     {
-        printf("Symbol '%s' not found in cache, resolving from PDB\n", name);
+        Log("Symbol '%s' not found in cache, resolving from PDB\n", name);
 
         char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME];
         memset(buffer, 0, sizeof(buffer));
@@ -48,7 +54,7 @@ void* ResolveSymbol(const char* name)
 
         if (!SymFromName(GetCurrentProcess(), name, symbol))
         {
-            printf(
+            Log(
                 "Failed to resolve symbol '%s': %lu\n",
                 name,
                 GetLastError()
@@ -57,7 +63,7 @@ void* ResolveSymbol(const char* name)
         } else
         {
             addr = reinterpret_cast<void*>(symbol->Address);
-            printf("Successfully resolved symbol '%s' from PDB at address %p\n",
+            Log("Successfully resolved symbol '%s' from PDB at address %p\n",
                 name,
                 addr
             );
@@ -66,13 +72,13 @@ void* ResolveSymbol(const char* name)
         return addr;
     }
 
-    printf("Successfully resolved symbol '%s' from cache at address %p\n", name, addr);
+    Log("Successfully resolved symbol '%s' from cache at address %p\n", name, addr);
     return addr;
 }
 
 bool HookWrapper(void* target, void* hook, void** trampoline)
 {
-    printf("Attempting Hooking address %p\n", target);
+    Log("Attempting Hooking address %p\n", target);
 
     auto status = MH_CreateHook(
         target,
@@ -81,7 +87,7 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
 
     if (status != MH_OK)
     {
-        printf("MH_CreateHook failed: %d\n", status);
+        Log("MH_CreateHook failed: %d\n", status);
         return false;
     }
 
@@ -89,11 +95,11 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
 
     if (status != MH_OK)
     {
-        printf("MH_EnableHook failed: %d\n", status);
+        Log("MH_EnableHook failed: %d\n", status);
         return false;
     }
 
-    printf("Hooking successful!\nTarget: %p\nHook: %p\nTrampoline: %p\n", target, hook, trampoline);
+    Log("Hooking successful!\n\tTarget: %p\n\tHook: %p\n\tTrampoline: %p\n", target, hook, trampoline);
 
     return true;
 }
@@ -103,7 +109,7 @@ void* CreateHook(const char* name, void* hook){
     void* target = ResolveSymbol(name);
     void* trampoline = nullptr;
 
-    printf("Creating hook for %s at %p to %p\n", name, target, hook);
+    Log("Creating hook for %s at %p to %p\n", name, target, hook);
 
     HookWrapper(
         target,
@@ -156,10 +162,10 @@ void LoadMod(const char* path)
 
     if (!mod)
     {
-        printf("Failed to load mod %s\n", path);
+        Log("Failed to load mod %s\n", path);
         return;
     }
-    printf("Loading mod %s\n", path);
+    Log("Loading mod %s\n", path);
 
     auto mod_init =
         reinterpret_cast<ModInit>(
@@ -168,7 +174,7 @@ void LoadMod(const char* path)
 
     if (!mod_init)
     {
-        printf("mod_init not found\n");
+        Log("mod_init not found\n");
         return;
     }
 
@@ -182,7 +188,7 @@ void LoadMod(const char* path)
 
     if (!mod_main)
     {
-        printf("mod_main not found\n");
+        Log("mod_main not found\n");
         return;
     }
 
@@ -196,14 +202,14 @@ DWORD WINAPI MainThread(LPVOID)
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    printf("Hello from Runtime API!\n");
+    Log("Hello from Runtime API!\n");
 
      if (MH_Initialize() != MH_OK)
      {
-         printf("MinHook init failed\n");
+         Log("MinHook init failed\n");
          return 0;
      }
-     printf("MinHook initialized\n");
+     Log("MinHook initialized\n");
 
     HANDLE mapping =
     OpenFileMappingA(
@@ -230,9 +236,9 @@ DWORD WINAPI MainThread(LPVOID)
     ready,
     INFINITE);
 
-    printf("Pilus_ModListReady\n");
+    Log("Pilus_ModListReady\n");
 
-    printf("Mod count: %i\n", shared->count);
+    Log("Mod count: %i\n", shared->count);
 
     for (uint32_t i = 0; i < shared->count; i++)
     {
