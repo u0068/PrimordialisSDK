@@ -102,6 +102,7 @@ namespace APIUtil
                 if (strcmp(materials_list[i].name, name) == 0)
                 {
                     PlasmidLog("Found cell type '%s' with index %i\n", name, i);
+                    numeric = HashCellId(name);
                     index = i;
                     return i;
                 }
@@ -167,20 +168,6 @@ namespace APIUtil
         }
     };
 
-    inline int GetCellIndexFromName(const char* name)
-    {
-        for (int i = 1; i < n_materials; i++)
-        {
-            if (strcmp(materials_list[i].name, name) == 0)
-            {
-                PlasmidLog("Found cell '%s' with index %i\n", name, i);
-                return i;
-            }
-        }
-        PlasmidLog("Cell '%s' not found, fallback to index 1\n", name);
-        return 1;
-    }
-
     static std::vector<char*> translation_values;
 
     inline void AddTranslation(char* _key, char* _value)
@@ -203,6 +190,13 @@ namespace APIUtil
         char key[15];
         sprintf_s(key, "cell_%s_desc", id);
         AddTranslation(key, desc);
+    }
+
+    inline void SetCellNameAndDesc(material_t &cell_type, char* name, char* desc)
+    {
+        cell_type.name = name;
+        cell_type.id = HashCellId(name);
+        AddCellDescription(CellRef{cell_type.id}, desc);
     }
 
     inline bool IsThreadSafe()
