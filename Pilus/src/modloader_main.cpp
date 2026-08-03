@@ -665,13 +665,13 @@ void ModManager::InjectAll()
             0,
             sizeof(ModListShared)));
 
-    HANDLE modListReadyEvent =
-    CreateEventA(
-        nullptr,
-        TRUE,
-        FALSE,
-        "Pilus_ModListReady"
-    );
+    // HANDLE modListReadyEvent =
+    // CreateEventA(
+    //     nullptr,
+    //     TRUE,
+    //     FALSE,
+    //     "Pilus_ModListReady"
+    // );
 
     shared->count = 0;
 
@@ -728,7 +728,7 @@ void ModManager::InjectAll()
         }
     }
 
-    SetEvent(modListReadyEvent);
+    // SetEvent(modListReadyEvent);
 
     if (ownProcess)
     {

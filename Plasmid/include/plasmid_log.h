@@ -1,4 +1,5 @@
 #pragma once
+#include "nucleus_interface.h"
 
 template<typename... Args>
 void PlasmidLog(Args... args)
