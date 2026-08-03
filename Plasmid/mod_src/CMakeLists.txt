@@ -27,8 +27,18 @@ endfunction()
 file(GLOB MODS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/*)
 
+set(MOD_TARGETS)
+
 foreach(MOD ${MODS})
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${MOD})
         add_subdirectory(${MOD})
+        get_filename_component(MOD_NAME ${MOD} NAME)
+        list(APPEND MOD_TARGETS ${MOD_NAME})
     endif()
 endforeach()
+
+add_custom_target(BuildAllMods)
+
+add_dependencies(BuildAllMods
+        ${MOD_TARGETS}
+)

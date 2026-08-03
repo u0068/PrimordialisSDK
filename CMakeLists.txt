@@ -12,24 +12,9 @@ add_subdirectory(Nucleus)
 add_subdirectory(Plasmid)
 
 
+add_custom_target(BuildAllModsNuc)
 
-file(GLOB MOD_DIRS CONFIGURE_DEPENDS
-        "${CMAKE_CURRENT_SOURCE_DIR}/Plasmid/mod_src/*"
-)
-
-set(MOD_TARGETS)
-
-foreach(MOD_DIR ${MOD_DIRS})
-    if(IS_DIRECTORY ${MOD_DIR})
-        #add_subdirectory(${MOD_DIR})
-        get_filename_component(MOD_NAME ${MOD_DIR} NAME)
-        list(APPEND MOD_TARGETS ${MOD_NAME})
-    endif()
-endforeach()
-
-add_custom_target(BuildAllMods)
-
-add_dependencies(BuildAllMods
+add_dependencies(BuildAllModsNuc
         NucleusRuntimeAPI
-        ${MOD_TARGETS}
+        BuildAllMods
 )
