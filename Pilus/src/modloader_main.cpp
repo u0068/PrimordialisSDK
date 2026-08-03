@@ -665,14 +665,6 @@ void ModManager::InjectAll()
             0,
             sizeof(ModListShared)));
 
-    HANDLE modListReadyEvent =
-    CreateEventA(
-        nullptr,
-        TRUE,
-        FALSE,
-        "Pilus_ModListReady"
-    );
-
     shared->count = 0;
 
     for (auto & mod : mods)
@@ -728,10 +720,19 @@ void ModManager::InjectAll()
         }
     }
 
-    SetEvent(modListReadyEvent);
 
     if (ownProcess)
     {
+        HANDLE nucleusModsInitialisedEvent =
+        OpenEventA(
+            SYNCHRONIZE,
+            FALSE,
+            "Nucleus_ModsInitialised");
+
+        WaitForSingleObject(
+        nucleusModsInitialisedEvent,
+        INFINITE);
+
         ResumeThread(procI.hThread);
 
         CloseHandle(procI.hThread);

@@ -210,18 +210,6 @@ DWORD WINAPI MainThread(LPVOID)
             0,
             sizeof(ModListShared)));
 
-    HANDLE ready =
-    OpenEventA(
-        SYNCHRONIZE,
-        FALSE,
-        "Pilus_ModListReady");
-
-    WaitForSingleObject(
-    ready,
-    INFINITE);
-
-    Log("Pilus_ModListReady\n");
-
     Log("Mod count: %i\n", shared->count);
 
     for (uint32_t i = 0; i < shared->count; i++)
@@ -229,6 +217,18 @@ DWORD WINAPI MainThread(LPVOID)
         ModInfo mod = shared->mods[i];
         LoadMod(mod.name);
     }
+
+    HANDLE nucleusModsInitialisedEvent =
+    CreateEventA(
+        nullptr,
+        TRUE,
+        FALSE,
+        "Nucleus_ModsInitialised"
+        );
+
+    SetEvent(nucleusModsInitialisedEvent);
+
+    Log("All Mods Initialised!\n");
 
     while (true)
     {
