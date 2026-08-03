@@ -41,8 +41,9 @@ git sparse-checkout set Plasmid
 git sparse-checkout set Nucleus
 ```
 # TO-DO:
-- Put Ghidra scripts in SDK repo
 - Make tutorials for setting up the mod loader and SDK
+- Move TO-DOs to trello
 
 See the README.md's inside the projects for their TO-DO lists.
 # DONE:
+- Put Ghidra scripts in SDK repo (DONE)

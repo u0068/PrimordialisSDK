@@ -4,14 +4,14 @@ A WIP modloader for [Plasmid](https://github.com/u0068/Plasmid) C++ and Lua mods
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
-- Start process suspended
 - Organise code into separate files
 - Switch to DearImgui
-- Exclude Nucleus from modlist
+- Exclude Nucleus from modlist reordering
 - Fix bugs:
   - Subscript out of range crash
   - Can't close through CLion
 ## DONE:
+- Start process suspended (DONE)
 - Modlist (DONE)
 - Basic UI (DONE)
   - Mod list editor (DONE)

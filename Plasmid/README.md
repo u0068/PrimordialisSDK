@@ -37,6 +37,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
 - Fix bugs
   - CMake find_package warning
 ## DONE:
+- Log to file (DONE)
 - Prefix mod name to log (DONE)
 - Unscuff the super scuffed temporary solutions (DONE)
 - Precompute relevant symbol ~~addresses~~ resolutions (DONE)

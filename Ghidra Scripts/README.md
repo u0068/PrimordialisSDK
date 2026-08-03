@@ -28,3 +28,8 @@ Ghidra scripts can be made in:
       # Start Ghidra in headless mode
       pyghidra.start()
   - Default working directory is `ghidra_installation_dir/support/`
+
+# TODO:
+- Rewrite java scripts in PyGhidra
+
+# DONE:
