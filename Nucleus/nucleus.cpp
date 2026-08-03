@@ -177,20 +177,6 @@ void LoadMod(const char* path)
     }
 
     mod_init(&api);
-
-    auto mod_main =
-        reinterpret_cast<ModMain>(
-            GetProcAddress(mod, "mod_main")
-        );
-
-
-    if (!mod_main)
-    {
-        Log("mod_main not found\n");
-        return;
-    }
-
-    mod_main();
 }
 
 DWORD WINAPI MainThread(LPVOID)

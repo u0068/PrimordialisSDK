@@ -243,13 +243,17 @@ namespace APIUtil
         Hook<"init_materials_list">(InitMaterialsHook);
         // Hook("update_cells", AddAllWorkHook);
     };
+
+    inline void InitialiseMod();
 };
 
 extern"C" __declspec(dllexport)
 inline void Initialise(NucleusRuntimeAPI* api)
 {
     nucleus = api;
-    PlasmidLog("Mod Initialised!\n");
+    PlasmidLog("Initialising Plasmid!\n");
     APIUtil::APIHookAllUtil();
     APIUtil::translation_values.reserve(2048);
+    APIUtil::Log("Initialising Mod!\n");
+    APIUtil::InitialiseMod();
 }
