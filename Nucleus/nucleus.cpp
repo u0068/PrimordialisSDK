@@ -15,68 +15,70 @@ void Log(Args... args)
     LogTemplate("NUCLEUS", args...);
 }
 
-std::unordered_map<std::string, void*> symbol_cache;
-void* ResolveSymbol(const char* name)
+void InitDbgHelp()
 {
-    static bool initialized = false;
-    if (!initialized)
+    static std::once_flag flag;
+    std::call_once(flag, []()
     {
         SymSetOptions(
             SYMOPT_UNDNAME |
-            SYMOPT_DEFERRED_LOADS
-        );
+            SYMOPT_DEFERRED_LOADS);
 
-        if (!SymInitialize(GetCurrentProcess(), nullptr, TRUE))
+        if (!SymInitialize(
+            GetCurrentProcess(),
+            nullptr,
+            TRUE))
         {
             Log("SymInitialize failed: %lu\n", GetLastError());
-            return nullptr;
         }
-        Log("DbgHelp initialized\n");
 
-        initialized = true;
-    }
+        printf("DbgHelp initialized\n");
+    });
+}
 
-    Log("Resolving symbol '%s'\n", name);
-    void* addr = symbol_cache[name];
-    if (!addr)
+inline void* ResolveSymbol(const char* name)
+{
+    void* addr;
+    // Log("Resolving Symbol %s\n", name);
+
+    char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME];
+    memset(buffer, 0, sizeof(buffer));
+
+    auto* symbol = reinterpret_cast<SYMBOL_INFO*>(buffer);
+
+    symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+    symbol->MaxNameLen = MAX_SYM_NAME;
+
+    if (!SymFromName(GetCurrentProcess(), name, symbol))
     {
-        Log("Symbol '%s' not found in cache, resolving from PDB\n", name);
-
-        char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME];
-        memset(buffer, 0, sizeof(buffer));
-
-        auto* symbol = reinterpret_cast<SYMBOL_INFO*>(buffer);
-
-        symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-        symbol->MaxNameLen = MAX_SYM_NAME;
-
-        if (!SymFromName(GetCurrentProcess(), name, symbol))
-        {
-            Log(
-                "Failed to resolve symbol '%s': %lu\n",
-                name,
-                GetLastError()
-            );
-            return nullptr;
-        } else
-        {
-            addr = reinterpret_cast<void*>(symbol->Address);
-            Log("Successfully resolved symbol '%s' from PDB at address %p\n",
-                name,
-                addr
-            );
-        }
-        symbol_cache[name] = addr;
-        return addr;
+        Log(
+            "Failed to resolve symbol '%s': %lu\n",
+            name,
+            GetLastError()
+        );
+        std::abort();
+        return nullptr;
     }
-
-    Log("Successfully resolved symbol '%s' from cache at address %p\n", name, addr);
+    addr = reinterpret_cast<void*>(symbol->Address);
+    if (addr == nullptr)
+    {
+        Log(
+            "Failed to resolve symbol '%s': %lu\n",
+            name,
+            GetLastError()
+        );
+        std::abort();
+    }
+    // Log("Successfully resolved symbol '%s' at address %p\n",
+    //     name,
+    //     addr
+    // );
     return addr;
 }
 
 bool HookWrapper(void* target, void* hook, void** trampoline)
 {
-    Log("Attempting Hooking address %p\n", target);
+    // Log("Attempting Hooking address %p\n", target);
 
     auto status = MH_CreateHook(
         target,
@@ -97,7 +99,7 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
         return false;
     }
 
-    Log("Hooking successful!\n\tTarget: %p\n\tHook: %p\n\tTrampoline: %p\n", target, hook, trampoline);
+    // Log("Hooking successful!\n\tTarget: %p\n\tHook: %p\n\tTrampoline: %p\n", target, hook, trampoline);
 
     return true;
 }
@@ -195,6 +197,8 @@ DWORD WINAPI MainThread(LPVOID)
      }
      Log("MinHook initialized\n");
 
+    InitDbgHelp();
+
     HANDLE mapping =
     OpenFileMappingA(
         FILE_MAP_READ,
@@ -210,14 +214,6 @@ DWORD WINAPI MainThread(LPVOID)
             0,
             sizeof(ModListShared)));
 
-    Log("Mod count: %i\n", shared->count);
-
-    for (uint32_t i = 0; i < shared->count; i++)
-    {
-        ModInfo mod = shared->mods[i];
-        LoadMod(mod.name);
-    }
-
     HANDLE nucleusModsInitialisedEvent =
     CreateEventA(
         nullptr,
@@ -225,6 +221,14 @@ DWORD WINAPI MainThread(LPVOID)
         FALSE,
         "Nucleus_ModsInitialised"
         );
+
+    Log("Mod count: %i\n", shared->count);
+
+    for (uint32_t i = 0; i < shared->count; i++)
+    {
+        ModInfo mod = shared->mods[i];
+        LoadMod(mod.name);
+    }
 
     SetEvent(nucleusModsInitialisedEvent);
 

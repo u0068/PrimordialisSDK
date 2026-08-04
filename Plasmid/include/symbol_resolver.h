@@ -19,12 +19,17 @@ class ResolvedData
 {
     const char* name;
     T* ptr = nullptr;
+    std::once_flag flag;
 
     T& Ref()
     {
-        if (!ptr)
+        std::call_once(flag, [&]()
+        {
             ptr = Resolve<T*>(name);
+            if (!ptr)
+                std::abort();
 
+        });
         return *ptr;
     }
 

@@ -201,7 +201,10 @@ namespace APIUtil
 
     inline bool IsThreadSafe()
     {
-        return *static_cast<int*>(TlsGetValue(tls_index)) == 0;
+        auto tls_value = TlsGetValue(tls_index);
+        if (tls_value == nullptr)
+            return false;
+        return *static_cast<int*>(tls_value) == 0;
     }
 
     void OnInitMaterials();
