@@ -1,4 +1,4 @@
-Primordialis SDK is a modding SDK for Primordialis.<br>
+Primordialis SDK is a modding SDK for Primordialis.
 # Contents:
 - Pilus Modloader
 - Nucleus Runtime API
@@ -7,15 +7,15 @@ Primordialis SDK is a modding SDK for Primordialis.<br>
 
 # Loading Mods into Primordialis:
 To load mods into Primordialis, you need to download Pilus.exe, NucleusRuntimeAPI.dll 
-and primordialis_avx.pbd from [Releases](https://github.com/u0068/PrimordialisSDK/releases).<br>
-Pilus.exe and primordialis_avx.pbd go in the Primordialis folder in your steam library.<br>
-Then launch Pilus.exe which will create a "mods" folder in Primordialis/mods.<br>
+and primordialis_avx.pbd from [Releases](https://github.com/u0068/PrimordialisSDK/releases).\
+Pilus.exe and primordialis_avx.pbd go in the Primordialis folder in your steam library.\
+Then launch Pilus.exe which will create a "mods" folder in Primordialis/mods.\
 Then, put NucleusRuntimeAPI.dll and your installed mods in the "mods" folder, configure and
-enable them to your liking, and launch Primordialis from Pilus by pressing "start".<br>
+enable them to your liking, and launch Primordialis from Pilus by pressing "start".
 
 # Making Mods:
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build
-C++ shared libraries such as Visual Studio, VScode, or Clion.<br>
+C++ shared libraries such as Visual Studio, VScode, or Clion.\
 You can download Plasmid.zip from releases, clone the entire SDK repo, 
 or use the following git commands to get only Plasmid:
 ```bash
@@ -23,18 +23,18 @@ git clone --filter=blob:none --sparse https://github.com/u0068/PrimordialisSDK
 cd PrimordialisSDK
 git sparse-checkout set Plasmid
 ```
-To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).<br>
+To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).\
 Load the Primordialis PDB before decompiling, by following the steps given in the
-Ghidra Docs (or just search it up).<br>
-Some decompiled functions are already in PrimordialisSDK/Decompiled.<br>
-Share your decompiled functions by putting them in there and pushing to the repo.<br>
+Ghidra Docs (or just search it up).\
+Some decompiled functions are already in PrimordialisSDK/Decompiled.\
+Share your decompiled functions by putting them in there and pushing to the repo.\
 **Warning: Interpreting decompiled code is not for the faint of heart!** 
 # Contributing to the SDK
 To contribute, clone the entire repo:
 ```bash
 git clone https://github.com/you/PrimordialisSDK
 ```
-Alternatively, you can sparsely checkout only the parts you want to contribute to.<br>
+Alternatively, you can sparsely checkout only the parts you want to contribute to.\
 For example, this is how you would only get Nucleus and Plasmid source code,
 without the Pilus source code:
 ```bash
@@ -43,6 +43,51 @@ cd PrimordialisSDK
 git sparse-checkout set Plasmid
 git sparse-checkout set Nucleus
 ```
+## CONTRIBUTION POLICY:
+- Everything must be as simple to use and understand as possible, both for the users and maintainers.
+- Everything must be working before pushing commits to the master branch.
+  - Make a new branch for experiments that might break stuff.
+- You must consult the key contributors (h (u0068) and gunno (guunno)) before making key decisions.
+- Code must be organised and documented.
+- Commits must be small and focused.
+- Commit messages must concisely and adequately describe the changes made.
+- Ask for help if you need any.
+## AI USE POLICY:
+- AI here refers to any machine learning models such as LLMs.
+- Contributing using AI is allowed as long as it is used **responsibly**.
+- ### Examples of responsible AI use:
+  - Asking AI to explain how to do something, e.g. using CMake, Ghidra, Git, etc
+  - Asking AI to explain what a piece of code does.
+  - Asking AI to teach you programming concepts, e.g. C++ templates, pointers, references, etc
+  - Using AI to generate **simple** pieces of code.
+  - Using AI to make minor edits code.
+  - Using AI to find bugs.
+  - Using AI to help design systems, e.g. a hook management system
+    - AI usually overcomplicates things, and writes much more code than it needs,
+      which put a large burden on maintainers.\
+      If the AI's output seems complicated, that's usually because it is, and must be simplified.
+    - If you don't know how to design most of the system yourself, you don't have a good enough
+      understanding of it to verify that the AI's output is good.\
+      Ask a human for help.
+- ### Examples of irresponsible AI use:
+  - Pushing AI code without reviewing it entirely.
+  - Pushing AI code that you don't understand.
+    - If you don't understand it, that is because:
+      - It is overcomplicated, and must be simplified.
+      - It uses programming concepts you don't understand. Ask a human or AI for help.
+      - You don't have a good enough grasp on what you are trying to do. Ask a human for help.
+<br><br>
+- All code made with the help of AI must be clearly disclosed as such, for example:
+  - ```c++
+    // Generated by ChatGPT
+    void ExampleFunction(){}
+  - ```c++
+    // Generated by Gemini and edited by [USERNAME]
+    void ExampleFunction(){}
+  - ```c++
+    // Made by [USERNAME] and edited by Claude Code
+    void ExampleFunction(){}
+  
 # TO-DO:
 - Make tutorials for setting up the mod loader and SDK
 - Move TO-DOs to trello
