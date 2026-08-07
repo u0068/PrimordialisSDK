@@ -60,6 +60,7 @@ https://discord.gg/Fz5RaRBNj8
 - AI here refers to any machine learning models such as LLMs.
 - Contributing using AI is allowed as long as it is used **responsibly**.
 - ### Examples of responsible AI use:
+  - Using AI for anything where you are the only person who will see the output.
   - Asking AI to explain how to do something, e.g. using CMake, Ghidra, Git, etc
   - Asking AI to explain what a piece of code does.
   - Asking AI to teach you programming concepts, e.g. C++ templates, pointers, references, etc
