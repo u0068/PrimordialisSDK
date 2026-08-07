@@ -1,7 +1,5 @@
-#define MOD_NAME "Example Mod"
+#define MOD_NAME "Constant Acid Color"
 #include "plasmid_api.h"
-#include "../include/generated/material_printer.h"
-//#include "../include/generated/game_functions/particles.h"
 
 namespace APIUtil
 {
