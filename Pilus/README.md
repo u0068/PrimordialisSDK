@@ -1,9 +1,12 @@
 # Pilus Modloader
-A WIP modloader for [Plasmid](https://github.com/u0068/Plasmid) C++ and Lua mods
+A WIP modloader for Primordialis C++ and Lua mods using the Nucleus and Plasmid APIs.
 
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
+- Automatically detect the presence of Nucleus and the PDB, and download them if absent.
+- Download updates for Pilus, Mods, Nucleus and PDB
+- Versioning for everything.
 - Organise code into separate files
 - Switch to DearImgui
 - Exclude Nucleus from modlist reordering
