@@ -5,13 +5,13 @@
 #include <vector>
 #include <optional>
 #include <iostream>
-
+#include <regex>
 #include <bcrypt.h>
 
 #pragma comment(lib, "bcrypt.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 1, 2};
+constexpr Version PILUS_VERSION{0, 1, 3};
 
 namespace fs = std::filesystem;
 
@@ -60,8 +60,8 @@ static std::optional<Version> ParseVersion(
     std::cout
         << "Parsing Version\n";
 
-    if (!tag.empty() && tag[0] == 'v')
-        tag.erase(0, 1);
+    // if (!tag.empty() && tag[0] == 'v')
+    //     tag.erase(0, 1);
 
     std::cout
         << tag
@@ -69,23 +69,25 @@ static std::optional<Version> ParseVersion(
 
     Version version;
 
-    if (sscanf_s(
-            tag.c_str(),
-            "v%d.%d.%d",
-            &version.major,
-            &version.minor,
-            &version.patch) != 3)
-    {
-        std::cout
-            << "Failed to Parse Version\n";
+    std::regex tag_regex(R"(\w*v(\d+).(\d+).(\d+)\w*)");
 
-        return std::nullopt;
+    std::smatch match;
+    if (std::regex_search(tag, match, tag_regex)) {
+        std::cout << "Tag: " << match[0].str() << "\n";
+        std::cout << "Major: " << match[1].str() << "\n";
+        std::cout << "Minor: " << match[2].str() << "\n";
+        std::cout << "Patch: " << match[3].str() << "\n";
+        version.major = std::stoi(match[1].str());
+        version.minor = std::stoi(match[2].str());
+        version.patch = std::stoi(match[3].str());
+
+        return version;
     }
 
     std::cout
-        << "Parsed Version\n";
+        << "Failed to Parse Version\n";
 
-    return version;
+    return std::nullopt;
 }
 
 static std::optional<json> FindPilusAsset(
