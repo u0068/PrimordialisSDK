@@ -6,28 +6,6 @@
 
 namespace fs = std::filesystem;
 
-static bool IsProcessRunning(DWORD pid)
-{
-    HANDLE process = OpenProcess(
-        PROCESS_QUERY_LIMITED_INFORMATION,
-        FALSE,
-        pid
-    );
-
-    if (!process)
-        return false;
-
-    DWORD exitCode = 0;
-
-    bool running =
-        GetExitCodeProcess(process, &exitCode) &&
-        exitCode == STILL_ACTIVE;
-
-    CloseHandle(process);
-
-    return running;
-}
-
 static bool WaitForProcessExit(DWORD pid)
 {
     HANDLE process = OpenProcess(

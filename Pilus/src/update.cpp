@@ -11,7 +11,7 @@
 #pragma comment(lib, "bcrypt.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 1, 1};
+constexpr Version PILUS_VERSION{0, 1, 2};
 
 namespace fs = std::filesystem;
 
@@ -38,7 +38,7 @@ static std::optional<json> GetLatestRelease()
             return std::nullopt;
 
         std::cout
-            << "Returning Latest Release JSON\n";
+            << "Found Latest Release JSON\n";
 
         // GitHub returns releases newest first.
         return releases[0];
@@ -71,7 +71,7 @@ static std::optional<Version> ParseVersion(
 
     if (sscanf_s(
             tag.c_str(),
-            "Pilus-v%d.%d.%d",
+            "v%d.%d.%d",
             &version.major,
             &version.minor,
             &version.patch) != 3)
