@@ -11,7 +11,7 @@
 #pragma comment(lib, "bcrypt.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 1, 3};
+constexpr Version PILUS_VERSION{0, 1, 4};
 
 namespace fs = std::filesystem;
 
@@ -58,10 +58,7 @@ static std::optional<Version> ParseVersion(
     std::string tag)
 {
     std::cout
-        << "Parsing Version\n";
-
-    // if (!tag.empty() && tag[0] == 'v')
-    //     tag.erase(0, 1);
+        << "Parsing Version: ";
 
     std::cout
         << tag
@@ -77,6 +74,7 @@ static std::optional<Version> ParseVersion(
         std::cout << "Major: " << match[1].str() << "\n";
         std::cout << "Minor: " << match[2].str() << "\n";
         std::cout << "Patch: " << match[3].str() << "\n";
+
         version.major = std::stoi(match[1].str());
         version.minor = std::stoi(match[2].str());
         version.patch = std::stoi(match[3].str());
@@ -90,22 +88,23 @@ static std::optional<Version> ParseVersion(
     return std::nullopt;
 }
 
-static std::optional<json> FindPilusAsset(
-    const json& release)
+static std::optional<json> FindAsset(
+    const json& release,
+    const char* name)
 {
     if (!release.contains("assets"))
         return std::nullopt;
 
     for (const auto& asset : release["assets"])
     {
-        if (asset["name"] == "Pilus.exe")
+        if (asset["name"] == name)
             return asset;
     }
 
     return std::nullopt;
 }
 
-// By ChatGPT
+// Sha256 boilerplate by ChatGPT
 static std::optional<std::string> Sha256(
     const fs::path& file)
 {
@@ -237,6 +236,104 @@ static std::optional<std::string> Sha256(
     return result;
 }
 
+bool DownloadAsset(const json& release, const char* asset_name, fs::path dest_path)
+{
+    auto asset = FindAsset(release, asset_name);
+
+    if (!asset)
+    {
+        std::cout
+            << "Release does not contain "
+            << asset_name
+            << "\n";
+
+        return false;
+    }
+
+    std::string downloadUrl =
+        (*asset)["browser_download_url"];
+
+    std::string digest =
+        (*asset)["digest"];
+
+    constexpr std::string_view prefix =
+        "https://github.com";
+
+    if (!downloadUrl.starts_with(prefix))
+    {
+        std::cout
+            << "Unexpected download URL:" << downloadUrl << "\n";
+
+        return false;
+    }
+
+    std::string path =
+        downloadUrl.substr(prefix.size());
+
+    DeleteFileW(dest_path.c_str());
+
+    std::cout
+        << "Downloading " << asset_name << "...\n";
+
+    if (!HttpDownload(
+            L"github.com",
+            std::wstring(
+                path.begin(),
+                path.end()),
+            dest_path))
+    {
+        std::cout
+            << "Failed to download " << asset_name << ".\n";
+
+        return false;
+    }
+
+    std::cout
+        << "Verifying " << asset_name << "...\n";
+
+    auto actualHash =
+        Sha256(dest_path);
+
+    if (!actualHash)
+    {
+        std::cout
+            << "Failed to calculate SHA-256.\n";
+
+        DeleteFileW(dest_path.c_str());
+        return false;
+    }
+
+    constexpr std::string_view shaPrefix =
+        "sha256:";
+
+    std::string expectedHash =
+        digest;
+
+    if (expectedHash.starts_with(shaPrefix))
+        expectedHash.erase(
+            0,
+            shaPrefix.size());
+
+    if (*actualHash != expectedHash)
+    {
+        std::cout
+            << "SHA-256 verification failed!\n"
+            << "Expected: "
+            << expectedHash
+            << "\n"
+            << "Actual:   "
+            << *actualHash
+            << "\n";
+
+        DeleteFileW(dest_path.c_str());
+
+        return false;
+    }
+
+    std::cout
+        << asset_name << " hash verified.\n";
+}
+
 bool Update::CheckAndUpdate()
 {
     std::cout
@@ -280,129 +377,44 @@ bool Update::CheckAndUpdate()
         << (*release)["tag_name"]
         << "\n";
 
-    auto asset = FindPilusAsset(*release);
-
-    if (!asset)
-    {
-        std::cout
-            << "Release does not contain Pilus.exe.\n";
-
-        return false;
-    }
-
-    std::string downloadUrl =
-        (*asset)["browser_download_url"];
-
-    std::string digest =
-        (*asset)["digest"];
-
-    constexpr std::string_view prefix =
-        "https://github.com";
-
-    if (!downloadUrl.starts_with(prefix))
-    {
-        std::cout
-            << "Unexpected download URL.\n";
-
-        return false;
-    }
-
-    std::string path =
-        downloadUrl.substr(prefix.size());
-
-    fs::path pilus =
+    fs::path pilus_path =
         fs::absolute(
             fs::path("Pilus.exe"));
 
-    fs::path update =
-        pilus.parent_path() /
+    fs::path update_path =
+        pilus_path.parent_path() /
         "Pilus.new.exe";
 
-    DeleteFileW(update.c_str());
-
-    std::cout
-        << "Downloading update...\n";
-
-    if (!HttpDownload(
-            L"github.com",
-            std::wstring(
-                path.begin(),
-                path.end()),
-            update))
-    {
-        std::cout
-            << "Failed to download update.\n";
-
-        return false;
-    }
-
-    std::cout
-        << "Verifying update...\n";
-
-    auto actualHash =
-        Sha256(update);
-
-    if (!actualHash)
-    {
-        std::cout
-            << "Failed to calculate SHA-256.\n";
-
-        DeleteFileW(update.c_str());
-        return false;
-    }
-
-    constexpr std::string_view shaPrefix =
-        "sha256:";
-
-    std::string expectedHash =
-        digest;
-
-    if (expectedHash.starts_with(shaPrefix))
-        expectedHash.erase(
-            0,
-            shaPrefix.size());
-
-    if (*actualHash != expectedHash)
-    {
-        std::cout
-            << "SHA-256 verification failed!\n"
-            << "Expected: "
-            << expectedHash
-            << "\n"
-            << "Actual:   "
-            << *actualHash
-            << "\n";
-
-        DeleteFileW(update.c_str());
-
-        return false;
-    }
-
-    std::cout
-        << "Update verified.\n";
+    DownloadAsset(release, "Pilus.exe", update_path);
 
     // Find our own PID and launch the updater.
 
     DWORD pid = GetCurrentProcessId();
 
-    fs::path updater =
-        pilus.parent_path() /
+    fs::path updater_path=
+        pilus_path.parent_path() /
         "PilusUpdater.exe";
 
-    if (!fs::exists(updater))
+    if (!fs::exists(updater_path))
     {
         std::cout
             << "PilusUpdater.exe not found.\n";
 
-        DeleteFileW(update.c_str());
-        return false;
+        std::cout
+            << "Downloading PilusUpdater from Github.\n";
+
+        if (!DownloadAsset(release, "PilusUpdater.exe", updater_path))
+        {
+            DeleteFileW(update_path.c_str());
+            return false;
+        }
     }
 
     std::wstring commandLine =
-        L"\"" + updater.wstring() + L"\" " +
+        L"\"" + updater_path.wstring() + L"\" " +
         std::to_wstring(pid) + L" \"" +
-        pilus.wstring() + L"\" \"" +
-        update.wstring() + L"\"";
+        pilus_path.wstring() + L"\" \"" +
+        update_path.wstring() + L"\"";
 
     STARTUPINFOW si{};
     si.cb = sizeof(si);
@@ -423,7 +435,7 @@ bool Update::CheckAndUpdate()
             FALSE,
             0,
             nullptr,
-            updater.parent_path().c_str(),
+            updater_path.parent_path().c_str(),
             &si,
             &pi))
     {
@@ -432,10 +444,12 @@ bool Update::CheckAndUpdate()
             << GetLastError()
             << "\n";
 
-        DeleteFileW(update.c_str());
+        DeleteFileW(updater_path.c_str());
 
         return false;
     }
+
+    Sleep(2000);
 
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
