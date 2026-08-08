@@ -1,5 +1,5 @@
 # Pilus Modloader
-A WIP modloader for [Plasmid](https://github.com/u0068/Plasmid) C++ and Lua mods
+A WIP modloader for Primordialis C++ and Lua mods made using Plasmid and Nucleus APIs.
 
 ## AIMS:
 - Make making and loading mods as easy as possible
@@ -14,6 +14,7 @@ A WIP modloader for [Plasmid](https://github.com/u0068/Plasmid) C++ and Lua mods
   - Subscript out of range crash
   - Can't close through CLion
 ## DONE:
+- Automatically download updater (DONE)
 - Pilus updater (DONE)
 - Organise code into separate files (DONE)
 - Start process suspended (DONE)
