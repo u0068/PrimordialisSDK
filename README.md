@@ -58,6 +58,7 @@ https://discord.gg/Fz5RaRBNj8
 - Ask for help if you need any.
 ## AI USE POLICY:
 - AI here refers to any machine learning models such as LLMs.
+- This only applies to contributing to the development of the SDK. You can freely use AI for making your own mods. 
 - Contributing using AI is allowed as long as it is used **responsibly**.
 - ### Examples of responsible AI use:
   - Using AI for anything where you are the only person who will see the output.
