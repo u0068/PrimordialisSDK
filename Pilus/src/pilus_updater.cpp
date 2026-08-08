@@ -142,7 +142,7 @@ static bool StartPilus(
     return true;
 }
 
-int wmain(int argc, wchar_t** argv)
+int main(int argc, char** argv)
 {
     /*
         Usage:
@@ -162,7 +162,7 @@ int wmain(int argc, wchar_t** argv)
         return 1;
     }
 
-    DWORD pid = std::wcstoul(argv[1], nullptr, 10);
+    DWORD pid = std::stoul(argv[1], nullptr, 10);
 
     fs::path target = argv[2];
     fs::path replacement = argv[3];
@@ -203,4 +203,13 @@ int wmain(int argc, wchar_t** argv)
     }
 
     return 0;
+}
+
+int WINAPI WinMain(
+    HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPSTR lpCmdLine,
+    int nCmdShow)
+{
+    return main(__argc, __argv);
 }
