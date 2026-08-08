@@ -11,7 +11,7 @@
 #pragma comment(lib, "bcrypt.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 1, 0};
+constexpr Version PILUS_VERSION{0, 1, 1};
 
 namespace fs = std::filesystem;
 
