@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <variant>
+#include <windows.h>
 
 struct ConfigValue
 {

@@ -6,7 +6,11 @@ project(Pilus)
 
 add_subdirectory(external/SFML)
 
-add_executable(Pilus WIN32 src/modloader_main.cpp src/modloader.h)
+add_executable(Pilus WIN32 src/modloader_main.cpp src/modloader.h
+        src/updater.h
+        src/injector.cpp
+        src/ui.cpp
+        src/modmanager.cpp)
 
 target_link_libraries(Pilus PRIVATE SFML::Graphics)
 
