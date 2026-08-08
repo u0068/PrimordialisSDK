@@ -1,11 +1,8 @@
-#pragma once
 #include <windows.h>
 #include <tchar.h>
 #include <tlhelp32.h>
 #include <fstream>
 #include "modloader.h"
-
-namespace fs = std::filesystem;
 
 DWORD GetProcessByName(const char* lpProcessName)
 {

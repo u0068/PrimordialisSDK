@@ -1,6 +1,4 @@
-#pragma once
 #include <deque>
-
 #include "modloader.h"
 
 std::string WrapText(const sf::Text& text, std::string& string, int max)

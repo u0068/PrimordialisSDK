@@ -5,9 +5,18 @@
 #include <windows.h>
 #include <winbase.h>
 #include "modloader.h"
+#include "update.h"
+
 
 void run()
 {
+    AllocConsole();
+
+    FILE* file;
+    freopen_s(&file, "CONOUT$", "w", stdout);
+
+    Update::CheckAndUpdate();
+
     sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
 
     sf::Font font;
@@ -23,11 +32,11 @@ void run()
     font.setSmooth(false);
     text.setCharacterSize(15);
 
-    std::filesystem::path modpath = std::filesystem::current_path().append("mods");
+    fs::path modpath = fs::current_path().append("mods");
 
-    if (!std::filesystem::exists(modpath))
+    if (!exists(modpath))
     {
-        std::filesystem::create_directory(modpath);
+        fs::create_directory(modpath);
         manager.log.append("Created mod directory\n");
     }
 
@@ -38,7 +47,7 @@ void run()
 
     manager.modpath = modpath;
 
-    if (std::filesystem::exists("PILUS_MODLOADER.CONFIG"))
+    if (fs::exists("PILUS_MODLOADER.CONFIG"))
     {
         manager.LoadModOrder();
     }

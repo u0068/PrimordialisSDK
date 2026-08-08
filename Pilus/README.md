@@ -7,9 +7,9 @@ A WIP modloader for [Plasmid](https://github.com/u0068/Plasmid) C++ and Lua mods
 - Automatically detect the presence of Nucleus and the PDB, and download them if absent.
 - Download updates for Pilus, Mods, Nucleus and PDB
 - Versioning for everything.
-- Organise code into separate files
 - Switch to DearImgui
 - Exclude Nucleus from modlist reordering
+- Make config use json for human readability
 - Fix bugs:
   - Subscript out of range crash
   - Can't close through CLion

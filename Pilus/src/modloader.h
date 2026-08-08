@@ -4,6 +4,8 @@
 #include <variant>
 #include <windows.h>
 
+namespace fs = std::filesystem;
+
 struct ConfigValue
 {
     std::string name{};
@@ -13,8 +15,8 @@ struct ConfigValue
 struct Mod
 {
     // SAVED IN PILUS.CONFIG
-    std::filesystem::path path{};
-    std::filesystem::path dll_path{};
+    fs::path path{};
+    fs::path dll_path{};
     bool enabled = true;
 
     // UNSAVED:
@@ -26,7 +28,7 @@ struct Mod
 
     bool operator== (const Mod& other) const
     {
-        if (std::filesystem::weakly_canonical(path) == std::filesystem::weakly_canonical(other.path)) // path is the only thing that matters
+        if (fs::weakly_canonical(path) == fs::weakly_canonical(other.path)) // path is the only thing that matters
             return true;
         return false;
     }
@@ -39,7 +41,7 @@ struct ModManager
     std::string error_log;
     std::string log;
 
-    std::filesystem::path modpath;
+    fs::path modpath;
     std::string last_description_trunc;
 
     sf::Font* font;

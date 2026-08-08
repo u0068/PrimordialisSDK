@@ -66,6 +66,7 @@ https://discord.gg/Fz5RaRBNj8
   - Asking AI to explain what a piece of code does.
   - Asking AI to teach you programming concepts, e.g. C++ templates, pointers, references, etc
   - Using AI to generate **simple** pieces of code.
+  - Using AI to generate boilerplate code.
   - Using AI to make minor edits code.
   - Using AI to find bugs.
   - Using AI to help design systems, e.g. a hook management system
