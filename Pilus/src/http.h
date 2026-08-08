@@ -1,4 +1,6 @@
 #pragma once
+#include <fstream>
+#include <iostream>
 #include <windows.h>
 #include <winhttp.h>
 #include "modloader.h"
@@ -95,7 +97,7 @@ static std::optional<std::string> HttpGet(
 
     if (status != 200)
     {
-        std::cerr
+        std::cout
             << "GitHub returned HTTP "
             << status
             << "\n";

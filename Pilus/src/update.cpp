@@ -1,11 +1,10 @@
+#include "http.h"
 #include <filesystem>
 #include <fstream>
-#include <sstream>
 #include <string>
 #include <vector>
 #include <optional>
 #include <iostream>
-#include "http.h"
 
 #include <bcrypt.h>
 
@@ -18,6 +17,9 @@ namespace fs = std::filesystem;
 
 static std::optional<json> GetLatestRelease()
 {
+    std::cout
+        << "Getting Latest Release\n";
+
     auto response =
         HttpGet(
             GITHUB_HOST,
@@ -35,12 +37,15 @@ static std::optional<json> GetLatestRelease()
             releases.empty())
             return std::nullopt;
 
+        std::cout
+            << "Returning Latest Release JSON\n";
+
         // GitHub returns releases newest first.
         return releases[0];
     }
     catch (const json::exception& e)
     {
-        std::cerr
+        std::cout
             << "Failed to parse GitHub response: "
             << e.what()
             << "\n";
@@ -52,20 +57,33 @@ static std::optional<json> GetLatestRelease()
 static std::optional<Version> ParseVersion(
     std::string tag)
 {
+    std::cout
+        << "Parsing Version\n";
+
     if (!tag.empty() && tag[0] == 'v')
         tag.erase(0, 1);
 
+    std::cout
+        << tag
+        << "\n";
+
     Version version;
 
-    if (std::sscanf(
+    if (sscanf_s(
             tag.c_str(),
-            "%d.%d.%d",
+            "Pilus-v%d.%d.%d",
             &version.major,
             &version.minor,
             &version.patch) != 3)
     {
+        std::cout
+            << "Failed to Parse Version\n";
+
         return std::nullopt;
     }
+
+    std::cout
+        << "Parsed Version\n";
 
     return version;
 }
@@ -239,7 +257,7 @@ bool Update::CheckAndUpdate()
 
     if (!version)
     {
-        std::cerr
+        std::cout
             << "Invalid release version.\n";
 
         return false;
@@ -264,7 +282,7 @@ bool Update::CheckAndUpdate()
 
     if (!asset)
     {
-        std::cerr
+        std::cout
             << "Release does not contain Pilus.exe.\n";
 
         return false;
@@ -281,7 +299,7 @@ bool Update::CheckAndUpdate()
 
     if (!downloadUrl.starts_with(prefix))
     {
-        std::cerr
+        std::cout
             << "Unexpected download URL.\n";
 
         return false;
@@ -310,7 +328,7 @@ bool Update::CheckAndUpdate()
                 path.end()),
             update))
     {
-        std::cerr
+        std::cout
             << "Failed to download update.\n";
 
         return false;
@@ -324,7 +342,7 @@ bool Update::CheckAndUpdate()
 
     if (!actualHash)
     {
-        std::cerr
+        std::cout
             << "Failed to calculate SHA-256.\n";
 
         DeleteFileW(update.c_str());
@@ -344,7 +362,7 @@ bool Update::CheckAndUpdate()
 
     if (*actualHash != expectedHash)
     {
-        std::cerr
+        std::cout
             << "SHA-256 verification failed!\n"
             << "Expected: "
             << expectedHash
@@ -371,7 +389,7 @@ bool Update::CheckAndUpdate()
 
     if (!fs::exists(updater))
     {
-        std::cerr
+        std::cout
             << "PilusUpdater.exe not found.\n";
 
         DeleteFileW(update.c_str());
@@ -407,7 +425,7 @@ bool Update::CheckAndUpdate()
             &si,
             &pi))
     {
-        std::cerr
+        std::cout
             << "Failed to start updater: "
             << GetLastError()
             << "\n";
