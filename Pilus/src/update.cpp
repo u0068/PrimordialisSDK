@@ -5,7 +5,7 @@
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 2, 1};
+constexpr Version PILUS_VERSION{0, 2, 0};
 
 static std::optional<Version> ParseVersion(
 
@@ -53,7 +53,7 @@ bool DownloadFromURL(const std::string &source_path, const fs::path &dest_path) 
         std::cout << "Downloaded to " << dest_path << "\n";
         return true;
     }
-    std::cerr << "Download failed with error: " << hr << "\n";
+    std::cout << "Download failed with error: " << hr << "\n";
     return false;
 }
 
@@ -325,7 +325,7 @@ void UpdateAll(ModManager &manager)
 
     UpdatePilus(manager);
 
-    CheckAndUpdate(manager, "nucleus", manager.mod_path);
+    CheckAndUpdate(manager, "nucleus", manager.mod_path / "NucleusRuntimeAPI.dll");
 
     UpdatePDB(fs::current_path(), manager);
 }

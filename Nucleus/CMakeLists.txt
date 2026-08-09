@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 20)
 
-project(NucleusRuntimeAPI)
+project(Nucleus)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-add_library(NucleusRuntimeAPI SHARED
+add_library(Nucleus SHARED
         nucleus.cpp)
 
 add_subdirectory(external/minhook)
 
-target_link_libraries(NucleusRuntimeAPI PRIVATE minhook)
+target_link_libraries(Nucleus PRIVATE minhook)
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/NucleusRuntimeAPI.dll
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/Nucleus.dll
         "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods"
-        COMMENT "Copying NucleusRuntimeAPI.dll to Primordialis mods"
+        COMMENT "Copying Nucleus.dll to Primordialis mods"
 )

@@ -11,10 +11,9 @@ add_subdirectory(Nucleus)
 
 add_subdirectory(Plasmid)
 
-
 add_custom_target(BuildAllModsNuc)
 
 add_dependencies(BuildAllModsNuc
-        NucleusRuntimeAPI
+        Nucleus
         BuildAllMods
 )

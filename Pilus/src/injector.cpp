@@ -224,7 +224,7 @@ void ModManager::InjectAll()
     for (auto & mod : mods)
     {
         //skip runtime api in modlist because should be last
-        if (mod.dll_path.filename().string() == "NucleusRuntimeAPI.dll")
+        if (mod.dll_path.filename().string() == "Nucleus.dll")
             continue;
 
         if (!mod.enabled)
@@ -264,12 +264,12 @@ void ModManager::InjectAll()
     Render();
 
     // load nucleus api.dll last after all other mods
-    if (std::filesystem::exists("mods/NucleusRuntimeAPI.dll"))
+    if (std::filesystem::exists("mods/Nucleus.dll"))
     {
         char dllpath[MAX_PATH];
-        if (Inject("mods/NucleusRuntimeAPI.dll", dllpath, lpprocessname, log, log) != 0)
+        if (Inject("mods/Nucleus.dll", dllpath, lpprocessname, log, log) != 0)
         {
-            log.append("Failed to inject runtime API, major issues may occur !\n");
+            log.append("Failed to inject nucleus runtime API, major issues may occur !\n");
             failed++;
         }
     }

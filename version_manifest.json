@@ -4,10 +4,15 @@
   "manifest_version" : 0,
 
   "pilus" : {
-    "latest_version" : "0.1.3",
+    "latest_version" : "0.2.0",
     "versions" : {
       "0.1.3" : {
-        "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/Pilus.exe",
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/v0.1.3/Pilus.exe",
+        "min_nucleus_version" : "0.1.0",
+        "min_updater_version" : "0.1.0"
+      },
+      "0.2.0" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.2.0/Pilus.exe",
         "min_nucleus_version" : "0.1.0",
         "min_updater_version" : "0.1.0"
       }
@@ -18,25 +23,25 @@
     "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
-        "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/PilusUpdater.exe"
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/PilusUpdater-v0.1.0/PilusUpdater-v0.1.0"
       }
     }
   },
 
   "nucleus" : {
-    "latest_version" : "v0.1.0",
+    "latest_version" : "0.1.0",
     "versions" : {
-      "v0.1.0" : {
-        "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/NucleusRuntimeAPI.dll",
-        "min_pilus_version" : "v0.1.3"
+      "0.1.0" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/Nucleus-v0.1.0/Nucleus.dll",
+        "min_pilus_version" : "0.1.3"
       }
     }
   },
 
   "plasmid" : {
     "versions" : {
-      "v0.0.0" : {
-        "min_nucleus_version" : "v0.0.0"
+      "0.0.0" : {
+        "min_nucleus_version" : "0.0.0"
       }
     }
   }

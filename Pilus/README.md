@@ -4,7 +4,9 @@ A WIP modloader for Primordialis C++ and Lua mods made using Plasmid and Nucleus
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
-- Download updates for Mods
+- Ask before updating, auto-update setting.
+- Compatibility detection.
+- Download updates for Mods.
 - Versioning for everything.
 - Switch to DearImgui
 - Exclude Nucleus from modlist reordering
