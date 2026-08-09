@@ -167,7 +167,7 @@ void ModManager::Update()
         if (event->is<sf::Event::Closed>())
         {
             window->close();
-            SaveModOrder();
+            SaveConfig();
         }
         if (event->is<sf::Event::MouseButtonPressed>())
         {
@@ -209,7 +209,7 @@ void ModManager::Update()
                             std::swap(mods[mod_hover], mods[mod_hover + 1]);
                         }
                     }
-                    SaveModOrder();
+                    SaveConfig();
                 }
             }
             else
@@ -302,7 +302,6 @@ void ModManager::Update()
     }
 }
 
-
 void ModManager::RefreshMods()
 {
     log.append("Refreshing Mods...\n");
@@ -357,50 +356,59 @@ void ModManager::RefreshMods()
     }
 
     mods = finalmods;
-    SaveModOrder();
+    SaveConfig();
+}
+
+void ModManager::LoadConfig()
+{
+    auto file = ReadFile("pilus_config.json");
+
+    if (file.empty())
+    {
+        printf("Failed to read config\n");
+        return;
+    }
+
+    pilus_config = json::parse(file);
 }
 
 void ModManager::LoadModOrder()
 {
-    std::ifstream file("PILUS_MODLOADER.CONFIG");
+    LoadConfig();
 
-    if (!file) return;
+    json mods_json = pilus_config["mods"];
 
-    uint32_t num_mods;
-    file.read(reinterpret_cast<char*>(&num_mods), sizeof(uint32_t));
+    printf("%s\n", mods_json.dump().c_str());
 
-    for (int i = 0; i < num_mods; i++)
+    for (auto mod : mods)
     {
-        Mod nmod;
-        file.read(reinterpret_cast<char*>(&nmod.enabled), sizeof(bool));
-
-        uint32_t pathlength = 0;
-        file.read(reinterpret_cast<char*>(&pathlength), sizeof(uint32_t));
-        std::string path(pathlength, '\0');
-        file.read(&path[0], pathlength);
-        nmod.path = std::filesystem::path(path);
-
-        mods.push_back(nmod);
+        json mod_json = mods_json[mod.name];
+        mod.path = mod_json["path"].get<std::string>();
+        mod.dll_path = mod_json["dll_path"].get<std::string>();
+        mod.enabled = mod_json["enabled"].get<bool>();
+        mods.push_back(mod);
     }
-
-    file.close();
 }
 
-void ModManager::SaveModOrder()
+void ModManager::SaveConfig()
 {
-    std::ofstream file("PILUS_MODLOADER.CONFIG");
+    std::ofstream file("pilus_config.json");
 
     if (!file) return;
 
-    uint32_t num_mods = mods.size();
-    file.write(reinterpret_cast<char*>(&num_mods), sizeof(uint32_t));
-    for (auto & mod : mods)
+    pilus_config["mod_count"] = mods.size();
+
+    for (auto mod : mods)
     {
-        file.write(reinterpret_cast<char*>(&(mod.enabled)), sizeof(bool));
-        uint32_t pathlength = mod.path.string().size();
-        file.write(reinterpret_cast<char*>(&pathlength), sizeof(uint32_t));
-        file.write(mod.path.string().data(), mod.path.string().size());
+        json mod_json;
+        mod_json["path"] = mod.path;
+        mod_json["dll_path"] = mod.path;
+        mod_json["enabled"] = mod.enabled;
+        pilus_config["mods"][mod.name] = mod_json;
     }
+
+    file.clear();
+    file << pilus_config.dump(1, *"\t");
 
     file.close();
 }

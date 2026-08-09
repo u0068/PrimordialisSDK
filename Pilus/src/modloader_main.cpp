@@ -16,8 +16,6 @@ void run()
 
     CheckAndUpdate();
 
-    CheckSteamBuild(fs::current_path());
-
     sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
 
     sf::Font font;
@@ -32,6 +30,7 @@ void run()
     manager.window = &window;
     font.setSmooth(false);
     text.setCharacterSize(15);
+
 
     fs::path modpath = fs::current_path().append("mods");
 
@@ -48,10 +47,12 @@ void run()
 
     manager.modpath = modpath;
 
-    if (fs::exists("PILUS_MODLOADER.CONFIG"))
+    if (fs::exists("pilus_config.json"))
     {
         manager.LoadModOrder();
     }
+
+    UpdatePDB(fs::current_path(), manager);
 
     manager.RefreshMods();
     manager.Render();

@@ -107,6 +107,7 @@ https://discord.gg/Fz5RaRBNj8
   - Making mods
   - Contributing to the SDK
 - Move TO-DOs to trello
+- Improve error messages everywhere
 
 See the README.md's inside the projects for their TO-DO lists.
 # DONE:

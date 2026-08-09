@@ -2,7 +2,8 @@
 #include "http.h"
 #include <regex>
 #include <bcrypt.h>
-
+#include <urlmon.h>
+#pragma comment(lib, "urlmon.lib")
 #pragma comment(lib, "bcrypt.lib")
 
 static std::optional<json> GetLatestRelease()
@@ -226,57 +227,39 @@ static std::optional<std::string> Sha256(
     return result;
 }
 
-bool DownloadAsset(const json& release, const char* asset_name, const fs::path &dest_path)
-{
-    auto asset = FindAsset(release, asset_name);
+bool DownloadFromURL(const std::string &source_path, const fs::path &dest_path) {
 
-    if (!asset)
-    {
-        std::cout
-            << "Release does not contain "
-            << asset_name
-            << "\n";
+    std::cout
+    << "Downloading " << source_path << "...\n";
 
-        return false;
+    HRESULT hr = URLDownloadToFileA(NULL, source_path.c_str(), dest_path.string().c_str(), 0, NULL);
+    if (SUCCEEDED(hr)) {
+        std::cout << "Downloaded to " << dest_path << "\n";
+        return true;
     }
+    std::cerr << "Download failed with error: " << hr << "\n";
+    return false;
+}
 
-    std::string downloadUrl =
-        (*asset)["browser_download_url"];
-
-    std::string digest =
-        (*asset)["digest"];
-
+bool DownloadFromGithub(const std::string &download_url, std::string &expected_hash, const char* asset_name, const fs::path &dest_path)
+{
     constexpr std::string_view prefix =
         "https://github.com";
 
-    if (!downloadUrl.starts_with(prefix))
+    if (!download_url.starts_with(prefix))
     {
         std::cout
-            << "Unexpected download URL:" << downloadUrl << "\n";
+            << "Unexpected download URL:" << download_url << "\n";
 
         return false;
     }
-
-    std::string path =
-        downloadUrl.substr(prefix.size());
 
     DeleteFileW(dest_path.c_str());
 
-    std::cout
-        << "Downloading " << asset_name << "...\n";
+    std::string path =
+        download_url.substr(prefix.size());
 
-    if (!HttpDownload(
-            L"github.com",
-            std::wstring(
-                path.begin(),
-                path.end()),
-            dest_path))
-    {
-        std::cout
-            << "Failed to download " << asset_name << ".\n";
-
-        return false;
-    }
+    DownloadFromURL(path, dest_path);
 
     std::cout
         << "Verifying " << asset_name << "...\n";
@@ -296,20 +279,17 @@ bool DownloadAsset(const json& release, const char* asset_name, const fs::path &
     constexpr std::string_view shaPrefix =
         "sha256:";
 
-    std::string expectedHash =
-        digest;
-
-    if (expectedHash.starts_with(shaPrefix))
-        expectedHash.erase(
+    if (expected_hash.starts_with(shaPrefix))
+        expected_hash.erase(
             0,
             shaPrefix.size());
 
-    if (*actualHash != expectedHash)
+    if (*actualHash != expected_hash)
     {
         std::cout
             << "SHA-256 verification failed!\n"
             << "Expected: "
-            << expectedHash
+            << expected_hash
             << "\n"
             << "Actual:   "
             << *actualHash
@@ -322,6 +302,29 @@ bool DownloadAsset(const json& release, const char* asset_name, const fs::path &
 
     std::cout
         << asset_name << " hash verified.\n";
+}
+
+bool DownloadAsset(const json& release, const char* asset_name, const fs::path &dest_path)
+{
+    auto asset = FindAsset(release, asset_name);
+
+    if (!asset)
+    {
+        std::cout
+            << "Release does not contain "
+            << asset_name
+            << "\n";
+
+        return false;
+    }
+
+    std::string download_url =
+        (*asset)["browser_download_url"];
+
+    std::string digest =
+        (*asset)["digest"];
+
+    DownloadFromGithub(download_url, digest, asset_name, dest_path);
 
     return true;
 }

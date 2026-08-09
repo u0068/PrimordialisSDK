@@ -29,4 +29,4 @@ struct Version
 };
 
 bool CheckAndUpdate();
-int CheckSteamBuild(const fs::path& gameExe);
+bool UpdatePDB(const fs::path& game_path, ModManager &manager);

@@ -3,6 +3,9 @@
 #include <vector>
 #include <variant>
 #include <windows.h>
+#include "../external/json.hpp"
+
+using json = nlohmann::json;
 
 namespace fs = std::filesystem;
 
@@ -41,6 +44,8 @@ struct ModManager
     std::string error_log;
     std::string log;
 
+    json pilus_config;
+
     fs::path modpath;
     std::string last_description_trunc;
 
@@ -72,7 +77,8 @@ struct ModManager
 
     bool CheckSignificantMouseMovement();
 
-    void SaveModOrder();
+    void SaveConfig();
+    void LoadConfig();
     void LoadModOrder();
 
     void Render();

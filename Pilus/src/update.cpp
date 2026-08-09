@@ -1,4 +1,5 @@
 #include "downloader.h"
+#include "modloader.h"
 
 // TODO: Make cmake generate the version number automatically
 constexpr Version PILUS_VERSION{0, 1, 4};
@@ -128,7 +129,7 @@ bool CheckAndUpdate()
 
     ExitProcess(0);
 
-    // This ends up never returning true because if everything goes right Pilus needs to close anyway.
+    // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
 }
 
 int CheckSteamBuild(const fs::path& game_path)
@@ -181,4 +182,58 @@ int CheckSteamBuild(const fs::path& game_path)
     printf("Build ID: %s\n", build.c_str());
 
     return std::stoi(build);
+}
+
+bool UpdatePDB(const fs::path& game_path, ModManager &manager)
+{
+    int actual_build_id = CheckSteamBuild(game_path);
+    if (actual_build_id == 0)
+        return false;
+
+    int installed_pdb_build_id{0};
+    if (!manager.pilus_config.contains("installed_pdb_build_id"))
+    {
+        printf("Installed PDB build ID not found\n");
+    } else
+    {
+        installed_pdb_build_id = manager.pilus_config["installed_pdb_build_id"].get<int>();
+    }
+
+    if (!fs::exists("primordialis_avx.pdb") || !fs::exists("primordialis_sse3.pdb"))
+    {
+        printf("PDBs not found\n");
+    }
+    else
+    {
+        if (actual_build_id == installed_pdb_build_id)
+        {
+            printf("PDBs found, correct build ID %i\n", installed_pdb_build_id);
+            return false;
+        }
+    }
+
+    // AVX
+    std::string pdb_file_name = "primordialis_avx_" + std::to_string(actual_build_id) + ".pdb";
+    std::string pdb_source_path = "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/PDBs/" + pdb_file_name;
+    if (!DownloadFromURL(pdb_source_path, game_path / "primordialis_avx.pdb"))
+    {
+        printf("AVX PDB download failed\n");
+        return false;
+    }
+    printf("AVX PDB download succeeded\n");
+
+    // SSE3
+    pdb_file_name = "primordialis_sse3_" + std::to_string(actual_build_id) + ".pdb";
+    pdb_source_path = "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/PDBs/" + pdb_file_name;
+    if (!DownloadFromURL(pdb_source_path, game_path / "primordialis_sse3.pdb"))
+    {
+        printf("SSE3 PDB download failed\n");
+        return false;
+    }
+    printf("SSE3 PDB download succeeded\n");
+
+    std::cout << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
+    manager.pilus_config["installed_pdb_build_id"] = actual_build_id;
+    manager.SaveConfig();
+    return true;
 }
