@@ -13,6 +13,7 @@ A WIP modloader for Primordialis C++ and Lua mods made using Plasmid and Nucleus
 - Fix bugs:
   - Subscript out of range crash
   - Can't close through CLion
+  - Corrupted config file causes memory leak
 ## DONE:
 - Automatically download updater (DONE)
 - Pilus updater (DONE)

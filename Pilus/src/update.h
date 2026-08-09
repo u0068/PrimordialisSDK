@@ -28,18 +28,5 @@ struct Version
     }
 };
 
-namespace Update
-{
-    bool CheckAndUpdate();
-}
-
-namespace
-{
-    constexpr wchar_t GITHUB_HOST[] = L"api.github.com";
-
-    constexpr wchar_t RELEASES_PATH[] =
-        L"/repos/u0068/PrimordialisSDK/releases";
-
-    constexpr wchar_t USER_AGENT[] =
-        L"Pilus-Updater";
-}
+bool CheckAndUpdate();
+int CheckSteamBuild(const fs::path& gameExe);

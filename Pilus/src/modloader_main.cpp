@@ -7,7 +7,6 @@
 #include "modloader.h"
 #include "update.h"
 
-
 void run()
 {
     AllocConsole();
@@ -15,7 +14,9 @@ void run()
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    Update::CheckAndUpdate();
+    CheckAndUpdate();
+
+    CheckSteamBuild(fs::current_path());
 
     sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
 

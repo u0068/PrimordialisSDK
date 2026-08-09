@@ -94,3 +94,5 @@ struct ModListShared
     uint32_t count;
     ModInfo mods[256];
 };
+
+std::string ReadFile(const fs::path& path);
