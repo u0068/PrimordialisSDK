@@ -24,8 +24,11 @@ struct Mod
 
     // UNSAVED:
     std::string name = "mod.dll"; // mod name is the filename or whatever is held in info.txt
-    std::string author{}; // default for no info.txt
-    std::string description{}; // default for no info.txt
+    std::string author{}; // defaults for no info.txt
+    std::string description{};
+    std::string mod_version{"unknown"};
+    std::string plasmid_version{"unknown"};
+    std::string min_primordialis_version{"unknown"};
 
     std::vector<ConfigValue> config{};
 

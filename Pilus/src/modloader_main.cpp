@@ -31,7 +31,6 @@ void run()
     font.setSmooth(false);
     text.setCharacterSize(15);
 
-
     fs::path modpath = fs::current_path().append("mods");
 
     if (!exists(modpath))

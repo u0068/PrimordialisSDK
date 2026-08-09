@@ -2,7 +2,7 @@
 #include "modloader.h"
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 1, 4};
+constexpr Version PILUS_VERSION{0, 2, 1};
 
 bool CheckAndUpdate()
 {
