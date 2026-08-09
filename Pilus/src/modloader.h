@@ -34,7 +34,7 @@ struct Mod
 
     bool operator== (const Mod& other) const
     {
-        if (fs::weakly_canonical(path) == fs::weakly_canonical(other.path)) // path is the only thing that matters
+        if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
             return true;
         return false;
     }
@@ -47,9 +47,15 @@ struct ModManager
     std::string error_log;
     std::string log;
 
+    const std::string version_manifest_url{
+        "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
+    const fs::path version_manifest_path{"pilus_version_manifest.json"};
+    json version_manifest;
+
+    const fs::path config_path{"pilus_config.json"};
     json pilus_config;
 
-    fs::path modpath;
+    fs::path mod_path;
     std::string last_description_trunc;
 
     sf::Font* font;
@@ -82,7 +88,6 @@ struct ModManager
 
     void SaveConfig();
     void LoadConfig();
-    void LoadModOrder();
 
     void Render();
     void Update();

@@ -14,7 +14,9 @@ void run()
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    CheckAndUpdate();
+    ModManager manager;
+
+    UpdateAll(manager);
 
     sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
 
@@ -24,7 +26,6 @@ void run()
         if (!font.openFromFile("verdana.ttf"))
             printf("FAILED TO LOAD FONT\n");
 
-    ModManager manager;
     manager.font = &font;
     manager.text = &text;
     manager.window = &window;
@@ -44,14 +45,8 @@ void run()
         FALSE,
         FILE_NOTIFY_CHANGE_FILE_NAME);
 
-    manager.modpath = modpath;
+    manager.mod_path = modpath;
 
-    if (fs::exists("pilus_config.json"))
-    {
-        manager.LoadModOrder();
-    }
-
-    UpdatePDB(fs::current_path(), manager);
 
     manager.RefreshMods();
     manager.Render();

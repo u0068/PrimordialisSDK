@@ -1,5 +1,6 @@
 #pragma once
 #include "../external/json.hpp"
+#include "modloader.h"
 
 using json = nlohmann::json;
 
@@ -26,7 +27,13 @@ struct Version
                minor == other.minor &&
                patch == other.patch;
     }
+
+    const std::string to_string() const
+    {
+        std::stringstream ss;
+        ss << major << "." << minor << "." << patch;
+        return ss.str();
+    }
 };
 
-bool CheckAndUpdate();
-bool UpdatePDB(const fs::path& game_path, ModManager &manager);
+void UpdateAll(ModManager &manager);

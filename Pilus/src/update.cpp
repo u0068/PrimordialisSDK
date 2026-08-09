@@ -1,51 +1,131 @@
-#include "downloader.h"
-#include "modloader.h"
+#include "update.h"
+#include <iostream>
+#include <regex>
+#include <urlmon.h>
+#pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
 constexpr Version PILUS_VERSION{0, 2, 1};
 
-bool CheckAndUpdate()
+static std::optional<Version> ParseVersion(
+
+    const std::string &tag)
 {
     std::cout
-        << "Checking for Pilus updates...\n";
+        << "Parsing Version: ";
 
-    auto release = GetLatestRelease();
+    std::cout
+        << tag
+        << "\n";
 
-    if (!release)
+    Version version{0,0,0};
+
+    std::regex tag_regex(R"((\d+).(\d+)(?:.(\d+))?)");
+
+    std::smatch match;
+    if (std::regex_search(tag, match, tag_regex)) {
+        std::cout << "Tag: " << match[0].str() << "\n";
+
+        version.major = std::stoi(match[1].str());
+        version.minor = std::stoi(match[2].str());
+        version.patch = std::stoi(match.size() > 3 ? match[3].str() : "0");
+
+        std::cout << "Major: " << version.major << "\n";
+        std::cout << "Minor: " << version.minor << "\n";
+        std::cout << "Patch: " << version.patch << "\n";
+
+        return version;
+    }
+
+    std::cout
+        << "Failed to Parse Version\n";
+
+    return std::nullopt;
+}
+
+bool DownloadFromURL(const std::string &source_path, const fs::path &dest_path) {
+
+    std::cout
+    << "Downloading " << source_path << "...\n";
+
+    HRESULT hr = URLDownloadToFileA(NULL, source_path.c_str(), dest_path.string().c_str(), 0, NULL);
+    if (SUCCEEDED(hr)) {
+        std::cout << "Downloaded to " << dest_path << "\n";
+        return true;
+    }
+    std::cerr << "Download failed with error: " << hr << "\n";
+    return false;
+}
+
+bool DownloadVersionManifest(ModManager &manager)
+{
+    DownloadFromURL(manager.version_manifest_url, manager.version_manifest_path);
+
+    auto file = ReadFile(manager.version_manifest_path);
+
+    if (file.empty())
     {
-        std::cout
-            << "Could not check for updates.\n";
-
+        printf("Verson manifest not found, unable to check compatibility or download updates.\n");
         return false;
     }
 
-    auto version =
-        ParseVersion(
-            (*release)["tag_name"]
-                .get<std::string>());
+    manager.version_manifest = json::parse(file);
 
-    if (!version)
+    json mods_json = manager.version_manifest["mods"];
+
+    return true;
+}
+
+bool CheckAndUpdate(ModManager &manager, const char* name, fs::path update_path)
+{
+    std::cout
+        << "Checking for " << name << " updates...\n";
+
+    json version_json = manager.version_manifest[name];
+
+    // std::cout << version_json.dump(1, *"\t") << "\n";
+
+    std::string latest_version = version_json["latest_version"].get<std::string>();
+
+    std::stringstream ss;
+    ss << name << "_installed_version";
+    auto installed_version_key = ss.str();
+
+    json installed_version_json = manager.pilus_config[installed_version_key];
+    std::string current_version = "0.0.0";
+    if (!installed_version_json.empty())
     {
-        std::cout
-            << "Invalid release version.\n";
-
-        return false;
+        current_version = installed_version_json.get<std::string>();
     }
 
-    Version current = PILUS_VERSION;
+    std::cout
+        << "Current " << name << " version: " << current_version << "\n";
 
-    if (!(*version > current))
+    if (!(*ParseVersion(latest_version) > *ParseVersion(current_version)))
     {
         std::cout
-            << "Pilus is up to date.\n";
+            << name << " is up to date.\n";
 
         return false;
     }
 
     std::cout
-        << "New Pilus version available: "
-        << (*release)["tag_name"]
+        << "New " << name << " version available: "
+        << version_json["latest_version"].get<std::string>()
         << "\n";
+
+    auto download_path = version_json["latest_version"]["download_url"].get<std::string>();
+    if(DownloadFromURL(download_path, update_path))
+    {
+        manager.pilus_config[installed_version_key] = latest_version;
+        return true;
+    }
+    return false;
+}
+
+bool UpdatePilus(ModManager &manager)
+{
+    manager.pilus_config["pilus_installed_version"] = PILUS_VERSION.to_string();
 
     fs::path pilus_path =
         fs::absolute(
@@ -55,7 +135,8 @@ bool CheckAndUpdate()
         pilus_path.parent_path() /
         "Pilus.new.exe";
 
-    DownloadAsset(release, "Pilus.exe", update_path);
+    if (!CheckAndUpdate(manager, "pilus", update_path))
+        return false;
 
     // Find our own PID and launch the updater.
 
@@ -65,19 +146,10 @@ bool CheckAndUpdate()
         pilus_path.parent_path() /
         "PilusUpdater.exe";
 
-    if (!fs::exists(updater_path))
+    if (!CheckAndUpdate(manager, "pilus_updater", updater_path))
     {
-        std::cout
-            << "PilusUpdater.exe not found.\n";
-
-        std::cout
-            << "Downloading PilusUpdater from Github.\n";
-
-        if (!DownloadAsset(release, "PilusUpdater.exe", updater_path))
-        {
-            DeleteFileW(update_path.c_str());
-            return false;
-        }
+        DeleteFileW(update_path.c_str());
+        return false;
     }
 
     std::wstring commandLine =
@@ -236,4 +308,21 @@ bool UpdatePDB(const fs::path& game_path, ModManager &manager)
     manager.pilus_config["installed_pdb_build_id"] = actual_build_id;
     manager.SaveConfig();
     return true;
+}
+
+void UpdateAll(ModManager &manager)
+{
+    if (!DownloadVersionManifest(manager))
+        return;
+
+    if (exists(manager.config_path))
+    {
+        manager.LoadConfig();
+    }
+
+    UpdatePilus(manager);
+
+    CheckAndUpdate(manager, "nucleus", manager.mod_path);
+
+    UpdatePDB(fs::current_path(), manager);
 }

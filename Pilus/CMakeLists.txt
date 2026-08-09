@@ -14,7 +14,6 @@ add_executable(Pilus WIN32
         src/modmanager.cpp
         src/update.cpp
         src/update.h
-        src/http.h
 )
 
 target_link_libraries(Pilus PRIVATE

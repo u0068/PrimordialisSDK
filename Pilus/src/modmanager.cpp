@@ -306,7 +306,7 @@ void ModManager::RefreshMods()
 {
     log.append("Refreshing Mods...\n");
     std::vector<Mod> fmods;
-    for (const auto& entry : std::filesystem::directory_iterator(modpath))
+    for (const auto& entry : std::filesystem::directory_iterator(mod_path))
     {
         log.append("Found Mod: ");
         log.append(entry.path().filename().stem().string());
@@ -361,7 +361,7 @@ void ModManager::RefreshMods()
 
 void ModManager::LoadConfig()
 {
-    auto file = ReadFile("pilus_config.json");
+    auto file = ReadFile(config_path);
 
     if (file.empty())
     {
@@ -370,15 +370,10 @@ void ModManager::LoadConfig()
     }
 
     pilus_config = json::parse(file);
-}
-
-void ModManager::LoadModOrder()
-{
-    LoadConfig();
 
     json mods_json = pilus_config["mods"];
 
-    printf("%s\n", mods_json.dump().c_str());
+    // printf("%s\n", mods_json.dump().c_str());
 
     for (auto mod : mods)
     {
@@ -392,7 +387,7 @@ void ModManager::LoadModOrder()
 
 void ModManager::SaveConfig()
 {
-    std::ofstream file("pilus_config.json");
+    std::ofstream file(config_path);
 
     if (!file) return;
 

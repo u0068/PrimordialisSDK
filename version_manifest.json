@@ -8,37 +8,35 @@
     "versions" : {
       "0.1.3" : {
         "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/Pilus.exe",
-        "updater_download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/PilusUpdater.exe",
-        "min_nucleus_version" : "0.0.0"
+        "min_nucleus_version" : "0.1.0",
+        "min_updater_version" : "0.1.0"
+      }
+    }
+  },
+
+  "pilus_updater" : {
+    "latest_version" : "0.1.0",
+    "versions" : {
+      "0.1.0" : {
+        "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/PilusUpdater.exe"
       }
     }
   },
 
   "nucleus" : {
-    "latest_version" : "0.0.0",
+    "latest_version" : "v0.1.0",
     "versions" : {
-      "0.0.0" : {
+      "v0.1.0" : {
         "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/releases/download/v0.1.3/NucleusRuntimeAPI.dll",
-        "min_pilus_version" : "0.1.3"
+        "min_pilus_version" : "v0.1.3"
       }
     }
   },
 
   "plasmid" : {
     "versions" : {
-      "0.0.0" : {
-        "min_nucleus_version" : "0.0.0"
-      }
-    }
-  },
-
-  "primordialis" : {
-    "versions" : {
-      "0.1" : {
-        "build_id" : "21311719"
-      },
-      "0.2" : {
-        "build_id" : "23810772"
+      "v0.0.0" : {
+        "min_nucleus_version" : "v0.0.0"
       }
     }
   }
