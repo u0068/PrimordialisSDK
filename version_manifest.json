@@ -7,7 +7,7 @@
     "latest_version" : "0.2.0",
     "versions" : {
       "0.1.3" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/v0.1.3/Pilus.exe",
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.1.3-alpha/Pilus.exe",
         "min_nucleus_version" : "0.1.0",
         "min_updater_version" : "0.1.0"
       },
