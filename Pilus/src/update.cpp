@@ -325,7 +325,7 @@ void UpdateAll(ModManager &manager)
 
     UpdatePilus(manager);
 
-    CheckAndUpdate(manager, "nucleus", manager.mod_path / "NucleusRuntimeAPI.dll");
+    CheckAndUpdate(manager, "nucleus", manager.mod_path / "mods/Nucleus.dll");
 
     UpdatePDB(fs::current_path(), manager);
 }
