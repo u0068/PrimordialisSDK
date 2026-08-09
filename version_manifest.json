@@ -23,7 +23,7 @@
     "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/PilusUpdater-v0.1.0/PilusUpdater-v0.1.0"
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/PilusUpdater-v0.1.0/PilusUpdater-v0.1.0"
       }
     }
   },
@@ -32,7 +32,7 @@
     "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/Nucleus-v0.1.0/Nucleus.dll",
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.0/Nucleus.dll",
         "min_pilus_version" : "0.1.3"
       }
     }
