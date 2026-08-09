@@ -101,6 +101,9 @@ bool CheckAndUpdate(ModManager &manager, const char* name, fs::path update_path)
     std::cout
         << "Current " << name << " version: " << current_version << "\n";
 
+    std::cout
+        << "Latest " << name << " version: " << latest_version << "\n";
+
     if (!(*ParseVersion(latest_version) > *ParseVersion(current_version)))
     {
         std::cout
@@ -110,11 +113,11 @@ bool CheckAndUpdate(ModManager &manager, const char* name, fs::path update_path)
     }
 
     std::cout
-        << "New " << name << " version available: "
+        << "Downloading new " << name << " version: "
         << version_json["latest_version"].get<std::string>()
         << "\n";
 
-    auto download_path = version_json["latest_version"]["download_url"].get<std::string>();
+    auto download_path = version_json["versions"][latest_version]["download_url"].get<std::string>();
     if(DownloadFromURL(download_path, update_path))
     {
         manager.pilus_config[installed_version_key] = latest_version;

@@ -4,8 +4,7 @@ A WIP modloader for Primordialis C++ and Lua mods made using Plasmid and Nucleus
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
-- Automatically detect the presence of Nucleus, and download if absent.
-- Download updates for Mods, Nucleus
+- Download updates for Mods
 - Versioning for everything.
 - Switch to DearImgui
 - Exclude Nucleus from modlist reordering
@@ -15,8 +14,8 @@ A WIP modloader for Primordialis C++ and Lua mods made using Plasmid and Nucleus
   - Can't close through CLion
   - Corrupted config file causes memory leak
 ## DONE:
-- Automatically detect the presence of correct PDB, and download if absent. (DONE)
-- Automatically download updater (DONE)
+- Automatically detect the presence of correct PDB and Nucleus, and download if absent. (DONE)
+- Automatically download updater and Nucleus (DONE)
 - Pilus updater (DONE)
 - Organise code into separate files (DONE)
 - Start process suspended (DONE)
