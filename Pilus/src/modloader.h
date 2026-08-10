@@ -47,7 +47,8 @@ struct ModManager
     std::string error_log;
     std::string log;
 
-    fs::path pilus_files_path{fs::current_path() /"pilus_files/"};
+    fs::path pilus_files_path{fs::current_path() / "pilus_files/"};
+    fs::path luasome_path{pilus_files_path / "luasome"};
 
     const std::string version_manifest_url{
         "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
@@ -59,6 +60,7 @@ struct ModManager
 
     fs::path mod_path{fs::current_path() / "mods"};
     std::string last_description_trunc;
+
 
     sf::Font* font;
     sf::Text* text;

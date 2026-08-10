@@ -47,10 +47,10 @@
   },
 
   "luasome" : {
-    "latest_version" : "0.1.0",
+    "latest_version" : "6",
     "versions" : {
-      "0.1.0" : {
-        "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/Luasome",
+      "6" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Luasome-v6/Luasome.zip",
         "min_pilus_version" : "0.3.0"
       }
     }

@@ -2,14 +2,13 @@
 #include <iostream>
 #include <regex>
 #include <urlmon.h>
+#include "../external/miniz-cpp/zip_file.hpp"
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
 constexpr Version PILUS_VERSION{0, 2, 1};
 
-static std::optional<Version> ParseVersion(
-
-    const std::string &tag)
+static std::optional<Version> ParseVersion(const std::string &tag)
 {
     std::cout
         << "Parsing Version: ";
@@ -43,12 +42,22 @@ static std::optional<Version> ParseVersion(
     return std::nullopt;
 }
 
-bool DownloadFromURL(const std::string &source_path, const fs::path &dest_path) {
+void ExtractZip(
+    const fs::path& zip,
+    const fs::path& destination)
+{
+    miniz_cpp::zip_file file(zip.string());
+    file.extractall(destination.string());
+}
+
+bool DownloadFromURL(
+    const std::string &source_path,
+    const fs::path &dest_path) {
 
     std::cout
     << "Downloading " << source_path << "...\n";
 
-    HRESULT hr = URLDownloadToFileA(NULL, source_path.c_str(), dest_path.string().c_str(), 0, NULL);
+    HRESULT hr = URLDownloadToFileA(nullptr, source_path.c_str(), dest_path.string().c_str(), 0, nullptr);
     if (SUCCEEDED(hr)) {
         std::cout << "Downloaded to " << dest_path << "\n";
         return true;
@@ -76,7 +85,10 @@ bool DownloadVersionManifest(ModManager &manager)
     return true;
 }
 
-bool CheckAndUpdate(ModManager &manager, const char* name, fs::path update_path)
+bool CheckAndUpdate(
+    ModManager &manager,
+    const char* name,
+    const fs::path& update_path)
 {
     std::cout
         << "Checking for " << name << " updates...\n";
@@ -263,7 +275,9 @@ int CheckSteamBuild(const fs::path& game_path)
     return std::stoi(build);
 }
 
-bool UpdatePDB(const fs::path& game_path, ModManager &manager)
+bool UpdatePDB(
+    ModManager &manager,
+    const fs::path& game_path)
 {
     int actual_build_id = CheckSteamBuild(game_path);
     if (actual_build_id == 0)
@@ -317,21 +331,46 @@ bool UpdatePDB(const fs::path& game_path, ModManager &manager)
     return true;
 }
 
-void UpdateAll(ModManager &manager)
+void CreateDirectories(ModManager &manager)
 {
-    if (!DownloadVersionManifest(manager))
-        return;
+    if (!exists(manager.pilus_files_path))
+    {
+        create_directory(manager.pilus_files_path);
+        manager.log.append("Created pilus files directory\n");
+    }
 
     if (exists(manager.config_path))
     {
         manager.LoadConfig();
     }
 
+    if (!exists(manager.mod_path))
+    {
+        create_directory(manager.mod_path);
+        manager.log.append("Created mod directory\n");
+    }
+
+    if (!exists(manager.luasome_path))
+    {
+        create_directory(manager.luasome_path);
+        manager.log.append("Created luasome directory\n");
+    }
+}
+
+void UpdateAll(ModManager &manager)
+{
+    CreateDirectories(manager);
+
+    if (!DownloadVersionManifest(manager))
+        return;
+
     UpdatePilus(manager);
 
-    CheckAndUpdate(manager, "nucleus", manager.mod_path / "mods/Nucleus.dll");
+    CheckAndUpdate(manager, "nucleus", manager.mod_path / "Nucleus.dll");
 
-    CheckAndUpdate(manager, "luasome", manager.pilus_files_path / "luasome");
+    fs::path luasome_temp_zip_path{manager.pilus_files_path / "luasome_tmp.zip"};
+    CheckAndUpdate(manager, "luasome", luasome_temp_zip_path);
+    ExtractZip(luasome_temp_zip_path, manager.luasome_path);
 
-    UpdatePDB(fs::current_path(), manager);
+    UpdatePDB(manager, fs::current_path());
 }
