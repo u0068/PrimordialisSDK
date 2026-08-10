@@ -244,7 +244,6 @@ void ModManager::InjectAll()
             log.append(mod.dll_path.filename().string());
             log.append(") Skipped\n");
 
-            Render();
             failed++;
             continue;
         }
@@ -256,14 +255,11 @@ void ModManager::InjectAll()
             shared->mods[shared->count++].name,
             mod.dll_path.filename().string().c_str()
         );
-
-        Render();
     }
     if (failed)
         log.append("Failed " + std::to_string(failed) + "/" + std::to_string(mods.size()) + " mods\n");
     else
         log.append("Mod injection finished successfully\n");
-    Render();
 
     // load nucleus api.dll last after all other mods
     if (std::filesystem::exists("mods/Nucleus.dll"))

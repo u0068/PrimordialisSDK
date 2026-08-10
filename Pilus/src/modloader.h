@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <vector>
 #include <variant>
 #include <windows.h>
@@ -53,7 +52,6 @@ struct Mod
 
 struct ModManager
 {
-    sf::RenderWindow* window;
     std::vector<Mod> mods;
     std::string error_log;
     std::string log;
@@ -73,9 +71,6 @@ struct ModManager
 
     fs::path mod_path{game_path / "mods"};
     std::string last_description_trunc;
-
-    sf::Font* font;
-    sf::Text* text;
 
     bool hover_top_move = false;
     bool hover_move = false;
@@ -103,13 +98,8 @@ struct ModManager
     void SaveLuaModlist();
     void PatchInitLua();
 
-    bool CheckSignificantMouseMovement();
-
     void SaveConfig();
     void LoadConfig();
-
-    void Render();
-    void Update();
 
     void ConfigEdit(char32_t key);
     void ConfigEditFinish();
