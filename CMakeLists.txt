@@ -17,3 +17,5 @@ add_dependencies(BuildAllModsNuc
         Nucleus
         BuildAllMods
 )
+
+add_subdirectory(Luazyme)

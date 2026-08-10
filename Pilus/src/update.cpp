@@ -6,7 +6,7 @@
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 2, 1};
+constexpr Version PILUS_VERSION{0, 3, 0};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
@@ -385,7 +385,10 @@ void UpdateAll(ModManager &manager)
 
     fs::path luasome_temp_zip_path{manager.pilus_files_path / "luasome_tmp.zip"};
     if (CheckAndUpdate(manager, "luasome", luasome_temp_zip_path))
+    {
         ExtractZip(luasome_temp_zip_path, manager.luasome_path);
+        fs::remove(luasome_temp_zip_path);
+    }
 
     UpdatePDB(manager, fs::current_path());
 }
