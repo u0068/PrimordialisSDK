@@ -19,15 +19,15 @@ static std::optional<Version> ParseVersion(const std::string &tag)
 
     Version version{0,0,0};
 
-    std::regex tag_regex(R"((\d+).(\d+)(?:.(\d+))?)");
+    std::regex tag_regex(R"((\d+)(?:.(\d+))?(?:.(\d+))?)");
 
     std::smatch match;
     if (std::regex_search(tag, match, tag_regex)) {
         std::cout << "Tag: " << match[0].str() << "\n";
 
         version.major = std::stoi(match[1].str());
-        version.minor = std::stoi(match[2].str());
-        version.patch = std::stoi(match.size() > 3 ? match[3].str() : "0");
+        version.minor = std::stoi(match[2].matched ? match[2].str() : "0");
+        version.patch = std::stoi(match[3].matched ? match[3].str() : "0");
 
         std::cout << "Major: " << version.major << "\n";
         std::cout << "Minor: " << version.minor << "\n";
@@ -46,6 +46,7 @@ void ExtractZip(
     const fs::path& zip,
     const fs::path& destination)
 {
+    std::cout << "Extracting " << zip << " to " << destination << "\n";
     miniz_cpp::zip_file file(zip.string());
     file.extractall(destination.string());
 }

@@ -37,9 +37,6 @@ void run()
         FALSE,
         FILE_NOTIFY_CHANGE_FILE_NAME);
 
-    manager.mod_path = manager.mod_path;
-
-
     manager.RefreshMods();
     manager.Render();
 
