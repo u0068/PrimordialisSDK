@@ -6,6 +6,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
 - Runtime API (Nucleus)
 - Extend the LUA API
 ## TODO:
+- Clean up logging (probably use std::cout instead of printf)
 - Lua API
 - External mod config and assets
 - Documentation
