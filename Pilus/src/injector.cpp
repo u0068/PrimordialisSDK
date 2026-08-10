@@ -80,7 +80,6 @@ bool IsDLL(const std::string& filePath, std::string& log)
     return (ntHeaders.FileHeader.Characteristics & IMAGE_FILE_DLL) != 0;
 }
 
-
 int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName, std::string& log, std::string& elog)
 {
     const DWORD dwProcessID = GetProcessByName(lpProcessName);
@@ -225,6 +224,9 @@ void ModManager::InjectAll()
     {
         //skip runtime api in modlist because should be last
         if (mod.dll_path.filename().string() == "Nucleus.dll")
+            continue;
+
+        if (mod.dll_path.empty())
             continue;
 
         if (!mod.enabled)

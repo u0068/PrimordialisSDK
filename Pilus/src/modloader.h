@@ -20,15 +20,16 @@ struct Mod
     // SAVED IN PILUS.CONFIG
     fs::path path{};
     fs::path dll_path{};
+    fs::path init_path{};
     bool enabled = true;
 
     // UNSAVED:
-    std::string name = "mod.dll"; // mod name is the filename or whatever is held in info.txt
-    std::string author{}; // defaults for no info.txt
-    std::string description{};
-    std::string mod_version{"unknown"};
-    std::string plasmid_version{"unknown"};
-    std::string min_primordialis_version{"unknown"};
+    std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.txt
+    std::string author{"Unknown"}; // defaults for no info.txt
+    std::string description{"No Description"};
+    std::string mod_version{"Unknown"};
+    std::string plasmid_version{"Unknown"};
+    std::string min_primordialis_version{"Unknown"};
 
     std::vector<ConfigValue> config{};
 
@@ -37,6 +38,16 @@ struct Mod
         if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
             return true;
         return false;
+    }
+
+    [[nodiscard]] bool is_lua() const
+    {
+        return !init_path.empty();
+    }
+
+    [[nodiscard]] bool is_cpp() const
+    {
+        return !dll_path.empty();
     }
 };
 
@@ -47,8 +58,10 @@ struct ModManager
     std::string error_log;
     std::string log;
 
-    fs::path pilus_files_path{fs::current_path() / "pilus_files/"};
+    fs::path game_path = fs::current_path();
+    fs::path pilus_files_path{game_path / "pilus_files/"};
     fs::path luasome_path{pilus_files_path / "luasome"};
+    fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
 
     const std::string version_manifest_url{
         "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
@@ -58,9 +71,8 @@ struct ModManager
     const fs::path config_path{pilus_files_path.string()+"pilus_config.json"};
     json pilus_config;
 
-    fs::path mod_path{fs::current_path() / "mods"};
+    fs::path mod_path{game_path / "mods"};
     std::string last_description_trunc;
-
 
     sf::Font* font;
     sf::Text* text;
@@ -87,6 +99,9 @@ struct ModManager
 
     void RefreshMods();
     void InjectAll();
+
+    void SaveLuaModlist();
+    void PatchInitLua();
 
     bool CheckSignificantMouseMovement();
 

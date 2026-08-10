@@ -42,7 +42,7 @@ void run()
 
     while (window.isOpen())
     {
-        WaitForSingleObject(dirchangenotif, 0);
+        WaitForSingleObject(dirchangenotif, 16);
 
         manager.log.clear();
         manager.RefreshMods();

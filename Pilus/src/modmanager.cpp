@@ -1,4 +1,6 @@
 #include <fstream>
+#include <iostream>
+
 #include "modloader.h"
 
 namespace fs = std::filesystem;
@@ -124,6 +126,11 @@ void ParseModInfo(Mod* mod, std::string& log)
         {
             mod->dll_path = entry.path();
         }
+
+        else if (filename == "init.lua")
+        {
+            mod->init_path = entry.path();
+        }
     }
 }
 
@@ -236,7 +243,10 @@ void ModManager::Update()
                 else
                 {
                     if (hover_inject)
+                    {
+                        SaveLuaModlist();
                         InjectAll();
+                    }
                 }
             }
 
@@ -406,4 +416,73 @@ void ModManager::SaveConfig()
     file << pilus_config.dump(1, *"\t");
 
     file.close();
+}
+
+void ModManager::SaveLuaModlist()
+{
+    std::ofstream file(lua_mod_list_path);
+
+    if (!file) return;
+
+    file.clear();
+    file << "LUA_MODLOADER_MOD_LIST = {\n";
+
+    for (auto mod : mods)
+    {
+        if (!mod.is_lua())
+            continue;
+        file << "\t\"" << mod.name << "\",\n";
+    }
+    file << "} -- Make sure that all mods are before this line!!!";
+    file.close();
+
+    PatchInitLua();
+}
+
+void ModManager::PatchInitLua()
+{
+    fs::path init_lua_path = game_path / "data/scripts/init.lua";
+    fs::path temp_init_lua_path = game_path / "data/scripts/init.temp";
+    std::string preline = "dofile(\"pilus_files/luasome/pre.lua\")\n";
+    std::string postline = "dofile(\"pilus_files/luasome/post.lua\")";
+
+    std::ifstream init_file;
+    std::ofstream temp_init_file;
+    init_file.open(init_lua_path);
+    temp_init_file.open(temp_init_lua_path);
+
+    std::string init_content, line;
+    while (std::getline(init_file, line)) {
+        init_content += line + "\n";
+    }
+
+    std::cout << "Patching init.lua\n";
+
+    init_file.close();
+
+    size_t pos = init_content.find(preline);
+    if (pos == std::string::npos)
+    {
+        init_content = preline + init_content;
+    }
+    else
+    {
+        std::cout << "Mod loader content already found in init.lua, skipping preline append\n";
+    }
+
+    pos = init_content.find(postline);
+    if (pos == std::string::npos)
+    {
+        init_content = init_content + postline;
+    }
+    else
+    {
+        std::cout << "Mod loader content already found in init.lua, skipping postline append\n";
+    }
+
+    temp_init_file << init_content;
+    temp_init_file.close();
+
+    fs::remove(init_lua_path);
+    fs::rename(temp_init_lua_path, init_lua_path);
 }
