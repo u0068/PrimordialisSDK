@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 void copy_directory_recursively(const fs::path& src, const fs::path& dest) {
     try {
-        fs::copy(src, dest, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+        copy(src, dest, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
