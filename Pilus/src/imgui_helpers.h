@@ -1,10 +1,11 @@
+#pragma once
 #include <iostream>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 
-void checkGLError(const char *operation)
+inline void checkGLError(const char *operation)
 {
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
@@ -13,12 +14,12 @@ void checkGLError(const char *operation)
     }
 }
 
-void glfwErrorCallback(int error, const char *description)
+inline void glfwErrorCallback(int error, const char *description)
 {
     std::cerr << "GLFW Error " << error << ": " << description << "\n";
 }
 
-void renderImGui(const ImGuiIO& io)
+inline void renderImGui(const ImGuiIO& io)
 {
     try
     {

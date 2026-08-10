@@ -2,20 +2,21 @@
 #define _WIN32_WINNT 0x0601
 #endif
 #include "imgui_helpers.h"
-#include "modloader.h"
+#include "ui.h"
 #include "updater.h"
 
-void main()
+int main()
 {
     ModManager manager;
 
     UpdateAll(manager);
+    manager.RefreshMods();
 
     glfwSetErrorCallback(glfwErrorCallback);
     if (!glfwInit())
     {
         std::cout << "Failed to initialise GLFW\n";
-        return;
+        return -1;
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -31,7 +32,7 @@ void main()
     {
         std::cout << "Failed to create GLFW window\n";
         glfwTerminate();
-        return;
+        return -1;
     }
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
@@ -53,13 +54,11 @@ void main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Hello");
-        ImGui::Text("Hello from Pilus!");
-        if (ImGui::Button("Click me"))
-        {
-            std::cout << "Clicked!\n";
-        }
-        ImGui::End();
+        ImGui::DockSpaceOverViewport();
+
+        DrawUI(manager);
+
+        // ImGui::ShowDemoWindow(); // I'm using https://pthom.github.io/imgui_explorer/ instead
 
         renderImGui(io);
 
@@ -83,4 +82,6 @@ void main()
     ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    return 0;
 }

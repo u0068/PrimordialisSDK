@@ -23,6 +23,12 @@ void PatchInitLua(fs::path init_lua_path)
 {
     fs::path temp_init_lua_path = init_lua_path.parent_path() / "init.temp";
 
+    if (!exists(init_lua_path))
+    {
+        std::cout << "init.lua not found! Conversion unreliable.";
+        return;
+    }
+
     std::ifstream init_file;
     std::ofstream temp_init_file;
     init_file.open(init_lua_path);
@@ -81,20 +87,30 @@ void main()
     }
 
     std::cout << "Start converting your Legacy Lua mods to Luasome mods:\n";
-    // std::system("pause");
+    std::cout << "1) Convert selected mods\n";
+    std::cout << "2) Convert all mods\n";
+    std::string accept;
+    std::cin >> accept;
+    bool convert_all = accept == "2";
+    if (convert_all)
+    {
+        std::cout << "Converting all mods.\n";
+    }
 
     for (const auto& entry : fs::directory_iterator(legacy_mod_path))
     {
         std::string mod_name = entry.path().filename().stem().string();
         std::cout << "Found Mod: " << mod_name << "\n";
 
-        std::cout << "Convert " << mod_name << " to Luasome? (Y/N): ";
-        std::string accept;
-        std::cin >> accept;
-        if (accept != "y" && accept != "Y")
+        if (!convert_all)
         {
-            std::cout << "Skipping mod conversion.\n";
-            continue;
+            std::cout << "Convert " << mod_name << " to Luasome? (Y/N): ";
+            std::cin >> accept;
+            if (accept != "y" && accept != "Y")
+            {
+                std::cout << "Skipping mod conversion.\n";
+                continue;
+            }
         }
 
         fs::path new_mod_path = luasome_mod_path / mod_name;

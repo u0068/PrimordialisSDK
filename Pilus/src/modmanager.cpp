@@ -134,39 +134,6 @@ void ParseModInfo(Mod* mod, std::string& log)
     }
 }
 
-void ModManager::ConfigEdit(char32_t key)
-{
-    if (key == U'\b') // backspace
-    {
-        if (!config_temp.empty())
-        {
-            config_temp.pop_back();
-        }
-    }
-    else
-    {
-        if (std::holds_alternative<std::string>(mods[mod_selected].config[config_selected].value))
-        {
-            config_temp.push_back(key);
-        }
-        else
-        {
-            if ((key >= U'0' && key <= U'9') || key == U'.')
-                config_temp.push_back(key);
-        }
-    }
-}
-
-void ModManager::ConfigEditFinish()
-{
-    char* end;
-    if (std::holds_alternative<std::string>(mods[mod_selected].config[config_selected].value))
-        mods[mod_selected].config[config_selected].value = config_temp;
-    else
-        mods[mod_selected].config[config_selected].value = std::strtod(config_temp.c_str(), &end);
-    config_temp.clear();
-}
-
 void ModManager::RefreshMods()
 {
     log.append("Refreshing Mods...\n");
@@ -220,10 +187,10 @@ void ModManager::RefreshMods()
     }
 
     mods = finalmods;
-    SaveConfig();
+    SavePilusConfig();
 }
 
-void ModManager::LoadConfig()
+void ModManager::LoadPilusConfig()
 {
     auto file = ReadFile(config_path);
 
@@ -250,7 +217,7 @@ void ModManager::LoadConfig()
     }
 }
 
-void ModManager::SaveConfig()
+void ModManager::SavePilusConfig()
 {
     std::ofstream file(config_path);
 

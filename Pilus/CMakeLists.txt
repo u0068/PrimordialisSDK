@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(glfw)
 # Dear ImGui
 add_library(imgui STATIC
         external/imgui/imgui.cpp
+        external/imgui/imgui_demo.cpp
         external/imgui/imgui_draw.cpp
         external/imgui/imgui_tables.cpp
         external/imgui/imgui_widgets.cpp
@@ -45,6 +46,7 @@ add_executable(Pilus
         src/updater.h
         src/ui.cpp
         src/imgui_helpers.h
+        src/ui.h
 )
 
 target_compile_definitions(Pilus PRIVATE

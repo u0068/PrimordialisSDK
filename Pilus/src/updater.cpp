@@ -1,4 +1,5 @@
 #include "updater.h"
+#include "modloader.h"
 #include <iostream>
 #include <regex>
 #include <urlmon.h>
@@ -342,7 +343,7 @@ bool UpdatePDB(
 
     std::cout << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
     manager.pilus_config["installed_pdb_build_id"] = actual_build_id;
-    manager.SaveConfig();
+    manager.SavePilusConfig();
     return true;
 }
 
@@ -356,7 +357,7 @@ void CreateDirectories(ModManager &manager)
 
     if (exists(manager.config_path))
     {
-        manager.LoadConfig();
+        manager.LoadPilusConfig();
     }
 
     if (!exists(manager.mod_path))

@@ -72,37 +72,14 @@ struct ModManager
     fs::path mod_path{game_path / "mods"};
     std::string last_description_trunc;
 
-    bool hover_top_move = false;
-    bool hover_move = false;
-
-    bool m_leftPressed = false;
-
-    bool hover_inject = false;
-
-    bool hover_mod_options = false;
-    bool hover_top_option = false;
-
-    uint32_t mod_hover = -1;
-    uint32_t mod_selected = -1;
-    uint32_t config_hover = -1;
-    uint32_t config_selected = -1;
-
-    std::string config_temp{};
-
-    float scroll = 0;
-    float cscroll = 0;
-
     void RefreshMods();
     void InjectAll();
 
     void SaveLuaModlist();
     void PatchInitLua();
 
-    void SaveConfig();
-    void LoadConfig();
-
-    void ConfigEdit(char32_t key);
-    void ConfigEditFinish();
+    void SavePilusConfig();
+    void LoadPilusConfig();
 
     ModManager() {}
 };
