@@ -48,6 +48,20 @@ void ExtractZip(
 {
     std::cout << "Extracting " << zip << " to " << destination << "\n";
     miniz_cpp::zip_file file(zip.string());
+    for (const auto& name : file.namelist())
+    {
+        fs::path output = destination / name;
+
+        // Directory entry
+        if (name.back() == '/')
+        {
+            create_directories(output);
+            continue;
+        }
+
+        // Ensure parent directory exists
+        create_directories(output.parent_path());
+    }
     file.extractall(destination.string());
 }
 
@@ -370,8 +384,8 @@ void UpdateAll(ModManager &manager)
     CheckAndUpdate(manager, "nucleus", manager.mod_path / "Nucleus.dll");
 
     fs::path luasome_temp_zip_path{manager.pilus_files_path / "luasome_tmp.zip"};
-    CheckAndUpdate(manager, "luasome", luasome_temp_zip_path);
-    ExtractZip(luasome_temp_zip_path, manager.luasome_path);
+    if (CheckAndUpdate(manager, "luasome", luasome_temp_zip_path))
+        ExtractZip(luasome_temp_zip_path, manager.luasome_path);
 
     UpdatePDB(manager, fs::current_path());
 }
