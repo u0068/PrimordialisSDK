@@ -383,13 +383,14 @@ void ModManager::LoadConfig()
 
     json mods_json = pilus_config["mods"];
 
-    // printf("%s\n", mods_json.dump().c_str());
-
-    for (auto mod : mods)
+    for (auto& el : mods_json.items())
     {
-        json mod_json = mods_json[mod.name];
+        json mod_json = el.value();
+        Mod mod{};
+        mod.name = el.key();
         mod.path = mod_json["path"].get<std::string>();
         mod.dll_path = mod_json["dll_path"].get<std::string>();
+        mod.init_path = mod_json["init_path"].get<std::string>();
         mod.enabled = mod_json["enabled"].get<bool>();
         mods.push_back(mod);
     }
@@ -407,7 +408,8 @@ void ModManager::SaveConfig()
     {
         json mod_json;
         mod_json["path"] = mod.path;
-        mod_json["dll_path"] = mod.path;
+        mod_json["dll_path"] = mod.dll_path;
+        mod_json["init_path"] = mod.init_path;
         mod_json["enabled"] = mod.enabled;
         pilus_config["mods"][mod.name] = mod_json;
     }
@@ -430,6 +432,8 @@ void ModManager::SaveLuaModlist()
     for (auto mod : mods)
     {
         if (!mod.is_lua())
+            continue;
+        if (!mod.enabled)
             continue;
         file << "\t\"" << mod.name << "\",\n";
     }
