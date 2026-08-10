@@ -65,7 +65,7 @@
     "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.3.1/Luazyme.zip",
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.3.1/Luazyme.exe",
         "min_luasome_version" : "6"
       }
     }
