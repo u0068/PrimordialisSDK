@@ -1,21 +1,24 @@
 # Pilus Modloader
-A WIP modloader for Primordialis C++ and Lua mods made using Plasmid and Nucleus APIs.
+A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid and Nucleus APIs.
 
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
+- Switch to DearImgui (DOING)
+- Uninstaller
+- Only run Luasome when starting the game through Pilus
 - Ask before updating, auto-update setting.
 - Compatibility detection.
 - Download updates for Mods.
-- Versioning for everything.
-- Switch to DearImgui
 - Exclude Nucleus from modlist reordering
-- Make config use json for human readability
 - Fix bugs:
   - Subscript out of range crash
   - Can't close through CLion
   - Corrupted config file causes memory leak
 ## DONE:
+- Versioning for everything. (DONE)
+- Make config use json for human readability (DONE)
+- Luasome API support (DONE)
 - Automatically detect the presence of correct PDB and Nucleus, and download if absent. (DONE)
 - Automatically download updater and Nucleus (DONE)
 - Pilus updater (DONE)

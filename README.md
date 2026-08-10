@@ -2,7 +2,8 @@ Primordialis SDK is a modding SDK for Primordialis.
 # Contents:
 - Pilus Modloader
 - Nucleus Runtime API
-- Plasmid Modding API
+- Plasmid C++ Modding API
+- Luasome Lua Modding API
 - Primordialis PDB files
 
 # Loading Mods into Primordialis:
