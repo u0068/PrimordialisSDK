@@ -44,5 +44,15 @@
         "min_nucleus_version" : "0.0.0"
       }
     }
+  },
+
+  "luasome" : {
+    "latest_version" : "0.1.0",
+    "versions" : {
+      "0.1.0" : {
+        "download_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/Luasome",
+        "min_pilus_version" : "0.3.0"
+      }
+    }
   }
 }

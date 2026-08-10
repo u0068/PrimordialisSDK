@@ -16,6 +16,12 @@ void run()
 
     ModManager manager;
 
+    if (!exists(manager.pilus_files_path))
+    {
+        fs::create_directory(manager.pilus_files_path);
+        manager.log.append("Created pilus files directory\n");
+    }
+
     UpdateAll(manager);
 
     sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
@@ -32,20 +38,18 @@ void run()
     font.setSmooth(false);
     text.setCharacterSize(15);
 
-    fs::path modpath = fs::current_path().append("mods");
-
-    if (!exists(modpath))
+    if (!exists(manager.mod_path))
     {
-        fs::create_directory(modpath);
+        fs::create_directory(manager.mod_path);
         manager.log.append("Created mod directory\n");
     }
 
     HANDLE dirchangenotif = FindFirstChangeNotification(
-        modpath.string().c_str(),
+        manager.mod_path.string().c_str(),
         FALSE,
         FILE_NOTIFY_CHANGE_FILE_NAME);
 
-    manager.mod_path = modpath;
+    manager.mod_path = manager.mod_path;
 
 
     manager.RefreshMods();

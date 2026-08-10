@@ -5,7 +5,7 @@
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 2, 0};
+constexpr Version PILUS_VERSION{0, 2, 1};
 
 static std::optional<Version> ParseVersion(
 
@@ -83,7 +83,11 @@ bool CheckAndUpdate(ModManager &manager, const char* name, fs::path update_path)
 
     json version_json = manager.version_manifest[name];
 
-    // std::cout << version_json.dump(1, *"\t") << "\n";
+    if (version_json.empty())
+    {
+        std::cout << "Version JSON for " << name << " not found, unable to update.\n";
+        return false;
+    }
 
     std::string latest_version = version_json["latest_version"].get<std::string>();
 
@@ -295,7 +299,7 @@ bool UpdatePDB(const fs::path& game_path, ModManager &manager)
         printf("AVX PDB download failed\n");
         return false;
     }
-    printf("AVX PDB download succeeded\n");
+    printf("AVX PDB downloaded successfully\n");
 
     // SSE3
     pdb_file_name = "primordialis_sse3_" + std::to_string(actual_build_id) + ".pdb";
@@ -305,7 +309,7 @@ bool UpdatePDB(const fs::path& game_path, ModManager &manager)
         printf("SSE3 PDB download failed\n");
         return false;
     }
-    printf("SSE3 PDB download succeeded\n");
+    printf("SSE3 PDB downloaded successfully\n");
 
     std::cout << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
     manager.pilus_config["installed_pdb_build_id"] = actual_build_id;
@@ -326,6 +330,8 @@ void UpdateAll(ModManager &manager)
     UpdatePilus(manager);
 
     CheckAndUpdate(manager, "nucleus", manager.mod_path / "mods/Nucleus.dll");
+
+    CheckAndUpdate(manager, "luasome", manager.pilus_files_path / "luasome");
 
     UpdatePDB(fs::current_path(), manager);
 }
