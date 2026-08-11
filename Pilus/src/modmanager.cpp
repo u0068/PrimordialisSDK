@@ -92,7 +92,7 @@ std::string GetValue(const std::string& data, const std::string& key)
     return data.substr(find, end - find);
 }
 
-void ParseModInfo(Mod* mod, std::stringstream& log)
+void ParseModInfo(Mod* mod)
 {
     if (mod->path == mod->dll_path)
         return; // Mod is raw dll so has no info
@@ -110,7 +110,7 @@ void ParseModInfo(Mod* mod, std::stringstream& log)
         {
             std::string data = ReadFile(entry.path());
 
-            mod->name = GetValue(data, "name");
+            // mod->name = GetValue(data, "name");
             mod->author = GetValue(data, "author");
             mod->description = GetValue(data, "description");
         }
@@ -136,13 +136,13 @@ void ParseModInfo(Mod* mod, std::stringstream& log)
 
 void ModManager::RefreshMods()
 {
-    log << "Refreshing Mods...\n";
-    std::vector<Mod> fmods;
+    console_log << "Refreshing Mods...\n";
+    std::vector<Mod> installed_mods;
     for (const auto& entry : std::filesystem::directory_iterator(mod_path))
     {
-        log << "Found Mod: ";
-        log << entry.path().filename().stem().string();
-        log << "\n";
+        console_log << "Found Mod: ";
+        console_log << entry.path().filename().stem().string();
+        console_log << "\n";
 
         Mod nmod;
         nmod.path = entry.path();
@@ -152,41 +152,47 @@ void ModManager::RefreshMods()
         {
             nmod.dll_path = entry.path();
         }
-        ParseModInfo(&nmod, log);
-        fmods.push_back(nmod);
+        ParseModInfo(&nmod);
+        installed_mods.push_back(nmod);
     }
 
-    std::vector<Mod> finalmods;
+    std::vector<Mod> final_mods;
 
     for (auto & mod : mods)
     {
-        for (const auto & fmod : fmods)
+        for (const auto & installed_mod : installed_mods)
         {
-            if (mod == fmod)
+            if (mod == installed_mod)
             {
-                finalmods.push_back(fmod);
-                finalmods[finalmods.size() - 1].enabled = mod.enabled;
+                if (mod.name == "Nucleus")
+                {
+                    final_mods.insert(final_mods.begin(), installed_mod);
+                    final_mods[0].enabled = true;
+                    continue;
+                }
+                final_mods.push_back(installed_mod);
+                final_mods[final_mods.size() - 1].enabled = mod.enabled;
             }
         }
     }
-    for (const auto & fmod : fmods)
+    for (const auto & installed_mod : installed_mods)
     {
-        bool addthismod = true;
-        for (const auto & finalmod : finalmods)
+        bool add_this_mod = true;
+        for (const auto & final_mod : final_mods)
         {
-            if (fmod == finalmod)
+            if (installed_mod == final_mod)
             {
-                addthismod = false;
+                add_this_mod = false;
                 break;
             }
         }
-        if (addthismod)
+        if (add_this_mod)
         {
-            finalmods.push_back(fmod);
+            final_mods.push_back(installed_mod);
         }
     }
 
-    mods = finalmods;
+    mods = final_mods;
     SavePilusConfig();
 }
 
@@ -196,7 +202,7 @@ void ModManager::LoadPilusConfig()
 
     if (file.empty())
     {
-        log << "Failed to read config\n";
+        console_log << err<< "Failed to read config\n";
         return;
     }
 
@@ -281,7 +287,7 @@ void ModManager::PatchInitLua()
         init_content += line + "\n";
     }
 
-    log << "Patching init.lua\n";
+    console_log << "Patching init.lua\n";
 
     init_file.close();
 
@@ -292,7 +298,7 @@ void ModManager::PatchInitLua()
     }
     else
     {
-        log << "Mod loader content already found in init.lua, skipping preline append\n";
+        console_log << "Mod loader content already found in init.lua, skipping preline append\n";
     }
 
     pos = init_content.find(postline);
@@ -302,7 +308,7 @@ void ModManager::PatchInitLua()
     }
     else
     {
-        log << "Mod loader content already found in init.lua, skipping postline append\n";
+        console_log << "Mod loader content already found in init.lua, skipping postline append\n";
     }
 
     temp_init_file << init_content;

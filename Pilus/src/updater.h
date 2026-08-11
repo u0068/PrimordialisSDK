@@ -36,4 +36,4 @@ struct Version
     }
 };
 
-void UpdateAll(ModManager &manager);
+void UpdateAll();

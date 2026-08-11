@@ -7,12 +7,10 @@
 
 int main()
 {
-    ModManager manager;
+    console_log << "Pilus Starting\n";
 
-    manager.log << "Pilus Starting\n";
-
-    UpdateAll(manager);
-    manager.RefreshMods();
+    UpdateAll();
+    ModManager::RefreshMods();
 
     glfwSetErrorCallback(glfwErrorCallback);
     if (!glfwInit())
@@ -48,7 +46,7 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    manager.log << "Pilus Initialised!\n";
+    console_log << "Pilus Initialised!\n";
 
     while (!glfwWindowShouldClose(window))
     {
@@ -60,7 +58,7 @@ int main()
 
         ImGui::DockSpaceOverViewport();
 
-        DrawUI(manager);
+        DrawUI();
 
         // ImGui::ShowDemoWindow(); // I'm using https://pthom.github.io/imgui_explorer/ instead
 

@@ -8,6 +8,8 @@ using json = nlohmann::json;
 
 namespace fs = std::filesystem;
 
+inline std::stringstream console_log;
+const std::string err{"[ERROR]\t"};
 
 struct ConfigValue
 {
@@ -51,26 +53,25 @@ struct Mod
     }
 };
 
-struct ModManager
+namespace ModManager
 {
-    std::vector<Mod> mods;
-    std::stringstream log;
+    inline std::vector<Mod> mods;
 
-    fs::path game_path = fs::current_path();
-    fs::path pilus_files_path{game_path / "pilus_files/"};
-    fs::path luasome_path{pilus_files_path / "luasome"};
-    fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
+    inline fs::path game_path = fs::current_path();
+    inline fs::path pilus_files_path{game_path / "pilus_files/"};
+    inline fs::path luasome_path{pilus_files_path / "luasome"};
+    inline fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
 
     const std::string version_manifest_url{
         "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
     const fs::path version_manifest_path{pilus_files_path.string()+"pilus_version_manifest.json"};
-    json version_manifest;
+    inline json version_manifest;
 
     const fs::path config_path{pilus_files_path.string()+"pilus_config.json"};
-    json pilus_config;
+    inline json pilus_config;
 
-    fs::path mod_path{game_path / "mods"};
-    std::string last_description_trunc;
+    inline fs::path mod_path{game_path / "mods"};
+    inline std::string last_description_trunc;
 
     void RefreshMods();
     void InjectAll();
@@ -80,8 +81,6 @@ struct ModManager
 
     void SavePilusConfig();
     void LoadPilusConfig();
-
-    ModManager() {}
 };
 
 struct ModInfo
