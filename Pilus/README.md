@@ -12,6 +12,10 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
   - Start game
   - Mod info
   - Mod config
+  - Make it all pretty
+- Save and load modlists
+  - Modlists contain mod configs
+- Restore mod .zip support
 - Uninstaller
 - Only run Luasome when starting the game through Pilus
 - Ask before updating, auto-update setting.
