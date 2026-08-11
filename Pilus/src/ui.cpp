@@ -35,9 +35,7 @@ void DrawConsole()
 
     ImGui::Separator();
 
-    ImGuiStyle& style = ImGui::GetStyle();
-    const float footer_height_to_reserve = style.SeparatorSize + style.ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-    if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
+    if (ImGui::BeginChild("ScrollingRegion", {0, 0}, ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
     {
         if (ImGui::BeginPopupContextWindow())
         {
@@ -71,7 +69,7 @@ void DrawConsole()
         ImGui::PopStyleVar();
     }
     ImGui::EndChild();
-    ImGui::Separator();
+    // ImGui::Separator();
 
     ImGui::End();
 }
@@ -83,8 +81,9 @@ void DrawActionBox()
     ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.9f, 0.9f));
+    ImGuiStyle& style = ImGui::GetStyle();
     if (ImGui::Button("Start Game", {
-        ImGui::GetContentRegionAvail().x/2,
+        (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x)/2,
         ImGui::GetContentRegionAvail().y}))
     {
         ModManager::InjectAll();
