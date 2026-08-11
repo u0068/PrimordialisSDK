@@ -8,6 +8,7 @@ using json = nlohmann::json;
 
 namespace fs = std::filesystem;
 
+
 struct ConfigValue
 {
     std::string name{};
@@ -53,8 +54,7 @@ struct Mod
 struct ModManager
 {
     std::vector<Mod> mods;
-    std::string error_log;
-    std::string log;
+    std::stringstream log;
 
     fs::path game_path = fs::current_path();
     fs::path pilus_files_path{game_path / "pilus_files/"};

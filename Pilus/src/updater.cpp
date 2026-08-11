@@ -44,10 +44,11 @@ static std::optional<Version> ParseVersion(const std::string &tag)
 }
 
 void ExtractZip(
+    ModManager &manager,
     const fs::path& zip,
     const fs::path& destination)
 {
-    std::cout << "Extracting " << zip << " to " << destination << "\n";
+    manager.log << "Extracting " << zip << " to " << destination << "\n";
     miniz_cpp::zip_file file(zip.string());
     for (const auto& name : file.namelist())
     {
@@ -67,10 +68,11 @@ void ExtractZip(
 }
 
 bool DownloadFromURL(
+    ModManager &manager,
     const std::string &source_path,
     const fs::path &dest_path) {
 
-    std::cout
+    manager.log
     << "Downloading " << source_path << "...\n";
 
     HRESULT hr = URLDownloadToFileA(nullptr, source_path.c_str(), dest_path.string().c_str(), 0, nullptr);
@@ -78,19 +80,19 @@ bool DownloadFromURL(
         std::cout << "Downloaded to " << dest_path << "\n";
         return true;
     }
-    std::cout << "Download failed with error: " << hr << "\n";
+    manager.log << "Download failed with error: " << hr << "\n";
     return false;
 }
 
 bool DownloadVersionManifest(ModManager &manager)
 {
-    DownloadFromURL(manager.version_manifest_url, manager.version_manifest_path);
+    DownloadFromURL(manager, manager.version_manifest_url, manager.version_manifest_path);
 
     auto file = ReadFile(manager.version_manifest_path);
 
     if (file.empty())
     {
-        printf("Verson manifest not found, unable to check compatibility or download updates.\n");
+        manager.log << "Verson manifest not found, unable to check compatibility or download updates.\n";
         return false;
     }
 
@@ -106,7 +108,7 @@ bool CheckAndUpdate(
     const char* name,
     const fs::path& update_path)
 {
-    std::cout
+    manager.log
         << "Checking for " << name << " updates...\n";
 
     json version_json = manager.version_manifest[name];
@@ -130,10 +132,10 @@ bool CheckAndUpdate(
         current_version = installed_version_json.get<std::string>();
     }
 
-    std::cout
+    manager.log
         << "Current " << name << " version: " << current_version << "\n";
 
-    std::cout
+    manager.log
         << "Latest " << name << " version: " << latest_version << "\n";
 
     if (!(*ParseVersion(latest_version) > *ParseVersion(current_version)))
@@ -144,13 +146,13 @@ bool CheckAndUpdate(
         return false;
     }
 
-    std::cout
+    manager.log
         << "Downloading new " << name << " version: "
         << version_json["latest_version"].get<std::string>()
         << "\n";
 
     auto download_path = version_json["versions"][latest_version]["download_url"].get<std::string>();
-    if(DownloadFromURL(download_path, update_path))
+    if(DownloadFromURL(manager, download_path, update_path))
     {
         manager.pilus_config[installed_version_key] = latest_version;
         return true;
@@ -239,20 +241,20 @@ bool UpdatePilus(ModManager &manager)
     // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
 }
 
-int CheckSteamBuild(const fs::path& game_path)
+int CheckSteamBuild(ModManager &manager, const fs::path& game_path)
 {
     const char* manifest_filename = "appmanifest_3011360.acf";
 
     auto steam_manifest_path =
         game_path.parent_path().parent_path() / manifest_filename;
 
-    printf("steam manifest path: %ls\n", steam_manifest_path.c_str());
+    manager.log << "steam manifest path: " << steam_manifest_path << "\n";
 
     auto file = ReadFile(steam_manifest_path);
 
     if (file.empty())
     {
-        printf("Failed to read manifest\n");
+        manager.log << "Failed to read manifest\n";
         return 0;
     }
 
@@ -262,7 +264,7 @@ int CheckSteamBuild(const fs::path& game_path)
 
     if (pos == std::string::npos)
     {
-        printf("No buildid found\n");
+        manager.log << "No buildid found\n";
         return 0;
     }
 
@@ -273,7 +275,7 @@ int CheckSteamBuild(const fs::path& game_path)
 
     if (file[pos] != '"')
     {
-        printf("Invalid buildid format\n");
+        manager.log << "Invalid buildid format\n";
         return 0;
     }
 
@@ -286,7 +288,7 @@ int CheckSteamBuild(const fs::path& game_path)
 
     std::string build = file.substr(pos, end - pos);
 
-    printf("Build ID: %s\n", build.c_str());
+    manager.log << "Build ID: " << build << "\n";
 
     return std::stoi(build);
 }
@@ -295,14 +297,14 @@ bool UpdatePDB(
     ModManager &manager,
     const fs::path& game_path)
 {
-    int actual_build_id = CheckSteamBuild(game_path);
+    int actual_build_id = CheckSteamBuild(manager, game_path);
     if (actual_build_id == 0)
         return false;
 
     int installed_pdb_build_id{0};
     if (!manager.pilus_config.contains("installed_pdb_build_id"))
     {
-        printf("Installed PDB build ID not found\n");
+        manager.log << "Installed PDB build ID not found\n";
     } else
     {
         installed_pdb_build_id = manager.pilus_config["installed_pdb_build_id"].get<int>();
@@ -310,13 +312,13 @@ bool UpdatePDB(
 
     if (!fs::exists("primordialis_avx.pdb") || !fs::exists("primordialis_sse3.pdb"))
     {
-        printf("PDBs not found\n");
+        manager.log << "PDBs not found\n";
     }
     else
     {
         if (actual_build_id == installed_pdb_build_id)
         {
-            printf("PDBs found, correct build ID %i\n", installed_pdb_build_id);
+            manager.log << "PDBs found, correct build ID" << installed_pdb_build_id << "\n";
             return false;
         }
     }
@@ -324,24 +326,24 @@ bool UpdatePDB(
     // AVX
     std::string pdb_file_name = "primordialis_avx_" + std::to_string(actual_build_id) + ".pdb";
     std::string pdb_source_path = "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/PDBs/" + pdb_file_name;
-    if (!DownloadFromURL(pdb_source_path, game_path / "primordialis_avx.pdb"))
+    if (!DownloadFromURL(manager, pdb_source_path, game_path / "primordialis_avx.pdb"))
     {
-        printf("AVX PDB download failed\n");
+        manager.log << "AVX PDB download failed\n";
         return false;
     }
-    printf("AVX PDB downloaded successfully\n");
+    manager.log << "AVX PDB downloaded successfully\n";
 
     // SSE3
     pdb_file_name = "primordialis_sse3_" + std::to_string(actual_build_id) + ".pdb";
     pdb_source_path = "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/PDBs/" + pdb_file_name;
-    if (!DownloadFromURL(pdb_source_path, game_path / "primordialis_sse3.pdb"))
+    if (!DownloadFromURL(manager, pdb_source_path, game_path / "primordialis_sse3.pdb"))
     {
-        printf("SSE3 PDB download failed\n");
+        manager.log << "SSE3 PDB download failed\n";
         return false;
     }
-    printf("SSE3 PDB downloaded successfully\n");
+    manager.log << "SSE3 PDB downloaded successfully\n";
 
-    std::cout << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
+    manager.log << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
     manager.pilus_config["installed_pdb_build_id"] = actual_build_id;
     manager.SavePilusConfig();
     return true;
@@ -352,7 +354,7 @@ void CreateDirectories(ModManager &manager)
     if (!exists(manager.pilus_files_path))
     {
         create_directory(manager.pilus_files_path);
-        manager.log.append("Created pilus files directory\n");
+        manager.log << "Created pilus files directory\n";
     }
 
     if (exists(manager.config_path))
@@ -363,13 +365,13 @@ void CreateDirectories(ModManager &manager)
     if (!exists(manager.mod_path))
     {
         create_directory(manager.mod_path);
-        manager.log.append("Created mod directory\n");
+        manager.log << "Created mod directory\n";
     }
 
     if (!exists(manager.luasome_path))
     {
         create_directory(manager.luasome_path);
-        manager.log.append("Created luasome directory\n");
+        manager.log << "Created luasome directory\n";
     }
 }
 
@@ -387,7 +389,7 @@ void UpdateAll(ModManager &manager)
     fs::path luasome_temp_zip_path{manager.pilus_files_path / "luasome_tmp.zip"};
     if (CheckAndUpdate(manager, "luasome", luasome_temp_zip_path))
     {
-        ExtractZip(luasome_temp_zip_path, manager.luasome_path);
+        ExtractZip(manager, luasome_temp_zip_path, manager.luasome_path);
         fs::remove(luasome_temp_zip_path);
     }
 

@@ -56,12 +56,12 @@ std::filesystem::path GetExePath()
     return buffer;
 }
 
-bool IsDLL(const std::string& filePath, std::string& log)
+bool IsDLL(const std::string& filePath, std::stringstream& log)
 {
     std::ifstream f(filePath, std::ios::binary);
     if (!f.is_open())
     {
-        log.append("Mod could not be opened\n");
+        log << "Mod could not be opened\n";
         return false;
     }
 
@@ -80,60 +80,60 @@ bool IsDLL(const std::string& filePath, std::string& log)
     return (ntHeaders.FileHeader.Characteristics & IMAGE_FILE_DLL) != 0;
 }
 
-int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName, std::string& log, std::string& elog)
+int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName, std::stringstream& log)
 {
     const DWORD dwProcessID = GetProcessByName(lpProcessName);
 
     if (dwProcessID == (DWORD)-1)
     {
-        elog.append("An error occurred when trying to find the target process. Is Primordialis open?\n");
+        log << "An error occurred when trying to find the target process. Is Primordialis open?\n";
         return -1;
     }
 
-    log.append("[DLL Injector]\n");
+    log << "[DLL Injector]\n";
 
     const DWORD dwFullPathResult = GetFullPathNameA(lpDLLName, MAX_PATH, lpFullDLLPath, nullptr);
     if (dwFullPathResult == 0)
     {
-        elog.append("Attempted to load a missing mod.\n");
+        log << "Attempted to load a missing mod.\n";
         return -1;
     }
 
-    if (!IsDLL(lpFullDLLPath, elog))
+    if (!IsDLL(lpFullDLLPath, log))
     {
-        elog.append("Attempted to load an invalid .DLL\n");
+        log << "Attempted to load an invalid .DLL\n";
         return -1;
     }
 
     const HANDLE &hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
     if (hTargetProcess == INVALID_HANDLE_VALUE)
     {
-        elog.append("An error occurred when trying to open the target process.\n");
+        log << "An error occurred when trying to open the target process.\n";
         return -1;
     }
 
-    log.append("[PROCESS INJECTION]\n");
-    log.append("Process opened successfully.\n");
+    log << "[PROCESS INJECTION]\n";
+    log << "Process opened successfully.\n";
 
     const LPVOID &lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr, lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (lpPathAddress == nullptr)
     {
-        elog.append("An error occurred when trying to allocate memory in the target process.\n");
+        log << "An error occurred when trying to allocate memory in the target process.\n";
         return -1;
     }
 
-    log.append("Memory allocate at 0x");
-    log.append(std::to_string((UINT)(uintptr_t)lpPathAddress));
-    log.append("\n");
+    log << "Memory allocate at 0x";
+    log << std::to_string((UINT)(uintptr_t)lpPathAddress);
+    log << "\n";
 
     const DWORD dwWriteResult = WriteProcessMemory(hTargetProcess, lpPathAddress, lpFullDLLPath, lstrlenA(lpFullDLLPath) + 1, nullptr);
     if (dwWriteResult == 0)
     {
-        elog.append("An error occurred when trying to write the DLL path in the target process.\n");
+        log << "An error occurred when trying to write the DLL path in the target process.\n";
         return -1;
     }
 
-    log.append("DLL path written successfully.\n");
+    log << "DLL path written successfully.\n";
 
     const HMODULE hModule = GetModuleHandleA("kernel32.dll");
     if (hModule == INVALID_HANDLE_VALUE || hModule == nullptr)
@@ -142,27 +142,27 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const FARPROC &lpFunctionAddress = GetProcAddress(hModule, "LoadLibraryA");
     if (lpFunctionAddress == nullptr)
     {
-        elog.append("An error occurred when trying to get \"LoadLibraryA\" address.\n");
+        log << "An error occurred when trying to get \"LoadLibraryA\" address.\n";
         return -1;
     }
 
-    log.append("LoadLibraryA address at 0x");
-    log.append(std::to_string((UINT)(uintptr_t)lpFunctionAddress));
-    log.append("\n");
+    log << "LoadLibraryA address at 0x";
+    log << std::to_string((UINT)(uintptr_t)lpFunctionAddress);
+    log << "\n";
 
     const HANDLE &hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
     if (hThreadCreationResult == INVALID_HANDLE_VALUE)
     {
-        elog.append("An error occurred when trying to create the thread in the target process.\n");
+        log << "An error occurred when trying to create the thread in the target process.\n";
         return -1;
     }
 
-    log.append("DLL Injected !\n");
+    log << "DLL Injected !\n";
 
     WaitForSingleObject(hThreadCreationResult, INFINITE);
     CloseHandle(hThreadCreationResult);
 
-    log.append("Mod injected !\n");
+    log << "Mod injected !\n";
 
     VirtualFreeEx(hTargetProcess, lpPathAddress, 0, MEM_RELEASE);
     CloseHandle(hTargetProcess);
@@ -173,7 +173,6 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
 void ModManager::InjectAll()
 {
     log.clear();
-    error_log.clear();
 
     constexpr const char *lpprocessname = "primordialis.exe";
     int failed = 0;
@@ -190,9 +189,9 @@ void ModManager::InjectAll()
         ownProcess = true;
         if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE, CREATE_SUSPENDED | SYNCHRONIZE, nullptr, nullptr, &startI, &procI))
         {
-            log.append("Failed to start primordialis: ");
-            log.append(std::to_string(GetLastError()));
-            log.append("\n");
+            log << "Failed to start primordialis: ";
+            log << std::to_string(GetLastError());
+            log << "\n";
             return;
         }
         // try get to work with suspended process in future (for main menu altering mods that might need this)
@@ -231,25 +230,25 @@ void ModManager::InjectAll()
 
         if (!mod.enabled)
         {
-            log.append("Encountered disabled mod, skipping...\n");
+            log << "Encountered disabled mod, skipping...\n";
             continue;
         }
 
         std::string injectPath = mod.dll_path.string();
         char dllpath[MAX_PATH];
 
-        if (Inject(injectPath.c_str(), dllpath, lpprocessname, log, error_log) != 0)
+        if (Inject(injectPath.c_str(), dllpath, lpprocessname, log) != 0)
         {
-            log.append("[INJECTION FAILED] (");
-            log.append(mod.dll_path.filename().string());
-            log.append(") Skipped\n");
+            log << "[INJECTION FAILED] (";
+            log << mod.dll_path.filename().string();
+            log << ") Skipped\n";
 
             failed++;
             continue;
         }
-        log.append("[INJECTION SUCCESS] (");
-        log.append(mod.dll_path.filename().string());
-        log.append(")\n");
+        log << "[INJECTION SUCCESS] (";
+        log << mod.dll_path.filename().string();
+        log << ")\n";
 
         strcpy_s(
             shared->mods[shared->count++].name,
@@ -257,19 +256,20 @@ void ModManager::InjectAll()
         );
     }
     if (failed)
-        log.append("Failed " + std::to_string(failed) + "/" + std::to_string(mods.size()) + " mods\n");
+        log << "Failed " + std::to_string(failed) + "/" + std::to_string(mods.size()) + " mods\n";
     else
-        log.append("Mod injection finished successfully\n");
+        log << "Mod injection finished successfully\n";
 
     // load nucleus api.dll last after all other mods
     if (std::filesystem::exists("mods/Nucleus.dll"))
     {
         char dllpath[MAX_PATH];
-        if (Inject("mods/Nucleus.dll", dllpath, lpprocessname, log, log) != 0)
+        if (Inject("mods/Nucleus.dll", dllpath, lpprocessname, log) != 0)
         {
-            log.append("Failed to inject nucleus runtime API, major issues may occur !\n");
+            log << "Failed to inject nucleus runtime API, major issues may occur !\n";
             failed++;
         }
+        log << "[INJECTION SUCCESS] (Nucleus)\n";
     }
 
     if (ownProcess)

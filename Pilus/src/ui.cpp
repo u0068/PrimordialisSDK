@@ -2,6 +2,28 @@
 #include <imgui_internal.h>
 #include "imgui_helpers.h"
 
+void DrawConsole(ModManager &manager)
+{
+    ImGui::Begin("Console");
+    ImGui::TextWrapped(manager.log.str().c_str());
+    ImGui::End();
+}
+
+void DrawActionBox(ModManager &manager)
+{
+    ImGui::Begin("Action Box");
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.6f, 0.6f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
+
+    if (ImGui::Button("Start", {120, 60}))
+    {
+        manager.InjectAll();
+    }
+
+    ImGui::PopStyleColor(3);
+    ImGui::End();
+}
 
 void DrawModList(ModManager &manager)
 {
@@ -87,5 +109,7 @@ void DrawModList(ModManager &manager)
 
 void DrawUI(ModManager &manager)
 {
+    DrawActionBox(manager);
+    DrawConsole(manager);
     DrawModList(manager);
 }

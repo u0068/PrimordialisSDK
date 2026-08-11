@@ -92,7 +92,7 @@ std::string GetValue(const std::string& data, const std::string& key)
     return data.substr(find, end - find);
 }
 
-void ParseModInfo(Mod* mod, std::string& log)
+void ParseModInfo(Mod* mod, std::stringstream& log)
 {
     if (mod->path == mod->dll_path)
         return; // Mod is raw dll so has no info
@@ -136,13 +136,13 @@ void ParseModInfo(Mod* mod, std::string& log)
 
 void ModManager::RefreshMods()
 {
-    log.append("Refreshing Mods...\n");
+    log << "Refreshing Mods...\n";
     std::vector<Mod> fmods;
     for (const auto& entry : std::filesystem::directory_iterator(mod_path))
     {
-        log.append("Found Mod: ");
-        log.append(entry.path().filename().stem().string());
-        log.append("\n");
+        log << "Found Mod: ";
+        log << entry.path().filename().stem().string();
+        log << "\n";
 
         Mod nmod;
         nmod.path = entry.path();
@@ -196,7 +196,7 @@ void ModManager::LoadPilusConfig()
 
     if (file.empty())
     {
-        printf("Failed to read config\n");
+        log << "Failed to read config\n";
         return;
     }
 
@@ -281,7 +281,7 @@ void ModManager::PatchInitLua()
         init_content += line + "\n";
     }
 
-    std::cout << "Patching init.lua\n";
+    log << "Patching init.lua\n";
 
     init_file.close();
 
@@ -292,7 +292,7 @@ void ModManager::PatchInitLua()
     }
     else
     {
-        std::cout << "Mod loader content already found in init.lua, skipping preline append\n";
+        log << "Mod loader content already found in init.lua, skipping preline append\n";
     }
 
     pos = init_content.find(postline);
@@ -302,7 +302,7 @@ void ModManager::PatchInitLua()
     }
     else
     {
-        std::cout << "Mod loader content already found in init.lua, skipping postline append\n";
+        log << "Mod loader content already found in init.lua, skipping postline append\n";
     }
 
     temp_init_file << init_content;
