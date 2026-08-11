@@ -188,7 +188,7 @@ DWORD WINAPI MainThread(LPVOID)
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    Log("Hello from Runtime API!\n");
+    Log("Hello from Nucleus!\n");
 
      if (MH_Initialize() != MH_OK)
      {

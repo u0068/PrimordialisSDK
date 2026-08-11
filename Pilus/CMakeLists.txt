@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(Pilus)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 add_subdirectory(external/SFML)
 
 add_executable(Pilus WIN32
