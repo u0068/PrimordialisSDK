@@ -10,7 +10,7 @@ Primordialis SDK is a modding SDK for Primordialis.
 To load mods into Primordialis, you need to:
 - Download Pilus.exe from [Releases](https://github.com/u0068/PrimordialisSDK/releases).
 - Put Pilus.exe in the Primordialis folder in your steam library.
-- Launch Pilus.exe which will create a "mods" folder in Primordialis/mods.
+- Launch Pilus.exe which will create a "mods" folder in Primordialis/mods and download everything else it needs.
 - Then, put your installed mods in the "mods" folder, configure and
 enable them to your liking, and launch Primordialis from Pilus by pressing "start".
 
