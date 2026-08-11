@@ -20,6 +20,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Advanced cell stuff
   - Make thread safety trivial (DONE)
   - Adding translation entries (DONE)
+  - Make generated cell ids human readable (eg BASE64)
 - Organisation
   - Organise directories (DONE)
   - Organise files (DONE)
