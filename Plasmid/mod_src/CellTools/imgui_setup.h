@@ -6,7 +6,8 @@
 #include <imgui_impl_opengl3_loader.h>
 #include <imgui_impl_win32.h>
 
-namespace P = APIUtil;
+// Use https://pthom.github.io/imgui_explorer/ for reference
+void DrawUI();
 
 inline WNDPROC original_wndproc;
 
@@ -53,8 +54,7 @@ inline void DrawImgui(P::window_t* window)
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+    DrawUI();
 
     ImGui::Render();
 
@@ -81,6 +81,7 @@ inline void window_init_hook(P::window_t* window)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;       // Enable Docking
     // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;     // Enable Multi-Viewport / Platform Windows
+    io.MouseDrawCursor = false;
 
     ImGui::StyleColorsDark();
 

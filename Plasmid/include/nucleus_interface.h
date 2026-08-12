@@ -10,7 +10,7 @@ struct HookChainBase
     virtual ~HookChainBase() = default;
 };
 
-struct NucleusRuntimeAPI
+struct Nucleus
 {
     void* (*ResolveSymbol)(const char*);
     void* (*CreateHook)(const char* name, void* detour);
@@ -19,7 +19,7 @@ struct NucleusRuntimeAPI
     void (*SetCurrentContext)(void* context);
 };
 
-inline NucleusRuntimeAPI* nucleus;
+inline Nucleus* nucleus;
 
 // ====== Other shared stuff ======
 

@@ -4,7 +4,7 @@
 #include "nucleus_interface.h"
 #include <windows.h>
 
-namespace APIUtil
+namespace P
 {
     // #include "generated/resolve_functions.h"
     #include "generated/game_functions/essential.h"
@@ -207,56 +207,15 @@ namespace APIUtil
         return *static_cast<int*>(tls_value) == 0;
     }
 
-    void OnInitMaterials();
-
-    inline void InitMaterialsHook()
-    {
-        Next<void>();
-        if (IsThreadSafe())
-        {
-            OnInitMaterials();
-        }
-    }
-
-    struct UpdateWorkCall
-    {
-        char* traceName = const_cast<char*>("no trace name");
-        void(*call)(){};
-    };
-
-    static std::vector<UpdateWorkCall> update_cells_work_append;
-
-    inline void DoAllUpdateCellsWork() // called after vanilla cell-related update functions
-    {
-        for (auto & i : update_cells_work_append)
-        {
-           begin_trace_stage(i.traceName);
-           i.call();
-        }
-    }
-
-    static void AddAllWorkHook(render_context* param_1, render_context* param_2, user_input* param_3)
-    {
-        Next<void>(param_1, param_2, param_3);
-        DoAllUpdateCellsWork();
-    }
-
-    static void APIHookAllUtil()
-    {
-        Hook<"init_materials_list">(InitMaterialsHook);
-        // Hook("update_cells", AddAllWorkHook);
-    };
-
     inline void InitialiseMod();
 };
 
 extern"C" __declspec(dllexport)
-inline void Initialise(NucleusRuntimeAPI* api)
+inline void Initialise(Nucleus* api)
 {
     nucleus = api;
     PlasmidLog("Initialising Plasmid!\n");
-    APIUtil::APIHookAllUtil();
-    APIUtil::translation_values.reserve(2048);
-    APIUtil::Log("Initialising Mod!\n");
-    APIUtil::InitialiseMod();
+    P::translation_values.reserve(2048);
+    P::Log("Initialising Mod!\n");
+    P::InitialiseMod();
 }
