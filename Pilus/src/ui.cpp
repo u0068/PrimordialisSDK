@@ -147,7 +147,8 @@ void DrawModList()
                 ImGui::BeginDisabled();
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
-            ImGui::Checkbox("##Enabled", &mod.enabled);
+            if (ImGui::Checkbox("##Enabled", &mod.enabled))
+                ModManager::SavePilusConfig();
             ImGui::TableNextColumn();
             if (!mod.enabled)
                 ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
@@ -200,6 +201,7 @@ void DrawModList()
             if (next >= 1 && next < mods.size())
             {
                 std::swap(mods[draggedModIndex], mods[next]);
+                ModManager::SavePilusConfig();
             }
         }
     }

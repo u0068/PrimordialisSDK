@@ -168,10 +168,11 @@ void ModManager::RefreshMods()
                 {
                     final_mods.insert(final_mods.begin(), installed_mod);
                     final_mods[0].enabled = true;
-                    continue;
+                } else
+                {
+                    final_mods.push_back(installed_mod);
+                    final_mods[final_mods.size() - 1].enabled = mod.enabled;
                 }
-                final_mods.push_back(installed_mod);
-                final_mods[final_mods.size() - 1].enabled = mod.enabled;
             }
         }
     }
