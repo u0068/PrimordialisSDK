@@ -86,7 +86,7 @@ bool DownloadVersionManifest()
 
     if (file.empty())
     {
-        console_log << err << "Verson manifest not found, unable to check compatibility or download updates.\n";
+        console_log << err << "Version manifest not found, unable to check compatibility or download updates.\n";
         return false;
     }
 

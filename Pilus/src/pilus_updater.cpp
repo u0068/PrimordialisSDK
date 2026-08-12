@@ -122,15 +122,6 @@ static bool StartPilus(
 
 int main(int argc, char** argv)
 {
-    /*
-        Usage:
-
-        PilusUpdater.exe
-            <pid>
-            <Pilus.exe>
-            <Pilus.new.exe>
-    */
-
     if (argc != 4)
     {
         std::wcerr
