@@ -1,1 +1,1 @@
-# Remember to rename the pdb to primordialis_avx.pbd so Nucleus can find it!!!
+The PDB files are suffixed with the steam build id.
