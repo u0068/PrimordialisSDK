@@ -300,7 +300,7 @@ inline ResolvedData<bool> paused("paused");
 inline ResolvedData<float> delta_t("delta_t");
 inline ResolvedData<int> death_frames("death_frames");
 // inline ResolvedData<tagPOINT> last_cursor_pos("last_cursor_pos");
-// inline ResolvedData<window_t> main_wnd("main_wnd");
+inline ResolvedData<window_t> main_wnd("main_wnd");
 inline ResolvedData<int> new_check_counter("new_check_counter");
 inline ResolvedData<bool> autoreload("autoreload");
 inline ResolvedData<bool> initialized_filetime("initialized_filetime");

@@ -22,6 +22,7 @@ add_library(imgui STATIC
 
         external/imgui/backends/imgui_impl_glfw.cpp
         external/imgui/backends/imgui_impl_opengl3.cpp
+        external/imgui/backends/imgui_impl_win32.cpp
 )
 
 target_include_directories(imgui PUBLIC

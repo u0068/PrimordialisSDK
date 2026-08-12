@@ -21,7 +21,7 @@ void acid(P::cell* cell)
     }
 }
 
-void APIUtil::OnInitMaterials()
+void P::OnInitMaterials()
 {
     material_t* mats = materials_list;
     material_t cell_type = base_material;
