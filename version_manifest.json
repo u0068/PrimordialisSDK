@@ -3,7 +3,7 @@
 
   "manifest_version" : 0,
 
-  "pilus" : {
+  "Pilus" : {
     "latest_version" : "0.2.0",
     "versions" : {
       "0.1.3" : {
@@ -24,7 +24,7 @@
     }
   },
 
-  "pilus_updater" : {
+  "PilusUpdater" : {
     "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
@@ -33,7 +33,7 @@
     }
   },
 
-  "nucleus" : {
+  "Nucleus" : {
     "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
@@ -43,7 +43,7 @@
     }
   },
 
-  "plasmid" : {
+  "Plasmid" : {
     "versions" : {
       "0.0.0" : {
         "min_nucleus_version" : "0.0.0"
@@ -51,7 +51,7 @@
     }
   },
 
-  "luasome" : {
+  "Luasome" : {
     "latest_version" : "6",
     "versions" : {
       "6" : {

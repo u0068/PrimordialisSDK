@@ -99,7 +99,8 @@ bool DownloadVersionManifest()
 
 bool CheckAndUpdate(
     const char* name,
-    const fs::path& update_path)
+    const fs::path& update_path,
+    const fs::path& check_path = "")
 {
     console_log << "Checking for " << name << " updates...\n";
 
@@ -117,22 +118,29 @@ bool CheckAndUpdate(
     ss << name << "_installed_version";
     auto installed_version_key = ss.str();
 
-    json installed_version_json = ModManager::pilus_config[installed_version_key];
-    std::string current_version = "0.0.0";
-    if (!installed_version_json.empty())
+    if (check_path != "" && !exists(check_path))
     {
-        current_version = installed_version_json.get<std::string>();
+        console_log << name << " not installed!\n";
     }
-
-    console_log << "Current " << name << " version: " << current_version << "\n";
-
-    console_log << "Latest " << name << " version: " << latest_version << "\n";
-
-    if (!(*ParseVersion(latest_version) > *ParseVersion(current_version)))
+    else
     {
-        console_log << name << " is up to date.\n";
+        json installed_version_json = ModManager::pilus_config[installed_version_key];
+        std::string installed_version = "0.0.0";
+        if (!installed_version_json.empty())
+        {
+            installed_version = installed_version_json.get<std::string>();
+        }
 
-        return false;
+        console_log << "Current " << name << " version: " << installed_version << "\n";
+
+        console_log << "Latest " << name << " version: " << latest_version << "\n";
+
+        if (!(*ParseVersion(latest_version) > *ParseVersion(installed_version)))
+        {
+            console_log << name << " is up to date.\n";
+
+            return false;
+        }
     }
 
     console_log << "Downloading new " << name << " version: "
@@ -160,7 +168,7 @@ bool UpdatePilus()
         pilus_path.parent_path() /
         "Pilus.new.exe";
 
-    if (!CheckAndUpdate("pilus", update_path))
+    if (!CheckAndUpdate("Pilus", update_path))
         return false;
 
     // Find our own PID and launch the updater.
@@ -171,7 +179,7 @@ bool UpdatePilus()
         pilus_path.parent_path() /
         "PilusUpdater.exe";
 
-    if (!CheckAndUpdate("pilus_updater", updater_path))
+    if (!CheckAndUpdate("PilusUpdater", updater_path, updater_path))
     {
         DeleteFileW(update_path.c_str());
         return false;
@@ -341,7 +349,7 @@ void CreateDirectories()
     if (!exists(ModManager::pilus_files_path))
     {
         create_directory(ModManager::pilus_files_path);
-        console_log << "Created pilus files directory\n";
+        console_log << "Created pilus_files directory\n";
     }
 
     if (exists(ModManager::config_path))
@@ -371,10 +379,10 @@ void UpdateAll()
 
     UpdatePilus();
 
-    CheckAndUpdate("nucleus", ModManager::mod_path / "Nucleus.dll");
+    CheckAndUpdate("Nucleus", ModManager::mod_path / "Nucleus.dll", ModManager::mod_path / "Nucleus.dll");
 
     fs::path luasome_temp_zip_path{ModManager::pilus_files_path / "luasome_tmp.zip"};
-    if (CheckAndUpdate("luasome", luasome_temp_zip_path))
+    if (CheckAndUpdate("Luasome", luasome_temp_zip_path, ModManager::luasome_path))
     {
         ExtractZip(luasome_temp_zip_path, ModManager::luasome_path);
         fs::remove(luasome_temp_zip_path);
