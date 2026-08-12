@@ -20,6 +20,34 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 //     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 // }
 
+inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam)
+{
+    BYTE keyboard_state[256];
+
+    if (!GetKeyboardState(keyboard_state))
+        return;
+
+    WCHAR chars[8];
+
+    UINT scan_code = (lParam >> 16) & 0xFF;
+
+    int count = ToUnicodeEx(
+        static_cast<UINT>(wParam),
+        scan_code,
+        keyboard_state,
+        chars,
+        ARRAYSIZE(chars),
+        0,
+        GetKeyboardLayout(0)
+    );
+
+    if (count > 0)
+    {
+        for (int i = 0; i < count; ++i)
+            ImGui::GetIO().AddInputCharacter(chars[i]);
+    }
+}
+
 inline LRESULT CALLBACK imgui_wndproc(
     HWND hwnd,
     UINT msg,
@@ -33,6 +61,29 @@ inline LRESULT CALLBACK imgui_wndproc(
         lParam
     );
 
+    if (msg == WM_KEYDOWN)
+    {
+        switch (wParam)
+        {
+            case VK_SHIFT:
+            case VK_CONTROL:
+            case VK_MENU:
+            case VK_LEFT:
+            case VK_RIGHT:
+            case VK_UP:
+            case VK_DOWN:
+            case VK_ESCAPE:
+            case VK_RETURN:
+            case VK_BACK:
+            case VK_TAB:
+                break;
+
+            default:
+                AddKeyCharacter(wParam, lParam);
+            break;
+        }
+    }
+
     return CallWindowProc(
         original_wndproc,
         hwnd,
@@ -42,13 +93,39 @@ inline LRESULT CALLBACK imgui_wndproc(
     );
 }
 
-inline bool show_demo_window = true;
-
-inline void DrawImgui(P::window_t* window)
+inline void BlockInputs(P::window_t* window)
 {
-    if (!P::IsThreadSafe())
+    Next<void>(window);
+
+    if (!ImGui::GetIO().WantCaptureMouse)
         return;
 
+    window->input.buttons_blocked = true;
+    window->input.click_blocked = true;
+    window->input.hover_blocked = true;
+    window->input.escape_blocked = true;
+    window->input.right_click_blocked = true;
+
+    window->frame_input.buttons_blocked = true;
+    window->frame_input.click_blocked = true;
+    window->frame_input.hover_blocked = true;
+    window->frame_input.escape_blocked = true;
+    window->frame_input.right_click_blocked = true;
+
+    P::w->block_mouse = 1;
+    P::w->scroll_blocked = 1;
+
+    window->input.cursor_type = 0;
+    window->input.mouse_wheel = 0;
+    window->input.mouse_hwheel = 0;
+
+    window->frame_input.cursor_type = 0;
+    window->frame_input.mouse_wheel = 0;
+    window->frame_input.mouse_hwheel = 0;
+}
+
+inline void DrawImgui()
+{
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -60,14 +137,13 @@ inline void DrawImgui(P::window_t* window)
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
-
-inline void imgui_hook(P::render_context* param_1, P::render_context* param_2, P::user_input* param_3, P::recording_buffer* param_4, float param_5, P::window_t* window)
+inline void ImguiHook(P::render_context *param_1,P::real_3 *param_2,float param_3,P::real_4 *param_4,int param_5)
 {
-    Next<void>(param_1, param_2, param_3, param_4, param_5, window);
-    DrawImgui(window);
+    DrawImgui();
+    Next<void>(param_1, param_2, param_3, param_4, param_5);
 }
 
-inline void window_init_hook(P::window_t* window)
+inline void WindowInitHook(P::window_t* window)
 {
     Next<void>(window);
 
@@ -99,7 +175,8 @@ inline void window_init_hook(P::window_t* window)
 
 inline void do_imgui_hooks()
 {
-    Hook<"init_gl_context">(window_init_hook);
-    Hook<"render_game">(imgui_hook);
+    Hook<"init_gl_context">(WindowInitHook);
+    Hook<"draw_cursor">(ImguiHook);
+    Hook<"update_mouse_pos">(BlockInputs);
     P::Log("Done ImGui Hooks!\n");
 }
