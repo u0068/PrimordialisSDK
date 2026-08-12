@@ -6,16 +6,18 @@
 P::material_t* mats_local{};
 P::material_t* mats_original{};
 int n_vanilla_mats{};
+bool show_combos = false;
 
 void DrawCellEditor()
 {
     if (P::w->loading_screen) return;
 
     ImGui::Begin("Cell Editor");
+    ImGui::Checkbox("Show Combos", &show_combos);
     for (int i = 0; i < P::n_materials; i++)
     {
         P::material_t& mat = P::materials_list[i];
-        if (((std::string)mat.name).starts_with("Combo")) continue;
+        if (((std::string)mat.name).starts_with("Combo") and not show_combos) continue;
         ImGui::PushID(mat.name);
         if (ImGui::CollapsingHeader(mat.name))
         {
