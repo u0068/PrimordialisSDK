@@ -92,7 +92,7 @@ std::string GetValue(const std::string& data, const std::string& key)
     return data.substr(find, end - find);
 }
 
-void ParseModInfo(Mod* mod, std::string& log)
+void ParseModInfo(Mod* mod)
 {
     if (mod->path == mod->dll_path)
         return; // Mod is raw dll so has no info
@@ -110,7 +110,7 @@ void ParseModInfo(Mod* mod, std::string& log)
         {
             std::string data = ReadFile(entry.path());
 
-            mod->name = GetValue(data, "name");
+            // mod->name = GetValue(data, "name");
             mod->author = GetValue(data, "author");
             mod->description = GetValue(data, "description");
         }
@@ -134,193 +134,15 @@ void ParseModInfo(Mod* mod, std::string& log)
     }
 }
 
-void ModManager::ConfigEdit(char32_t key)
-{
-    if (key == U'\b') // backspace
-    {
-        if (!config_temp.empty())
-        {
-            config_temp.pop_back();
-        }
-    }
-    else
-    {
-        if (std::holds_alternative<std::string>(mods[mod_selected].config[config_selected].value))
-        {
-            config_temp.push_back(key);
-        }
-        else
-        {
-            if ((key >= U'0' && key <= U'9') || key == U'.')
-                config_temp.push_back(key);
-        }
-    }
-}
-
-void ModManager::ConfigEditFinish()
-{
-    char* end;
-    if (std::holds_alternative<std::string>(mods[mod_selected].config[config_selected].value))
-        mods[mod_selected].config[config_selected].value = config_temp;
-    else
-        mods[mod_selected].config[config_selected].value = std::strtod(config_temp.c_str(), &end);
-    config_temp.clear();
-}
-
-void ModManager::Update()
-{
-    while (const std::optional event = window->pollEvent())
-    {
-        if (event->is<sf::Event::Closed>())
-        {
-            window->close();
-            SaveConfig();
-        }
-        if (event->is<sf::Event::MouseButtonPressed>())
-        {
-            CheckSignificantMouseMovement(); // often clicking something in the modloader after not being in focus can trigger wrong button so do this
-
-            if (event->getIf<sf::Event::MouseButtonPressed>()->button == sf::Mouse::Button::Left)
-                m_leftPressed = true;
-
-            if (mod_hover != -1 && !mods.empty())
-            {
-                if (hover_mod_options && !hover_top_option)
-                {
-                    mods[mod_hover].enabled = !mods[mod_hover].enabled;
-                }
-                else if (hover_mod_options && hover_top_option)
-                {
-                    if (mod_selected != mod_hover)
-                    {
-                        mod_selected = mod_hover;
-                        cscroll = 0;
-                        config_selected = -1;
-                    }
-                    else
-                        mod_selected = -1;
-                }
-                else if (hover_move)
-                {
-                    if (hover_top_move)
-                    {
-                        if (mod_hover > 0)
-                        {
-                            std::swap(mods[mod_hover], mods[mod_hover - 1]);
-                        }
-                    }
-                    else
-                    {
-                        if (mod_hover < mods.size() - 1)
-                        {
-                            std::swap(mods[mod_hover], mods[mod_hover + 1]);
-                        }
-                    }
-                    SaveConfig();
-                }
-            }
-            else
-            {
-                if (mod_selected != -1) // enter config mode
-                {
-                    if (config_hover != -1)
-                    {
-                        if (std::holds_alternative<bool>(mods[mod_selected].config[config_hover].value))
-                        {
-                            mods[mod_selected].config[config_hover].value = !std::get<bool>(mods[mod_selected].config[config_hover].value);
-                            config_selected = -1;
-                        }
-                        else
-                        {
-                            if (std::holds_alternative<double>(mods[mod_selected].config[config_hover].value))
-                                config_temp = std::to_string(std::get<double>(mods[mod_selected].config[config_hover].value));
-                            else
-                                config_temp = std::get<std::string>(mods[mod_selected].config[config_hover].value);
-                            config_selected = config_hover;
-                        }
-                    }
-                }
-                else
-                {
-                    if (hover_inject)
-                    {
-                        SaveLuaModlist();
-                        InjectAll();
-                    }
-                }
-            }
-
-            Render();
-        }
-        if (event->is<sf::Event::MouseButtonReleased>())
-        {
-            if (event->getIf<sf::Event::MouseButtonReleased>()->button == sf::Mouse::Button::Left)
-                m_leftPressed = false;
-        }
-        if (event->is<sf::Event::KeyPressed>())
-        {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::I))
-                InjectAll();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::L))
-            {
-                std::ofstream file("loader_log.txt");
-                file << error_log << "\n" << log;
-                file.close();
-                log.clear();
-                log.append("Printed log to \"loader_log.txt\"\n");
-                Render();
-            }
-
-        }
-        if (event->is<sf::Event::TextEntered>())
-        {
-            if (config_selected != -1)
-            {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter))
-                {
-                    ConfigEditFinish();
-                    config_selected = -1;
-                }
-                else
-                {
-                    ConfigEdit(event->getIf<sf::Event::TextEntered>()->unicode);
-                }
-                Render();
-            }
-        }
-        if (event->is<sf::Event::MouseMoved>())
-        {
-            if (CheckSignificantMouseMovement())
-            {
-                Render();
-            }
-        }
-        if (event->is<sf::Event::MouseWheelScrolled>())
-        {
-            if (sf::Mouse::getPosition(*window).x < 400)
-            {
-                scroll += event->getIf<sf::Event::MouseWheelScrolled>()->delta * 20;
-                scroll = std::min(0.f, scroll);
-            }
-            else
-            {
-                cscroll += event->getIf<sf::Event::MouseWheelScrolled>()->delta * 10;
-                cscroll = std::min(0.f, cscroll);
-            }
-            Render();
-        }
-    }
-}
-
 void ModManager::RefreshMods()
 {
-    log.append("Refreshing Mods...\n");
-    std::vector<Mod> fmods;
+    console_log << "Refreshing Mods...\n";
+    std::vector<Mod> installed_mods;
     for (const auto& entry : std::filesystem::directory_iterator(mod_path))
     {
-        log.append("Found Mod: ");
-        log.append(entry.path().filename().stem().string());
-        log.append("\n");
+        console_log << "Found Mod: ";
+        console_log << entry.path().filename().stem().string();
+        console_log << "\n";
 
         Mod nmod;
         nmod.path = entry.path();
@@ -330,52 +152,58 @@ void ModManager::RefreshMods()
         {
             nmod.dll_path = entry.path();
         }
-        ParseModInfo(&nmod, log);
-        fmods.push_back(nmod);
+        ParseModInfo(&nmod);
+        installed_mods.push_back(nmod);
     }
-    Render();
 
-    std::vector<Mod> finalmods;
+    std::vector<Mod> final_mods;
 
     for (auto & mod : mods)
     {
-        for (const auto & fmod : fmods)
+        for (const auto & installed_mod : installed_mods)
         {
-            if (mod == fmod)
+            if (mod == installed_mod)
             {
-                finalmods.push_back(fmod);
-                finalmods[finalmods.size() - 1].enabled = mod.enabled;
+                if (mod.name == "Nucleus")
+                {
+                    final_mods.insert(final_mods.begin(), installed_mod);
+                    final_mods[0].enabled = true;
+                } else
+                {
+                    final_mods.push_back(installed_mod);
+                    final_mods[final_mods.size() - 1].enabled = mod.enabled;
+                }
             }
         }
     }
-    for (const auto & fmod : fmods)
+    for (const auto & installed_mod : installed_mods)
     {
-        bool addthismod = true;
-        for (const auto & finalmod : finalmods)
+        bool add_this_mod = true;
+        for (const auto & final_mod : final_mods)
         {
-            if (fmod == finalmod)
+            if (installed_mod == final_mod)
             {
-                addthismod = false;
+                add_this_mod = false;
                 break;
             }
         }
-        if (addthismod)
+        if (add_this_mod)
         {
-            finalmods.push_back(fmod);
+            final_mods.push_back(installed_mod);
         }
     }
 
-    mods = finalmods;
-    SaveConfig();
+    mods = final_mods;
+    SavePilusConfig();
 }
 
-void ModManager::LoadConfig()
+void ModManager::LoadPilusConfig()
 {
     auto file = ReadFile(config_path);
 
     if (file.empty())
     {
-        printf("Failed to read config\n");
+        console_log << err<< "Failed to read config\n";
         return;
     }
 
@@ -396,7 +224,7 @@ void ModManager::LoadConfig()
     }
 }
 
-void ModManager::SaveConfig()
+void ModManager::SavePilusConfig()
 {
     std::ofstream file(config_path);
 
@@ -460,7 +288,7 @@ void ModManager::PatchInitLua()
         init_content += line + "\n";
     }
 
-    std::cout << "Patching init.lua\n";
+    console_log << "Patching init.lua\n";
 
     init_file.close();
 
@@ -471,7 +299,7 @@ void ModManager::PatchInitLua()
     }
     else
     {
-        std::cout << "Mod loader content already found in init.lua, skipping preline append\n";
+        console_log << "Mod loader content already found in init.lua, skipping preline append\n";
     }
 
     pos = init_content.find(postline);
@@ -481,7 +309,7 @@ void ModManager::PatchInitLua()
     }
     else
     {
-        std::cout << "Mod loader content already found in init.lua, skipping postline append\n";
+        console_log << "Mod loader content already found in init.lua, skipping postline append\n";
     }
 
     temp_init_file << init_content;

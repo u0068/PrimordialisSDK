@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <vector>
 #include <variant>
 #include <windows.h>
@@ -8,6 +7,9 @@
 using json = nlohmann::json;
 
 namespace fs = std::filesystem;
+
+inline std::stringstream console_log;
+const std::string err{"[ERROR]\t"};
 
 struct ConfigValue
 {
@@ -51,51 +53,25 @@ struct Mod
     }
 };
 
-struct ModManager
+namespace ModManager
 {
-    sf::RenderWindow* window;
-    std::vector<Mod> mods;
-    std::string error_log;
-    std::string log;
+    inline std::vector<Mod> mods;
 
-    fs::path game_path = fs::current_path();
-    fs::path pilus_files_path{game_path / "pilus_files/"};
-    fs::path luasome_path{pilus_files_path / "luasome"};
-    fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
+    inline fs::path game_path = fs::current_path();
+    inline fs::path pilus_files_path{game_path / "pilus_files/"};
+    inline fs::path luasome_path{pilus_files_path / "luasome"};
+    inline fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
 
     const std::string version_manifest_url{
         "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
     const fs::path version_manifest_path{pilus_files_path.string()+"pilus_version_manifest.json"};
-    json version_manifest;
+    inline json version_manifest;
 
     const fs::path config_path{pilus_files_path.string()+"pilus_config.json"};
-    json pilus_config;
+    inline json pilus_config;
 
-    fs::path mod_path{game_path / "mods"};
-    std::string last_description_trunc;
-
-    sf::Font* font;
-    sf::Text* text;
-
-    bool hover_top_move = false;
-    bool hover_move = false;
-
-    bool m_leftPressed = false;
-
-    bool hover_inject = false;
-
-    bool hover_mod_options = false;
-    bool hover_top_option = false;
-
-    uint32_t mod_hover = -1;
-    uint32_t mod_selected = -1;
-    uint32_t config_hover = -1;
-    uint32_t config_selected = -1;
-
-    std::string config_temp{};
-
-    float scroll = 0;
-    float cscroll = 0;
+    inline fs::path mod_path{game_path / "mods"};
+    inline std::string last_description_trunc;
 
     void RefreshMods();
     void InjectAll();
@@ -103,18 +79,8 @@ struct ModManager
     void SaveLuaModlist();
     void PatchInitLua();
 
-    bool CheckSignificantMouseMovement();
-
-    void SaveConfig();
-    void LoadConfig();
-
-    void Render();
-    void Update();
-
-    void ConfigEdit(char32_t key);
-    void ConfigEditFinish();
-
-    ModManager() {}
+    void SavePilusConfig();
+    void LoadPilusConfig();
 };
 
 struct ModInfo

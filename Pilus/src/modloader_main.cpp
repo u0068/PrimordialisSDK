@@ -1,59 +1,89 @@
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601
 #endif
-#define NOMINMAX
-#include <windows.h>
-#include <winbase.h>
-#include "modloader.h"
-#include "update.h"
+#include "imgui_helpers.h"
+#include "ui.h"
+#include "updater.h"
 
-void run()
+int main()
 {
-    AllocConsole();
+    console_log << "Pilus Starting\n";
 
-    FILE* file;
-    freopen_s(&file, "CONOUT$", "w", stdout);
+    UpdateAll();
+    ModManager::RefreshMods();
 
-    ModManager manager;
-
-    UpdateAll(manager);
-
-    sf::RenderWindow window(sf::VideoMode({ 800, 560 }), "Pilus", sf::Style::Titlebar | sf::Style::Close);
-
-    sf::Font font;
-    sf::Text text(font);
-    if (!font.openFromFile("data/CreatoDisplay-Regular.otf"))
-        if (!font.openFromFile("verdana.ttf"))
-            printf("FAILED TO LOAD FONT\n");
-
-    manager.font = &font;
-    manager.text = &text;
-    manager.window = &window;
-    font.setSmooth(false);
-    text.setCharacterSize(15);
-
-    HANDLE dirchangenotif = FindFirstChangeNotification(
-        manager.mod_path.string().c_str(),
-        FALSE,
-        FILE_NOTIFY_CHANGE_FILE_NAME);
-
-    manager.RefreshMods();
-    manager.Render();
-
-    while (window.isOpen())
+    glfwSetErrorCallback(glfwErrorCallback);
+    if (!glfwInit())
     {
-        WaitForSingleObject(dirchangenotif, 16);
-
-        manager.log.clear();
-        manager.RefreshMods();
-        FindNextChangeNotification(dirchangenotif);
-
-        manager.Update();
+        std::cout << "Failed to initialise GLFW\n";
+        return -1;
     }
-}
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    GLFWwindow* window = glfwCreateWindow(
+        720,
+        720,
+        "Pilus Modloader",
+        nullptr,
+        nullptr
+    );
+    if (!window)
+    {
+        std::cout << "Failed to create GLFW window\n";
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-    LPSTR lpCmdLine, int nCmdShow) {
-    run();
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+    console_log << "Pilus Initialised!\n";
+
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::DockSpaceOverViewport();
+
+        DrawUI();
+
+        // ImGui::ShowDemoWindow(); // I'm using https://pthom.github.io/imgui_explorer/ instead
+
+        renderImGui(io);
+
+        int width;
+        int height;
+
+        glfwGetFramebufferSize(window, &width, &height);
+
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui_ImplOpenGL3_RenderDrawData(
+            ImGui::GetDrawData()
+        );
+
+        glfwSwapBuffers(window);
+    }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
     return 0;
 }

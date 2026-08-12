@@ -1,329 +1,216 @@
-#include <deque>
+#include "ui.h"
+#include <imgui_internal.h>
+#include "imgui_helpers.h"
 #include "modloader.h"
 
-std::string WrapText(const sf::Text& text, std::string& string, int max)
+bool AutoScroll = true;
+bool ScrollToBottom = false;
+std::vector<std::string> Lines{};
+
+void DrawConsole()
 {
-    std::string nstring;
-    sf::Text temp = text;
-    temp.setString(nstring);
-    for (int i = 0; i < string.length(); i++)
+    ImGui::Begin("Console");
+    // ImGui::TextWrapped(console_log.str().c_str());
+
+    std::string line{};
+    while (std::getline(console_log, line))
+        Lines.push_back(line);
+    console_log.clear();
+
+    if (ImGui::SmallButton("Clear"))    Lines.clear();
+    ImGui::SameLine();
+    bool copy_to_clipboard = ImGui::SmallButton("Copy");
+    //static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
+
+    // Options menu
+    if (ImGui::BeginPopup("Options"))
     {
-        nstring.append(string.substr(i, 1));
-        temp.setString(nstring);
-        if (temp.getLocalBounds().size.x > max)
-        {
-            nstring.insert(nstring.length() - 1, "\n");
-        }
-        temp.setString(nstring);
+        ImGui::Checkbox("Auto-scroll", &AutoScroll);
+        if (ImGui::SmallButton("Scroll to bottom")) ScrollToBottom = true;
+        ImGui::EndPopup();
     }
-    return nstring;
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Options"))
+        ImGui::OpenPopup("Options");
+
+    ImGui::Separator();
+
+    if (ImGui::BeginChild("ScrollingRegion", {0, 0}, ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
+    {
+        if (ImGui::BeginPopupContextWindow())
+        {
+            if (ImGui::Selectable("Clear")) Lines.clear();
+            ImGui::EndPopup();
+        }
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+        if (copy_to_clipboard)
+            ImGui::LogToClipboard();
+        for (auto line : Lines)
+        {
+            ImVec4 color;
+            bool has_color = false;
+            if (strstr(line.c_str(), "[ERROR]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
+            else if (strncmp(line.c_str(), "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+            if (has_color)
+                ImGui::PushStyleColor(ImGuiCol_Text, color);
+            ImGui::TextUnformatted(line.c_str());
+            if (has_color)
+                ImGui::PopStyleColor();
+        }
+        if (copy_to_clipboard)
+            ImGui::LogFinish();
+
+        // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
+        // Using a scrollbar or mouse-wheel will take away from the bottom edge.
+        if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
+            ImGui::SetScrollHereY(1.0f);
+        ScrollToBottom = false;
+
+        ImGui::PopStyleVar();
+    }
+    ImGui::EndChild();
+    // ImGui::Separator();
+
+    ImGui::End();
 }
 
-void ModManager::Render()
+void DrawActionBox()
 {
-    sf::VertexArray bline(sf::PrimitiveType::Lines, 2);
+    ImGui::Begin("Action Box");
 
-    window->clear(sf::Color::Black);
-    if (mod_selected == -1)
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.9f, 0.9f));
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (ImGui::Button("Start Game", {
+        (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x)/2,
+        ImGui::GetContentRegionAvail().y}))
     {
-        std::deque<std::string> trunc_log;
-
-        int maxlines = 12;
-        std::istringstream sstream(error_log);
-        std::string line;
-        while (std::getline(sstream, line))
-        {
-            trunc_log.push_back(line);
-            if (trunc_log.size() > maxlines)
-                trunc_log.pop_front();
-        }
-        sstream = std::istringstream(log);
-        sstream.seekg(0);
-        while (std::getline(sstream, line))
-        {
-            trunc_log.push_back(line);
-            if (trunc_log.size() > maxlines)
-                trunc_log.pop_front();
-        }
-
-        std::string flog;
-        for (const auto & i : trunc_log)
-        {
-            flog.append(i);
-            flog.append("\n");
-        }
-
-        flog = WrapText(*text, flog, 400);
-        flog = "Pilus Modloader\n" + flog;
-        text->setString(flog);
-
-        text->setPosition({ 400, 255 });
-
-        window->draw(*text);
-
-        bline[0].position = { 400, 255 };
-        bline[1].position = { 800, 255 };
-
-        window->draw(bline);
+        ModManager::InjectAll();
     }
-    else
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+    if (ImGui::Button("Refresh Mods", ImGui::GetContentRegionAvail()))
     {
-        for (int i = 0; i < mods[mod_selected].config.size(); i++)
-        {
-            std::string configline;
-
-            if (i == config_selected)
-                configline = "(" + mods[mod_selected].config[i].name + "): " + config_temp;
-            else
-            {
-                configline = mods[mod_selected].config[i].name + ": ";
-
-                if (std::holds_alternative<double>(mods[mod_selected].config[i].value))
-                    configline.append(std::to_string(std::get<double>(mods[mod_selected].config[i].value)));
-                else if (std::holds_alternative<bool>(mods[mod_selected].config[i].value))
-                {
-                    if (std::get<bool>(mods[mod_selected].config[i].value))
-                        configline.append("Enabled");
-                    else
-                        configline.append("Disabled");
-                }
-                else if (std::holds_alternative<std::string>(mods[mod_selected].config[i].value))
-                    configline.append(std::get<std::string>(mods[mod_selected].config[i].value));
-            }
-            if (i % 2 == 1)
-            {
-                sf::RectangleShape brighterrect;
-                brighterrect.setSize({ 400, 50 });
-                brighterrect.setFillColor(sf::Color(255, 255, 255, 10));
-                brighterrect.setPosition({ 400, 50 * i + cscroll });
-                window->draw(brighterrect);
-            }
-
-            text->setString(configline);
-            text->setPosition({ 400, 50 * i + cscroll - text->getLocalBounds().size.y / 2 + 25 });
-            window->draw(*text);
-        }
+        ModManager::RefreshMods();
     }
-
-    bline[0].position = {400, 0};
-    bline[1].position = {400, 560};
-
-    window->draw(bline);
-
-    if (mod_hover != -1 && !mods.empty())
-    {
-        if (mod_selected == -1)
-        {
-            last_description_trunc = WrapText(*text, mods[mod_hover].description, 400);
-            text->setString(last_description_trunc);
-            text->setPosition({ 600 - text->getLocalBounds().size.x / 2, 255 / 2 - text->getLocalBounds().size.y / 2 });
-            window->draw(*text);
-        }
-
-        sf::RectangleShape hoverhighlight;
-        if (!m_leftPressed)
-        {
-            hoverhighlight.setSize({399, 100});
-            hoverhighlight.setPosition({0, 100 * mod_hover + scroll});
-            hoverhighlight.setFillColor(sf::Color(20, 20, 20));
-
-            if (hover_move)
-            {
-                hoverhighlight.setSize({ 31, 50 });
-                if (hover_top_move)
-                    hoverhighlight.setPosition({400 - 32, 100 * mod_hover + scroll});
-                else
-                    hoverhighlight.setPosition({400 - 32, 100 * mod_hover + scroll + 50});
-            }
-            if (hover_mod_options)
-            {
-                hoverhighlight.setSize({ 68, 50 });
-                if (hover_top_option)
-                    hoverhighlight.setPosition({ 300, 100 * mod_hover + scroll });
-                else
-                    hoverhighlight.setPosition({ 300, 100 * mod_hover + scroll + 50 });
-            }
-            window->draw(hoverhighlight);
-        }
-
-        text->setString("/\\");
-        text->setPosition({ 400 - 16 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 25 });
-        window->draw(*text);
-
-        text->setString("\\/");
-        text->setPosition({ 400 - 16 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 50 + 25 });
-        window->draw(*text);
-
-        text->setString("Config");
-        text->setPosition({ 300 + 34 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 25});
-        window->draw(*text);
-
-        if (mods[mod_hover].enabled)
-            text->setString("Disable");
-        else
-            text->setString("Enable");
-        text->setPosition({ 300 + 34 - (text->getLocalBounds().size.x / 2), 100 * mod_hover + scroll - (text->getLocalBounds().size.y / 2) + 50 + 25 });
-        window->draw(*text);
-    }
-    else if (mod_selected == -1)
-    {
-        if (hover_inject)
-        {
-            sf::RectangleShape hover_highlight;
-            hover_highlight.setSize({400, 254});
-            hover_highlight.setPosition({400, 0});
-            hover_highlight.setFillColor(sf::Color(20, 20, 20));
-
-            window->draw(hover_highlight);
-        }
-
-        text->setString("Start");
-        // would add a way to check for if primordialis is already open and alternate between Start and Inject but its too slow
-        text->setPosition({600 - text->getLocalBounds().size.x / 2, 255 / 2 - text->getLocalBounds().size.y / 2});
-        window->draw(*text);
-    }
-    else
-    {
-        sf::RectangleShape hoverhighlight;
-        hoverhighlight.setSize({ 399, 100 });
-        hoverhighlight.setPosition({ 0, 100 * mod_selected + scroll });
-        hoverhighlight.setFillColor(sf::Color(20, 20, 20));
-        window->draw(hoverhighlight);
-
-        text->setString("Editing Config");
-        text->setPosition({ 320 - (text->getLocalBounds().size.x / 2), 100 * mod_selected + scroll - (text->getLocalBounds().size.y / 2) + 50 });
-        window->draw(*text);
-    }
-
-    for (int i = 0; i < mods.size(); i++)
-    {
-        int mody = i * 100 + int(scroll);
-
-        if (i % 2 == 1)
-        {
-            sf::RectangleShape brighterrect;
-            brighterrect.setFillColor(sf::Color(255, 255, 255, 10));
-            brighterrect.setSize({399, 100});
-            brighterrect.setPosition({0, float(mody)});
-            window->draw(brighterrect);
-        }
-
-        text->setPosition({8, float(mody + 8)});
-        text->setString(mods[i].name);
-        window->draw(*text);
-        text->setPosition({8, float(mody + 100 - 50)});
-        text->setString(mods[i].author);
-        text->setFillColor(sf::Color(60, 60, 60));
-        window->draw(*text);
-        text->setFillColor(sf::Color::White);
-
-        if (!mods[i].enabled)
-        {
-            sf::RectangleShape disablerect;
-            disablerect.setSize({399, 100});
-            disablerect.setPosition({0, float(mody)});
-            disablerect.setFillColor(sf::Color(0, 0, 0, 150));
-            window->draw(disablerect);
-        }
-    }
-
-    window->display();
+    ImGui::End();
 }
 
-bool ModManager::CheckSignificantMouseMovement()
+static void HelpMarker(const char* desc)
 {
-    bool change = false;
-    sf::Vector2i mouse = sf::Mouse::getPosition(*window);
-
-    if (mouse.x < 400)
+    ImGui::TextDisabled("(?)");
+    if (ImGui::BeginItemTooltip())
     {
-        if (mods.empty())
-        {
-            if (mod_hover != -1)
-            {
-                mod_hover = -1;
-                change = true;
-            }
-        }
-        else
-        {
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc);
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+}
 
-            if (hover_move != (mouse.x > 368))
-            {
-                hover_move = !hover_move;
-                change = true;
-            }
-            if (hover_mod_options != (mouse.x > 300 && mouse.x < 368))
-            {
-                hover_mod_options = !hover_mod_options;
-                change = true;
-            }
+void DrawModList()
+{
+    ImGui::Begin("Mods");
 
-            int hoveridxnoclamp = int(mouse.y - scroll) / 100;
-            int hoveridx = std::max(0, std::min(hoveridxnoclamp, (int)mods.size() - 1));
-            if (mod_hover != hoveridx)
+    auto& mods = ModManager::mods;
+
+    if (ImGui::BeginTable(
+        "ModList",
+        3,
+        ImGuiTableFlags_RowBg |
+        ImGuiTableFlags_BordersInnerV |
+        ImGuiTableFlags_SizingStretchProp))
+    {
+        ImGui::TableSetupColumn(
+            "Enabled",
+            ImGuiTableColumnFlags_WidthFixed,
+            20.0f
+        );
+        ImGui::TableSetupColumn(
+            "Mod",
+            ImGuiTableColumnFlags_WidthStretch
+        );
+        ImGui::TableSetupColumn(
+            "##Config",
+            ImGuiTableColumnFlags_WidthFixed,
+            80.0f
+            );
+        int moveDirection = 0;
+        int draggedModIndex = -1;
+        for (int i = 0; i < mods.size(); ++i)
+        {
+            Mod& mod = mods[i];
+            ImGui::PushID(mod.name.c_str());
+            if (mod.name == "Nucleus")
+                ImGui::BeginDisabled();
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            if (ImGui::Checkbox("##Enabled", &mod.enabled))
+                ModManager::SavePilusConfig();
+            ImGui::TableNextColumn();
+            if (!mod.enabled)
+                ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+            ImGui::Selectable(
+                mod.name.c_str(),
+                true
+                );
+            if (!mod.enabled)
+                ImGui::PopStyleColor();
+
+            bool isHovered = ImGui::TableGetHoveredRow() == i;
+            if (ImGui::IsItemActive())
             {
-                mod_hover = hoveridx;
-                change = true;
-            }
-            if (mouse.x > 368 && hoveridxnoclamp == hoveridx)
-            {
-                if (!hover_move)
+                if (draggedModIndex == -1)
+                    draggedModIndex = i;
+                if (!isHovered)
                 {
-                    hover_move = true;
-                    change = true;
-                }
-                if (hover_top_move != ((mouse.y - int(scroll)) % 100 < 50))
-                {
-                    hover_top_move = !hover_top_move;
-                    change = true;
-                }
-            }
-            else
-            {
-                if (mouse.x > 300)
-                {
-                    if (hover_top_option != ((mouse.y - int(scroll)) % 100 < 50))
+                    moveDirection =
+                        ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
+                    int next = i + moveDirection;
+                    if (next >= 0 &&
+                        next < mods.size())
                     {
-                        hover_top_option = !hover_top_option;
-                        change = true;
+                        ImGui::ResetMouseDragDelta();
                     }
                 }
             }
-        }
-
-        if (config_hover != -1)
-        {
-            config_hover = -1;
-            change = true;
-        }
-    }
-    else
-    {
-        if (mod_selected != -1)
-        {
-            int hoveridxnoclamp = int(mouse.y - cscroll) / 50;
-            int hoveridx = std::max(0, std::min(hoveridxnoclamp, (int)mods[mod_selected].config.size() - 1));
-
-            if (config_hover != hoveridx)
+            // ImGui::Text("Active: %d", ImGui::IsItemActive());
+            // ImGui::Text("Hovered: %d", isHovered);
+            // ImGui::Text("Dragged: %d", draggedModIndex == i);
+            if (mod.name == "Nucleus")
+                ImGui::EndDisabled();
+            if (mod.config.empty())
+                ImGui::BeginDisabled();
+            ImGui::TableNextColumn();
+            HelpMarker(std::format("Author: {}\n{}", mod.author, mod.description).c_str());
+            ImGui::SameLine();
+            if (ImGui::Button("Config"))
             {
-                config_hover = hoveridx;
-                change = true;
+                // OpenModConfig(mod);
+            }
+            if (mod.config.empty())
+                ImGui::EndDisabled();
+            ImGui::PopID();
+        }
+        ImGui::EndTable();
+        if (moveDirection != 0)
+        {
+            int next = draggedModIndex + moveDirection;
+            if (next >= 1 && next < mods.size())
+            {
+                std::swap(mods[draggedModIndex], mods[next]);
+                ModManager::SavePilusConfig();
             }
         }
-
-        if (mod_hover != -1)
-        {
-            mod_hover = -1;
-            change = true;
-        }
-
-        if (hover_inject != mouse.y < 255)
-        {
-            hover_inject = mouse.y < 255;
-            change = true;
-        }
     }
+    ImGui::End();
+}
 
-    return change;
+void DrawUI()
+{
+    DrawActionBox();
+    DrawModList();
+    DrawConsole();
 }

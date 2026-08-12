@@ -5,6 +5,17 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - Make making and loading mods as easy as possible
 ## TODO:
 - Switch to DearImgui (DOING)
+  - Modlist (DONE)
+    - Drag to reorder (DONE)
+    - Checkbox to enable (DONE)
+    - Config button (DONE)
+  - Start game
+  - Mod info
+  - Mod config
+  - Make it all pretty
+- Save and load modlists
+  - Modlists contain mod configs
+- Restore mod .zip support
 - Uninstaller
 - Only run Luasome when starting the game through Pilus
 - Ask before updating, auto-update setting.
@@ -13,7 +24,6 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - Exclude Nucleus from modlist reordering
 - Fix bugs:
   - Subscript out of range crash
-  - Can't close through CLion
   - Corrupted config file causes memory leak
 ## DONE:
 - Versioning for everything. (DONE)
@@ -36,3 +46,4 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
   - Multiple DLLs (DONE)
   - Mod config editor (DONE)
 - Fixed Bugs:
+  - Can't close through CLion (DONE)

@@ -133,7 +133,7 @@ void SetCurrentContext(void* context)
 }
 
 
-NucleusRuntimeAPI api
+Nucleus api
 {
     ResolveSymbol,
     CreateHook,
@@ -153,7 +153,7 @@ struct ModListShared
     ModInfo mods[256];
 };
 
-using ModInit = void(*)(NucleusRuntimeAPI*);
+using ModInit = void(*)(Nucleus*);
 using ModMain = void(*)();
 
 void LoadMod(const char* path)
