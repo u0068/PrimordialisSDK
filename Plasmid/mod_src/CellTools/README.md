@@ -5,6 +5,7 @@ Uses ImGui in-game.
 ---
 
 ## TO-DO:
+- Add material
 - Cell Pickup spawning
 - Cell Property view + edit
 - Export materials
