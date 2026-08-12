@@ -1,11 +1,10 @@
 #define MOD_NAME "Constant Acid Color"
 #include "plasmid_api.h"
 
-namespace APIUtil
+namespace P
 {
 #include "../include/generated/game_functions/cells.h"
 }
-namespace P = APIUtil;
 
 void acid(P::cell* cell)
 {
@@ -21,17 +20,21 @@ void acid(P::cell* cell)
     }
 }
 
-void P::OnInitMaterials()
+void OnInitMats()
 {
-    material_t* mats = materials_list;
-    material_t cell_type = base_material;
+    if (!P::IsThreadSafe())
+        return
+    Next<void>();
+    P::material_t* mats = P::materials_list;
+    P::material_t cell_type = P::base_material;
 
-    cell_type = mats[CellRef{"Acid cell"}.GetIndex()];
+    cell_type = mats[P::CellRef{"Acid cell"}.GetIndex()];
     cell_type.physics_update_fn = acid;
-    mats[CellRef{"Acid cell"}.GetIndex()] = cell_type;
+    mats[P::CellRef{"Acid cell"}.GetIndex()] = cell_type;
 }
 
 void P::InitialiseMod()
 {
     Log("Hello World!\n");
+    Hook<"init_materials_list">(OnInitMats);
 }
