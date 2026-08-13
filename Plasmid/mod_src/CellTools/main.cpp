@@ -1,5 +1,6 @@
 #define MOD_NAME "Cell Tools"
 
+#include <imgui_internal.h>
 #include <regex>
 
 #include "plasmid_api.h"
@@ -26,11 +27,17 @@ union material_u
 void DrawMaterialEditor(int id, P::material_t &mat)
 {
     ImGui::PushID(id);
-    if (ImGui::CollapsingHeader(mat.name))
+    bool open = ImGui::CollapsingHeader("##header");
+    ImGui::SameLine();
+    ImGui::TextUnformatted(mat.name);
+    if (ImGui::BeginPopupContextItem(mat.name))
     {
+        ImGui::PushItemFlag(ImGuiItemFlags_LiveEditOnInputText, false);
+        ImGui::InputText("##name", mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue);
+        ImGui::PopItemFlag();
         if (ImGui::Button("Copy to Clipboard"))
         {
-            // TO-DO: Make this human-readable
+            // TO-DO: Make this human-readable and only store the changes
             ImGui::LogToClipboard();
             ImGui::LogText("{");
             for (int i = 0; i < 280; i++)
@@ -45,7 +52,6 @@ void DrawMaterialEditor(int id, P::material_t &mat)
             ImGui::LogText("}");
             ImGui::LogFinish();
         }
-        ImGui::SameLine();
         if (ImGui::Button("Load from Clipboard"))
         {
             std::string clipboard = ImGui::GetClipboardText();
@@ -57,12 +63,15 @@ void DrawMaterialEditor(int id, P::material_t &mat)
             }
             mat = mat_data.mat;
         }
-        ImGui::SameLine();
         if (ImGui::Button("Give"))
         {
             P::cell_item cell_item = {id, {}, false};
             P::create_cell_item(&cell_item);
         }
+        ImGui::EndPopup();
+    }
+    if (open)
+    {
         ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1); // Tighten spacing
         ImGui::PushItemWidth(220.f);
         float speed = 0.005f;
@@ -177,9 +186,11 @@ void DrawMaterialEditor(int id, P::material_t &mat)
     ImGui::PopID();
 }
 
-void CopyMaterialFrom()
+P::material_t CopyMaterial(P::material_t mat)
 {
-
+    // Idk if this is a good way to unlink char* but it works
+    mat.name = (char*)(new std::string(mat.name))->c_str();
+    return mat;
 }
 
 void DrawMaterialsEditor()
@@ -188,32 +199,33 @@ void DrawMaterialsEditor()
 
     ImGui::Begin("Materials Editor");
 
-    ImGui::Checkbox("Show Combos",  &show_combos);
-    // ImGui::SameLine();
-    // ImGui::Checkbox("Show Vanilla", &show_vanilla);
-    ImGui::SameLine();
+    ImGui::Checkbox("Show Combos",  &show_combos); ImGui::SameLine();
+    ImGui::Checkbox("Show Vanilla", &show_vanilla); ImGui::SameLine();
     ImGui::Checkbox("Reset on Reload",  &reset_on_reload);
-    // auto combo_preview_value = P::materials_list[copy_from].name;
-    // if (ImGui::BeginCombo("Create New From", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
-    // {
-    //     static ImGuiTextFilter filter;
-    //     if (ImGui::IsWindowAppearing())
-    //     {
-    //         ImGui::SetKeyboardFocusHere();
-    //         filter.Clear();
-    //     }
-    //     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
-    //     filter.Draw("##Filter", -FLT_MIN);
-    //
-    //     for (int n = 0; n < P::n_materials; n++)
-    //     {
-    //         const bool is_selected = (copy_from == n);
-    //         if (filter.PassFilter(P::materials_list[n].name))
-    //             if (ImGui::Selectable(P::materials_list[n].name, is_selected))
-    //                 copy_from = n;
-    //     }
-    //     ImGui::EndCombo();
-    // }
+    auto combo_preview_value = P::materials_list[copy_from].name;
+    if (ImGui::Button("Create New From: "))
+        P::materials_list[P::n_materials++] = CopyMaterial(P::materials_list[copy_from]);
+    ImGui::SameLine();
+    if (ImGui::BeginCombo("##copy_from", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
+    {
+        static ImGuiTextFilter filter;
+        if (ImGui::IsWindowAppearing())
+        {
+            ImGui::SetKeyboardFocusHere();
+            filter.Clear();
+        }
+        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+        filter.Draw("##Filter", -FLT_MIN);
+
+        for (int n = 0; n < P::n_materials; n++)
+        {
+            const bool is_selected = (copy_from == n);
+            if (filter.PassFilter(P::materials_list[n].name))
+                if (ImGui::Selectable(P::materials_list[n].name, is_selected))
+                    copy_from = n;
+        }
+        ImGui::EndCombo();
+    }
     for (int i = 0; i < P::n_materials; i++)
     {
         P::material_t& mat = P::materials_list[i];
