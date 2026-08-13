@@ -54,15 +54,12 @@ inline LRESULT CALLBACK imgui_wndproc(
     WPARAM wParam,
     LPARAM lParam)
 {
-    if (msg != WM_MOUSEMOVE)
-    {
-        ImGui_ImplWin32_WndProcHandler(
-            hwnd,
-            msg,
-            wParam,
-            lParam
-        );
-    }
+    ImGui_ImplWin32_WndProcHandler(
+        hwnd,
+        msg,
+        wParam,
+        lParam
+    );
 
     if (msg == WM_KEYDOWN)
     {
