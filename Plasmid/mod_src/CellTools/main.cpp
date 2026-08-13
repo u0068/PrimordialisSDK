@@ -1,5 +1,7 @@
 #define MOD_NAME "Cell Tools"
 
+#include <regex>
+
 #include "plasmid_api.h"
 #include "imgui_setup.h"
 
@@ -10,11 +12,46 @@ bool reset_on_reload = true;
 int copy_from = 1;
 bool show_cell_editor = true;
 
+union material_u
+{
+    P::material_t mat;
+    byte data[280];
+};
+
 void DrawCellEditor(int id, P::material_t &mat)
 {
     ImGui::PushID(id);
     if (ImGui::CollapsingHeader(mat.name))
     {
+        if (ImGui::Button("Copy to Clipboard"))
+        {
+            // TO-DO: Make this human-readable
+            ImGui::LogToClipboard();
+            ImGui::LogText("{");
+            for (int i = 0; i < 280; i++)
+            {
+                byte data = material_u{mat}.data[i];
+                if (data < 100)
+                    ImGui::LogText("0");
+                if (data < 10)
+                    ImGui::LogText("0");
+                ImGui::LogText("%d,", data);
+            }
+            ImGui::LogText("}");
+            ImGui::LogFinish();
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Load from Clipboard"))
+        {
+            std::string clipboard = ImGui::GetClipboardText();
+            material_u mat_data{mat};
+            for (int i = 16; i < 280-8*6; i++)
+            {
+                byte data = stoi(clipboard.substr(1+i*4, 4));
+                mat_data.data[i] = data;
+            }
+            mat = mat_data.mat;
+        }
         ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1); // Tighten spacing
         ImGui::PushItemWidth(220.f);
         float speed = 0.005f;
@@ -80,9 +117,9 @@ void DrawCellEditor(int id, P::material_t &mat)
             ImGui::DragFloat("light_intensity", &mat.light_intensity, speed);
             ImGui::ColorEdit3("emission", mat.emission.data, ImGuiColorEditFlags_Float);
             ImGui::SliderInt("texture_type", &mat.texture_type, 0, 4);
-            P::int_2 uv = {(int)(mat.uv.x*32+0.5), (int)(mat.uv.y*32+0.5)};
+            P::int_2 uv = {(int)(mat.uv.x*32+0.5f), (int)(mat.uv.y*32+0.5f)};
             ImGui::DragInt2("uv", uv.data, 0.1);
-            mat.uv = {(float)(uv.x-0.5)/32.f, (float)(uv.y-0.5)/32.f};
+            mat.uv = {(float)(uv.x-0.5f)/32.f, (float)(uv.y-0.5f)/32.f};
 
             ImGui::TreePop();
         }
@@ -133,15 +170,13 @@ void DrawCellsEditor()
 {
     if (P::w->loading_screen) return;
 
-    ImGui::Begin("Cell Editor", &show_cell_editor, ImGuiWindowFlags_MenuBar);
+    ImGui::Begin("Cell Editor");
 
-    if (ImGui::BeginMenuBar())
-    {
-        ImGui::MenuItem("Show Combo Cells", "",  &show_combos);
-        ImGui::MenuItem("Show Vanilla Cells", "", &show_vanilla);
-        ImGui::MenuItem("Reset Cells on Reload", "",  &reset_on_reload);
-        ImGui::EndMenuBar();
-    }
+    ImGui::Checkbox("Show Combo Cells",  &show_combos);
+    ImGui::SameLine();
+    // ImGui::Checkbox("Show Vanilla Cells", &show_vanilla);
+    // ImGui::SameLine();
+    ImGui::Checkbox("Reset Cells on Reload",  &reset_on_reload);
     // auto combo_preview_value = P::materials_list[copy_from].name;
     // if (ImGui::BeginCombo("Copy From", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
     // {

@@ -13,8 +13,7 @@ static std::optional<Version> ParseVersion(const std::string &tag)
 {
     console_log << "Parsing Version: ";
 
-    console_log << tag
-        << "\n";
+    console_log << tag << "\n";
 
     Version version{0,0,0};
 
