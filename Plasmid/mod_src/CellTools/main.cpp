@@ -64,13 +64,17 @@ void DrawCellEditor()
             {
                 ImGui::DragFloat("conductivity", &mat.conductivity, speed);
                 ImGui::DragFloat("leak_conductivity", &mat.leak_conductivity, speed);
-                ImGui::DragFloat("capacitance", &mat.capacitance, speed);
-                ImGui::DragFloat("inv_capacitance", &mat.inv_capacitance, speed);
+                if(ImGui::DragFloat("capacitance", &mat.capacitance, speed))
+                    mat.inv_capacitance = 1.f / mat.capacitance;
+                if(ImGui::DragFloat("inv_capacitance", &mat.inv_capacitance, speed))
+                    mat.capacitance = 1.f / mat.inv_capacitance;
                 ImGui::DragFloat("directional_conductivity", &mat.directional_conductivity, speed);
                 ImGui::DragFloat("heat_conductivity", &mat.heat_conductivity, speed);
                 ImGui::DragFloat("leak_heat_conductivity", &mat.leak_heat_conductivity, speed);
-                ImGui::DragFloat("heat_capacity", &mat.heat_capacity, speed);
-                ImGui::DragFloat("inv_heat_capacity", &mat.inv_heat_capacity, speed);
+                if(ImGui::DragFloat("heat_capacity", &mat.heat_capacity, speed))
+                    mat.inv_heat_capacity = 1.f / mat.heat_capacity;
+                if(ImGui::DragFloat("inv_heat_capacity", &mat.inv_heat_capacity, speed))
+                    mat.heat_capacity = 1.f / mat.inv_heat_capacity;
 
                 ImGui::TreePop();
             }
