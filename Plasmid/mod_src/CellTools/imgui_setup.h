@@ -194,11 +194,12 @@ inline void WindowInitHook(P::window_t* window)
 
     ImGui::StyleColorsDark();
 
-    // Color correction
+    // Color correction to offset the game's post processing
     for (int i = 0; i < ImGuiCol_COUNT; i++)
     {
         auto col = ImGui::GetStyleColorVec4(i);
-        col = {col.x*col.x, col.y*col.y, col.z*col.z, col.w*col.w};
+        float exponent = 1.75;
+        col = {pow(col.x, exponent), pow(col.y, exponent), pow(col.z, exponent),pow(col.w, exponent)};
         ImGui::PushStyleColor(i, col);
     }
 
