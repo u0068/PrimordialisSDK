@@ -198,8 +198,7 @@ inline void WindowInitHook(P::window_t* window)
     for (int i = 0; i < ImGuiCol_COUNT; i++)
     {
         auto col = ImGui::GetStyleColorVec4(i);
-        float exponent = 2.;
-        col = {pow(col.x, exponent), pow(col.y, exponent), pow(col.z, exponent),pow(col.w, exponent)};
+        col = {col.x*col.x, col.y*col.y, col.z*col.z, col.w*col.w};
         ImGui::PushStyleColor(i, col);
     }
 
