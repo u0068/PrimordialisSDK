@@ -267,8 +267,6 @@ void ModManager::SaveLuaModlist()
     }
     file << "} -- Make sure that all mods are before this line!!!";
     file.close();
-
-    PatchInitLua();
 }
 
 void ModManager::PatchInitLua()

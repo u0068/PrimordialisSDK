@@ -86,6 +86,8 @@ void DrawActionBox()
         (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x)/2,
         ImGui::GetContentRegionAvail().y}))
     {
+        ModManager::PatchInitLua();
+        ModManager::SaveLuaModlist();
         ModManager::InjectAll();
     }
     ImGui::PopStyleColor(3);
@@ -148,7 +150,9 @@ void DrawModList()
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
             if (ImGui::Checkbox("##Enabled", &mod.enabled))
+            {
                 ModManager::SavePilusConfig();
+            }
             ImGui::TableNextColumn();
             if (!mod.enabled)
                 ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
