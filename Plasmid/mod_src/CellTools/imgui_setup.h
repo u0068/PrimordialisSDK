@@ -194,6 +194,15 @@ inline void WindowInitHook(P::window_t* window)
 
     ImGui::StyleColorsDark();
 
+    // Color correction
+    for (int i = 0; i < ImGuiCol_COUNT; i++)
+    {
+        auto col = ImGui::GetStyleColorVec4(i);
+        float exponent = 2.;
+        col = {pow(col.x, exponent), pow(col.y, exponent), pow(col.z, exponent),pow(col.w, exponent)};
+        ImGui::PushStyleColor(i, col);
+    }
+
     ImGui_ImplWin32_InitForOpenGL(window->hwnd);
 
     ImGui_ImplOpenGL3_Init();
