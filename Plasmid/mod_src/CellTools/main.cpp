@@ -8,13 +8,15 @@ bool show_combos = false;
 bool show_vanilla = true;
 bool reset_on_reload = true;
 int copy_from = 1;
+bool show_cell_editor = true;
 
-void DrawCellEditor(P::material_t &mat)
+void DrawCellEditor(int id, P::material_t &mat)
 {
-    ImGui::PushID(mat.name);
+    ImGui::PushID(id);
     if (ImGui::CollapsingHeader(mat.name))
     {
         ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1); // Tighten spacing
+        ImGui::PushItemWidth(220.f);
         float speed = 0.005f;
         if (ImGui::TreeNode("Biomass"))
         {
@@ -121,7 +123,7 @@ void DrawCellEditor(P::material_t &mat)
 
             ImGui::TreePop();
         }
-
+        ImGui::PopItemWidth();
         ImGui::PopStyleVar();
     }
     ImGui::PopID();
@@ -131,39 +133,42 @@ void DrawCellsEditor()
 {
     if (P::w->loading_screen) return;
 
-    ImGui::Begin("Cell Editor");
-    ImGui::Checkbox("Show Combo Cells", &show_combos);
-    ImGui::SameLine();
-    ImGui::Checkbox("Show Vanilla Cells", &show_vanilla);
-    // ImGui::SameLine();
-    ImGui::Checkbox("Reset Cells on Reload", &reset_on_reload);
-    auto combo_preview_value = P::materials_list[copy_from].name;
-    if (ImGui::BeginCombo("Copy From", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
-    {
-        static ImGuiTextFilter filter;
-        if (ImGui::IsWindowAppearing())
-        {
-            ImGui::SetKeyboardFocusHere();
-            filter.Clear();
-        }
-        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
-        filter.Draw("##Filter", -FLT_MIN);
+    ImGui::Begin("Cell Editor", &show_cell_editor, ImGuiWindowFlags_MenuBar);
 
-        for (int n = 0; n < P::n_materials; n++)
-        {
-            const bool is_selected = (copy_from == n);
-            if (filter.PassFilter(P::materials_list[n].name))
-                if (ImGui::Selectable(P::materials_list[n].name, is_selected))
-                    copy_from = n;
-        }
-        ImGui::EndCombo();
+    if (ImGui::BeginMenuBar())
+    {
+        ImGui::MenuItem("Show Combo Cells", "",  &show_combos);
+        ImGui::MenuItem("Show Vanilla Cells", "", &show_vanilla);
+        ImGui::MenuItem("Reset Cells on Reload", "",  &reset_on_reload);
+        ImGui::EndMenuBar();
     }
+    // auto combo_preview_value = P::materials_list[copy_from].name;
+    // if (ImGui::BeginCombo("Copy From", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
+    // {
+    //     static ImGuiTextFilter filter;
+    //     if (ImGui::IsWindowAppearing())
+    //     {
+    //         ImGui::SetKeyboardFocusHere();
+    //         filter.Clear();
+    //     }
+    //     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+    //     filter.Draw("##Filter", -FLT_MIN);
+    //
+    //     for (int n = 0; n < P::n_materials; n++)
+    //     {
+    //         const bool is_selected = (copy_from == n);
+    //         if (filter.PassFilter(P::materials_list[n].name))
+    //             if (ImGui::Selectable(P::materials_list[n].name, is_selected))
+    //                 copy_from = n;
+    //     }
+    //     ImGui::EndCombo();
+    // }
     for (int i = 0; i < P::n_materials; i++)
     {
         P::material_t& mat = P::materials_list[i];
         if (((std::string)mat.name).starts_with("Combo") && !show_combos) continue;
         if (i < n_vanilla_mats && !show_vanilla) continue;
-        DrawCellEditor(mat);
+        DrawCellEditor(i, mat);
     }
 
     ImGui::End();
@@ -173,7 +178,7 @@ bool show_demo_window = true;
 void DrawUI()
 {
     // if (show_demo_window)
-    //     ImGui::ShowDemoWindow(&show_demo_window);
+    ImGui::ShowDemoWindow(&show_demo_window);
 
     DrawCellsEditor();
 }
