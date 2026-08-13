@@ -54,12 +54,15 @@ inline LRESULT CALLBACK imgui_wndproc(
     WPARAM wParam,
     LPARAM lParam)
 {
-    ImGui_ImplWin32_WndProcHandler(
-        hwnd,
-        msg,
-        wParam,
-        lParam
-    );
+    if (msg != WM_MOUSEMOVE)
+    {
+        ImGui_ImplWin32_WndProcHandler(
+            hwnd,
+            msg,
+            wParam,
+            lParam
+        );
+    }
 
     if (msg == WM_KEYDOWN)
     {
@@ -126,9 +129,37 @@ inline void BlockInputs(P::window_t* window)
 
 inline void DrawImgui()
 {
+    ImGuiIO& io = ImGui::GetIO();
+
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplWin32_NewFrame();
+
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+    io.DisplaySize = ImVec2(
+        static_cast<float>(viewport[2]),
+        static_cast<float>(viewport[3])
+    );;
+
+    P::real_2 scale_factor{
+        (float)P::settings->resolution_x/(float)P::settings->window_x,
+        (float)P::settings->resolution_y/(float)P::settings->window_y};
+    POINT mouse_pos;
+    if (GetCursorPos(&mouse_pos))
+    {
+        ScreenToClient(
+            (HWND)P::main_wnd->hwnd,
+            &mouse_pos
+        );
+
+        io.AddMousePosEvent(
+            static_cast<float>(mouse_pos.x)*scale_factor.x,
+            static_cast<float>(mouse_pos.y)*scale_factor.y
+        );
+    }
+
     ImGui::NewFrame();
 
     DrawUI();
@@ -137,15 +168,20 @@ inline void DrawImgui()
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
 inline void ImguiHook(P::render_context *param_1,P::real_3 *param_2,float param_3,P::real_4 *param_4,int param_5)
 {
     DrawImgui();
     Next<void>(param_1, param_2, param_3, param_4, param_5);
 }
 
+inline bool imgui_initialized = false;
 inline void WindowInitHook(P::window_t* window)
 {
     Next<void>(window);
+
+    if (imgui_initialized)
+        return;
 
     ImGui_ImplWin32_EnableDpiAwareness();
 
@@ -162,6 +198,7 @@ inline void WindowInitHook(P::window_t* window)
     ImGui::StyleColorsDark();
 
     ImGui_ImplWin32_InitForOpenGL(window->hwnd);
+
     ImGui_ImplOpenGL3_Init();
 
     original_wndproc = reinterpret_cast<WNDPROC>(
@@ -171,6 +208,10 @@ inline void WindowInitHook(P::window_t* window)
             reinterpret_cast<LONG_PTR>(imgui_wndproc)
         )
     );
+
+    imgui_initialized = true;
+
+    P::settings->hardware_cursor = false;
 }
 
 inline void do_imgui_hooks()
