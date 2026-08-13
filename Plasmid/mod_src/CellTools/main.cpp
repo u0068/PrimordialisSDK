@@ -12,11 +12,12 @@ namespace P
 }
 
 int n_vanilla_mats{};
+int copy_from = 1;
 bool show_combos = false;
 bool show_vanilla = true;
-bool reset_on_reload = true;
-int copy_from = 1;
+bool reset_on_reload = false;
 bool show_cell_editor = true;
+bool show_demo_window = true;
 
 union material_u
 {
@@ -24,16 +25,86 @@ union material_u
     byte data[280];
 };
 
-void DrawMaterialEditor(int id, P::material_t &mat)
+P::material_t CopyMaterial(P::material_t mat)
 {
-    ImGui::PushID(id);
+    // Idk if this is a good way to unlink char* but it works
+    mat.name = (char*)(new std::string(mat.name))->c_str();
+    mat.id = P::HashCellId(mat.name);
+    return mat;
+}
+
+void SaveAllMats()
+{
+    std::ofstream file("materials.txt");
+
+    if (!file) return;
+
+    file.clear();
+
+    for (int idx = 0; idx < P::n_materials; idx++)
+    {
+        P::material_t& mat = P::materials_list[idx];
+        file << "{";
+        for (int i = 0; i < 280; i++)
+        {
+            byte data = material_u{mat}.data[i];
+            if (data < 100)
+                file << "0";
+            if (data < 10)
+                file << "0";
+            file << std::to_string(data);
+            file << ",";
+        }
+        file << "}\n";
+        file << mat.name << "\n";
+    }
+
+    file.close();
+}
+
+void LoadAllMats()
+{
+    std::ifstream file("materials.txt");
+
+    if (!file) return;
+
+    file.clear();
+
+    material_u mat_data{};
+    int line_num{};
+    std::string line{};
+    while (getline(file, line))
+    {
+        if (line_num % 2 == 0)
+        {
+            for (int i = 0; i < 280; i++)
+            {
+                byte data = std::stoi(line.substr(1+i*4, 3));
+                mat_data.data[i] = data;
+            }
+        }
+        else
+        {
+            mat_data.mat.name = (char*)(new std::string(line))->c_str();
+            P::materials_list[line_num/2] = mat_data.mat;
+        }
+        line_num++;
+    }
+
+    file.close();
+}
+
+void DrawMaterialEditor(int idx, P::material_t &mat)
+{
+    ImGui::PushID(idx);
     bool open = ImGui::CollapsingHeader("##header");
     ImGui::SameLine();
     ImGui::TextUnformatted(mat.name);
     if (ImGui::BeginPopupContextItem(mat.name))
     {
         ImGui::PushItemFlag(ImGuiItemFlags_LiveEditOnInputText, false);
-        ImGui::InputText("##name", mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue);
+        if (ImGui::InputText("##name", mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue))
+            mat.id = P::HashCellId(mat.name);
         ImGui::PopItemFlag();
         if (ImGui::Button("Copy to Clipboard"))
         {
@@ -58,14 +129,14 @@ void DrawMaterialEditor(int id, P::material_t &mat)
             material_u mat_data{mat};
             for (int i = 16; i < 280-8*6; i++)
             {
-                byte data = stoi(clipboard.substr(1+i*4, 4));
+                byte data = stoi(clipboard.substr(1+i*4, 3));
                 mat_data.data[i] = data;
             }
             mat = mat_data.mat;
         }
         if (ImGui::Button("Give"))
         {
-            P::cell_item cell_item = {id, {}, false};
+            P::cell_item cell_item = {idx, {}, false};
             P::create_cell_item(&cell_item);
         }
         ImGui::EndPopup();
@@ -186,13 +257,6 @@ void DrawMaterialEditor(int id, P::material_t &mat)
     ImGui::PopID();
 }
 
-P::material_t CopyMaterial(P::material_t mat)
-{
-    // Idk if this is a good way to unlink char* but it works
-    mat.name = (char*)(new std::string(mat.name))->c_str();
-    return mat;
-}
-
 void DrawMaterialsEditor()
 {
     if (P::w->loading_screen) return;
@@ -202,10 +266,15 @@ void DrawMaterialsEditor()
     ImGui::Checkbox("Show Combos",  &show_combos); ImGui::SameLine();
     ImGui::Checkbox("Show Vanilla", &show_vanilla); ImGui::SameLine();
     ImGui::Checkbox("Reset on Reload",  &reset_on_reload);
-    auto combo_preview_value = P::materials_list[copy_from].name;
+    if (ImGui::Button("Save Materials"))
+        SaveAllMats();
+    ImGui::SameLine();
+    if (ImGui::Button("Load Materials"))
+        LoadAllMats();
     if (ImGui::Button("Create New From: "))
         P::materials_list[P::n_materials++] = CopyMaterial(P::materials_list[copy_from]);
     ImGui::SameLine();
+    auto combo_preview_value = P::materials_list[copy_from].name;
     if (ImGui::BeginCombo("##copy_from", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
     {
         static ImGuiTextFilter filter;
@@ -237,7 +306,6 @@ void DrawMaterialsEditor()
     ImGui::End();
 }
 
-bool show_demo_window = true;
 void DrawUI()
 {
     if (show_demo_window)
@@ -248,12 +316,13 @@ void DrawUI()
 
 void InitMaterialsHook()
 {
-    if (!reset_on_reload)
+    if (!reset_on_reload and n_vanilla_mats > 0)
         return;
     Next<void>();
     if (!P::IsThreadSafe())
         return;
-    n_vanilla_mats = P::n_materials;
+    if (n_vanilla_mats == 0)
+        n_vanilla_mats = P::n_materials;
 }
 
 void P::InitialiseMod()
