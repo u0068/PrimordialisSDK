@@ -5,6 +5,11 @@
 #include "plasmid_api.h"
 #include "imgui_setup.h"
 
+namespace P
+{
+#include "../include/generated/game_functions/cells.h"
+}
+
 int n_vanilla_mats{};
 bool show_combos = false;
 bool show_vanilla = true;
@@ -18,7 +23,7 @@ union material_u
     byte data[280];
 };
 
-void DrawCellEditor(int id, P::material_t &mat)
+void DrawMaterialEditor(int id, P::material_t &mat)
 {
     ImGui::PushID(id);
     if (ImGui::CollapsingHeader(mat.name))
@@ -51,6 +56,12 @@ void DrawCellEditor(int id, P::material_t &mat)
                 mat_data.data[i] = data;
             }
             mat = mat_data.mat;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Give"))
+        {
+            P::cell_item cell_item = {id, {}, false};
+            P::create_cell_item(&cell_item);
         }
         ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1); // Tighten spacing
         ImGui::PushItemWidth(220.f);
@@ -166,19 +177,24 @@ void DrawCellEditor(int id, P::material_t &mat)
     ImGui::PopID();
 }
 
-void DrawCellsEditor()
+void CopyMaterialFrom()
+{
+
+}
+
+void DrawMaterialsEditor()
 {
     if (P::w->loading_screen) return;
 
-    ImGui::Begin("Cell Editor");
+    ImGui::Begin("Materials Editor");
 
-    ImGui::Checkbox("Show Combo Cells",  &show_combos);
-    ImGui::SameLine();
-    // ImGui::Checkbox("Show Vanilla Cells", &show_vanilla);
+    ImGui::Checkbox("Show Combos",  &show_combos);
     // ImGui::SameLine();
-    ImGui::Checkbox("Reset Cells on Reload",  &reset_on_reload);
+    // ImGui::Checkbox("Show Vanilla", &show_vanilla);
+    ImGui::SameLine();
+    ImGui::Checkbox("Reset on Reload",  &reset_on_reload);
     // auto combo_preview_value = P::materials_list[copy_from].name;
-    // if (ImGui::BeginCombo("Copy From", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
+    // if (ImGui::BeginCombo("Create New From", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
     // {
     //     static ImGuiTextFilter filter;
     //     if (ImGui::IsWindowAppearing())
@@ -203,7 +219,7 @@ void DrawCellsEditor()
         P::material_t& mat = P::materials_list[i];
         if (((std::string)mat.name).starts_with("Combo") && !show_combos) continue;
         if (i < n_vanilla_mats && !show_vanilla) continue;
-        DrawCellEditor(i, mat);
+        DrawMaterialEditor(i, mat);
     }
 
     ImGui::End();
@@ -212,10 +228,10 @@ void DrawCellsEditor()
 bool show_demo_window = true;
 void DrawUI()
 {
-    // if (show_demo_window)
-    ImGui::ShowDemoWindow(&show_demo_window);
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
 
-    DrawCellsEditor();
+    DrawMaterialsEditor();
 }
 
 void InitMaterialsHook()
