@@ -2,6 +2,7 @@
 
 #include <imgui_internal.h>
 #include <regex>
+#include <sstream>
 
 #include "plasmid_api.h"
 #include "imgui_setup.h"
@@ -33,6 +34,25 @@ P::material_t CopyMaterial(P::material_t mat)
     return mat;
 }
 
+std::string SaveMat(P::material_t& mat)
+{
+    std::stringstream output;
+    output << mat.name << "\n";
+    output << "{";
+    for (int i = 0; i < 280; i++)
+    {
+        byte data = material_u{mat}.data[i];
+        if (data < 100)
+            output << "0";
+        if (data < 10)
+            output << "0";
+        output << std::to_string(data);
+        output << ",";
+    }
+    output << "}\n";
+    return output.str();
+}
+
 void SaveAllMats()
 {
     std::ofstream file("materials.txt");
@@ -44,22 +64,22 @@ void SaveAllMats()
     for (int idx = 0; idx < P::n_materials; idx++)
     {
         P::material_t& mat = P::materials_list[idx];
-        file << "{";
-        for (int i = 0; i < 280; i++)
-        {
-            byte data = material_u{mat}.data[i];
-            if (data < 100)
-                file << "0";
-            if (data < 10)
-                file << "0";
-            file << std::to_string(data);
-            file << ",";
-        }
-        file << "}\n";
-        file << mat.name << "\n";
+        file << SaveMat(mat);
     }
 
     file.close();
+}
+
+P::material_t LoadMat(std::string& data_string, std::string& name)
+{
+    material_u mat_data{};
+    for (int i = 0; i < 280; i++)
+    {
+        byte data = std::stoi(data_string.substr(1+i*4, 3));
+        mat_data.data[i] = data;
+    }
+    mat_data.mat.name = (char*)(new std::string(name))->c_str();
+    return mat_data.mat;
 }
 
 void LoadAllMats()
@@ -73,19 +93,16 @@ void LoadAllMats()
     material_u mat_data{};
     int line_num{};
     std::string line{};
+    std::string name;
     while (getline(file, line))
     {
         if (line_num % 2 == 0)
         {
-            for (int i = 0; i < 280; i++)
-            {
-                byte data = std::stoi(line.substr(1+i*4, 3));
-                mat_data.data[i] = data;
-            }
+            name = line;
         }
         else
         {
-            mat_data.mat.name = (char*)(new std::string(line))->c_str();
+            LoadMat(line, name);
             P::materials_list[line_num/2] = mat_data.mat;
         }
         line_num++;
@@ -110,29 +127,20 @@ void DrawMaterialEditor(int idx, P::material_t &mat)
         {
             // TO-DO: Make this human-readable and only store the changes
             ImGui::LogToClipboard();
-            ImGui::LogText("{");
-            for (int i = 0; i < 280; i++)
-            {
-                byte data = material_u{mat}.data[i];
-                if (data < 100)
-                    ImGui::LogText("0");
-                if (data < 10)
-                    ImGui::LogText("0");
-                ImGui::LogText("%d,", data);
-            }
-            ImGui::LogText("}");
+            ImGui::LogText(SaveMat(mat).c_str());
             ImGui::LogFinish();
         }
         if (ImGui::Button("Load from Clipboard"))
         {
             std::string clipboard = ImGui::GetClipboardText();
-            material_u mat_data{mat};
-            for (int i = 16; i < 280-8*6; i++)
-            {
-                byte data = stoi(clipboard.substr(1+i*4, 3));
-                mat_data.data[i] = data;
+            size_t pos = clipboard.find('\n');
+            if (pos != std::string::npos) {
+                std::string name = clipboard.substr(0,pos);
+                std::string data_string = clipboard.substr(pos+1, 280*4);
+                P::Log(name);
+                P::Log(data_string);
+                mat = LoadMat(data_string, name);
             }
-            mat = mat_data.mat;
         }
         if (ImGui::Button("Give"))
         {

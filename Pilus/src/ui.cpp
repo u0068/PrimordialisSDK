@@ -7,6 +7,11 @@ bool AutoScroll = true;
 bool ScrollToBottom = false;
 std::vector<std::string> Lines{};
 
+void DrawModConfig()
+{
+
+}
+
 void DrawConsole()
 {
     ImGui::Begin("Console");
