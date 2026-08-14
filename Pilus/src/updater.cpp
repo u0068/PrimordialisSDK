@@ -12,7 +12,6 @@ constexpr Version PILUS_VERSION{0, 4, 1};
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
     console_log << "Parsing Version: ";
-
     console_log << tag << "\n";
 
     Version version{0,0,0};
@@ -117,7 +116,7 @@ bool CheckAndUpdate(
     ss << name << "_installed_version";
     auto installed_version_key = ss.str();
 
-    if (check_path != "" && !exists(check_path))
+    if (check_path != "" and !exists(check_path))
     {
         console_log << name << " not installed!\n";
     }
@@ -131,13 +130,11 @@ bool CheckAndUpdate(
         }
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
-
         console_log << "Latest " << name << " version: " << latest_version << "\n";
 
         if (!(*ParseVersion(latest_version) > *ParseVersion(installed_version)))
         {
             console_log << name << " is up to date.\n";
-
             return false;
         }
     }
@@ -157,7 +154,7 @@ bool CheckAndUpdate(
 
 bool UpdatePilus()
 {
-    ModManager::pilus_config["pilus_installed_version"] = PILUS_VERSION.to_string();
+    ModManager::pilus_config["Pilus_installed_version"] = PILUS_VERSION.to_string();
 
     fs::path pilus_path =
         absolute(
@@ -168,7 +165,9 @@ bool UpdatePilus()
         "Pilus.new.exe";
 
     if (!CheckAndUpdate("Pilus", update_path))
+    {
         return false;
+    }
 
     // Find our own PID and launch the updater.
 
@@ -183,6 +182,8 @@ bool UpdatePilus()
         DeleteFileW(update_path.c_str());
         return false;
     }
+
+    std::cout << console_log.str();
 
     std::wstring commandLine =
         L"\"" + updater_path.wstring() + L"\" " +
@@ -223,7 +224,7 @@ bool UpdatePilus()
         return false;
     }
 
-    Sleep(2000);
+    Sleep(200000);
 
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
