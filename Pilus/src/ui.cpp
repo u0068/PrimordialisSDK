@@ -3,15 +3,129 @@
 #include "imgui_helpers.h"
 #include "modloader.h"
 
-bool AutoScroll = true;
-bool ScrollToBottom = false;
-std::vector<std::string> Lines{};
+// Use the demo window or https://pthom.github.io/imgui_explorer/ for reference
+
+int configured_mod = -1;
+bool config_open = true;
+
+template<typename T>
+T GetFromJson(json json, const char* name, const T& fallback=0)
+{
+    return json[name].empty() ? fallback : json[name].get<T>();
+}
+std::string GetStringFromJson(json json, const char* name, const std::string& fallback="")
+{
+    return json[name].empty() ? fallback : json[name].get<std::string>();
+}
+
+static void InfoMarker(const char* desc)
+{
+    ImGui::TextDisabled("(?)");
+    if (ImGui::BeginItemTooltip())
+    {
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc);
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
+}
+
+void DrawSettings(nlohmann::ordered_json& settings)
+{
+    for (auto& element : settings.items())
+    {
+        auto name = element.key().c_str();
+        nlohmann::ordered_json& setting = element.value();
+        if (setting["value"].empty() and not setting["default"].empty())
+            setting["value"] = setting["default"];
+        else if (setting["default"].empty() and not setting["value"].empty())
+            setting["default"] = setting["value"];
+        else if (setting["default"].empty() and setting["value"].empty())
+        {
+            ImGui::TextColored({1.0, 0.5, 0.5, 1.0}, name);
+            if (ImGui::IsItemHovered())
+            {
+                ImGui::BeginErrorTooltip();
+                ImGui::Text("No default or value has been set! I don't know you want me to do with this.");
+                ImGui::EndErrorTooltip();
+                continue;
+            }
+        }
+        // if (setting["default"].is_object())
+        // {
+        //     ImGui::SeparatorText(name);
+        //     DrawSettings(setting["default"]);
+        //     continue;
+        // }
+        if (setting["value"].type() == json::value_t::number_integer || setting["value"].type() == json::value_t::number_unsigned)
+        {
+            auto value = GetFromJson<int>(setting, "value");
+            auto min = GetFromJson<int>(setting, "min");
+            auto max = GetFromJson<int>(setting, "max");
+            auto speed = GetFromJson<float>(setting, "speed", 0.1);
+            auto slider = GetFromJson<bool>(setting, "slider");
+            if (slider) {
+                if (ImGui::SliderInt(name, &value, min, max))
+                    setting["value"] = value;
+            }   else
+            {
+                if (ImGui::DragInt(name, &value, speed, min, max))
+                    setting["value"] = value;
+            }
+        }
+        else if (setting["value"].type() == json::value_t::number_float)
+        {
+            auto value = GetFromJson<float>(setting, "value");
+            auto min = GetFromJson<float>(setting, "min");
+            auto max = GetFromJson<float>(setting, "max");
+            auto speed = GetFromJson<float>(setting, "speed", 0.1);
+            auto slider = GetFromJson<bool>(setting, "slider");
+            if (slider) {
+                if (ImGui::SliderFloat(name, &value, min, max))
+                    setting["value"] = value;
+            }   else
+            {
+                if (ImGui::DragFloat(name, &value, speed, min, max))
+                    setting["value"] = value;
+            }
+        }
+        else if (setting["value"].type() == json::value_t::boolean)
+        {
+            auto value = GetFromJson<bool>(setting, "value");
+            if (ImGui::Checkbox(name, &value))
+                setting["value"] = value;
+        }
+        else if (setting["value"].type() == json::value_t::string)
+        {
+            auto value = (char*)GetStringFromJson(setting, "value").c_str();
+            auto hint = (char*)GetStringFromJson(setting, "default").c_str();
+            if (ImGui::InputTextWithHint(name, hint, value, 128, ImGuiInputTextFlags_EnterReturnsTrue))
+                setting["value"] = value;
+        }
+        if (!setting["description"].empty())
+        {
+            ImGui::SameLine();
+            InfoMarker(GetStringFromJson(setting, "description").c_str());
+        }
+    }
+}
 
 void DrawModConfig()
 {
+    if (configured_mod < 0 or !config_open)
+        return;
+    Mod& mod = ModManager::mods[configured_mod];
+    ImGui::Begin((mod.name + " Config").c_str(), &config_open);
+    ImGui::PushItemWidth(200);
 
+    DrawSettings(mod.config);
+
+    ImGui::End();
 }
 
+bool AutoScroll = true;
+bool ScrollToBottom = false;
+std::vector<std::string> Lines{};
 void DrawConsole()
 {
     ImGui::Begin("Console");
@@ -105,18 +219,6 @@ void DrawActionBox()
     ImGui::End();
 }
 
-static void HelpMarker(const char* desc)
-{
-    ImGui::TextDisabled("(?)");
-    if (ImGui::BeginItemTooltip())
-    {
-        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-        ImGui::TextUnformatted(desc);
-        ImGui::PopTextWrapPos();
-        ImGui::EndTooltip();
-    }
-}
-
 void DrawModList()
 {
     ImGui::Begin("Mods");
@@ -151,7 +253,11 @@ void DrawModList()
             Mod& mod = mods[i];
             ImGui::PushID(mod.name.c_str());
             if (mod.name == "Nucleus")
+            {
                 ImGui::BeginDisabled();
+                if (i != 0)
+                    std::swap(mods[i], mods[0]);
+            }
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
             if (ImGui::Checkbox("##Enabled", &mod.enabled))
@@ -178,8 +284,7 @@ void DrawModList()
                     moveDirection =
                         ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
                     int next = i + moveDirection;
-                    if (next >= 0 &&
-                        next < mods.size())
+                    if (next >= 1 and next < mods.size())
                     {
                         ImGui::ResetMouseDragDelta();
                     }
@@ -193,14 +298,19 @@ void DrawModList()
             if (mod.config.empty())
                 ImGui::BeginDisabled();
             ImGui::TableNextColumn();
-            HelpMarker(std::format("Author: {}\n{}", mod.author, mod.description).c_str());
+            InfoMarker(std::format("Author: {}\n{}", mod.author, mod.description).c_str());
             ImGui::SameLine();
             if (ImGui::Button("Config"))
             {
-                // OpenModConfig(mod);
+                configured_mod = i;
+                config_open = true;
             }
             if (mod.config.empty())
+            {
+                if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
+                    ImGui::SetTooltip("This mod is not configurable");
                 ImGui::EndDisabled();
+            }
             ImGui::PopID();
         }
         ImGui::EndTable();
@@ -222,4 +332,5 @@ void DrawUI()
     DrawActionBox();
     DrawModList();
     DrawConsole();
+    DrawModConfig();
 }

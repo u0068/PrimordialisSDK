@@ -5,63 +5,6 @@
 
 namespace fs = std::filesystem;
 
-void ParseConfig(Mod* mod, const std::string& data)
-{
-    size_t readingat = 0;
-
-    while (readingat != std::string::npos)
-    {
-        ConfigValue workingV;
-        size_t prevRead = readingat;
-        readingat = data.find(':', readingat);
-
-        if (readingat == std::string::npos)
-            break;
-
-        workingV.name = data.substr(prevRead, readingat - prevRead);
-
-        readingat++;
-        prevRead = readingat;
-
-        readingat = data.find(':', readingat);
-
-        if (readingat == std::string::npos)
-            break;
-
-        std::string type = data.substr(prevRead, readingat - prevRead);
-
-        readingat++;
-        prevRead = readingat;
-
-        readingat = data.find('\n', readingat);
-
-        if (readingat == std::string::npos)
-            readingat = data.length();
-
-        std::string value = data.substr(prevRead, readingat - prevRead);
-
-        if (type == "STRING")
-        {
-            workingV.value = value;
-        }
-        else if (type == "BOOL")
-        {
-            workingV.value = value != "0";
-        }
-        else
-        {
-            workingV.value = std::strtod(value.c_str(), nullptr);
-        }
-
-        mod->config.push_back(workingV);
-
-        if (readingat < data.length())
-            readingat++;
-        else
-            break;
-    }
-}
-
 std::string ReadFile(const fs::path& path)
 {
     std::ifstream file(path);
@@ -115,11 +58,9 @@ void ParseModInfo(Mod* mod)
             mod->description = GetValue(data, "description");
         }
 
-        else if (filename == "config.txt")
+        else if (filename == "config.json")
         {
-            std::string data = ReadFile(entry.path());
-
-            ParseConfig(mod, data);
+            mod->config = json::parse(ReadFile(entry), nullptr, true, true);
         }
 
         else if (entry.path().extension() == ".dll")
@@ -164,15 +105,8 @@ void ModManager::RefreshMods()
         {
             if (mod == installed_mod)
             {
-                if (mod.name == "Nucleus")
-                {
-                    final_mods.insert(final_mods.begin(), installed_mod);
-                    final_mods[0].enabled = true;
-                } else
-                {
-                    final_mods.push_back(installed_mod);
-                    final_mods[final_mods.size() - 1].enabled = mod.enabled;
-                }
+                final_mods.push_back(installed_mod);
+                final_mods[final_mods.size() - 1].enabled = mod.enabled;
             }
         }
     }
@@ -239,6 +173,7 @@ void ModManager::SavePilusConfig()
         mod_json["dll_path"] = mod.dll_path;
         mod_json["init_path"] = mod.init_path;
         mod_json["enabled"] = mod.enabled;
+        mod_json["config"] = mod.config;
         pilus_config["mods"][mod.name] = mod_json;
     }
 
@@ -246,6 +181,18 @@ void ModManager::SavePilusConfig()
     file << pilus_config.dump(1, *"\t");
 
     file.close();
+}
+
+std::string ModConfigToLua(json config)
+{
+    std::stringstream lua;
+    lua << "\t{\n";
+    for (auto& el : config.items())
+    {
+        lua << "\t\t" << el.key() << " = " << el.value()["value"] << ",\n";
+    }
+    lua << "\t},\n";
+    return lua.str();
 }
 
 void ModManager::SaveLuaModlist()
@@ -263,8 +210,14 @@ void ModManager::SaveLuaModlist()
             continue;
         if (!mod.enabled)
             continue;
-        file << "\t\"" << mod.name << "\",\n";
+        if (mod.config.empty())
+            file << "\t\"" << mod.name << "\",\n";
+
+        file << "\t{\"" << mod.name << "\",\n";
+        file << ModConfigToLua(mod.config);
+        file << "\t}\n";
     }
+
     file << "} -- Make sure that all mods are before this line!!!";
     file.close();
 }

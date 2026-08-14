@@ -33,7 +33,8 @@ struct Mod
     std::string plasmid_version{"Unknown"};
     std::string min_primordialis_version{"Unknown"};
 
-    std::vector<ConfigValue> config{};
+    // std::vector<ConfigValue> config{};
+   nlohmann::ordered_json config{};
 
     bool operator== (const Mod& other) const
     {
@@ -55,7 +56,7 @@ struct Mod
 
 namespace ModManager
 {
-    inline std::vector<Mod> mods;
+    inline std::vector<Mod> mods{};
 
     inline fs::path game_path = fs::current_path();
     inline fs::path pilus_files_path{game_path / "pilus_files/"};
@@ -65,13 +66,13 @@ namespace ModManager
     const std::string version_manifest_url{
         "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
     const fs::path version_manifest_path{pilus_files_path.string()+"pilus_version_manifest.json"};
-    inline json version_manifest;
+    inline json version_manifest{};
 
     const fs::path config_path{pilus_files_path.string()+"pilus_config.json"};
-    inline json pilus_config;
+    inline json pilus_config{};
 
     inline fs::path mod_path{game_path / "mods"};
-    inline std::string last_description_trunc;
+    inline std::string last_description_trunc{};
 
     void RefreshMods();
     void InjectAll();
