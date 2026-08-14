@@ -126,6 +126,11 @@ void ModManager::RefreshMods()
             final_mods.push_back(installed_mod);
         }
     }
+    for (auto i=0; i<final_mods.size(); i++)
+    {
+        if (final_mods[i].name == "Nucleus")
+            std::swap(final_mods[i], final_mods[0]);
+    }
 
     mods = final_mods;
     SavePilusConfig();

@@ -211,7 +211,7 @@ void DrawMaterialEditor(int idx, P::material_t &mat)
         }
         if (ImGui::TreeNode("Visual"))
         {
-            ImGui::ColorEdit4("base_color", mat.base_color.data, ImGuiColorEditFlags_Float);
+            ImGui::ColorEdit4("base_color", mat.base_color.data, ImGuiColorEditFlags_Float | ImGuiColorEditFlags_PickerHueWheel);
             ImGui::DragFloat("light_radius", &mat.light_radius, speed);
             ImGui::DragFloat("light_intensity", &mat.light_intensity, speed);
             ImGui::ColorEdit3("emission", mat.emission.data, ImGuiColorEditFlags_Float);

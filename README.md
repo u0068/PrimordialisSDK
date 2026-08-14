@@ -6,6 +6,9 @@ Primordialis SDK is a modding SDK for Primordialis.
 - Luasome Lua Modding API
 - Primordialis PDB files
 
+## Expect bugs.
+Everything is in very early development.
+
 # Loading Mods into Primordialis:
 To load mods into Primordialis, you need to:
 - Download Pilus.exe from [Releases](https://github.com/u0068/PrimordialisSDK/releases).

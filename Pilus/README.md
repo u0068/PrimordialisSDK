@@ -4,6 +4,11 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
+- Modlist filter
+- Checkbox to hide disabled / not installed mods
+- Disable mods that are not installed (DONE)
+  - Button to remove them from the modlist
+- Don't inject nucleus if no C++ mods are enabled
 - Save and load modlists
   - Modlists contain mod configs (DONE)
 - Restore mod .zip support
@@ -16,6 +21,7 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
   - Subscript out of range crash
   - Corrupted config file causes memory leak
 ## DONE:
+- Lua and C++ markers on mods (DONE)
 - Exclude Nucleus from modlist reordering (DONE)
 - Switch to DearImgui (DOING)
   - Modlist (DONE)

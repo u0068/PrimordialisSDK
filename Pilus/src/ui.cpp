@@ -18,9 +18,9 @@ std::string GetStringFromJson(json json, const char* name, const std::string& fa
     return json[name].empty() ? fallback : json[name].get<std::string>();
 }
 
-static void InfoMarker(const char* desc)
+static void InfoMarker(const char* desc, const char* sign="(i)")
 {
-    ImGui::TextDisabled("(?)");
+    ImGui::TextDisabled(sign);
     if (ImGui::BeginItemTooltip())
     {
         ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
@@ -32,6 +32,7 @@ static void InfoMarker(const char* desc)
 
 void DrawSettings(nlohmann::ordered_json& settings)
 {
+    ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1);
     for (auto& element : settings.items())
     {
         auto name = element.key().c_str();
@@ -108,6 +109,7 @@ void DrawSettings(nlohmann::ordered_json& settings)
             InfoMarker(GetStringFromJson(setting, "description").c_str());
         }
     }
+    ImGui::PopStyleVar();
 }
 
 void DrawModConfig()
@@ -131,9 +133,9 @@ void DrawConsole()
     ImGui::Begin("Console");
     // ImGui::TextWrapped(console_log.str().c_str());
 
-    std::string line{};
-    while (std::getline(console_log, line))
-        Lines.push_back(line);
+    std::string stream_line{};
+    while (std::getline(console_log, stream_line))
+        Lines.push_back(stream_line);
     console_log.clear();
 
     if (ImGui::SmallButton("Clear"))    Lines.clear();
@@ -222,9 +224,7 @@ void DrawActionBox()
 void DrawModList()
 {
     ImGui::Begin("Mods");
-
     auto& mods = ModManager::mods;
-
     if (ImGui::BeginTable(
         "ModList",
         3,
@@ -244,7 +244,7 @@ void DrawModList()
         ImGui::TableSetupColumn(
             "##Config",
             ImGuiTableColumnFlags_WidthFixed,
-            80.0f
+            ImGui::CalcTextSize("(i) Mod  Config ").x
             );
         int moveDirection = 0;
         int draggedModIndex = -1;
@@ -253,16 +253,19 @@ void DrawModList()
             Mod& mod = mods[i];
             ImGui::PushID(mod.name.c_str());
             if (mod.name == "Nucleus")
-            {
                 ImGui::BeginDisabled();
-                if (i != 0)
-                    std::swap(mods[i], mods[0]);
-            }
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
+            if (!exists(mod.dll_path) and !exists(mod.init_path))
+                ImGui::BeginDisabled();
             if (ImGui::Checkbox("##Enabled", &mod.enabled))
-            {
                 ModManager::SavePilusConfig();
+            if (!exists(mod.dll_path) and !exists(mod.init_path))
+            {
+                mod.enabled = false;
+                if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
+                    ImGui::SetTooltip("This mod is not installed");
+                ImGui::EndDisabled();
             }
             ImGui::TableNextColumn();
             if (!mod.enabled)
@@ -295,11 +298,20 @@ void DrawModList()
             // ImGui::Text("Dragged: %d", draggedModIndex == i);
             if (mod.name == "Nucleus")
                 ImGui::EndDisabled();
-            if (mod.config.empty())
-                ImGui::BeginDisabled();
             ImGui::TableNextColumn();
             InfoMarker(std::format("Author: {}\n{}", mod.author, mod.description).c_str());
             ImGui::SameLine();
+            if (mod.is_lua() and mod.is_cpp())
+                ImGui::Text("C+L");
+            else if (mod.is_lua())
+                ImGui::Text("Lua");
+            else if (mod.is_cpp())
+                ImGui::Text("C++");
+            else
+                ImGui::Dummy(ImGui::CalcTextSize("Lua"));
+            ImGui::SameLine();
+            if (mod.config.empty())
+                ImGui::BeginDisabled();
             if (ImGui::Button("Config"))
             {
                 configured_mod = i;
