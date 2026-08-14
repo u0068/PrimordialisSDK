@@ -36,3 +36,10 @@ void LogTemplate(const char* name, Args... args)
     printf(buffer2);
     log_file << buffer2;
 }
+inline void LogTemplate(const char* name, std::string& text)
+{
+    char buffer2[2048];
+    sprintf_s(buffer2, "[%s]\n  %s", name, text);
+    printf(buffer2);
+    log_file << buffer2;
+}
