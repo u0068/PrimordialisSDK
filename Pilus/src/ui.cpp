@@ -37,11 +37,7 @@ void DrawSettings(nlohmann::ordered_json& settings)
     {
         auto name = element.key().c_str();
         nlohmann::ordered_json& setting = element.value();
-        if (setting["value"].empty() and not setting["default"].empty())
-            setting["value"] = setting["default"];
-        else if (setting["default"].empty() and not setting["value"].empty())
-            setting["default"] = setting["value"];
-        else if (setting["default"].empty() and setting["value"].empty())
+        if (setting["value"].empty())
         {
             ImGui::TextColored({1.0, 0.5, 0.5, 1.0}, name);
             if (ImGui::IsItemHovered())
@@ -52,12 +48,12 @@ void DrawSettings(nlohmann::ordered_json& settings)
                 continue;
             }
         }
-        // if (setting["default"].is_object())
-        // {
-        //     ImGui::SeparatorText(name);
-        //     DrawSettings(setting["default"]);
-        //     continue;
-        // }
+        if (setting["default"].is_object())
+        {
+            ImGui::SeparatorText(name);
+            DrawSettings(setting["default"]);
+            continue;
+        }
         if (setting["value"].type() == json::value_t::number_integer || setting["value"].type() == json::value_t::number_unsigned)
         {
             auto value = GetFromJson<int>(setting, "value");
@@ -136,7 +132,6 @@ void DrawConsole()
     std::string stream_line{};
     while (std::getline(console_log, stream_line))
         Lines.push_back(stream_line);
-    console_log.clear();
 
     if (ImGui::SmallButton("Clear"))    Lines.clear();
     ImGui::SameLine();
@@ -207,8 +202,8 @@ void DrawActionBox()
         (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x)/2,
         ImGui::GetContentRegionAvail().y}))
     {
-        ModManager::PatchInitLua();
         ModManager::SaveLuaModlist();
+        ModManager::PatchInitLua();
         ModManager::InjectAll();
     }
     ImGui::PopStyleColor(3);
@@ -216,6 +211,7 @@ void DrawActionBox()
     ImGui::SameLine();
     if (ImGui::Button("Refresh Mods", ImGui::GetContentRegionAvail()))
     {
+        ModManager::SaveLuaModlist();
         ModManager::RefreshMods();
     }
     ImGui::End();

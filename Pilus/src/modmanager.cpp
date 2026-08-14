@@ -159,6 +159,7 @@ void ModManager::LoadPilusConfig()
         mod.dll_path = mod_json["dll_path"].get<std::string>();
         mod.init_path = mod_json["init_path"].get<std::string>();
         mod.enabled = mod_json["enabled"].get<bool>();
+        // mod.config = mod_json["config"];
         mods.push_back(mod);
     }
 }
@@ -178,7 +179,7 @@ void ModManager::SavePilusConfig()
         mod_json["dll_path"] = mod.dll_path;
         mod_json["init_path"] = mod.init_path;
         mod_json["enabled"] = mod.enabled;
-        mod_json["config"] = mod.config;
+        // mod_json["config"] = mod.config;
         pilus_config["mods"][mod.name] = mod_json;
     }
 

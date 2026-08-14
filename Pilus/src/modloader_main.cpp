@@ -7,6 +7,8 @@
 
 int main()
 {
+    console_log.clear();
+
     console_log << "Pilus Starting\n";
 
     UpdateAll();
@@ -84,6 +86,10 @@ int main()
     ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    ModManager::SaveLuaModlist();
+
+    // console_log.close();
 
     return 0;
 }

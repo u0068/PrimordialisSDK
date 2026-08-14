@@ -7,7 +7,7 @@
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 5, 0};
+constexpr Version PILUS_VERSION{0, 5, 1};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
@@ -165,9 +165,7 @@ bool UpdatePilus()
         "Pilus.new.exe";
 
     if (!CheckAndUpdate("Pilus", update_path))
-    {
         return false;
-    }
 
     // Find our own PID and launch the updater.
 
@@ -182,8 +180,6 @@ bool UpdatePilus()
         DeleteFileW(update_path.c_str());
         return false;
     }
-
-    std::cout << console_log.str();
 
     std::wstring commandLine =
         L"\"" + updater_path.wstring() + L"\" " +
