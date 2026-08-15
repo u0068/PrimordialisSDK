@@ -1,7 +1,7 @@
 # from ghidra.ghidra_builtins import currentProgram
 
-from ghidra_types import TypeExporter
 from cpp_emitter import CppEmitter
+from ghidra_types import TypeExporter
 from util import *
 
 exporter = TypeExporter(currentProgram)

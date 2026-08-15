@@ -1,5 +1,7 @@
 import re
+
 from ghidra.program.model.data import *
+
 
 def indent(level):
     return "    " * level

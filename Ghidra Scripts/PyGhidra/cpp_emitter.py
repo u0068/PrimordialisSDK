@@ -1,4 +1,3 @@
-from ghidra.program.model.data import *
 from util import *
 
 

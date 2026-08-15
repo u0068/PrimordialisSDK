@@ -1,7 +1,3 @@
-from ghidra.program.model.data import *
-from util import *
-
-
 class TypeExporter:
 
     def __init__(self, currentProgram):
