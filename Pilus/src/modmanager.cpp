@@ -35,6 +35,14 @@ std::string GetValue(const std::string& data, const std::string& key)
     return data.substr(find, end - find);
 }
 
+void GetModConfigValuesFromDefaults(Mod& mod)
+{
+    for (auto& el : mod.config_defaults.items())
+        mod.config_values[el.key()] = el.value()["default"];
+    // std::cout << "Defaults: " << mod.config_defaults.dump();
+    // std::cout << "Values: " << mod.config_values.dump();
+}
+
 void ParseModInfo(Mod* mod)
 {
     if (mod->path == mod->dll_path)
@@ -59,19 +67,13 @@ void ParseModInfo(Mod* mod)
         }
 
         else if (filename == "config.json")
-        {
-            mod->config = json::parse(ReadFile(entry), nullptr, true, true);
-        }
+            mod->config_defaults = json::parse(ReadFile(entry), nullptr, true, true);
 
         else if (entry.path().extension() == ".dll")
-        {
             mod->dll_path = entry.path();
-        }
 
         else if (filename == "init.lua")
-        {
             mod->init_path = entry.path();
-        }
     }
 }
 
@@ -90,9 +92,7 @@ void ModManager::RefreshMods()
         nmod.name = entry.path().filename().stem().string();
 
         if (entry.path().extension() == ".dll")
-        {
             nmod.dll_path = entry.path();
-        }
         ParseModInfo(&nmod);
         installed_mods.push_back(nmod);
     }
@@ -100,16 +100,13 @@ void ModManager::RefreshMods()
     std::vector<Mod> final_mods;
 
     for (auto & mod : mods)
-    {
         for (const auto & installed_mod : installed_mods)
-        {
             if (mod == installed_mod)
             {
                 final_mods.push_back(installed_mod);
                 final_mods[final_mods.size() - 1].enabled = mod.enabled;
+                final_mods[final_mods.size() - 1].config_values = mod.config_values;
             }
-        }
-    }
     for (const auto & installed_mod : installed_mods)
     {
         bool add_this_mod = true;
@@ -122,15 +119,11 @@ void ModManager::RefreshMods()
             }
         }
         if (add_this_mod)
-        {
             final_mods.push_back(installed_mod);
-        }
     }
     for (auto i=0; i<final_mods.size(); i++)
-    {
         if (final_mods[i].name == "Nucleus")
             std::swap(final_mods[i], final_mods[0]);
-    }
 
     mods = final_mods;
     SavePilusConfig();
@@ -159,7 +152,7 @@ void ModManager::LoadPilusConfig()
         mod.dll_path = mod_json["dll_path"].get<std::string>();
         mod.init_path = mod_json["init_path"].get<std::string>();
         mod.enabled = mod_json["enabled"].get<bool>();
-        // mod.config = mod_json["config"];
+        mod.config_values = mod_json["config"];
         mods.push_back(mod);
     }
 }
@@ -179,7 +172,7 @@ void ModManager::SavePilusConfig()
         mod_json["dll_path"] = mod.dll_path;
         mod_json["init_path"] = mod.init_path;
         mod_json["enabled"] = mod.enabled;
-        // mod_json["config"] = mod.config;
+        mod_json["config"] = mod.config_values;
         pilus_config["mods"][mod.name] = mod_json;
     }
 
@@ -195,7 +188,7 @@ std::string ModConfigToLua(json config)
     lua << "\t{\n";
     for (auto& el : config.items())
     {
-        lua << "\t\t" << el.key() << " = " << el.value()["value"] << ",\n";
+        lua << "\t\t" << el.key() << " = " << el.value() << ",\n";
     }
     lua << "\t},\n";
     return lua.str();
@@ -216,11 +209,13 @@ void ModManager::SaveLuaModlist()
             continue;
         if (!mod.enabled)
             continue;
-        if (mod.config.empty())
+        if (mod.config_defaults.empty())
             file << "\t\"" << mod.name << "\",\n";
+        if (mod.config_values.empty())
+            GetModConfigValuesFromDefaults(mod);
 
         file << "\t{\"" << mod.name << "\",\n";
-        file << ModConfigToLua(mod.config);
+        file << ModConfigToLua(mod.config_values);
         file << "\t}\n";
     }
 

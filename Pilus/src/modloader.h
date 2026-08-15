@@ -14,11 +14,11 @@ namespace fs = std::filesystem;
 inline std::stringstream console_log;
 const std::string err{"[ERROR]\t"};
 
-struct ConfigValue
-{
-    std::string name{};
-    std::variant<double, bool, std::string> value;
-};
+// struct ConfigValue
+// {
+//     std::string name{};
+//     std::variant<double, bool, std::string> value;
+// };
 
 struct Mod
 {
@@ -37,7 +37,9 @@ struct Mod
     std::string min_primordialis_version{"Unknown"};
 
     // std::vector<ConfigValue> config{};
-   nlohmann::ordered_json config{};
+    // std::unordered_map<std::string, std::variant<int, float, bool, std::string>> config{};
+    nlohmann::ordered_json config_defaults{};
+    json config_values{};
 
     bool operator== (const Mod& other) const
     {

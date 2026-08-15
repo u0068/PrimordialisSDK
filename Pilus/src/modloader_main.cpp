@@ -88,6 +88,7 @@ int main()
     glfwTerminate();
 
     ModManager::SaveLuaModlist();
+    ModManager::SavePilusConfig();
 
     // console_log.close();
 

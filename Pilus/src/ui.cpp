@@ -18,7 +18,7 @@ std::string GetStringFromJson(json json, const char* name, const std::string& fa
     return json[name].empty() ? fallback : json[name].get<std::string>();
 }
 
-static void InfoMarker(const char* desc, const char* sign="(i)")
+static void InfoMarker(const char* desc, const char* sign="(?)")
 {
     ImGui::TextDisabled(sign);
     if (ImGui::BeginItemTooltip())
@@ -30,14 +30,16 @@ static void InfoMarker(const char* desc, const char* sign="(i)")
     }
 }
 
-void DrawSettings(nlohmann::ordered_json& settings)
+void DrawSettings(Mod& mod)
 {
     ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1);
-    for (auto& element : settings.items())
+    for (auto& el : mod.config_defaults.items())
     {
-        auto name = element.key().c_str();
-        nlohmann::ordered_json& setting = element.value();
-        if (setting["value"].empty())
+        auto name = el.key().c_str();
+        nlohmann::ordered_json& setting = el.value();
+        if (mod.config_values[name].empty() and not setting["default"].empty())
+            mod.config_values[name] = setting["default"];
+        else if (setting["default"].empty() and mod.config_values[name].empty())
         {
             ImGui::TextColored({1.0, 0.5, 0.5, 1.0}, name);
             if (ImGui::IsItemHovered())
@@ -48,56 +50,56 @@ void DrawSettings(nlohmann::ordered_json& settings)
                 continue;
             }
         }
-        if (setting["default"].is_object())
+        // if (setting["default"].is_object())
+        // {
+        //     ImGui::SeparatorText(name);
+        //     DrawSettings(setting["default"]);
+        //     continue;
+        // }
+        if (mod.config_values[name].type() == json::value_t::number_integer || mod.config_values[name].type() == json::value_t::number_unsigned)
         {
-            ImGui::SeparatorText(name);
-            DrawSettings(setting["default"]);
-            continue;
-        }
-        if (setting["value"].type() == json::value_t::number_integer || setting["value"].type() == json::value_t::number_unsigned)
-        {
-            auto value = GetFromJson<int>(setting, "value");
+            auto value = GetFromJson<int>(mod.config_values, name);
             auto min = GetFromJson<int>(setting, "min");
             auto max = GetFromJson<int>(setting, "max");
             auto speed = GetFromJson<float>(setting, "speed", 0.1);
             auto slider = GetFromJson<bool>(setting, "slider");
             if (slider) {
                 if (ImGui::SliderInt(name, &value, min, max))
-                    setting["value"] = value;
+                    mod.config_values[name] = value;
             }   else
             {
                 if (ImGui::DragInt(name, &value, speed, min, max))
-                    setting["value"] = value;
+                    mod.config_values[name] = value;
             }
         }
-        else if (setting["value"].type() == json::value_t::number_float)
+        else if (mod.config_values[name].type() == json::value_t::number_float)
         {
-            auto value = GetFromJson<float>(setting, "value");
+            auto value = GetFromJson<float>(mod.config_values, name);
             auto min = GetFromJson<float>(setting, "min");
             auto max = GetFromJson<float>(setting, "max");
             auto speed = GetFromJson<float>(setting, "speed", 0.1);
             auto slider = GetFromJson<bool>(setting, "slider");
             if (slider) {
                 if (ImGui::SliderFloat(name, &value, min, max))
-                    setting["value"] = value;
+                    mod.config_values[name] = value;
             }   else
             {
                 if (ImGui::DragFloat(name, &value, speed, min, max))
-                    setting["value"] = value;
+                    mod.config_values[name] = value;
             }
         }
-        else if (setting["value"].type() == json::value_t::boolean)
+        else if (mod.config_values[name].type() == json::value_t::boolean)
         {
-            auto value = GetFromJson<bool>(setting, "value");
+            auto value = GetFromJson<bool>(mod.config_values, name);
             if (ImGui::Checkbox(name, &value))
-                setting["value"] = value;
+                mod.config_values[name] = value;
         }
-        else if (setting["value"].type() == json::value_t::string)
+        else if (mod.config_values[name].type() == json::value_t::string)
         {
-            auto value = (char*)GetStringFromJson(setting, "value").c_str();
+            auto value = (char*)GetStringFromJson(mod.config_values, name).c_str();
             auto hint = (char*)GetStringFromJson(setting, "default").c_str();
             if (ImGui::InputTextWithHint(name, hint, value, 128, ImGuiInputTextFlags_EnterReturnsTrue))
-                setting["value"] = value;
+                mod.config_values[name] = value;
         }
         if (!setting["description"].empty())
         {
@@ -116,7 +118,7 @@ void DrawModConfig()
     ImGui::Begin((mod.name + " Config").c_str(), &config_open);
     ImGui::PushItemWidth(200);
 
-    DrawSettings(mod.config);
+    DrawSettings(mod);
 
     ImGui::End();
 }
@@ -306,14 +308,14 @@ void DrawModList()
             else
                 ImGui::Dummy(ImGui::CalcTextSize("Lua"));
             ImGui::SameLine();
-            if (mod.config.empty())
+            if (mod.config_defaults.empty())
                 ImGui::BeginDisabled();
             if (ImGui::Button("Config"))
             {
                 configured_mod = i;
                 config_open = true;
             }
-            if (mod.config.empty())
+            if (mod.config_defaults.empty())
             {
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
                     ImGui::SetTooltip("This mod is not configurable");
