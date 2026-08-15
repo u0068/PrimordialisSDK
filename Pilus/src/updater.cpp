@@ -3,11 +3,11 @@
 #include <iostream>
 #include <regex>
 #include <urlmon.h>
-#include "../external/miniz-cpp/zip_file.hpp"
+#include "../external/miniz/zip_file.hpp"
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 5, 1};
+constexpr Version PILUS_VERSION{0, 5, 2};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
