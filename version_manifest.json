@@ -4,7 +4,7 @@
   "manifest_version" : 1,
 
   "Pilus" : {
-    "latest_version" : "0.5.1",
+    "latest_version" : "0.5.2",
     "versions" : {
       "0.1.3" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.1.3-alpha/Pilus.exe",
@@ -84,5 +84,17 @@
         "min_luasome_version" : "6"
       }
     }
+  },
+
+  "pilus" : {
+    "latest_version" : "0.5.2",
+    "versions" : {
+      "0.5.2" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.2-alpha/Pilus.exe",
+        "min_nucleus_version" : "0.1.0",
+        "min_updater_version" : "0.1.0"
+      }
+    },
+    "comment" : "this is a temporary fix because some old versions of pilus had a typo. this can be removed when everyone has the fixed version"
   }
 }
