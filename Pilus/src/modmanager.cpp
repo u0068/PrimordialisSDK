@@ -111,13 +111,11 @@ void ModManager::RefreshMods()
     {
         bool add_this_mod = true;
         for (const auto & final_mod : final_mods)
-        {
             if (installed_mod == final_mod)
             {
                 add_this_mod = false;
                 break;
             }
-        }
         if (add_this_mod)
             final_mods.push_back(installed_mod);
     }

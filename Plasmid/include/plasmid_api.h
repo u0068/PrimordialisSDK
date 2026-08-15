@@ -65,12 +65,9 @@ namespace P
         CellRef(const char* id)
         {
             if (strlen(id) == 4)
-            {
                 strcpy_s(string, id);
-            } else
-            {
+            else
                 name = id;
-            }
 
         }
 

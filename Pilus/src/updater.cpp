@@ -63,12 +63,13 @@ void ExtractZip(
 
 bool DownloadFromURL(
     const std::string &source_path,
-    const fs::path &dest_path) {
-
+    const fs::path &dest_path)
+{
     console_log << "Downloading " << source_path << "...\n";
 
     HRESULT hr = URLDownloadToFileA(nullptr, source_path.c_str(), dest_path.string().c_str(), 0, nullptr);
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         console_log << "Downloaded to " << dest_path << "\n";
         return true;
     }
@@ -117,17 +118,13 @@ bool CheckAndUpdate(
     auto installed_version_key = ss.str();
 
     if (check_path != "" and !exists(check_path))
-    {
         console_log << name << " not installed!\n";
-    }
     else
     {
         json installed_version_json = ModManager::pilus_config[installed_version_key];
         std::string installed_version = "0.0.0";
         if (!installed_version_json.empty())
-        {
             installed_version = installed_version_json.get<std::string>();
-        }
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
         console_log << "Latest " << name << " version: " << latest_version << "\n";
@@ -294,24 +291,16 @@ bool UpdatePDB(
 
     int installed_pdb_build_id{0};
     if (!ModManager::pilus_config.contains("installed_pdb_build_id"))
-    {
         console_log << err << "Installed PDB build ID not found\n";
-    } else
-    {
+    else
         installed_pdb_build_id = ModManager::pilus_config["installed_pdb_build_id"].get<int>();
-    }
 
     if (!fs::exists("primordialis_avx.pdb") || !fs::exists("primordialis_sse3.pdb"))
-    {
         console_log << err << "PDBs not found\n";
-    }
-    else
+    else if (actual_build_id == installed_pdb_build_id)
     {
-        if (actual_build_id == installed_pdb_build_id)
-        {
-            console_log << "PDBs found, correct build ID" << installed_pdb_build_id << "\n";
-            return false;
-        }
+        console_log << "PDBs found, correct build ID" << installed_pdb_build_id << "\n";
+        return false;
     }
 
     // AVX
@@ -349,9 +338,7 @@ void CreateDirectories()
     }
 
     if (exists(ModManager::config_path))
-    {
         ModManager::LoadPilusConfig();
-    }
 
     if (!exists(ModManager::mod_path))
     {

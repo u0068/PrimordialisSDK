@@ -63,10 +63,12 @@ void DrawSettings(Mod& mod)
             auto max = GetFromJson<int>(setting, "max");
             auto speed = GetFromJson<float>(setting, "speed", 0.1);
             auto slider = GetFromJson<bool>(setting, "slider");
-            if (slider) {
+            if (slider)
+            {
                 if (ImGui::SliderInt(name, &value, min, max))
                     mod.config_values[name] = value;
-            }   else
+            }
+            else
             {
                 if (ImGui::DragInt(name, &value, speed, min, max))
                     mod.config_values[name] = value;
@@ -79,10 +81,12 @@ void DrawSettings(Mod& mod)
             auto max = GetFromJson<float>(setting, "max");
             auto speed = GetFromJson<float>(setting, "speed", 0.1);
             auto slider = GetFromJson<bool>(setting, "slider");
-            if (slider) {
+            if (slider)
+            {
                 if (ImGui::SliderFloat(name, &value, min, max))
                     mod.config_values[name] = value;
-            }   else
+            }
+            else
             {
                 if (ImGui::DragFloat(name, &value, speed, min, max))
                     mod.config_values[name] = value;
@@ -286,9 +290,7 @@ void DrawModList()
                         ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
                     int next = i + moveDirection;
                     if (next >= 1 and next < mods.size())
-                    {
                         ImGui::ResetMouseDragDelta();
-                    }
                 }
             }
             // ImGui::Text("Active: %d", ImGui::IsItemActive());
