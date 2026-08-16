@@ -4,8 +4,11 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 ## AIMS:
 - Make making and loading mods as easy as possible
 ## TODO:
+### High Priority:
 - AUTOMATE PUBLISHING UPDATES
   - I keep making mistakes when I do it by hand
+### Low Priority:
+- Log to a file
 - Modlist filter
 - Checkbox to hide disabled / not installed mods
 - Disable mods that are not installed (DONE)

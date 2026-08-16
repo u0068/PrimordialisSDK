@@ -18,7 +18,7 @@ bool show_combos = false;
 bool show_vanilla = true;
 bool reset_on_reload = false;
 bool show_cell_editor = true;
-bool show_demo_window = true;
+bool show_demo_window = false;
 
 union material_u
 {

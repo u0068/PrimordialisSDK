@@ -96,6 +96,8 @@ inline LRESULT CALLBACK imgui_wndproc(
 inline void BlockInputs(P::window_t* window)
 {
     Next<void>(window);
+    if (!P::IsThreadSafe())
+        return;
 
     if (!ImGui::GetIO().WantCaptureMouse)
         return;
@@ -168,7 +170,8 @@ inline void DrawImgui()
 
 inline void ImguiHook(P::render_context *param_1,P::real_3 *param_2,float param_3,P::real_4 *param_4,int param_5)
 {
-    DrawImgui();
+    if (P::IsThreadSafe())
+        DrawImgui();
     Next<void>(param_1, param_2, param_3, param_4, param_5);
 }
 
@@ -177,6 +180,8 @@ inline void WindowInitHook(P::window_t* window)
 {
     Next<void>(window);
 
+    if (!P::IsThreadSafe())
+        return;
     if (imgui_initialized)
         return;
 
@@ -216,6 +221,7 @@ inline void WindowInitHook(P::window_t* window)
     );
 
     imgui_initialized = true;
+    P::Log("ImGui Initialised!");
 
     P::settings->hardware_cursor = false;
 }

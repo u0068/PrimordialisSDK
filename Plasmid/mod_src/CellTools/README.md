@@ -18,6 +18,9 @@ Uses ImGui in-game.
 ## TO-DO:
 - Fix hardware cursor
 - Publish as a separate library
+- **Fix Bugs:**
+  - Unknown crash
+  - Weird resolution stuff
 ## DONE:
 - Fix colors (~DONE)
 - Fix character input (DONE)

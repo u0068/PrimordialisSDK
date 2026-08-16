@@ -299,7 +299,7 @@ bool UpdatePDB(
         console_log << err << "PDBs not found\n";
     else if (actual_build_id == installed_pdb_build_id)
     {
-        console_log << "PDBs found, correct build ID" << installed_pdb_build_id << "\n";
+        console_log << "PDBs found with correct build ID " << installed_pdb_build_id << "\n";
         return false;
     }
 
