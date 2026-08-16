@@ -9,6 +9,8 @@
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
 
+const std::string NUCLEUS_VERSION = "v0.1.1";
+
 template<typename... Args>
 void Log(Args... args)
 {
@@ -75,6 +77,8 @@ inline void* ResolveSymbol(const char* name)
     // );
     return addr;
 }
+
+inline int PrimordialisLog(const char* text) { return reinterpret_cast<int(*)(const char*)>(ResolveSymbol("log_printf"))(text); }
 
 bool HookWrapper(void* target, void* hook, void** trampoline)
 {
@@ -188,7 +192,7 @@ DWORD WINAPI MainThread(LPVOID)
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    Log("Hello from Nucleus!\n");
+    Log("Hello from Nucleus " + NUCLEUS_VERSION + "!\n");
 
      if (MH_Initialize() != MH_OK)
      {
@@ -223,6 +227,17 @@ DWORD WINAPI MainThread(LPVOID)
         );
 
     Log("Mod count: %i\n", shared->count);
+
+    std::string mod_names;
+    for (uint32_t i = 0; i < shared->count; i++)
+    {
+        ModInfo mod = shared->mods[i];
+        mod_names += "\t";
+        mod_names += mod.name;
+        mod_names += "\n";
+    }
+    PrimordialisLog(("\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODDING API "+NUCLEUS_VERSION+" AND THE FOLLOWING MODS:\n"
+                    +mod_names+"\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!").c_str());
 
     for (uint32_t i = 0; i < shared->count; i++)
     {
