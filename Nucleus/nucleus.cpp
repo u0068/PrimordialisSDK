@@ -9,7 +9,7 @@
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
 
-const std::string NUCLEUS_VERSION = "v0.1.1";
+const std::string NUCLEUS_VERSION = "v0.1.2";
 
 template<typename... Args>
 void Log(Args... args)
@@ -192,7 +192,7 @@ DWORD WINAPI MainThread(LPVOID)
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    Log("Hello from Nucleus " + NUCLEUS_VERSION + "!\n");
+    Log("Hello from Nucleus %s!\n", NUCLEUS_VERSION);
 
      if (MH_Initialize() != MH_OK)
      {
