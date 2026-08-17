@@ -68,7 +68,6 @@ namespace P
                 strcpy_s(string, id);
             else
                 name = id;
-
         }
 
         bool IsInitialised()
@@ -90,7 +89,7 @@ namespace P
             PlasmidLog("Searching for cell type '%s' with id %u\n", name, numeric);
             for (int i = 1; i < n_materials; i++)
             {
-                if (materials_list[i].id == numeric)
+                if (numeric != 0 and materials_list[i].id == numeric)
                 {
                     PlasmidLog("Found cell type '%s' with id %u at index %i\n", name, numeric, i);
                     index = i;

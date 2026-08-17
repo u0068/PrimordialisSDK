@@ -26,7 +26,7 @@ void OnInitMats()
     if (!P::IsThreadSafe())
         return;
     P::material_t* mats = P::materials_list;
-    P::material_t cell_type = P::base_material;
+    P::material_t cell_type{};
 
     cell_type = mats[P::CellRef{"Acid cell"}.GetIndex()];
     cell_type.physics_update_fn = acid;

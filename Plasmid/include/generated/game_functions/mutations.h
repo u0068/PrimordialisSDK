@@ -5,8 +5,8 @@
 
 inline void draw_mutation_icons(icon_render_info* param_1, int param_2, real_4x4* param_3) { return Resolve<void(*)(icon_render_info*, int, real_4x4*)>("draw_mutation_icons")(param_1, param_2, param_3); }
 inline int get_mutation_index(id_t* param_1) { return Resolve<int(*)(id_t*)>("get_mutation_index")(param_1); }
-inline schar* mutation_count(uchar* param_1, int param_2) { return Resolve<schar*(*)(uchar*, int)>("mutation_count")(param_1, param_2); }
-inline schar* mutation_count(body* param_1, int param_2) { return Resolve<schar*(*)(body*, int)>("mutation_count")(param_1, param_2); }
+inline char* mutation_count(uchar* param_1, int param_2) { return Resolve<char*(*)(uchar*, int)>("mutation_count")(param_1, param_2); }
+inline char* mutation_count(body* param_1, int param_2) { return Resolve<char*(*)(body*, int)>("mutation_count")(param_1, param_2); }
 inline uchar* mutation_extra_data(uchar* param_1, int param_2) { return Resolve<uchar*(*)(uchar*, int)>("mutation_extra_data")(param_1, param_2); }
 inline uchar* mutation_extra_data(body* param_1, int param_2) { return Resolve<uchar*(*)(body*, int)>("mutation_extra_data")(param_1, param_2); }
 inline mutation_item* add_mutation_item(mutation_item_list* param_1) { return Resolve<mutation_item*(*)(mutation_item_list*)>("add_mutation_item")(param_1); }

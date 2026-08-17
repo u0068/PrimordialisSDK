@@ -9,9 +9,6 @@ inline int clamp(int param_1, int param_2, int param_3) { return Resolve<int(*)(
 inline uint min(uint param_1, uint param_2) { return Resolve<uint(*)(uint, uint)>("min")(param_1, param_2); }
 inline uint max(uint param_1, uint param_2) { return Resolve<uint(*)(uint, uint)>("max")(param_1, param_2); }
 inline uint clamp(uint param_1, uint param_2, uint param_3) { return Resolve<uint(*)(uint, uint, uint)>("clamp")(param_1, param_2, param_3); }
-inline ulong64 min(ulong64 param_1, ulong64 param_2) { return Resolve<ulong64(*)(ulong64, ulong64)>("min")(param_1, param_2); }
-inline ulong64 max(ulong64 param_1, ulong64 param_2) { return Resolve<ulong64(*)(ulong64, ulong64)>("max")(param_1, param_2); }
-inline ulong64 clamp(ulong64 param_1, ulong64 param_2, ulong64 param_3) { return Resolve<ulong64(*)(ulong64, ulong64, ulong64)>("clamp")(param_1, param_2, param_3); }
 inline float min(float param_1, float param_2) { return Resolve<float(*)(float, float)>("min")(param_1, param_2); }
 inline float max(float param_1, float param_2) { return Resolve<float(*)(float, float)>("max")(param_1, param_2); }
 inline float clamp(float param_1, float param_2, float param_3) { return Resolve<float(*)(float, float, float)>("clamp")(param_1, param_2, param_3); }
@@ -385,19 +382,17 @@ inline float sd_line(real_2 param_1, real_2 param_2, real_2 param_3) { return Re
 inline real_3* sdgradient_line(real_3* __return_storage_ptr__, real_2 param_1, real_2 param_2, real_2 param_3) { return Resolve<real_3*(*)(real_3*, real_2, real_2, real_2)>("sdgradient_line")(__return_storage_ptr__, param_1, param_2, param_3); }
 inline int init_hex_rots() { return Resolve<int(*)()>("init_hex_rots")(); }
 inline real_2 expi(float param_1) { return Resolve<real_2(*)(float)>("expi")(param_1); }
-inline int log_printf(char* param_1) { return Resolve<int(*)(char*)>("log_printf")(param_1); }
 inline void log_alert() { return Resolve<void(*)()>("log_alert")(); }
 inline void log_flush() { return Resolve<void(*)()>("log_flush")(); }
-inline expandable_buffer* allocate_expandable_buffer(expandable_buffer* __return_storage_ptr__, ulong64 param_1, ulong64 param_2) { return Resolve<expandable_buffer*(*)(expandable_buffer*, ulong64, ulong64)>("allocate_expandable_buffer")(__return_storage_ptr__, param_1, param_2); }
-inline bool expand_memory(expandable_buffer* param_1, ulong64 param_2) { return Resolve<bool(*)(expandable_buffer*, ulong64)>("expand_memory")(param_1, param_2); }
+inline expandable_buffer* allocate_expandable_buffer(expandable_buffer* __return_storage_ptr__, __uint64 param_1, __uint64 param_2) { return Resolve<expandable_buffer*(*)(expandable_buffer*, __uint64, __uint64)>("allocate_expandable_buffer")(__return_storage_ptr__, param_1, param_2); }
+inline bool expand_memory(expandable_buffer* param_1, __uint64 param_2) { return Resolve<bool(*)(expandable_buffer*, __uint64)>("expand_memory")(param_1, param_2); }
 inline char* load_file_0_terminated(char* param_1) { return Resolve<char*(*)(char*)>("load_file_0_terminated")(param_1); }
-inline int file_dialogue(char* param_1, ulong64 param_2, char* param_3, char* param_4, char* param_5, int param_6) { return Resolve<int(*)(char*, ulong64, char*, char*, char*, int)>("file_dialogue")(param_1, param_2, param_3, param_4, param_5, param_6); }
+inline int file_dialogue(char* param_1, __uint64 param_2, char* param_3, char* param_4, char* param_5, int param_6) { return Resolve<int(*)(char*, __uint64, char*, char*, char*, int)>("file_dialogue")(param_1, param_2, param_3, param_4, param_5, param_6); }
 inline void adjust_singing(float* param_1) { return Resolve<void(*)(float*)>("adjust_singing")(param_1); }
 inline bounding_box_2* expand_to(bounding_box_2* __return_storage_ptr__, bounding_box_2* param_1, int_2 param_2) { return Resolve<bounding_box_2*(*)(bounding_box_2*, bounding_box_2*, int_2)>("expand_to")(__return_storage_ptr__, param_1, param_2); }
 inline bounding_box_2* expand_to(bounding_box_2* __return_storage_ptr__, bounding_box_2* param_1, bounding_box_2* param_2) { return Resolve<bounding_box_2*(*)(bounding_box_2*, bounding_box_2*, bounding_box_2*)>("expand_to")(__return_storage_ptr__, param_1, param_2); }
 inline box_real_2* expand_to(box_real_2* __return_storage_ptr__, box_real_2* param_1, real_2 param_2) { return Resolve<box_real_2*(*)(box_real_2*, box_real_2*, real_2)>("expand_to")(__return_storage_ptr__, param_1, param_2); }
 inline box_real_2* expand_to(box_real_2* __return_storage_ptr__, box_real_2* param_1, box_real_2* param_2) { return Resolve<box_real_2*(*)(box_real_2*, box_real_2*, box_real_2*)>("expand_to")(__return_storage_ptr__, param_1, param_2); }
-inline void expand_grid_bodies(int param_1) { return Resolve<void(*)(int)>("expand_grid_bodies")(param_1); }
 inline uint bsd_checksum(char* param_1) { return Resolve<uint(*)(char*)>("bsd_checksum")(param_1); }
 inline uint remove_entry(translation_map* param_1, char* param_2) { return Resolve<uint(*)(translation_map*, char*)>("remove_entry")(param_1, param_2); }
 inline uchar get_modifier_state(user_input* param_1) { return Resolve<uchar(*)(user_input*)>("get_modifier_state")(param_1); }
@@ -420,115 +415,116 @@ inline real_3* fbmd_gradient(real_3* __return_storage_ptr__, real_2 param_1, flo
 inline wall_t* smin(wall_t* __return_storage_ptr__, wall_t* param_1, wall_t* param_2, float param_3) { return Resolve<wall_t*(*)(wall_t*, wall_t*, wall_t*, float)>("smin")(__return_storage_ptr__, param_1, param_2, param_3); }
 inline wall_t* smax(wall_t* __return_storage_ptr__, wall_t* param_1, wall_t* param_2, float param_3) { return Resolve<wall_t*(*)(wall_t*, wall_t*, wall_t*, float)>("smax")(__return_storage_ptr__, param_1, param_2, param_3); }
 inline int cost(int_3* param_1, int_2 param_2) { return Resolve<int(*)(int_3*, int_2)>("cost")(param_1, param_2); }
-inline int ilog(int param_1) { return Resolve<int(*)(int)>("ilog")(param_1); }
+inline int ilog(uint param_1) { return Resolve<int(*)(uint)>("ilog")(param_1); }
 inline explosion_t* create_explosion(real_2 param_1, float param_2, int param_3, float param_4, float param_5, real_4* param_6, real_4* param_7, float param_8) { return Resolve<explosion_t*(*)(real_2, float, int, float, float, real_4*, real_4*, float)>("create_explosion")(param_1, param_2, param_3, param_4, param_5, param_6, param_7, param_8); }
-//inline void SteamInternal_Init_SteamUGC(ISteamUGC** param_1) { return Resolve<void(*)(ISteamUGC**)>("SteamInternal_Init_SteamUGC")(param_1); }
-//inline void SteamInternal_Init_SteamUser(ISteamUser** param_1) { return Resolve<void(*)(ISteamUser**)>("SteamInternal_Init_SteamUser")(param_1); }
-//inline void SteamInternal_Init_SteamUserStats(ISteamUserStats** param_1) { return Resolve<void(*)(ISteamUserStats**)>("SteamInternal_Init_SteamUserStats")(param_1); }
-//inline void SteamInternal_Init_SteamFriends(ISteamFriends** param_1) { return Resolve<void(*)(ISteamFriends**)>("SteamInternal_Init_SteamFriends")(param_1); }
-//inline char* strstr(char* param_1, char* param_2) { return Resolve<char*(*)(char*, char*)>("strstr")(param_1, param_2); }
-//inline bool validate_stream_is_ansi_if_required(_iobuf* param_1) { return Resolve<bool(*)(_iobuf*)>("validate_stream_is_ansi_if_required")(param_1); }
-//inline void write_string_impl(output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_>* this, char* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_>*, char*, int, int*, __crt_cached_ptd_host*)>("write_string_impl")(this, param_1, param_2, param_3, param_4); }
-//inline bool parse_int_from_format_string(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, int* param_1) { return Resolve<bool(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, int*)>("parse_int_from_format_string")(this, param_1); }
-//inline void write_string_impl(output_adapter_common<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>* this, wchar_t* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(output_adapter_common<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>*, wchar_t*, int, int*, __crt_cached_ptd_host*)>("write_string_impl")(this, param_1, param_2, param_3, param_4); }
-//inline bool parse_int_from_format_string(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, int* param_1) { return Resolve<bool(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, int*)>("parse_int_from_format_string")(this, param_1); }
-//inline int type_case_s_compute_narrow_string_length(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, int param_1, wchar_t param_2) { return Resolve<int(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, int, wchar_t)>("type_case_s_compute_narrow_string_length")(this, param_1, param_2); }
-//inline void write_string(string_output_adapter<char>* this, char* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(string_output_adapter<char>*, char*, int, int*, __crt_cached_ptd_host*)>("write_string")(this, param_1, param_2, param_3, param_4); }
-//inline void write_string(string_output_adapter<wchar_t>* this, wchar_t* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(string_output_adapter<wchar_t>*, wchar_t*, int, int*, __crt_cached_ptd_host*)>("write_string")(this, param_1, param_2, param_3, param_4); }
-//inline int type_case_s_compute_narrow_string_length(output_processor<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>_>_>* this, int param_1, wchar_t param_2) { return Resolve<int(*)(output_processor<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>_>_>*, int, wchar_t)>("type_case_s_compute_narrow_string_length")(this, param_1, param_2); }
-//inline void type_case_integer_parse_into_buffer<unsigned_int,16>(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,16>")(this, param_1, param_2); }
-//inline void type_case_integer_parse_into_buffer<unsigned_int,8>(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,8>")(this, param_1, param_2); }
-//inline void type_case_integer_parse_into_buffer<unsigned_int,10>(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,10>")(this, param_1, param_2); }
-//inline void type_case_integer_parse_into_buffer<unsigned_int,16>(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,16>")(this, param_1, param_2); }
-//inline void type_case_integer_parse_into_buffer<unsigned_int,8>(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,8>")(this, param_1, param_2); }
-//inline void type_case_integer_parse_into_buffer<unsigned_int,10>(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,10>")(this, param_1, param_2); }
-//inline ulong64 divide(big_integer* param_1, big_integer* param_2) { return Resolve<ulong64(*)(big_integer*, big_integer*)>("divide")(param_1, param_2); }
-//inline SLD_STATUS convert_decimal_string_to_floating_type_common(floating_point_string* param_1, floating_point_value* param_2) { return Resolve<SLD_STATUS(*)(floating_point_string*, floating_point_value*)>("convert_decimal_string_to_floating_type_common")(param_1, param_2); }
-//inline SLD_STATUS convert_hexadecimal_string_to_floating_type_common(floating_point_string* param_1, floating_point_value* param_2) { return Resolve<SLD_STATUS(*)(floating_point_string*, floating_point_value*)>("convert_hexadecimal_string_to_floating_type_common")(param_1, param_2); }
-//inline bool process_string_specifier(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>* this, conversion_mode param_1) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>*, conversion_mode)>("process_string_specifier")(this, param_1); }
-//inline void scan_optional_length_modifier(format_string_parser<char>* this) { return Resolve<void(*)(format_string_parser<char>*)>("scan_optional_length_modifier")(this); }
-//inline bool process_string_specifier(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>* this, conversion_mode param_1) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>*, conversion_mode)>("process_string_specifier")(this, param_1); }
-//inline bool process_string_specifier_tchar<char>(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>* this, conversion_mode param_1, char param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>*, conversion_mode, char)>("process_string_specifier_tchar<char>")(this, param_1, param_2); }
-//inline bool process_string_specifier_tchar<wchar_t>(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>* this, conversion_mode param_1, wchar_t param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>*, conversion_mode, wchar_t)>("process_string_specifier_tchar<wchar_t>")(this, param_1, param_2); }
-//inline bool process_string_specifier_tchar<char>(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>* this, conversion_mode param_1, char param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>*, conversion_mode, char)>("process_string_specifier_tchar<char>")(this, param_1, param_2); }
-//inline bool process_string_specifier_tchar<wchar_t>(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>* this, conversion_mode param_1, wchar_t param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>*, conversion_mode, wchar_t)>("process_string_specifier_tchar<wchar_t>")(this, param_1, param_2); }
-inline void try_cor_exit_process(uint param_1) { return Resolve<void(*)(uint)>("try_cor_exit_process")(param_1); }
-inline void exit_or_terminate_process(uint param_1, bool param_2) { return Resolve<void(*)(uint, bool)>("exit_or_terminate_process")(param_1, param_2); }
-//inline int ftprintf<_iobuf_*,wchar_t_const_*,wchar_t_const_*_const_&,wchar_t_const_*_const_&,unsigned_int_const_&>(_iobuf** param_1, wchar_t** param_2, wchar_t** param_3, wchar_t** param_4, uint* param_5) { return Resolve<int(*)(_iobuf**, wchar_t**, wchar_t**, wchar_t**, uint*)>("ftprintf<_iobuf_*,wchar_t_const_*,wchar_t_const_*_const_&,wchar_t_const_*_const_&,unsigned_int_const_&>")(param_1, param_2, param_3, param_4, param_5); }
-//inline void common_assert_to_message_box_build_string<wchar_t>(wchar_t* param_1, ulong64 param_2, wchar_t* param_3, wchar_t* param_4, uint param_5, void* param_6) { return Resolve<void(*)(wchar_t*, ulong64, wchar_t*, wchar_t*, uint, void*)>("common_assert_to_message_box_build_string<wchar_t>")(param_1, param_2, param_3, param_4, param_5, param_6); }
-inline double acos(double param_1) { return Resolve<double(*)(double)>("acos")(param_1); }
+inline void SteamInternal_Init_SteamUGC(ISteamUGC** param_1) { return Resolve<void(*)(ISteamUGC**)>("SteamInternal_Init_SteamUGC")(param_1); }
+inline void SteamInternal_Init_SteamUser(ISteamUser** param_1) { return Resolve<void(*)(ISteamUser**)>("SteamInternal_Init_SteamUser")(param_1); }
+inline void SteamInternal_Init_SteamUserStats(ISteamUserStats** param_1) { return Resolve<void(*)(ISteamUserStats**)>("SteamInternal_Init_SteamUserStats")(param_1); }
+inline void SteamInternal_Init_SteamFriends(ISteamFriends** param_1) { return Resolve<void(*)(ISteamFriends**)>("SteamInternal_Init_SteamFriends")(param_1); }
+inline char* strstr(char* _Str, char* _SubStr) { return Resolve<char*(*)(char*, char*)>("strstr")(_Str, _SubStr); }
+inline bool validate_stream_is_ansi_if_required(_iobuf* param_1) { return Resolve<bool(*)(_iobuf*)>("validate_stream_is_ansi_if_required")(param_1); }
+inline void write_string_impl(output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_>* this, char* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(output_adapter_common<char,__crt_stdio_output::stream_output_adapter<char>_>*, char*, int, int*, __crt_cached_ptd_host*)>("write_string_impl")(this, param_1, param_2, param_3, param_4); }
+inline bool parse_int_from_format_string(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, int* param_1) { return Resolve<bool(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, int*)>("parse_int_from_format_string")(this, param_1); }
+inline void write_string_impl(output_adapter_common<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>* this, wchar_t* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(output_adapter_common<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>*, wchar_t*, int, int*, __crt_cached_ptd_host*)>("write_string_impl")(this, param_1, param_2, param_3, param_4); }
+inline bool parse_int_from_format_string(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, int* param_1) { return Resolve<bool(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, int*)>("parse_int_from_format_string")(this, param_1); }
+inline int type_case_s_compute_narrow_string_length(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, int param_1, wchar_t param_2) { return Resolve<int(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, int, wchar_t)>("type_case_s_compute_narrow_string_length")(this, param_1, param_2); }
+inline void write_string(string_output_adapter<char>* this, char* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(string_output_adapter<char>*, char*, int, int*, __crt_cached_ptd_host*)>("write_string")(this, param_1, param_2, param_3, param_4); }
+inline void write_string(string_output_adapter<wchar_t>* this, wchar_t* param_1, int param_2, int* param_3, __crt_cached_ptd_host* param_4) { return Resolve<void(*)(string_output_adapter<wchar_t>*, wchar_t*, int, int*, __crt_cached_ptd_host*)>("write_string")(this, param_1, param_2, param_3, param_4); }
+inline int type_case_s_compute_narrow_string_length(output_processor<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>_>_>* this, int param_1, wchar_t param_2) { return Resolve<int(*)(output_processor<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::string_output_adapter<wchar_t>_>_>*, int, wchar_t)>("type_case_s_compute_narrow_string_length")(this, param_1, param_2); }
+inline void type_case_integer_parse_into_buffer<unsigned_int,16>(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,16>")(this, param_1, param_2); }
+inline void type_case_integer_parse_into_buffer<unsigned_int,8>(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,8>")(this, param_1, param_2); }
+inline void type_case_integer_parse_into_buffer<unsigned_int,10>(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>,__crt_stdio_output::standard_base<wchar_t,__crt_stdio_output::stream_output_adapter<wchar_t>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,10>")(this, param_1, param_2); }
+inline void type_case_integer_parse_into_buffer<unsigned_int,16>(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,16>")(this, param_1, param_2); }
+inline void type_case_integer_parse_into_buffer<unsigned_int,8>(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,8>")(this, param_1, param_2); }
+inline void type_case_integer_parse_into_buffer<unsigned_int,10>(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>* this, uint param_1, bool param_2) { return Resolve<void(*)(output_processor<char,__crt_stdio_output::stream_output_adapter<char>,__crt_stdio_output::standard_base<char,__crt_stdio_output::stream_output_adapter<char>_>_>*, uint, bool)>("type_case_integer_parse_into_buffer<unsigned_int,10>")(this, param_1, param_2); }
+inline SLD_STATUS convert_decimal_string_to_floating_type_common(floating_point_string* param_1, floating_point_value* param_2) { return Resolve<SLD_STATUS(*)(floating_point_string*, floating_point_value*)>("convert_decimal_string_to_floating_type_common")(param_1, param_2); }
+inline SLD_STATUS convert_hexadecimal_string_to_floating_type_common(floating_point_string* param_1, floating_point_value* param_2) { return Resolve<SLD_STATUS(*)(floating_point_string*, floating_point_value*)>("convert_hexadecimal_string_to_floating_type_common")(param_1, param_2); }
+inline bool process_string_specifier(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>* this, conversion_mode param_1) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>*, conversion_mode)>("process_string_specifier")(this, param_1); }
+inline void scan_optional_length_modifier(format_string_parser<char>* this) { return Resolve<void(*)(format_string_parser<char>*)>("scan_optional_length_modifier")(this); }
+inline bool process_string_specifier(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>* this, conversion_mode param_1) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>*, conversion_mode)>("process_string_specifier")(this, param_1); }
+inline bool process_string_specifier_tchar<char>(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>* this, conversion_mode param_1, char param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>*, conversion_mode, char)>("process_string_specifier_tchar<char>")(this, param_1, param_2); }
+inline bool process_string_specifier_tchar<wchar_t>(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>* this, conversion_mode param_1, wchar_t param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::string_input_adapter<char>_>*, conversion_mode, wchar_t)>("process_string_specifier_tchar<wchar_t>")(this, param_1, param_2); }
+inline bool process_string_specifier_tchar<char>(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>* this, conversion_mode param_1, char param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>*, conversion_mode, char)>("process_string_specifier_tchar<char>")(this, param_1, param_2); }
+inline bool process_string_specifier_tchar<wchar_t>(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>* this, conversion_mode param_1, wchar_t param_2) { return Resolve<bool(*)(input_processor<char,__crt_stdio_input::stream_input_adapter<char>_>*, conversion_mode, wchar_t)>("process_string_specifier_tchar<wchar_t>")(this, param_1, param_2); }
+inline undefined try_cor_exit_process(uint param_1) { return Resolve<undefined(*)(uint)>("try_cor_exit_process")(param_1); }
+inline undefined exit_or_terminate_process(UINT param_1, char param_2) { return Resolve<undefined(*)(UINT, char)>("exit_or_terminate_process")(param_1, param_2); }
+inline undefined common_assert_to_message_box_build_string<wchar_t>(wchar_t* param_1, rsize_t param_2, wchar_t* param_3, wchar_t* param_4, int param_5, LPCWSTR param_6) { return Resolve<undefined(*)(wchar_t*, rsize_t, wchar_t*, wchar_t*, int, LPCWSTR)>("common_assert_to_message_box_build_string<wchar_t>")(param_1, param_2, param_3, param_4, param_5, param_6); }
+inline double acos(double _X) { return Resolve<double(*)(double)>("acos")(_X); }
 inline double acos_internal(double param_1) { return Resolve<double(*)(double)>("acos_internal")(param_1); }
-inline double atan2(double param_1, double param_2) { return Resolve<double(*)(double, double)>("atan2")(param_1, param_2); }
-inline double atan2_internal(double param_1, double param_2) { return Resolve<double(*)(double, double)>("atan2_internal")(param_1, param_2); }
-inline float atan2f(float param_1, float param_2) { return Resolve<float(*)(float, float)>("atan2f")(param_1, param_2); }
+inline double atan2(double _Y, double _X) { return Resolve<double(*)(double, double)>("atan2")(_Y, _X); }
+inline undefined atan2_internal() { return Resolve<undefined(*)()>("atan2_internal")(); }
+inline float atan2f(float _Y, float _X) { return Resolve<float(*)(float, float)>("atan2f")(_Y, _X); }
 inline float atan2f_internal(float param_1, float param_2) { return Resolve<float(*)(float, float)>("atan2f_internal")(param_1, param_2); }
-inline void cos() { return Resolve<void(*)()>("cos")(); }
-inline void cosf_sse2() { return Resolve<void(*)()>("cosf_sse2")(); }
-inline void cosf() { return Resolve<void(*)()>("cosf")(); }
-inline void exp() { return Resolve<void(*)()>("exp")(); }
-inline float exp2f(float param_1) { return Resolve<float(*)(float)>("exp2f")(param_1); }
-inline float exp2f_internal(float param_1) { return Resolve<float(*)(float)>("exp2f_internal")(param_1); }
-inline void expf_sse2() { return Resolve<void(*)()>("expf_sse2")(); }
-inline void expf() { return Resolve<void(*)()>("expf")(); }
-inline void fmod() { return Resolve<void(*)()>("fmod")(); }
-inline float fmodf(float param_1, float param_2) { return Resolve<float(*)(float, float)>("fmodf")(param_1, param_2); }
-inline double frexp(double param_1, int* param_2) { return Resolve<double(*)(double, int*)>("frexp")(param_1, param_2); }
-//inline bool common_fseek_binary_mode_read_only_fast_track_nolock(__crt_stdio_stream param_1, long64 param_2, int param_3) { return Resolve<bool(*)(__crt_stdio_stream, long64, int)>("common_fseek_binary_mode_read_only_fast_track_nolock")(param_1, param_2, param_3); }
-//inline long64 common_ftell_translated_utf8_nolock(__crt_stdio_stream param_1, long64 param_2, __crt_cached_ptd_host* param_3) { return Resolve<long64(*)(__crt_stdio_stream, long64, __crt_cached_ptd_host*)>("common_ftell_translated_utf8_nolock")(param_1, param_2, param_3); }
-//inline long64 common_ftell_read_mode_nolock(__crt_stdio_stream param_1, long64 param_2, long64 param_3, __crt_cached_ptd_host* param_4) { return Resolve<long64(*)(__crt_stdio_stream, long64, long64, __crt_cached_ptd_host*)>("common_ftell_read_mode_nolock")(param_1, param_2, param_3, param_4); }
-inline double ldexp(double param_1, int param_2) { return Resolve<double(*)(double, int)>("ldexp")(param_1, param_2); }
-inline void log() { return Resolve<void(*)()>("log")(); }
-inline double pow(double param_1, double param_2) { return Resolve<double(*)(double, double)>("pow")(param_1, param_2); }
-inline double pow_internal(double param_1, double param_2) { return Resolve<double(*)(double, double)>("pow_internal")(param_1, param_2); }
-inline void powf() { return Resolve<void(*)()>("powf")(); }
-inline void sin() { return Resolve<void(*)()>("sin")(); }
-inline void sinf_sse2() { return Resolve<void(*)()>("sinf_sse2")(); }
-inline void sinf() { return Resolve<void(*)()>("sinf")(); }
-inline float sqrtf(float param_1) { return Resolve<float(*)(float)>("sqrtf")(param_1); }
-inline ulong64 strnlen(char* param_1, ulong64 param_2) { return Resolve<ulong64(*)(char*, ulong64)>("strnlen")(param_1, param_2); }
-inline long strtol(char* param_1, char** param_2, int param_3) { return Resolve<long(*)(char*, char**, int)>("strtol")(param_1, param_2, param_3); }
-inline ulong64 strtoull(char* param_1, char** param_2, int param_3) { return Resolve<ulong64(*)(char*, char**, int)>("strtoull")(param_1, param_2, param_3); }
-inline void tanf_sse2() { return Resolve<void(*)()>("tanf_sse2")(); }
-inline void tanf() { return Resolve<void(*)()>("tanf")(); }
-inline void terminate() { return Resolve<void(*)()>("terminate")(); }
-//inline int StateFromControlPc(_s_FuncInfo* param_1, _xDISPATCHER_CONTEXT* param_2) { return Resolve<int(*)(_s_FuncInfo*, _xDISPATCHER_CONTEXT*)>("StateFromControlPc")(param_1, param_2); }
-//inline void SetUnwindTryBlock(ulong64* param_1, _xDISPATCHER_CONTEXT* param_2, _s_FuncInfo* param_3, int param_4) { return Resolve<void(*)(ulong64*, _xDISPATCHER_CONTEXT*, _s_FuncInfo*, int)>("SetUnwindTryBlock")(param_1, param_2, param_3, param_4); }
-//inline int GetUnwindTryBlock(ulong64* param_1, _xDISPATCHER_CONTEXT* param_2, _s_FuncInfo* param_3) { return Resolve<int(*)(ulong64*, _xDISPATCHER_CONTEXT*, _s_FuncInfo*)>("GetUnwindTryBlock")(param_1, param_2, param_3); }
-//inline uchar IsInExceptionSpec(EHExceptionRecord* param_1, _s_ESTypeList* param_2) { return Resolve<uchar(*)(EHExceptionRecord*, _s_ESTypeList*)>("IsInExceptionSpec")(param_1, param_2); }
-inline int strcpy_s(char* param_1, ulong64 param_2, char* param_3) { return Resolve<int(*)(char*, ulong64, char*)>("strcpy_s")(param_1, param_2, param_3); }
-//inline void* try_get_function_slow(function_id param_1, char* param_2, module_id* param_3, module_id* param_4) { return Resolve<void*(*)(function_id, char*, module_id*, module_id*)>("try_get_function_slow")(param_1, param_2, param_3, param_4); }
-inline void destroy_fls(void* param_1) { return Resolve<void(*)(void*)>("destroy_fls")(param_1); }
-//inline void construct_ptd_array(__acrt_ptd* param_1) { return Resolve<void(*)(__acrt_ptd*)>("construct_ptd_array")(param_1); }
-//inline void destroy_ptd_array(__acrt_ptd* param_1) { return Resolve<void(*)(__acrt_ptd*)>("destroy_ptd_array")(param_1); }
-//inline bool should_round_up(double* param_1, ulong64 param_2, short param_3, __acrt_rounding_mode param_4) { return Resolve<bool(*)(double*, ulong64, short, __acrt_rounding_mode)>("should_round_up")(param_1, param_2, param_3, param_4); }
-inline int fegetround() { return Resolve<int(*)()>("fegetround")(); }
-//inline int common_expand_argv_wildcards<char>(char** param_1, char*** param_2) { return Resolve<int(*)(char**, char***)>("common_expand_argv_wildcards<char>")(param_1, param_2); }
-//inline int expand_argument_wildcards<char>(char* param_1, char* param_2, argument_list<char>* param_3) { return Resolve<int(*)(char*, char*, argument_list<char>*)>("expand_argument_wildcards<char>")(param_1, param_2, param_3); }
-//inline int common_xtox_s<unsigned_long,wchar_t>(ulong param_1, wchar_t* param_2, ulong64 param_3, uint param_4, bool param_5) { return Resolve<int(*)(ulong, wchar_t*, ulong64, uint, bool)>("common_xtox_s<unsigned_long,wchar_t>")(param_1, param_2, param_3, param_4, param_5); }
-//inline int common_xtox<unsigned_long,wchar_t>(ulong param_1, wchar_t* param_2, ulong64 param_3, uint param_4, bool param_5) { return Resolve<int(*)(ulong, wchar_t*, ulong64, uint, bool)>("common_xtox<unsigned_long,wchar_t>")(param_1, param_2, param_3, param_4, param_5); }
-inline double acos_fma(double param_1) { return Resolve<double(*)(double)>("acos_fma")(param_1); }
-inline double atan2_fma(double param_1, double param_2) { return Resolve<double(*)(double, double)>("atan2_fma")(param_1, param_2); }
-inline float atan2f_fma(float param_1, float param_2) { return Resolve<float(*)(float, float)>("atan2f_fma")(param_1, param_2); }
-inline float exp2f_fma(float param_1) { return Resolve<float(*)(float)>("exp2f_fma")(param_1); }
-//inline write_result* write_double_translated_ansi_nolock(write_result* __return_storage_ptr__, int param_1, char* param_2, uint param_3, __crt_cached_ptd_host* param_4) { return Resolve<write_result*(*)(write_result*, int, char*, uint, __crt_cached_ptd_host*)>("write_double_translated_ansi_nolock")(__return_storage_ptr__, param_1, param_2, param_3, param_4); }
-//inline bool stream_is_at_end_of_file_nolock(__crt_stdio_stream param_1) { return Resolve<bool(*)(__crt_stdio_stream)>("stream_is_at_end_of_file_nolock")(param_1); }
-inline int translate_ansi_or_utf8_nolock(int param_1, char* param_2, ulong64 param_3, wchar_t* param_4, ulong64 param_5) { return Resolve<int(*)(int, char*, ulong64, wchar_t*, ulong64)>("translate_ansi_or_utf8_nolock")(param_1, param_2, param_3, param_4, param_5); }
-inline double pow_fma(double param_1, double param_2) { return Resolve<double(*)(double, double)>("pow_fma")(param_1, param_2); }
-//inline void* try_get_function(function_id param_1, char* param_2, module_id* param_3, module_id* param_4) { return Resolve<void*(*)(function_id, char*, module_id*, module_id*)>("try_get_function")(param_1, param_2, param_3, param_4); }
-inline int initialize_multibyte() { return Resolve<int(*)()>("initialize_multibyte")(); }
-//inline char* strrchr(char* param_1, int param_2) { return Resolve<char*(*)(char*, int)>("strrchr")(param_1, param_2); }
-//inline bool should_round_up(char* param_1, char* param_2, int param_3, __acrt_has_trailing_digits param_4, __acrt_rounding_mode param_5) { return Resolve<bool(*)(char*, char*, int, __acrt_has_trailing_digits, __acrt_rounding_mode)>("should_round_up")(param_1, param_2, param_3, param_4, param_5); }
-inline int strncpy_s(char* param_1, ulong64 param_2, char* param_3, ulong64 param_4) { return Resolve<int(*)(char*, ulong64, char*, ulong64)>("strncpy_s")(param_1, param_2, param_3, param_4); }
-inline char* strpbrk(char* param_1, char* param_2) { return Resolve<char*(*)(char*, char*)>("strpbrk")(param_1, param_2); }
-inline int truncate_ctrl_z_if_present(int param_1) { return Resolve<int(*)(int)>("truncate_ctrl_z_if_present")(param_1); }
-inline double ceil(double param_1) { return Resolve<double(*)(double)>("ceil")(param_1); }
+inline double cos(double _X) { return Resolve<double(*)(double)>("cos")(_X); }
+inline undefined8 cosf_sse2(float param_1) { return Resolve<undefined8(*)(float)>("cosf_sse2")(param_1); }
+inline float cosf(float _X) { return Resolve<float(*)(float)>("cosf")(_X); }
+inline double exp(double _X) { return Resolve<double(*)(double)>("exp")(_X); }
+inline ulonglong exp2f(float param_1) { return Resolve<ulonglong(*)(float)>("exp2f")(param_1); }
+inline undefined exp2f_internal(float param_1) { return Resolve<undefined(*)(float)>("exp2f_internal")(param_1); }
+inline undefined8 expf_sse2(undefined8 param_1) { return Resolve<undefined8(*)(undefined8)>("expf_sse2")(param_1); }
+inline float expf(float _X) { return Resolve<float(*)(float)>("expf")(_X); }
+inline double fmod(double _X, double _Y) { return Resolve<double(*)(double, double)>("fmod")(_X, _Y); }
+inline float fmodf(float _X, float _Y) { return Resolve<float(*)(float, float)>("fmodf")(_X, _Y); }
+inline double frexp(double _X, int* _Y) { return Resolve<double(*)(double, int*)>("frexp")(_X, _Y); }
+inline ulonglong common_fseek_binary_mode_read_only_fast_track_nolock(longlong* param_1, ulonglong param_2, int param_3) { return Resolve<ulonglong(*)(longlong*, ulonglong, int)>("common_fseek_binary_mode_read_only_fast_track_nolock")(param_1, param_2, param_3); }
+inline LARGE_INTEGER common_ftell_translated_utf8_nolock(FILE* param_1, LARGE_INTEGER param_2, __crt_cached_ptd_host* param_3) { return Resolve<LARGE_INTEGER(*)(FILE*, LARGE_INTEGER, __crt_cached_ptd_host*)>("common_ftell_translated_utf8_nolock")(param_1, param_2, param_3); }
+inline LARGE_INTEGER common_ftell_read_mode_nolock(FILE* param_1, LARGE_INTEGER param_2, longlong param_3, __crt_cached_ptd_host* param_4) { return Resolve<LARGE_INTEGER(*)(FILE*, LARGE_INTEGER, longlong, __crt_cached_ptd_host*)>("common_ftell_read_mode_nolock")(param_1, param_2, param_3, param_4); }
+inline double ldexp(double _X, int _Y) { return Resolve<double(*)(double, int)>("ldexp")(_X, _Y); }
+inline double log(double _X) { return Resolve<double(*)(double)>("log")(_X); }
+inline ulonglong logf_sse2() { return Resolve<ulonglong(*)()>("logf_sse2")(); }
+inline float logf(float _X) { return Resolve<float(*)(float)>("logf")(_X); }
+inline double pow(double _X, double _Y) { return Resolve<double(*)(double, double)>("pow")(_X, _Y); }
+inline undefined pow_internal(double param_1) { return Resolve<undefined(*)(double)>("pow_internal")(param_1); }
+inline float powf(float _X, float _Y) { return Resolve<float(*)(float, float)>("powf")(_X, _Y); }
+inline double sin(double _X) { return Resolve<double(*)(double)>("sin")(_X); }
+inline undefined8 sinf_sse2(undefined8 param_1) { return Resolve<undefined8(*)(undefined8)>("sinf_sse2")(param_1); }
+inline float sinf(float _X) { return Resolve<float(*)(float)>("sinf")(_X); }
+inline float sqrtf(float _X) { return Resolve<float(*)(float)>("sqrtf")(_X); }
+inline size_t strnlen(char* _Str, size_t _MaxCount) { return Resolve<size_t(*)(char*, size_t)>("strnlen")(_Str, _MaxCount); }
+inline long strtol(char* _Str, char** _EndPtr, int _Radix) { return Resolve<long(*)(char*, char**, int)>("strtol")(_Str, _EndPtr, _Radix); }
+inline undefined8 tanf_sse2(undefined8 param_1) { return Resolve<undefined8(*)(undefined8)>("tanf_sse2")(param_1); }
+inline float tanf(float _X) { return Resolve<float(*)(float)>("tanf")(_X); }
+inline undefined terminate() { return Resolve<undefined(*)()>("terminate")(); }
+inline int StateFromControlPc(_s_FuncInfo* param_1, _xDISPATCHER_CONTEXT* param_2) { return Resolve<int(*)(_s_FuncInfo*, _xDISPATCHER_CONTEXT*)>("StateFromControlPc")(param_1, param_2); }
+inline void SetUnwindTryBlock(__uint64* param_1, _xDISPATCHER_CONTEXT* param_2, _s_FuncInfo* param_3, int param_4) { return Resolve<void(*)(__uint64*, _xDISPATCHER_CONTEXT*, _s_FuncInfo*, int)>("SetUnwindTryBlock")(param_1, param_2, param_3, param_4); }
+inline int GetUnwindTryBlock(__uint64* param_1, _xDISPATCHER_CONTEXT* param_2, _s_FuncInfo* param_3) { return Resolve<int(*)(__uint64*, _xDISPATCHER_CONTEXT*, _s_FuncInfo*)>("GetUnwindTryBlock")(param_1, param_2, param_3); }
+inline undefined1 IsInExceptionSpec(longlong param_1, int* param_2) { return Resolve<undefined1(*)(longlong, int*)>("IsInExceptionSpec")(param_1, param_2); }
+inline errno_t strcpy_s(char* _Dst, rsize_t _SizeInBytes, char* _Src) { return Resolve<errno_t(*)(char*, rsize_t, char*)>("strcpy_s")(_Dst, _SizeInBytes, _Src); }
+inline FARPROC try_get_function_slow(uint param_1, LPCSTR param_2, uint* param_3, uint* param_4) { return Resolve<FARPROC(*)(uint, LPCSTR, uint*, uint*)>("try_get_function_slow")(param_1, param_2, param_3, param_4); }
+inline undefined destroy_fls(undefined8* param_1) { return Resolve<undefined(*)(undefined8*)>("destroy_fls")(param_1); }
+inline undefined construct_ptd_array(undefined8* param_1) { return Resolve<undefined(*)(undefined8*)>("construct_ptd_array")(param_1); }
+inline undefined destroy_ptd_array(undefined8* param_1) { return Resolve<undefined(*)(undefined8*)>("destroy_ptd_array")(param_1); }
+inline int* update_thread_multibyte_data_internal(longlong param_1, undefined8* param_2) { return Resolve<int*(*)(longlong, undefined8*)>("update_thread_multibyte_data_internal")(param_1, param_2); }
+inline bool should_round_up(ulonglong* param_1, ulonglong param_2, short param_3, int param_4) { return Resolve<bool(*)(ulonglong*, ulonglong, short, int)>("should_round_up")(param_1, param_2, param_3, param_4); }
+inline undefined fegetround() { return Resolve<undefined(*)()>("fegetround")(); }
+inline ulonglong common_expand_argv_wildcards<char>(undefined8* param_1, undefined8* param_2) { return Resolve<ulonglong(*)(undefined8*, undefined8*)>("common_expand_argv_wildcards<char>")(param_1, param_2); }
+inline ulonglong expand_argument_wildcards<char>(uchar* param_1, uchar* param_2, longlong* param_3) { return Resolve<ulonglong(*)(uchar*, uchar*, longlong*)>("expand_argument_wildcards<char>")(param_1, param_2, param_3); }
+inline ulonglong common_xtox_s<unsigned_long,wchar_t>(uint param_1, short* param_2, ulonglong param_3, uint param_4, byte param_5) { return Resolve<ulonglong(*)(uint, short*, ulonglong, uint, byte)>("common_xtox_s<unsigned_long,wchar_t>")(param_1, param_2, param_3, param_4, param_5); }
+inline undefined8 common_xtox<unsigned_long,wchar_t>(uint param_1, short* param_2, ulonglong param_3, uint param_4, char param_5) { return Resolve<undefined8(*)(uint, short*, ulonglong, uint, char)>("common_xtox<unsigned_long,wchar_t>")(param_1, param_2, param_3, param_4, param_5); }
+inline double acos_fma() { return Resolve<double(*)()>("acos_fma")(); }
+inline double atan2_fma() { return Resolve<double(*)()>("atan2_fma")(); }
+inline undefined8 atan2f_fma(float param_1, float param_2) { return Resolve<undefined8(*)(float, float)>("atan2f_fma")(param_1, param_2); }
+inline ulonglong exp2f_fma(float param_1) { return Resolve<ulonglong(*)(float)>("exp2f_fma")(param_1); }
+inline undefined8* find_or_allocate_unused_stream_nolock(undefined8* param_1) { return Resolve<undefined8*(*)(undefined8*)>("find_or_allocate_unused_stream_nolock")(param_1); }
+inline DWORD* write_double_translated_ansi_nolock(DWORD* param_1, uint param_2, byte* param_3, ulonglong param_4, __crt_cached_ptd_host* param_5) { return Resolve<DWORD*(*)(DWORD*, uint, byte*, ulonglong, __crt_cached_ptd_host*)>("write_double_translated_ansi_nolock")(param_1, param_2, param_3, param_4, param_5); }
+inline bool stream_is_at_end_of_file_nolock(longlong* param_1) { return Resolve<bool(*)(longlong*)>("stream_is_at_end_of_file_nolock")(param_1); }
+inline int translate_ansi_or_utf8_nolock(uint param_1, byte* param_2, longlong param_3) { return Resolve<int(*)(uint, byte*, longlong)>("translate_ansi_or_utf8_nolock")(param_1, param_2, param_3); }
+inline double pow_fma(double param_1) { return Resolve<double(*)(double)>("pow_fma")(param_1); }
+inline FARPROC try_get_function(uint param_1, LPCSTR param_2, uint* param_3, uint* param_4) { return Resolve<FARPROC(*)(uint, LPCSTR, uint*, uint*)>("try_get_function")(param_1, param_2, param_3, param_4); }
+inline uint initialize_multibyte() { return Resolve<uint(*)()>("initialize_multibyte")(); }
+inline char* strrchr(char* _Str, int _Ch) { return Resolve<char*(*)(char*, int)>("strrchr")(_Str, _Ch); }
+inline bool should_round_up(char* param_1, char* param_2, int param_3, int param_4, int param_5) { return Resolve<bool(*)(char*, char*, int, int, int)>("should_round_up")(param_1, param_2, param_3, param_4, param_5); }
+inline errno_t strncpy_s(char* _Dst, rsize_t _SizeInBytes, char* _Src, rsize_t _MaxCount) { return Resolve<errno_t(*)(char*, rsize_t, char*, rsize_t)>("strncpy_s")(_Dst, _SizeInBytes, _Src, _MaxCount); }
+inline char* strpbrk(char* _Str, char* _Control) { return Resolve<char*(*)(char*, char*)>("strpbrk")(_Str, _Control); }
+inline int truncate_ctrl_z_if_present(uint param_1) { return Resolve<int(*)(uint)>("truncate_ctrl_z_if_present")(param_1); }
+inline double ceil(double _X) { return Resolve<double(*)(double)>("ceil")(_X); }
 inline double ceil_soft(double param_1) { return Resolve<double(*)(double)>("ceil_soft")(param_1); }
-inline void log10() { return Resolve<void(*)()>("log10")(); }
+inline double log10(double _X) { return Resolve<double(*)(double)>("log10")(_X); }
 inline uint common_control87(uint param_1, uint param_2) { return Resolve<uint(*)(uint, uint)>("common_control87")(param_1, param_2); }
-inline void ceil_sse41() { return Resolve<void(*)()>("ceil_sse41")(); }
-inline void strcmp() { return Resolve<void(*)()>("strcmp")(); }
-inline void strcat() { return Resolve<void(*)()>("strcat")(); }
-inline void strcpy() { return Resolve<void(*)()>("strcpy")(); }
-inline void strlen() { return Resolve<void(*)()>("strlen")(); }
-inline void strncmp() { return Resolve<void(*)()>("strncmp")(); }
-inline void strncpy() { return Resolve<void(*)()>("strncpy")(); }
+inline undefined8 ceil_sse41() { return Resolve<undefined8(*)()>("ceil_sse41")(); }
+inline int strcmp(char* _Str1, char* _Str2) { return Resolve<int(*)(char*, char*)>("strcmp")(_Str1, _Str2); }
+inline char* strcat(char* _Dest, char* _Source) { return Resolve<char*(*)(char*, char*)>("strcat")(_Dest, _Source); }
+inline char* strcpy(char* _Dest, char* _Source) { return Resolve<char*(*)(char*, char*)>("strcpy")(_Dest, _Source); }
+inline size_t strlen(char* _Str) { return Resolve<size_t(*)(char*)>("strlen")(_Str); }
+inline int strncmp(char* _Str1, char* _Str2, size_t _MaxCount) { return Resolve<int(*)(char*, char*, size_t)>("strncmp")(_Str1, _Str2, _MaxCount); }
+inline char* strncpy(char* _Dest, char* _Source, size_t _Count) { return Resolve<char*(*)(char*, char*, size_t)>("strncpy")(_Dest, _Source, _Count); }

@@ -32,11 +32,13 @@ struct color_swatch_render_info;
 struct command_result_t;
 struct contact;
 struct creature_spawner;
+struct digger_t;
 struct doorway;
 struct draggable_button;
 struct explosion_render_info;
 struct explosion_t;
 struct id_index;
+struct int_2;
 struct lane_group_t;
 struct laser_t;
 struct light_reciever_t;
@@ -81,6 +83,13 @@ struct undo_state;
 struct user_input;
 struct workshop_body_plan;
 
+struct stbtt__bitmap
+{
+    int w;
+    int h;
+    int stride;
+    uchar* pixels;
+};
 struct real_2
 {
     union
@@ -91,6 +100,25 @@ struct real_2
             float y;
         };
         float data[2];
+    };
+};
+struct cell_pickup
+{
+    int material_index;
+    real_2 x;
+    real_2 x_dot;
+    float r;
+    float r_dot;
+    float alpha;
+    float text_alpha;
+    union
+    {
+        struct
+        {
+            uint selected : 1;
+            uint is_combo : 1;
+        };
+        uint flags;
     };
 };
 struct real_3
@@ -179,15 +207,6 @@ struct final_boss_state
     float total_health;
     float total_max_health;
 };
-struct pickup_node
-{
-    int mutation_index;
-    real_2 x_rel;
-    float r;
-    float r_dot;
-    float alpha;
-    bool is_selected;
-};
 struct int_2
 {
     union
@@ -224,6 +243,70 @@ struct bounding_box_3
     int_3 l;
     int_3 u;
 };
+struct bounding_box_2
+{
+    int_2 l;
+    int_2 u;
+};
+struct pickup_node
+{
+    int mutation_index;
+    real_2 x_rel;
+    float r;
+    float r_dot;
+    float alpha;
+    bool is_selected;
+};
+struct text_element
+{
+    uchar type;
+    union
+    {
+        char c;
+        uchar modifiers;
+    };
+};
+struct gamepad_t
+{
+    uint gamepads_connected;
+    short buttons;
+    float left_trigger;
+    float right_trigger;
+    real_2 left_stick;
+    real_2 right_stick;
+};
+struct user_input
+{
+    real_2 mouse;
+    real_2 dmouse;
+    real_2 cursor_x;
+    float mouse_wheel;
+    float mouse_hwheel;
+    uchar buttons[32];
+    uchar pressed_buttons[32];
+    uchar released_buttons[32];
+    bool click_blocked;
+    bool right_click_blocked;
+    bool escape_blocked;
+    bool hover_blocked;
+    bool buttons_blocked;
+    void* active_ui_element;
+    int hovered_ui_element;
+    int old_hovered_ui_element;
+    int cursor_type;
+    text_element text_stream[256];
+    int n_text_stream;
+    uint text_modifiers;
+    gamepad_t gamepad;
+    short gamepad_prev_buttons;
+};
+struct pairNode
+{
+    longlong _padding_;
+    DNameNode* left;
+    DNameNode* right;
+    int myLen;
+};
 struct floodfill_piece
 {
     int start_index;
@@ -239,6 +322,19 @@ struct thread_init_data
     int thread_index;
     lane_group_t* group;
 };
+struct recording_buffer
+{
+    uint frame_buffer;
+    uint* textures;
+    int n_textures;
+    uint8_4* data;
+    int_2 resolution;
+    int buffer_length;
+    int current_frame;
+    int n_frames;
+    bool initialized;
+    float centiseconds;
+};
 struct biome_weights
 {
     int_3 biomes;
@@ -249,6 +345,10 @@ struct stbtt__buf
     uchar* data;
     int cursor;
     int size;
+};
+struct once_flag
+{
+    void* _Opaque;
 };
 struct hexagon_render_info
 {
@@ -269,6 +369,24 @@ struct explosion_render_info
 struct hex_uint
 {
     uint value;
+};
+struct particle_t
+{
+    int type;
+    real_2 x;
+    real_2 x_dot;
+    real_2 x_spawn;
+    int target;
+    float r;
+    float r_dot;
+    int time;
+    int duration;
+    real_4 color;
+    real_4 color_initial;
+    real_4 color_final;
+    real_4 emission;
+    float emission_radius;
+    bool affects_gameplay;
 };
 struct stbtt_packedchar
 {
@@ -308,15 +426,18 @@ struct thrd_t
     void* _Handle;
     uint _Tid;
 };
+struct spawn_creature_params
+{
+    int body_id;
+    real_2 orientation;
+    uint spawn_cells : 1;
+    uint plant : 1;
+    uint dont_load_plan : 1;
+};
 struct portal_t
 {
     real_2 x;
     real_2 x_dot;
-};
-struct bounding_box_2
-{
-    int_2 l;
-    int_2 u;
 };
 struct body_plan
 {
@@ -347,6 +468,10 @@ struct trace_node
     double start_time;
     double end_time;
 };
+struct stbtt__hheap_chunk
+{
+    stbtt__hheap_chunk* next;
+};
 struct stbtt__csctx
 {
     int bounds;
@@ -362,14 +487,12 @@ struct stbtt__csctx
     stbtt_vertex* pvertices;
     int num_vertices;
 };
-struct gamepad_t
+struct radiant_render_info
 {
-    uint gamepads_connected;
-    short buttons;
-    float left_trigger;
-    float right_trigger;
-    real_2 left_stick;
-    real_2 right_stick;
+    real_3 x;
+    float r;
+    float distortion;
+    real_4 color;
 };
 struct lane_context_t
 {
@@ -422,6 +545,10 @@ struct stbtt__active_edge
     float sy;
     float ey;
 };
+struct srwlock_guard
+{
+    _RTL_SRWLOCK* lck;
+};
 struct box_real_2
 {
     real_2 l;
@@ -445,6 +572,26 @@ struct mutation_type
     int extra_data_offset;
     int n_imbues;
     uint no_stacking : 1;
+};
+struct brown_sound
+{
+    float value;
+    float filtered_value;
+    float volume;
+    float target_volume;
+    union
+    {
+        float next_target_volume;
+        long next_target_volume_data;
+    };
+    float lowpass;
+    float target_lowpass;
+    union
+    {
+        float next_lowpass;
+        long next_lowpass_data;
+    };
+    float lerp_rate;
 };
 struct mutation_pickup
 {
@@ -474,6 +621,91 @@ struct text_params
 struct file_info
 {
     uint is_directory : 1;
+};
+struct static_button
+{
+    float r;
+    float r_dot;
+    float state;
+    float tooltip_alpha;
+    bool was_hovered;
+};
+struct slider_t
+{
+    float t;
+    float width;
+    float radius;
+    float radius_dot;
+    bool dragging;
+    bool was_hovered;
+    bool active;
+};
+struct tooltip_t
+{
+    real_2 box_size;
+    real_2 pos;
+    float alpha;
+    int last_hovered_index;
+    int last_hovered_type;
+    int last_hovered_imbue;
+    real_2 last_hovered_mutation_pos;
+    uint is_combo : 1;
+    uint consumable_instructions;
+};
+struct sandbox_menu
+{
+    int tool;
+    static_button tool_buttons[11];
+    float selected_team;
+    static_button team_buttons[5];
+    float* mutation_r;
+    float* mutation_r_dot;
+    slider_t explosion_slider;
+    float explosion_radius;
+    slider_t teraform_slider;
+    float teraform_radius;
+    int teraform_biome_index;
+    union
+    {
+        struct
+        {
+            uint teraform_coarse : 1;
+            uint teraform_flow : 1;
+            uint teraform_biome : 1;
+            uint teraform_grid : 1;
+            uint teraform_biome_hide : 1;
+            uint map_export_mode : 1;
+        };
+        uint teraform_flags;
+    };
+    static_button teraform_buttons[4];
+    float* cell_r;
+    float* cell_r_dot;
+    float* biome_r;
+    float* biome_r_dot;
+    real_2 block_zone;
+    real_2 block_center;
+    int selected_creature;
+    int dragged_body;
+    tooltip_t tooltip;
+};
+struct expandable_buffer
+{
+    uchar* memory;
+    ulonglong reserved_size;
+    ulonglong committed_size;
+};
+struct stack_allocation
+{
+    void* data;
+};
+struct memory_manager
+{
+    expandable_buffer stack;
+    ulonglong stack_used;
+    ulonglong checkpoint;
+    stack_allocation stallocs[4096];
+    int n_stallocs;
 };
 struct trace_t
 {
@@ -522,26 +754,134 @@ struct lightning_render_info
     real_2 r;
     real_4 color;
 };
-struct slider_t
+struct keybinds_t
 {
-    float t;
-    float width;
-    float radius;
-    float radius_dot;
-    bool dragging;
-    bool was_hovered;
-    bool active;
+    int forward;
+    int backward;
+    int left;
+    int right;
+    int ability;
+    int ability1;
+    int ability2;
+    int extend;
+    int retract;
+    int interact;
+    int map;
+    int zoom_in;
+    int zoom_out;
+    int edit;
+    int inspect;
+    int brush_bigger;
+    int brush_smaller;
+    union
+    {
+        struct
+        {
+            int tool_select;
+            int tool_draw;
+            int tool_fill;
+        };
+        int tools[3];
+    };
+    int toggle_symmetry;
+    int toggle_icons;
+    int editor_up;
+    int editor_down;
+    int editor_left;
+    int editor_right;
+    int editor_zoom_in;
+    int editor_zoom_out;
+    int console;
 };
-struct exp_data
+struct settings_t
 {
-    double invln2N;
-    double shift;
-    double negln2hiN;
-    double negln2loN;
-    double poly[4];
-    double exp2_shift;
-    double exp2_poly[5];
-    ulong64 tab[512];
+    uint settings_version;
+    float effects_volume;
+    float music_volume;
+    union
+    {
+        keybinds_t keybinds;
+        int buttons[29];
+    };
+    uint toggle_seek;
+    uint toggle_ability;
+    uint show_fps;
+    uint fullscreen;
+    uint clip_cursor;
+    uint hardware_cursor;
+    float gamepad_cursor_sens;
+    float gamepad_deadzone;
+    int window_x;
+    int window_y;
+    int resolution_x;
+    int resolution_y;
+    uint replay_recorder;
+    int gif_resolution_x;
+    int gif_resolution_y;
+    int gif_frames;
+    uint cap_framerate;
+    uint framerate_cap;
+    uint thread_count;
+    float screenshake;
+    float brightness;
+    float contrast;
+    uint background_effects;
+    uint reflections;
+    uint distortions;
+    uint limit_particles;
+    uint max_particles;
+    uint pause_on_unfocus;
+    uint show_tutorial;
+    uint show_disconnected_warning;
+    uint error_sound;
+    uint always_show_storage;
+    uint pushable_cell_buttons;
+    uint copy_plan_on_possess;
+    uint show_cell_icons;
+    uint enable_console;
+    uint win_unlocks;
+};
+struct real_3x3
+{
+    union
+    {
+        real_3 columns[3];
+        float data[9];
+    };
+};
+// struct exp_data
+// {
+//     double invln2N;
+//     double shift;
+//     double negln2hiN;
+//     double negln2loN;
+//     double poly[4];
+//     double exp2_shift;
+//     double exp2_poly[5];
+//     __uint64 tab[512];
+// };
+struct map_template
+{
+    bounding_box_2 region;
+    uchar* data;
+    int_2* points;
+    int n_points;
+    float* wall_values;
+    real_2* flow;
+    int* biome_ids;
+};
+struct biome_node
+{
+    int core_index;
+    real_2 x;
+    float r;
+    uint fill : 1;
+    uint snap : 1;
+    map_template templ;
+    biome_edge* first_edge;
+    void* pre_generation_fn;
+    void* post_generation_fn;
+    void* template_generation_fn;
 };
 struct print_buffer_t
 {
@@ -573,6 +913,41 @@ struct printer
     int count;
     print_format format;
 };
+struct stbtt_bakedchar
+{
+    ushort x0;
+    ushort y0;
+    ushort x1;
+    ushort y1;
+    float xoff;
+    float yoff;
+    float xadvance;
+};
+struct biome_core
+{
+    int biome_index;
+    int guardian_id;
+    int track_length;
+    int bronze_time;
+    int n_checkpoints;
+    int target_size;
+    int n_hexes;
+    bounding_box_2 bounds;
+    int_2 entrance_points[32];
+    int n_entrance_points;
+    ulonglong mergable_cores;
+    int modifiers[16];
+    int n_modifiers;
+    int n_default_modifiers;
+    uint no_creatures : 1;
+};
+struct lane_group_t
+{
+    int group_index;
+    void* shared;
+    int n_lanes;
+    _RTL_BARRIER barrier;
+};
 struct stbtt_vertex
 {
     short x;
@@ -589,10 +964,100 @@ struct magnetic_field_t
     cell* c;
     real_3 moment;
 };
+struct draggable_button
+{
+    real_2 x;
+    real_2 x_dot;
+    real_2 x_brown;
+    real_2 x_brown_dot;
+    real_2 x_offset;
+    float r;
+    float r_dot;
+    float selection_theta;
+    float wiggle_phase;
+    float hovered;
+    float selected;
+    bool was_hovered;
+    bool pinned;
+};
 struct translation_map_kash_t
 {
     char* key;
     uint hash;
+};
+struct stbtt__point
+{
+    float x;
+    float y;
+};
+struct id_index
+{
+    int id;
+    int index;
+};
+struct cell_pool
+{
+    int material_indices[2048];
+    float material_cum_chances[2048];
+    int n_materials;
+};
+struct biome_type
+{
+    uint id;
+    real_3 color;
+    float light;
+    float bumpyness;
+    float temperature;
+    uint tracked : 1;
+    uint explored : 1;
+    uint no_modifiers : 1;
+    uint custom_cell_spawning;
+    uint flags;
+    int ambient_music_id;
+    int battle_music_id;
+    float noise_amount;
+    float fbm_amount;
+    float fbm_base_frequency;
+    float fbm_octives;
+    float fbm_gain;
+    float neighbor_fbm;
+    float neighbor_amount;
+    float base_amount;
+    float min_value;
+    float cell_chance;
+    int cell_max_neighbors;
+    cell_pool pool;
+    uint creature_ids[256];
+    int creature_xps[256];
+    float creature_cum_chances[256];
+    float creature_teams[256];
+    int n_creatures;
+    uint plant_ids[256];
+    int plant_xps[256];
+    float plant_cum_chances[256];
+    int n_plants;
+    int modifiers[16];
+    int n_modifiers;
+};
+struct plan_cell
+{
+    int material_index;
+    real_4 color;
+    int_2 body_coord;
+    int respawn_timer;
+    union
+    {
+        struct
+        {
+            uchar selected_symmetry_index;
+            uchar pending_selected;
+        };
+        uint selected;
+    };
+    uint floodfilled;
+    float r;
+    float r_dot;
+    uint temporary : 1;
 };
 struct textbox
 {
@@ -609,6 +1074,169 @@ struct mutation_item_list
     mutation_item* items;
     int n_items;
     int max_items;
+};
+struct context_t
+{
+    union
+    {
+        struct
+        {
+            int lane_index;
+            lane_group_t* group;
+        };
+        lane_context_t current_lane_context;
+    };
+    lane_context_t lane_stack[4];
+    int n_lane_stack;
+    int barrier_number;
+    int thread_id;
+    memory_manager* manager;
+    uint seed;
+    uint visual_seed;
+    lua_State* L;
+    print_buffer_t log_buffer;
+    print_buffer_t game_buffer;
+    trace_t* current_trace;
+    trace_t* latest_trace;
+    trace_node* current_trace_node;
+    profiler_frame* profiler_frames;
+    int current_profiler_frame;
+    circle_render_info* circles;
+    int n_circles;
+};
+struct mutation_item
+{
+    int mutation_index;
+    int imbues[4];
+    real_2 pos;
+    float r;
+    float r_dot;
+};
+struct stashed_body_plan
+{
+    body_plan plan;
+    char name[512];
+    real_2 pos;
+};
+struct sound_params
+{
+    float volume;
+    float delay;
+    float pitch_shift;
+    float lowpass_dist;
+    int type;
+};
+struct stbtt_fontinfo
+{
+    void* userdata;
+    uchar* data;
+    int fontstart;
+    int numGlyphs;
+    int loca;
+    int head;
+    int glyf;
+    int hhea;
+    int hmtx;
+    int kern;
+    int gpos;
+    int svg;
+    int index_map;
+    int indexToLocFormat;
+    stbtt__buf cff;
+    stbtt__buf charstrings;
+    stbtt__buf gsubrs;
+    stbtt__buf subrs;
+    stbtt__buf fontdicts;
+    stbtt__buf fdselect;
+};
+struct font_info
+{
+    uint texture;
+    stbtt_fontinfo info;
+    float size;
+    stbtt_packedchar* char_data;
+};
+struct real_4x4
+{
+    union
+    {
+        real_4 columns[4];
+        float data[16];
+    };
+};
+struct render_context
+{
+    float fov;
+    real_3 camera_pos;
+    real_3 old_camera_pos;
+    real_3x3 camera_axes;
+    real_4x4 camera;
+    real_4 background_color;
+    real_4 foreground_color;
+    real_4 highlight_color;
+    uint frame_buffer;
+    uint cell_frame_buffer;
+    uint lighting_frame_buffer;
+    uint post_process_frame_buffer;
+    uint background_frame_buffer;
+    uint thumbnail_frame_buffer;
+    union
+    {
+        struct
+        {
+            uint color_texture;
+            uint post_color_texture;
+            uint post_effects_texture;
+            uint background_textures[2];
+            uint cell_color_texture;
+            uint cell_material_texture;
+            uint lighting_texture;
+            uint edit_distance_texture;
+        };
+        uint textures[9];
+    };
+    int current_background_texture;
+    uint thumbnail_texture;
+    uint wall_texture;
+    uint biome_texture;
+    uint map_flow_texture;
+    uint map_color_texture;
+    uint map_wall_color1_texture;
+    uint map_wall_color2_texture;
+    uint map_wall_params_texture;
+    uint map_lighting_texture;
+    uint map_bumpyness_texture;
+    uint map_temperature_texture;
+    uint map_explored_texture;
+    int_2 resolution;
+    union
+    {
+        struct
+        {
+            font_info small_font;
+            font_info default_font;
+            font_info medium_font;
+            font_info big_font;
+        };
+        font_info font_infos[4];
+    };
+    float time;
+};
+struct window_t
+{
+    HWND__* hwnd;
+    HGLRC__* hglrc;
+    real_2 size;
+    user_input input;
+    user_input frame_input;
+    _LARGE_INTEGER timer_frequency;
+    _LARGE_INTEGER last_time;
+    _LARGE_INTEGER this_time;
+    render_context rc;
+    render_context ui;
+    recording_buffer rb;
+    bool clip_cursor;
+    bool focused;
 };
 struct explosion_t
 {
@@ -627,30 +1255,20 @@ struct explosion_t
     uint ignore_body;
     uint recolor : 1;
 };
-struct static_button
+struct multithread_loop_info
 {
-    float r;
-    float r_dot;
-    float state;
-    float tooltip_alpha;
-    bool was_hovered;
+    user_input* input;
+    int start;
+    int end;
+    int iteration;
 };
-struct expandable_buffer
+struct int_2x2
 {
-    uchar* memory;
-    ulonglong reserved_size;
-    ulonglong committed_size;
-};
-struct tooltip_t
-{
-    real_2 box_size;
-    real_2 pos;
-    float alpha;
-    int last_hovered_index;
-    int last_hovered_type;
-    int last_hovered_imbue;
-    real_2 last_hovered_mutation_pos;
-    uint is_combo : 1;
+    union
+    {
+        int_2 columns[2];
+        int data[4];
+    };
 };
 struct edit_menu
 {
@@ -764,6 +1382,7 @@ struct circle_render_info
 struct saver_t
 {
     uint pending_save;
+    uint pending_map_edits;
     char temp_player_filename[256];
     char temp_world_filename[256];
     char final_player_filename[256];
@@ -782,6 +1401,15 @@ struct saver_t
     void* player_filemapping;
     uchar* world_mapview;
     uchar* player_mapview;
+    char temp_map_edits_filename[256];
+    char final_map_edits_filename[256];
+    uchar* serialized_map_edits;
+    ulonglong max_serialized_map_edits_size;
+    ulonglong serialized_map_edits_size;
+    ulonglong map_edits_written_size;
+    void* map_edits_file;
+    void* map_edits_filemapping;
+    uchar* map_edits_mapview;
     char* save_dir;
     char settings_filename[1024];
     char run_history_filename[1024];
@@ -793,6 +1421,18 @@ struct saver_t
     char workshop_dir[1024];
     char appdata_path[1024];
     char userdata_path[1024];
+};
+struct cell_item
+{
+    int type;
+    union
+    {
+        int material_index;
+        int body_id;
+    };
+    draggable_button button;
+    uint filtered : 1;
+    uint activated : 1;
 };
 struct uint8_2
 {
@@ -857,14 +1497,6 @@ struct uint8_4
         uchar data[4];
     };
 };
-struct mutation_item
-{
-    int mutation_index;
-    int imbues[4];
-    real_2 pos;
-    float r;
-    float r_dot;
-};
 struct creature_t
 {
     uint id;
@@ -873,14 +1505,17 @@ struct creature_t
     mutation_item mutations[32];
     int n_mutations;
     float cost_discount;
+    float abstract_speed;
     uint show_damage_numbers : 1;
-    uint hidden : 1;
     uint snap : 1;
+    uint pickupable : 1;
+    uint die_on_activation : 1;
+    uint hidden : 1;
     body_plan plan;
-    void (*ai_func)(body *);
-    void (*spawn_func)(body *, real_2);
-    void (*death_func)(body *);
-    bool (*generation_func)(body *, real_2);
+    void* ai_func;
+    void* spawn_func;
+    void* death_func;
+    void* generation_func;
     char lua_func[128];
     char lua_spawn_func[128];
     char lua_death_func[128];
@@ -915,6 +1550,41 @@ struct color_bar_render_info
     unnamed_type_colors colors;
     uint do_square;
 };
+struct workshop_published_item
+{
+    ulonglong id;
+    char name[129];
+};
+struct biome_edge
+{
+    biome_node* node;
+    biome_edge* next;
+    real_2 dir;
+    float spacing;
+    float randomness;
+    float stiffness;
+    float bias;
+    uint virtual_edge : 1;
+};
+struct serialized_data
+{
+    uchar* data;
+    int size;
+};
+struct queued_sound
+{
+    sound_t* sound;
+    sound_params params;
+    float filtered[2];
+    int n_played_samples;
+    bool kill;
+};
+struct light_reciever_t
+{
+    real_2 x;
+    real_3 hsv;
+    float radius_sq;
+};
 struct id_t_index
 {
     id_t id;
@@ -924,6 +1594,13 @@ struct rle_pair
 {
     float value;
     int count;
+};
+struct biome_modifier
+{
+    char* id;
+    void* generation_fn;
+    void* creature_fn;
+    float chance;
 };
 struct healthbar_t
 {
@@ -938,18 +1615,14 @@ struct healthbar_t
     float damage_timer;
     float can_rebirth;
 };
+struct srwlock_shared_guard
+{
+    _RTL_SRWLOCK* lck;
+};
 struct strand
 {
     char* str;
     int len;
-};
-struct spawn_creature_params
-{
-    int body_id;
-    real_2 orientation;
-    uint spawn_cells : 1;
-    uint plant : 1;
-    uint dont_load_plan : 1;
 };
 struct biome_entrance
 {
@@ -965,12 +1638,41 @@ struct biome_entrance
     uint optional : 1;
     uint room_exit : 1;
 };
-// mat_and_color None[12];
-// struct work_task
-// {
-//     void (*func)(context_t *, void *);
-//     void* data;
-// };
+struct real_2x2
+{
+    union
+    {
+        real_2 columns[2];
+        float data[4];
+    };
+};
+struct tool_render_info
+{
+    real_3 x;
+    float r;
+    real_4 color;
+    uint id;
+    float state;
+};
+struct work_task
+{
+    void* func;
+    void* data;
+};
+struct lightning_emitter
+{
+    real_2 x;
+    real_2 dir;
+};
+struct laser_t
+{
+    int cell_id;
+    real_2 x;
+    real_2 dir;
+    float heat;
+    float width;
+    float length;
+};
 struct uint_2
 {
     union
@@ -1001,6 +1703,20 @@ struct uint_3
         };
         uint data[3];
     };
+};
+struct stbtt_pack_context
+{
+    void* user_allocator_context;
+    void* pack_info;
+    int width;
+    int height;
+    int stride_in_bytes;
+    int padding;
+    int skip_missing;
+    uint h_oversample;
+    uint v_oversample;
+    uchar* pixels;
+    void* nodes;
 };
 struct uint_4
 {
@@ -1245,6 +1961,11 @@ struct cell
         float base_r;
         float base_r_packed[16];
     };
+    union
+    {
+        float range_multiplier;
+        float range_multiplier_packed[16];
+    };
     float spacing[96];
     union
     {
@@ -1260,19 +1981,19 @@ struct cell
             uint open_sides : 6;
             uint touched : 1;
             uint health_gated : 1;
+            uint kill : 1;
             uint floodfill_needed : 1;
             uint linking : 1;
             uint link_attracting : 1;
             uint self_touching : 1;
             uint poison_immune : 1;
-            uint kill : 1;
             uint nontrivial_bone : 1;
             uint temp_rigid : 1;
-            uint stem_cell : 1;
             uint cell_collision : 1;
             uint no_explosive_regen_delay : 1;
             uint has_brain_fn : 1;
             uint recolored : 1;
+            uint sync_health : 1;
         };
     };
     union
@@ -1317,8 +2038,18 @@ struct cell
     };
     union
     {
+        float drag_reduction;
+        float drag_reduction_packed[16];
+    };
+    union
+    {
         float detected_light;
         float detected_light_packed[16];
+    };
+    union
+    {
+        float map_light;
+        float map_light_packed[16];
     };
     union
     {
@@ -1382,6 +2113,137 @@ struct cell
     };
     cell_extra extra_fields[16];
 };
+struct brain_t
+{
+    real_2 movement;
+    float rotation;
+    real_2 grab_target;
+    float grab_weight;
+    float grab_dir;
+    bool abilities[3];
+    void* fun;
+    real_2 old_movement;
+    float old_rotation;
+    real_2 old_grab_target;
+    float old_grab_weight;
+    float old_grab_dir;
+    bool old_abilities[3];
+    int target;
+    int old_target;
+    int action;
+    real_2 target_point;
+    double values[32];
+};
+struct particle_type_t
+{
+    bool streak;
+    bool draw_on_top;
+};
+struct lua_State
+{
+};
+struct body
+{
+    int id;
+    int creature_index;
+    body_plan plan;
+    int* cell_map;
+    cell* first_cell;
+    cell* last_cell;
+    int parent_id;
+    int holder_id;
+    float team;
+    boss_part_t* boss_part;
+    float cost_limit;
+    float max_health;
+    float total_cost;
+    float age;
+    int xp;
+    int next_levelup;
+    int last_levelup;
+    int level;
+    float xp_timer;
+    float xp_alpha;
+    float cost_discount;
+    float bonus_health_multiplier;
+    float abstract_acceleration;
+    uint loaded : 1;
+    uint floodfill_needed : 1;
+    uint rooted : 1;
+    uint touched : 1;
+    uint is_boss : 1;
+    uint show_damage_numbers : 1;
+    uint snap : 1;
+    uint pickupable : 1;
+    uint activated : 1;
+    uint is_safe : 1;
+    uint kill : 1;
+    uint kill_slowly : 2;
+    uint unload : 1;
+    uint plan_modified : 1;
+    uint cell_collision : 1;
+    uint no_regen_delay : 1;
+    uint regen_boost;
+    float avg_phasing;
+    real_2 spawn_x;
+    int n_cells;
+    real_2 center_of_mass;
+    real_2 old_center_of_mass;
+    real_2 center_of_mass_dot;
+    real_2 old_center_of_mass_dot;
+    float radius;
+    float mass;
+    float invmass;
+    float cell_cost;
+    float max_grown;
+    float health;
+    float damage;
+    float damage_timer;
+    float poison_damage;
+    float burn_damage;
+    float healing;
+    real_2 cost_centroid;
+    real_2 orientation;
+    real_2 old_orientation;
+    float omega;
+    real_2 global_body_force;
+    float wall_force;
+    float old_wall_force;
+    float avg_shock;
+    float avg_temperature;
+    float vision_radius;
+    float text_alpha;
+    float damage_number;
+    float damage_number_timer;
+    union
+    {
+        struct
+        {
+            uint portal_index : 8;
+            uint in_portal : 1;
+        };
+        uint portal_info;
+    };
+    float portal_timer;
+    brain_t brain;
+    wall_t nearest_wall;
+    union
+    {
+        mutation_item_list mutation_items;
+        struct
+        {
+            mutation_item* mutations;
+            int n_mutations;
+            int max_mutations;
+        };
+    };
+};
+struct pcharNode
+{
+    longlong _padding_;
+    char* me;
+    int myLen;
+};
 struct map_floodfill_piece
 {
     int id;
@@ -1398,7 +2260,7 @@ struct button_out
 //     double ln2hi;
 //     double ln2lo;
 //     double poly[7];
-//     unnamed_tag_000047F2 tab[128];
+//     unnamed_0094 tab[128];
 // };
 struct material_t
 {
@@ -1416,6 +2278,7 @@ struct material_t
     float max_health;
     float transfer_rate;
     float regen;
+    float regen_delay_multiplier;
     union
     {
         struct
@@ -1430,9 +2293,12 @@ struct material_t
             uint is_directional : 1;
             uint show_adjacency : 1;
             uint show_direction : 1;
+            uint show_neighbor_direction : 1;
             uint is_hard : 1;
             uint play_note : 1;
             uint no_recolor : 1;
+            uint sync_health : 1;
+            uint is_stem : 1;
         };
         uint flags;
     };
@@ -1442,6 +2308,7 @@ struct material_t
     float hardness;
     float max_radial_force;
     float max_angular_force;
+    float base_radius;
     float radial_compliance;
     float angular_compliance;
     float plasticity;
@@ -1467,27 +2334,45 @@ struct material_t
     real_2 uv;
     int combine_material_index1;
     int combine_material_index2;
-    void (*physics_update_fn)(cell *);
-    void (*force_update_fn)(cell *);
-    void (*electric_update_fn)(cell *);
-    void (*connection_update_fn)(cell *);
-    void (*brain_fn)(cell *);
-    void (*destroyed_fn)(cell *);
+    void* physics_update_fn;
+    void* force_update_fn;
+    void* electric_update_fn;
+    void* connection_update_fn;
+    void* brain_fn;
+    void* destroyed_fn;
 };
-struct exp2f_data
+// struct exp2f_data
+// {
+//     __uint64 tab[32];
+//     double shift_scaled;
+//     double poly[3];
+//     double shift;
+//     double invln2_scaled;
+//     double poly_scaled[3];
+// };
+struct acid_particle_16
 {
-    ulong64 tab[32];
-    double shift_scaled;
-    double poly[3];
-    double shift;
-    double invln2_scaled;
-    double poly_scaled[3];
+    float x[16];
+    float y[16];
+    float x_dot[16];
+    float y_dot[16];
+    float r[16];
+    float r_dot[16];
+    int time[16];
+    real_4 color_initial[16];
+    real_4 color_final[16];
 };
 struct stbtt__hheap
 {
     stbtt__hheap_chunk* head;
     void* first_free;
     int num_remaining_in_head_chunk;
+};
+struct command_result_t
+{
+    char* command;
+    char* result;
+    char* error;
 };
 struct sound_t
 {
@@ -1515,11 +2400,43 @@ struct boss_part_t
     real_2 x_dot;
     real_2 orientation;
 };
+struct player_command_t
+{
+    real_2 movement;
+    real_2 grab_target;
+    float grab_weight;
+    float grab_dir;
+    bool abilities[1];
+};
 struct room_t
 {
     uint cleared : 1;
     int first_spawner;
     int n_spawners;
+};
+struct tss_ptd
+{
+    tss_ptd* next;
+    tss_ptd* prev;
+    void * data[1024];
+    bool tss_dtor_used;
+};
+struct bone
+{
+    int id;
+    float mass;
+    float inertia;
+    float spacing;
+    real_2 center_of_mass;
+    real_2 center_of_mass_dot;
+    real_2 orientation;
+    float omega;
+    int n_cells;
+    real_2 plan_center;
+    cell* first_cell;
+    cell* last_cell;
+    uint merge_id;
+    uint floodfill_needed : 1;
 };
 struct translation_info
 {
@@ -1536,6 +2453,18 @@ struct translation_info
 //     ulong vshape;
 //     uchar data;
 // };
+struct big_lightning_vertex
+{
+    real_2 x;
+    real_4 color;
+};
+struct init_world_params
+{
+    bool keep_seed;
+    int map_type;
+    bool no_creatures;
+    bool loading;
+};
 struct bone_id_table
 {
     union
@@ -1557,25 +2486,23 @@ struct circular_buffer_t
     uchar* buffer;
     ulonglong size;
 };
-struct brown_sound
+struct static_cell
 {
-    float value;
-    float filtered_value;
-    float volume;
-    float target_volume;
-    union
-    {
-        float next_target_volume;
-        long next_target_volume_data;
-    };
-    float lowpass;
-    float target_lowpass;
-    union
-    {
-        float next_lowpass;
-        long next_lowpass_data;
-    };
-    float lerp_rate;
+    real_2 x;
+    uint alive;
+    real_3 color;
+    int neighbors[6];
+    uint open_sides;
+};
+struct type_info
+{
+    longlong _padding_;
+    __std_type_info_data _Data;
+};
+union float_conv
+{
+    float f;
+    int i;
 };
 struct audio_context
 {
@@ -1636,8 +2563,14 @@ struct map_t
     float* bumpyness;
     float* temperature;
     int* room_ids;
+    uchar* track_dists;
     uint* flags;
     uint* blocked_spawns;
+    uchar* edits;
+    uchar* save_hexes;
+    int_2 save_origin;
+    int map_edits_number;
+    int saved_map_edits_number;
     room_t* rooms;
     int n_rooms;
     creature_spawner* spawners;
@@ -1668,10 +2601,29 @@ struct line_render_info
     float r;
     real_4 color;
 };
+struct contact
+{
+    cell* o;
+    real_2 normal;
+    float spacing;
+    float depth;
+    int c_sharpness;
+    int o_sharpness;
+};
 struct raycast_result
 {
     wall_t wall;
     float length;
+};
+struct bone_contact
+{
+    cell* c;
+    cell* o;
+    real_2 normal;
+    float spacing;
+    float depth;
+    int c_sharpness;
+    int o_sharpness;
 };
 struct stbtt_pack_range
 {
@@ -1691,6 +2643,13 @@ struct saved_body_plan
     char name[512];
     real_2 pos;
     float expand_t;
+};
+struct icon_render_info
+{
+    real_3 x;
+    float r;
+    real_4 color;
+    real_2 uv;
 };
 struct looping_sound
 {
@@ -1768,151 +2727,6 @@ struct mtx_t
     uint _Owner;
     uint _Cnt;
 };
-// struct cParams_t
-// {
-//     lz4hc_strat_e strat;
-//     int nbSearches;
-//     uint targetLength;
-// };
-struct tunnel_tile
-{
-    int_2 pos;
-    int index;
-    float value;
-};
-struct workshop_body_plan
-{
-    ulonglong workshop_id;
-    char name[512];
-    char path[512];
-    real_2 pos;
-};
-struct run_stats
-{
-    double start_time;
-    double end_time;
-    uint frames;
-    uint seed;
-    int biomes_explored;
-    int xp;
-    int level;
-    uint ending;
-    int creature_deaths;
-    uint death_biome;
-};
-struct body_id_table
-{
-    union
-    {
-        id_index* index_table;
-        expandable_buffer index_table_memory;
-    };
-    int n_max_elements;
-    int next_id;
-    union
-    {
-        body* elements;
-        expandable_buffer elements_memory;
-    };
-    int n_elements;
-};
-struct tss_t
-{
-    uint _Idx;
-};
-struct genode
-{
-    int type;
-    int_2 p;
-    real_2 dir;
-    float length;
-};
-// struct tm
-// {
-//     int tm_sec;
-//     int tm_min;
-//     int tm_hour;
-//     int tm_mday;
-//     int tm_mon;
-//     int tm_year;
-//     int tm_wday;
-//     int tm_yday;
-//     int tm_isdst;
-// };
-struct stbtt_fontinfo
-{
-    void* userdata;
-    uchar* data;
-    int fontstart;
-    int numGlyphs;
-    int loca;
-    int head;
-    int glyf;
-    int hhea;
-    int hmtx;
-    int kern;
-    int gpos;
-    int svg;
-    int index_map;
-    int indexToLocFormat;
-    stbtt__buf cff;
-    stbtt__buf charstrings;
-    stbtt__buf gsubrs;
-    stbtt__buf subrs;
-    stbtt__buf fontdicts;
-    stbtt__buf fdselect;
-};
-struct font_info
-{
-    uint texture;
-    stbtt_fontinfo info;
-    float size;
-    stbtt_packedchar* char_data;
-};
-struct text_info
-{
-    char* text;
-    real_2 x;
-    real_4 color;
-    real_2 alignment;
-    font_info font;
-    text_params params;
-    real_4 background_color;
-    float background_radius;
-};
-struct pDNameNode
-{
-    longlong _padding_;
-    DName* me;
-};
-struct light_render_info
-{
-    real_3 x;
-    float r;
-    real_4 color;
-};
-struct fenv_t
-{
-    ulong _Fe_ctl;
-    ulong _Fe_stat;
-};
-struct mat_and_color
-{
-    int material_index;
-    real_4 color;
-};
-struct bitmap_t
-{
-    uint8_4* data;
-    int_2 size;
-    uint texture;
-};
-struct rectangle_space
-{
-    int_2 max_size;
-    bounding_box_2* free_regions;
-    int n_free_regions;
-};
 struct inspector_menu
 {
     int body_id;
@@ -1936,859 +2750,34 @@ struct inspector_menu
     real_2 drag_start;
     tooltip_t tooltip;
 };
-struct charNode
-{
-    longlong _padding_;
-    char me;
-};
-struct stbtt__bitmap
-{
-    int w;
-    int h;
-    int stride;
-    uchar* pixels;
-};
-struct cell_pickup
-{
-    int material_index;
-    real_2 x;
-    real_2 x_dot;
-    float r;
-    float r_dot;
-    float alpha;
-    float text_alpha;
-    union
-    {
-        struct
-        {
-            uint selected : 1;
-            uint is_combo : 1;
-        };
-        uint flags;
-    };
-};
-struct text_element
-{
-    uchar type;
-    union
-    {
-        char c;
-        uchar modifiers;
-    };
-};
-struct user_input
-{
-    real_2 mouse;
-    real_2 dmouse;
-    real_2 cursor_x;
-    float mouse_wheel;
-    float mouse_hwheel;
-    uchar buttons[32];
-    uchar pressed_buttons[32];
-    uchar released_buttons[32];
-    bool click_blocked;
-    bool right_click_blocked;
-    bool escape_blocked;
-    bool hover_blocked;
-    bool buttons_blocked;
-    void* active_ui_element;
-    int hovered_ui_element;
-    int old_hovered_ui_element;
-    int cursor_type;
-    text_element text_stream[256];
-    int n_text_stream;
-    uint text_modifiers;
-    gamepad_t gamepad;
-    short gamepad_prev_buttons;
-};
-struct pairNode
-{
-    longlong _padding_;
-    DNameNode* left;
-    DNameNode* right;
-    int myLen;
-};
-struct recording_buffer
-{
-    uint frame_buffer;
-    uint* textures;
-    int n_textures;
-    uint8_4* data;
-    int_2 resolution;
-    int buffer_length;
-    int current_frame;
-    int n_frames;
-    bool initialized;
-    float centiseconds;
-};
-struct once_flag
-{
-    void* _Opaque;
-};
-struct particle_t
-{
-    int type;
-    real_2 x;
-    real_2 x_dot;
-    real_2 x_spawn;
-    int target;
-    float r;
-    float r_dot;
-    int time;
-    int duration;
-    real_4 color;
-    real_4 color_initial;
-    real_4 color_final;
-    real_4 emission;
-    float emission_radius;
-    bool affects_gameplay;
-};
-struct stbtt__hheap_chunk
-{
-    stbtt__hheap_chunk* next;
-};
-struct radiant_render_info
-{
-    real_3 x;
-    float r;
-    float distortion;
-    real_4 color;
-};
-struct srwlock_guard
-{
-    _RTL_SRWLOCK* lck;
-};
-struct sandbox_menu
-{
-    int tool;
-    static_button tool_buttons[10];
-    float selected_team;
-    static_button team_buttons[5];
-    float* mutation_r;
-    float* mutation_r_dot;
-    slider_t explosion_slider;
-    float explosion_radius;
-    float* cell_r;
-    float* cell_r_dot;
-    real_2 block_zone;
-    int selected_creature;
-    int dragged_body;
-    tooltip_t tooltip;
-};
-struct stack_allocation
-{
-    void* data;
-};
-struct memory_manager
-{
-    expandable_buffer stack;
-    ulonglong stack_used;
-    ulonglong checkpoint;
-    stack_allocation stallocs[4096];
-    int n_stallocs;
-};
-struct keybinds_t
-{
-    int forward;
-    int backward;
-    int left;
-    int right;
-    int ability;
-    int ability1;
-    int ability2;
-    int extend;
-    int retract;
-    int interact;
-    int map;
-    int zoom_in;
-    int zoom_out;
-    int edit;
-    int inspect;
-    int brush_bigger;
-    int brush_smaller;
-    union
-    {
-        struct
-        {
-            int tool_select;
-            int tool_draw;
-            int tool_fill;
-        };
-        int tools[3];
-    };
-    int toggle_symmetry;
-    int toggle_icons;
-    int editor_up;
-    int editor_down;
-    int editor_left;
-    int editor_right;
-    int editor_zoom_in;
-    int editor_zoom_out;
-    int console;
-};
-struct settings_t
-{
-    uint settings_version;
-    float effects_volume;
-    float music_volume;
-    union
-    {
-        keybinds_t keybinds;
-        int buttons[29];
-    };
-    uint toggle_seek;
-    uint toggle_ability;
-    uint show_fps;
-    uint fullscreen;
-    uint clip_cursor;
-    uint hardware_cursor;
-    float gamepad_cursor_sens;
-    float gamepad_deadzone;
-    int window_x;
-    int window_y;
-    int resolution_x;
-    int resolution_y;
-    uint replay_recorder;
-    int gif_resolution_x;
-    int gif_resolution_y;
-    int gif_frames;
-    uint cap_framerate;
-    uint framerate_cap;
-    uint thread_count;
-    float screenshake;
-    float brightness;
-    float contrast;
-    uint background_effects;
-    uint reflections;
-    uint distortions;
-    uint limit_particles;
-    uint max_particles;
-    uint pause_on_unfocus;
-    uint show_tutorial;
-    uint show_disconnected_warning;
-    uint error_sound;
-    uint always_show_storage;
-    uint pushable_cell_buttons;
-    uint copy_plan_on_possess;
-    uint show_cell_icons;
-    uint enable_console;
-    uint win_unlocks;
-};
-struct real_3x3
+struct body_id_table
 {
     union
     {
-        real_3 columns[3];
-        float data[9];
+        id_index* index_table;
+        expandable_buffer index_table_memory;
     };
-};
-struct biome_node
-{
-    int core_index;
-    real_2 x;
-    float r;
-    uint snap : 1;
-    biome_edge* first_edge;
-    void (*pre_generation_fn)(biome_node *);
-    void (*post_generation_fn)(biome_node *);
-};
-struct stbtt_bakedchar
-{
-    ushort x0;
-    ushort y0;
-    ushort x1;
-    ushort y1;
-    float xoff;
-    float yoff;
-    float xadvance;
-};
-struct biome_core
-{
-    int biome_index;
-    int guardian_id;
-    int target_size;
-    int n_hexes;
-    bounding_box_2 bounds;
-    int_2 entrance_points[32];
-    int n_entrance_points;
-    ulonglong mergable_cores;
-    int modifiers[16];
-    int n_modifiers;
-    int n_default_modifiers;
-    uint no_creatures : 1;
-};
-struct lane_group_t
-{
-    int group_index;
-    void* shared;
-    int n_lanes;
-    _RTL_BARRIER barrier;
-};
-struct draggable_button
-{
-    real_2 x;
-    real_2 x_dot;
-    real_2 x_brown;
-    real_2 x_brown_dot;
-    real_2 x_offset;
-    float r;
-    float r_dot;
-    float selection_theta;
-    float hovered;
-    float selected;
-    bool was_hovered;
-    bool pinned;
-};
-struct stbtt__point
-{
-    float x;
-    float y;
-};
-struct id_index
-{
-    int id;
-    int index;
-};
-struct cell_pool
-{
-    int material_indices[2048];
-    float material_cum_chances[2048];
-    int n_materials;
-};
-struct biome_type
-{
-    uint id;
-    real_3 color;
-    float light;
-    float bumpyness;
-    float temperature;
-    uint tracked : 1;
-    uint explored : 1;
-    uint no_modifiers : 1;
-    uint custom_cell_spawning;
-    int ambient_music_id;
-    int battle_music_id;
-    float noise_amount;
-    float fbm_amount;
-    float fbm_base_frequency;
-    float fbm_octives;
-    float fbm_gain;
-    float neighbor_fbm;
-    float neighbor_amount;
-    float base_amount;
-    float min_value;
-    float cell_chance;
-    int cell_max_neighbors;
-    cell_pool pool;
-    uint creature_ids[256];
-    int creature_xps[256];
-    float creature_cum_chances[256];
-    float creature_teams[256];
-    int n_creatures;
-    uint plant_ids[256];
-    int plant_xps[256];
-    float plant_cum_chances[256];
-    int n_plants;
-    int modifiers[16];
-    int n_modifiers;
-};
-struct plan_cell
-{
-    int material_index;
-    real_4 color;
-    int_2 body_coord;
-    int respawn_timer;
+    int n_max_elements;
+    int next_id;
     union
     {
-        struct
-        {
-            uchar selected_symmetry_index;
-            uchar pending_selected;
-        };
-        uint selected;
+        body* elements;
+        expandable_buffer elements_memory;
     };
-    uint floodfilled;
-    float r;
-    float r_dot;
-    uint temporary : 1;
+    int n_elements;
 };
-struct context_t
+struct run_stats
 {
-    union
-    {
-        struct
-        {
-            int lane_index;
-            lane_group_t* group;
-        };
-        lane_context_t current_lane_context;
-    };
-    lane_context_t lane_stack[4];
-    int n_lane_stack;
-    int barrier_number;
-    int thread_id;
-    memory_manager* manager;
+    double start_time;
+    double end_time;
+    uint frames;
     uint seed;
-    uint visual_seed;
-    lua_State* L;
-    print_buffer_t log_buffer;
-    print_buffer_t game_buffer;
-    trace_t* current_trace;
-    trace_t* latest_trace;
-    trace_node* current_trace_node;
-    profiler_frame* profiler_frames;
-    int current_profiler_frame;
-    circle_render_info* circles;
-    int n_circles;
-};
-struct stashed_body_plan
-{
-    body_plan plan;
-    char name[512];
-    real_2 pos;
-};
-struct sound_params
-{
-    float volume;
-    float delay;
-    float pitch_shift;
-    float lowpass_dist;
-    int type;
-};
-struct real_4x4
-{
-    union
-    {
-        real_4 columns[4];
-        float data[16];
-    };
-};
-struct render_context
-{
-    float fov;
-    real_3 camera_pos;
-    real_3 old_camera_pos;
-    real_3x3 camera_axes;
-    real_4x4 camera;
-    real_4 background_color;
-    real_4 foreground_color;
-    real_4 highlight_color;
-    uint frame_buffer;
-    uint cell_frame_buffer;
-    uint lighting_frame_buffer;
-    uint post_process_frame_buffer;
-    uint background_frame_buffer;
-    uint thumbnail_frame_buffer;
-    union
-    {
-        struct
-        {
-            uint color_texture;
-            uint post_color_texture;
-            uint post_effects_texture;
-            uint background_textures[2];
-            uint cell_color_texture;
-            uint cell_material_texture;
-            uint lighting_texture;
-            uint edit_distance_texture;
-        };
-        uint textures[9];
-    };
-    int current_background_texture;
-    uint thumbnail_texture;
-    uint wall_texture;
-    uint biome_texture;
-    uint map_flow_texture;
-    uint map_color_texture;
-    uint map_wall_color1_texture;
-    uint map_wall_color2_texture;
-    uint map_wall_params_texture;
-    uint map_lighting_texture;
-    uint map_bumpyness_texture;
-    uint map_temperature_texture;
-    uint map_explored_texture;
-    int_2 resolution;
-    union
-    {
-        struct
-        {
-            font_info small_font;
-            font_info default_font;
-            font_info medium_font;
-            font_info big_font;
-        };
-        font_info font_infos[4];
-    };
-    float time;
-};
-struct window_t
-{
-    HWND__* hwnd;
-    HGLRC__* hglrc;
-    real_2 size;
-    user_input input;
-    user_input frame_input;
-    _LARGE_INTEGER timer_frequency;
-    _LARGE_INTEGER last_time;
-    _LARGE_INTEGER this_time;
-    render_context rc;
-    render_context ui;
-    recording_buffer rb;
-    bool clip_cursor;
-    bool focused;
-};
-struct multithread_loop_info
-{
-    user_input* input;
-    int start;
-    int end;
-    int iteration;
-};
-struct int_2x2
-{
-    union
-    {
-        int_2 columns[2];
-        int data[4];
-    };
-};
-struct cell_item
-{
-    int material_index;
-    draggable_button button;
-    uint filtered : 1;
-};
-struct workshop_published_item
-{
-    ulonglong id;
-    char name[129];
-};
-struct biome_edge
-{
-    biome_node* node;
-    biome_edge* next;
-    real_2 dir;
-    float spacing;
-    float randomness;
-    float stiffness;
-    float bias;
-    uint virtual_edge : 1;
-};
-// struct tWAVEFORMATEX
-// {
-//     ushort wFormatTag;
-//     ushort nChannels;
-//     ulong nSamplesPerSec;
-//     ulong nAvgBytesPerSec;
-//     ushort nBlockAlign;
-//     ushort wBitsPerSample;
-//     ushort cbSize;
-// };
-struct serialized_data
-{
-    uchar* data;
-    int size;
-};
-struct queued_sound
-{
-    sound_t* sound;
-    sound_params params;
-    float filtered[2];
-    int n_played_samples;
-    bool kill;
-};
-struct light_reciever_t
-{
-    real_2 x;
-    real_3 hsv;
-    float radius_sq;
-};
-struct biome_modifier
-{
-    char* id;
-    void (*generation_fn)(biome_core *);
-    void (*creature_fn)(body *);
-    float chance;
-};
-struct srwlock_shared_guard
-{
-    _RTL_SRWLOCK* lck;
-};
-struct real_2x2
-{
-    union
-    {
-        real_2 columns[2];
-        float data[4];
-    };
-};
-struct tool_render_info
-{
-    real_3 x;
-    float r;
-    real_4 color;
-    uint id;
-    float state;
-};
-struct lightning_emitter
-{
-    real_2 x;
-    real_2 dir;
-};
-struct laser_t
-{
-    int cell_id;
-    real_2 x;
-    real_2 dir;
-    float heat;
-    float width;
-    float length;
-};
-struct stbtt_pack_context
-{
-    void* user_allocator_context;
-    void* pack_info;
-    int width;
-    int height;
-    int stride_in_bytes;
-    int padding;
-    int skip_missing;
-    uint h_oversample;
-    uint v_oversample;
-    uchar* pixels;
-    void* nodes;
-};
-struct brain_t
-{
-    real_2 movement;
-    float rotation;
-    real_2 grab_target;
-    float grab_weight;
-    float grab_dir;
-    bool abilities[3];
-    void (*fun)(body *);
-    real_2 old_movement;
-    float old_rotation;
-    real_2 old_grab_target;
-    float old_grab_weight;
-    float old_grab_dir;
-    bool old_abilities[3];
-    int target;
-    int old_target;
-    int action;
-    real_2 target_point;
-    double values[32];
-};
-struct particle_type_t
-{
-    bool streak;
-    bool draw_on_top;
-};
-struct lua_State
-{
-};
-struct body
-{
-    int id;
-    int creature_index;
-    body_plan plan;
-    int* cell_map;
-    cell* first_cell;
-    cell* last_cell;
-    int parent_id;
-    float team;
-    boss_part_t* boss_part;
-    float cost_limit;
-    float max_health;
-    float total_cost;
-    float age;
+    int biomes_explored;
     int xp;
-    int next_levelup;
-    int last_levelup;
     int level;
-    float xp_timer;
-    float xp_alpha;
-    float cost_discount;
-    float bonus_health_multiplier;
-    uint loaded : 1;
-    uint floodfill_needed : 1;
-    uint rooted : 1;
-    uint snap : 1;
-    uint touched : 1;
-    uint is_boss : 1;
-    uint is_safe : 1;
-    uint kill : 1;
-    uint kill_slowly : 1;
-    uint unload : 1;
-    uint show_damage_numbers : 1;
-    uint plan_modified : 1;
-    uint cell_collision : 1;
-    uint no_regen_delay : 1;
-    uint regen_boost;
-    float avg_phasing;
-    real_2 spawn_x;
-    int n_cells;
-    real_2 center_of_mass;
-    real_2 old_center_of_mass;
-    real_2 center_of_mass_dot;
-    real_2 old_center_of_mass_dot;
-    float radius;
-    float mass;
-    float invmass;
-    float cell_cost;
-    float max_grown;
-    float health;
-    float damage;
-    float damage_timer;
-    float poison_damage;
-    float burn_damage;
-    float healing;
-    real_2 cost_centroid;
-    real_2 orientation;
-    real_2 old_orientation;
-    float omega;
-    real_2 global_body_force;
-    float wall_force;
-    float old_wall_force;
-    float avg_shock;
-    float avg_temperature;
-    float vision_radius;
-    float damage_number;
-    float damage_number_timer;
-    union
-    {
-        struct
-        {
-            uint portal_index : 8;
-            uint in_portal : 1;
-        };
-        uint portal_info;
-    };
-    float portal_timer;
-    brain_t brain;
-    wall_t nearest_wall;
-    union
-    {
-        mutation_item_list mutation_items;
-        struct
-        {
-            mutation_item* mutations;
-            int n_mutations;
-            int max_mutations;
-        };
-    };
-};
-struct pcharNode
-{
-    longlong _padding_;
-    char* me;
-    int myLen;
-};
-struct acid_particle_16
-{
-    float x[16];
-    float y[16];
-    float x_dot[16];
-    float y_dot[16];
-    float r[16];
-    float r_dot[16];
-    int time[16];
-    real_4 color_initial[16];
-    real_4 color_final[16];
-};
-struct command_result_t
-{
-    char* command;
-    char* result;
-    char* error;
-};
-struct player_command_t
-{
-    real_2 movement;
-    real_2 grab_target;
-    float grab_weight;
-    float grab_dir;
-    bool abilities[1];
-};
-struct tss_ptd
-{
-    tss_ptd* next;
-    tss_ptd* prev;
-    void * data[1024];
-    bool tss_dtor_used;
-};
-struct bone
-{
-    int id;
-    float mass;
-    float inertia;
-    float spacing;
-    real_2 center_of_mass;
-    real_2 center_of_mass_dot;
-    real_2 orientation;
-    float omega;
-    int n_cells;
-    real_2 plan_center;
-    cell* first_cell;
-    cell* last_cell;
-    uint merge_id;
-    uint floodfill_needed : 1;
-};
-struct big_lightning_vertex
-{
-    real_2 x;
-    real_4 color;
-};
-struct init_world_params
-{
-    bool keep_seed;
-    int map_type;
-    bool no_creatures;
-    bool loading;
-};
-struct static_cell
-{
-    real_2 x;
-    uint alive;
-    real_3 color;
-    int neighbors[6];
-    uint open_sides;
-};
-// struct type_info
-// {
-//     longlong _padding_;
-//     __std_type_info_data _Data;
-// };
-union float_conv
-{
-    float f;
-    int i;
-};
-struct contact
-{
-    cell* o;
-    real_2 normal;
-    float spacing;
-    float depth;
-    int c_sharpness;
-    int o_sharpness;
-};
-struct bone_contact
-{
-    cell* c;
-    cell* o;
-    real_2 normal;
-    float spacing;
-    float depth;
-    int c_sharpness;
-    int o_sharpness;
-};
-struct icon_render_info
-{
-    real_3 x;
-    float r;
-    real_4 color;
-    real_2 uv;
+    uint ending;
+    int creature_deaths;
+    uint death_biome;
 };
 struct world
 {
@@ -2835,6 +2824,15 @@ struct world
     int selected_body;
     float last_team;
     mutation_item_list last_mutations;
+    biome_core* current_race_core;
+    uint completed_race_checkpoints;
+    int race_start_frame;
+    int last_race_time;
+    int best_race_time;
+    float last_race_flash;
+    float best_race_flash;
+    int completed_race_targets;
+    float visual_best_race_time;
     real_2 spawn_x;
     float boss_heart_movement;
     float boss_heart_rotation;
@@ -2911,6 +2909,13 @@ struct world
     };
     int n_explosion_visuals;
     int max_explosion_visuals;
+    union
+    {
+        digger_t* diggers;
+        expandable_buffer diggers_memory;
+    };
+    int n_diggers;
+    int max_diggers;
     union
     {
         radiant_render_info* radiant_visuals;
@@ -3008,6 +3013,7 @@ struct world
     uint seed;
     uint editor_seed;
     int frame_number;
+    double last_frame_time;
     int tutorial_stage;
     char* current_tutorial;
     int map_prompt_timer;
@@ -3065,6 +3071,12 @@ struct world
     int n_player_commands;
     int input_delay;
 };
+// struct cParams_t
+// {
+//     lz4hc_strat_e strat;
+//     int nbSearches;
+//     uint targetLength;
+// };
 struct rectangle_render_info
 {
     real_3 x;
@@ -3077,6 +3089,49 @@ struct link_attractor_t
     float strength;
     int bone_id;
 };
+struct tunnel_tile
+{
+    int_2 pos;
+    int index;
+    float value;
+};
+struct workshop_body_plan
+{
+    ulonglong workshop_id;
+    char name[512];
+    char path[512];
+    real_2 pos;
+};
+struct decompressed_map_data
+{
+    int version_number;
+    bounding_box_2 region;
+    uchar* data;
+    int size;
+};
+struct tss_t
+{
+    uint _Idx;
+};
+struct genode
+{
+    int type;
+    int_2 p;
+    real_2 dir;
+    float length;
+};
+struct tm
+{
+    int tm_sec;
+    int tm_min;
+    int tm_hour;
+    int tm_mday;
+    int tm_mon;
+    int tm_year;
+    int tm_wday;
+    int tm_yday;
+    int tm_isdst;
+};
 // struct lfTaggedUnion
 // {
 //     ushort leaf;
@@ -3085,9 +3140,42 @@ struct link_attractor_t
 //     ulong caselist;
 //     uchar data;
 // };
+struct text_info
+{
+    char* text;
+    real_2 x;
+    real_4 color;
+    real_2 alignment;
+    font_info font;
+    text_params params;
+    real_4 background_color;
+    float background_radius;
+};
 struct cnd_t
 {
     void* _Ptr;
+};
+struct pDNameNode
+{
+    longlong _padding_;
+    DName* me;
+};
+struct digger_t
+{
+    real_2 x;
+    float r;
+    int duration;
+};
+struct fenv_t
+{
+    ulong _Fe_ctl;
+    ulong _Fe_stat;
+};
+struct light_render_info
+{
+    real_3 x;
+    float r;
+    real_4 color;
 };
 // struct lconv
 // {
@@ -3109,21 +3197,38 @@ struct cnd_t
 //     char n_sep_by_space;
 //     char p_sign_posn;
 //     char n_sign_posn;
-//     wchar_t* _W_decimal_point;
-//     wchar_t* _W_thousands_sep;
-//     wchar_t* _W_int_curr_symbol;
-//     wchar_t* _W_currency_symbol;
-//     wchar_t* _W_mon_decimal_point;
-//     wchar_t* _W_mon_thousands_sep;
-//     wchar_t* _W_positive_sign;
-//     wchar_t* _W_negative_sign;
+//     wchar* _W_decimal_point;
+//     wchar* _W_thousands_sep;
+//     wchar* _W_int_curr_symbol;
+//     wchar* _W_currency_symbol;
+//     wchar* _W_mon_decimal_point;
+//     wchar* _W_mon_thousands_sep;
+//     wchar* _W_positive_sign;
+//     wchar* _W_negative_sign;
 // };
+struct mat_and_color
+{
+    int material_index;
+    real_4 color;
+};
 // struct code_page_info
 // {
 //     int code_page;
 //     ushort mbulinfo[6];
 //     uchar[8] rgrange[4];
 // };
+struct bitmap_t
+{
+    uint8_4* data;
+    int_2 size;
+    uint texture;
+};
+struct rectangle_space
+{
+    int_2 max_size;
+    bounding_box_2* free_regions;
+    int n_free_regions;
+};
 struct boss_gate
 {
     int_2 pos;
@@ -3145,155 +3250,44 @@ struct cell_render_info
     real_2 uv;
     uint open_sides;
 };
+struct charNode
+{
+    longlong _padding_;
+    char me;
+};
+// struct components_type
+// {
+//     __uint64 _mantissa : 52;
+//     __uint64 _exponent : 11;
+//     __uint64 _sign : 1;
+// };
+struct beginthread_thunk_data
+{
+    void* real_entry;
+    void* data;
+};
 struct components_type
 {
     uint _mantissa : 23;
     uint _exponent : 8;
     uint _sign : 1;
 };
-struct process_end_policy_properties
-{
-};
-struct pmf_21b2b88d
-{
-};
-struct pmf_72c97792
-{
-};
-struct pmf_6a51ca05
-{
-};
-struct windowing_model_policy_properties
-{
-};
-// struct tss_global_data_t
-// {
-//     _RTL_SRWLOCK lock;
-//     ulong tss_ptd_idx;
-//     _func___cdecl_void_void_ptr ** dtor_table;
-//     tss_ptd* ptd_list;
-//     uint last_idx;
-// };
-struct cachedint
-{
-    int _value;
-    bool _valid;
-};
-struct guard
-{
-    cachedint* _parent;
-    cachedint _copy;
-    bool _enabled;
-};
-// struct guard
-// {
-// };
-struct scoped_get_last_error_reset
-{
-    ulong _old_last_error;
-};
-struct begin_thread_init_policy_properties
-{
-};
-struct write_result
-{
-    ulong error_code;
-    ulong char_count;
-    ulong lf_count;
-};
-struct scoped_global_state_reset
-{
-};
-struct scoped_fp_state_reset
-{
-    fenv_t _environment;
-    bool _requires_reset;
-};
-struct fp_control_word_guard
-{
-    uint _original_control_word;
-    uint _mask;
-};
-struct developer_information_policy_properties
-{
-};
-struct big_integer
-{
-    uint _used;
-    uint _data[115];
-};
-struct floating_point_value
-{
-    void* _value;
-    bool _is_double;
-};
-struct floating_point_string
-{
-    int _exponent;
-    uint _mantissa_count;
-    uchar _mantissa[768];
-    bool _is_negative;
-};
-struct unpack_index
-{
-    ushort _offset;
-    uchar _zeroes;
-    uchar _size;
-};
-// struct components_type
-// {
-//     ulong64 _mantissa : 52;
-//     ulong64 _exponent : 11;
-//     ulong64 _sign : 1;
-// };
-// struct StubPtr160_far64&_To_color_bar_render_info
-// {
-// };
 struct exception
 {
     longlong _padding_;
     __std_exception_data _Data;
 };
-struct bad_typeid
+struct in_place_t
 {
-};
-struct nothrow_t
-{
-};
-struct exception_ptr
-{
-    void* _Data1;
-    void* _Data2;
-};
-struct nested_exception
-{
-    longlong _padding_;
-    exception_ptr _Exc;
 };
 struct bad_cast
 {
 };
 struct strong_ordering
 {
-    schar _Value;
+    char _Value;
 };
 struct bad_optional_access
-{
-};
-struct partial_ordering
-{
-    schar _Value;
-};
-struct bad_alloc
-{
-};
-struct bad_array_new_length
-{
-};
-struct in_place_t
-{
-};
-struct bad_variant_access
 {
 };
 struct bad_exception
@@ -3302,11 +3296,63 @@ struct bad_exception
 struct nullopt_t
 {
 };
+struct bad_typeid
+{
+};
+struct exception_ptr
+{
+    void* _Data1;
+    void* _Data2;
+};
+struct bad_variant_access
+{
+};
+struct partial_ordering
+{
+    char _Value;
+};
+struct bad_alloc
+{
+};
 struct weak_ordering
 {
-    schar _Value;
+    char _Value;
+};
+struct nothrow_t
+{
+};
+struct nested_exception
+{
+    longlong _padding_;
+    exception_ptr _Exc;
+};
+struct bad_array_new_length
+{
 };
 struct dangling
+{
+};
+struct process_end_policy_properties
+{
+};
+struct guard
+{
+};
+struct cachedint
+{
+    int _value;
+    bool _valid;
+};
+// struct guard
+// {
+//     cachedint* _parent;
+//     cachedint _copy;
+//     bool _enabled;
+// };
+struct begin_thread_init_policy_properties
+{
+};
+struct scoped_global_state_reset
 {
 };
 struct errentry
@@ -3314,18 +3360,53 @@ struct errentry
     ulong oscode;
     int errnocode;
 };
-struct environment_strings_traits
+struct fp_control_word_guard
 {
+    uint _original_control_word;
+    uint _mask;
 };
-struct beginthread_thunk_data
+// struct tss_global_data_t
+// {
+//     _RTL_SRWLOCK lock;
+//     ulong tss_ptd_idx;
+//     void* dtor_table;
+//     tss_ptd* ptd_list;
+//     uint last_idx;
+// };
+struct scoped_fp_state_reset
 {
-    int (*real_entry)(void *);
-    void* data;
+    fenv_t _environment;
+    bool _requires_reset;
 };
 struct filwbuf_context
 {
     bool _is_split_character;
     uchar _leftover_low_order_byte;
+};
+struct scoped_get_last_error_reset
+{
+    ulong _old_last_error;
+};
+struct write_result
+{
+    ulong error_code;
+    ulong char_count;
+    ulong lf_count;
+};
+struct environment_strings_traits
+{
+};
+struct file_options
+{
+    char crt_flags;
+    ulong access;
+    ulong create;
+    ulong share;
+    ulong attributes;
+    ulong flags;
+};
+struct developer_information_policy_properties
+{
 };
 // struct formatting_buffer
 // {
@@ -3338,40 +3419,29 @@ struct filwbuf_context
 //     state next_state;
 //     character_type current_class;
 // };
-// struct parameter_data
-// {
-//     parameter_type _actual_type;
-//     char _format_type;
-//     char* _valist_it;
-//     length_modifier _length;
-// };
-// struct parameter_data
-// {
-//     parameter_type _actual_type;
-//     wchar_t _format_type;
-//     char* _valist_it;
-//     length_modifier _length;
-// };
-// struct parameter_data
-// {
-//     parameter_type _actual_type;
-//     char _format_type;
-//     char* _valist_it;
-//     length_modifier _length;
-// };
-// struct parameter_data
-// {
-//     parameter_type _actual_type;
-//     wchar_t _format_type;
-//     char* _valist_it;
-//     length_modifier _length;
-// };
-struct file_options
+struct windowing_model_policy_properties
 {
-    char crt_flags;
-    ulong access;
-    ulong create;
-    ulong share;
-    ulong attributes;
-    ulong flags;
+};
+struct big_integer
+{
+    uint _used;
+    uint _data[115];
+};
+struct floating_point_string
+{
+    int _exponent;
+    uint _mantissa_count;
+    uchar _mantissa[768];
+    bool _is_negative;
+};
+struct floating_point_value
+{
+    void* _value;
+    bool _is_double;
+};
+struct unpack_index
+{
+    ushort _offset;
+    uchar _zeroes;
+    uchar _size;
 };

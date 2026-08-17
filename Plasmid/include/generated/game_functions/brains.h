@@ -11,6 +11,7 @@ inline void d_brain(body* param_1) { return Resolve<void(*)(body*)>("d_brain")(p
 inline void left_click_brain(body* param_1) { return Resolve<void(*)(body*)>("left_click_brain")(param_1); }
 inline void passive_ai(body* param_1, float param_2) { return Resolve<void(*)(body*, float)>("passive_ai")(param_1, param_2); }
 inline void passive_ai(body* param_1) { return Resolve<void(*)(body*)>("passive_ai")(param_1); }
+inline void trophy_ai(body* param_1) { return Resolve<void(*)(body*)>("trophy_ai")(param_1); }
 inline void fly_ai(body* param_1) { return Resolve<void(*)(body*)>("fly_ai")(param_1); }
 inline void mosquito_ai(body* param_1) { return Resolve<void(*)(body*)>("mosquito_ai")(param_1); }
 inline void firefly_ai(body* param_1) { return Resolve<void(*)(body*)>("firefly_ai")(param_1); }
@@ -33,6 +34,8 @@ inline void minion_worm_ai(body* param_1) { return Resolve<void(*)(body*)>("mini
 inline void jet_squid_ai(body* param_1) { return Resolve<void(*)(body*)>("jet_squid_ai")(param_1); }
 inline void shield_crab_ai(body* param_1) { return Resolve<void(*)(body*)>("shield_crab_ai")(param_1); }
 inline void speedy_ai(body* param_1) { return Resolve<void(*)(body*)>("speedy_ai")(param_1); }
+inline void racer_ai(body* param_1) { return Resolve<void(*)(body*)>("racer_ai")(param_1); }
+inline void firefly_racer_ai(body* param_1) { return Resolve<void(*)(body*)>("firefly_racer_ai")(param_1); }
 inline void boss_gate_ai(body* param_1) { return Resolve<void(*)(body*)>("boss_gate_ai")(param_1); }
 inline void boss_centipede_ai(body* param_1) { return Resolve<void(*)(body*)>("boss_centipede_ai")(param_1); }
 inline void boss_donut_ai(body* param_1) { return Resolve<void(*)(body*)>("boss_donut_ai")(param_1); }
