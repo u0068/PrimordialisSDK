@@ -237,7 +237,7 @@ DWORD WINAPI MainThread(LPVOID)
         mod_names += "\n";
     }
     PrimordialisLog(("\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODDING API "+NUCLEUS_VERSION+" AND THE FOLLOWING MODS:\n"
-                    +mod_names+"\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!").c_str());
+                    +mod_names+"\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n").c_str());
 
     for (uint32_t i = 0; i < shared->count; i++)
     {
