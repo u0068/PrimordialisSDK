@@ -305,18 +305,6 @@ bool UpdatePDB()
     if (fs::exists("pdbs.zip"))
     {
         ExtractZip("pdbs.zip", ModManager::game_path);
-
-        if (rename("build/primordialis_avx.pdb", "primordialis_avx.pdb") != 0) {
-            console_log << err << "Error extracted primordialis_avx.pdb\n";
-        } else {
-            console_log << "primordialis_avx.pdb extracted successfully\n";
-        }
-        if (rename("build/primordialis_sse3.pdb", "primordialis_sse3.pdb") != 0) {
-            console_log << err << "Error extracted primordialis_sse3.pdb\n";
-        } else {
-            console_log << "primordialis_sse3.pdb extracted successfully\n";
-        }
-        fs::remove("build");
     }
     else
     {

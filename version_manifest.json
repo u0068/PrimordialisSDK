@@ -4,7 +4,7 @@
   "manifest_version" : 1,
 
   "Pilus" : {
-    "latest_version" : "0.5.3",
+    "latest_version" : "0.5.4",
     "versions" : {
       "0.1.3" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.1.3-alpha/Pilus.exe",
@@ -38,6 +38,11 @@
       },
       "0.5.3" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.3-alpha/Pilus.exe",
+        "min_nucleus_version" : "0.1.0",
+        "min_updater_version" : "0.1.0"
+      },
+      "0.5.4" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.4-alpha/Pilus.exe",
         "min_nucleus_version" : "0.1.0",
         "min_updater_version" : "0.1.0"
       }
@@ -100,7 +105,7 @@
   },
 
   "pilus" : {
-    "latest_version" : "0.5.3",
+    "latest_version" : "0.5.2",
     "versions" : {
       "0.5.2" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.2-alpha/Pilus.exe",
