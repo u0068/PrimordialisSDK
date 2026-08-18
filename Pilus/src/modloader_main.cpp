@@ -17,7 +17,7 @@ int main()
     glfwSetErrorCallback(glfwErrorCallback);
     if (!glfwInit())
     {
-        std::cout << "Failed to initialise GLFW\n";
+        console_log << "Failed to initialise GLFW\n";
         return -1;
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -32,7 +32,7 @@ int main()
     );
     if (!window)
     {
-        std::cout << "Failed to create GLFW window\n";
+        console_log << "Failed to create GLFW window\n";
         glfwTerminate();
         return -1;
     }
