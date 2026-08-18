@@ -7,14 +7,8 @@
 namespace P
 {
     // #include "generated/resolve_functions.h"
-    #include "generated/game_functions/essential.h"
-    #include "generated/resolve_data.h"
-
-    template<typename... Args>
-    void Log(Args... args)
-    {
-        LogTemplate(MOD_NAME, args...);
-    }
+#include "generated/game_functions/essential.h"
+#include "generated/resolve_data.h"
 
     inline uint32_t HashCellId(
         const char *cell
@@ -28,7 +22,7 @@ namespace P
             hash *= 16777619;
         };
 
-        for (char c : (std::string_view)MOD_NAME)
+        for (char c : (std::string_view)mod_name)
             hash_byte(c);
 
         hash_byte(':');
@@ -36,7 +30,7 @@ namespace P
         for (char c : (std::string_view)cell)
             hash_byte(c);
 
-        PlasmidLog("Generated '%s' id: %u\n", cell, hash);
+        PlasmidLog() << "Generated '"<<cell<<"' id: "<<hash<<"\n";
 
         return hash;
     }
@@ -82,28 +76,28 @@ namespace P
 
             if (numeric == 0 && name == nullptr)
             {
-                PlasmidLog("CellRef not initialised\n");
+                PlasmidLog()<<"CellRef not initialised\n";
                 return -1;
             }
 
-            PlasmidLog("Searching for cell type '%s' with id %u\n", name, numeric);
+            PlasmidLog()<<"Searching for cell type '"<<name<<"' with id "<<numeric<<"\n";
             for (int i = 1; i < n_materials; i++)
             {
                 if (numeric != 0 and materials_list[i].id == numeric)
                 {
-                    PlasmidLog("Found cell type '%s' with id %u at index %i\n", name, numeric, i);
+                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i<<"\n";
                     index = i;
                     return i;
                 }
                 if (strcmp(materials_list[i].name, name) == 0)
                 {
-                    PlasmidLog("Found cell type '%s' with index %i\n", name, i);
+                    PlasmidLog()<<"Found cell type '"<<name<<"' with index "<<i<<"\n";
                     numeric = HashCellId(name);
                     index = i;
                     return i;
                 }
             }
-            PlasmidLog("Failed to find cell type '%s' with id %u\n", name, numeric);
+            PlasmidLog()<<"Failed to find cell type '"<<name<<"' with id "<<numeric<<"\n";
             return -1;
         }
 
@@ -210,8 +204,7 @@ extern"C" __declspec(dllexport)
 inline void Initialise(Nucleus* api)
 {
     nucleus = api;
-    PlasmidLog("Initialising Plasmid!\n");
     P::translation_values.reserve(2048);
-    P::Log("Initialising Mod!\n");
     P::InitialiseMod();
+    P::Log()<<"Initialised Mod!\n";
 }

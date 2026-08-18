@@ -1,5 +1,3 @@
-#define MOD_NAME "Cell Tools"
-
 #include <imgui_internal.h>
 #include <regex>
 #include <sstream>
@@ -137,8 +135,8 @@ void DrawMaterialEditor(int idx, P::material_t &mat)
             if (pos != std::string::npos) {
                 std::string name = clipboard.substr(0,pos);
                 std::string data_string = clipboard.substr(pos+1, 280*4);
-                P::Log(name);
-                P::Log(data_string);
+                P::Log() << name;
+                P::Log() << data_string;
                 mat = LoadMat(data_string, name);
             }
         }
@@ -335,7 +333,8 @@ void InitMaterialsHook()
 
 void P::InitialiseMod()
 {
-    Log("Hello World!\n");
+    mod_name = "Cell Tools";
+    Log() << "Hello World!\n";
     Hook<"init_materials_list">(InitMaterialsHook);
     do_imgui_hooks();
 }
