@@ -9,14 +9,14 @@
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
 
-const std::string NUCLEUS_VERSION = "v0.1.2";
+const std::string NUCLEUS_VERSION = "v0.1.3";
 
-template<typename... Args>
-void Log(Args... args)
+inline LogStream Log()
 {
-    LogTemplate("NUCLEUS", args...);
+    return LogSourced(
+        "NUCLEUS"
+    );
 }
-
 void InitDbgHelp()
 {
     static std::once_flag flag;
@@ -31,10 +31,10 @@ void InitDbgHelp()
             nullptr,
             TRUE))
         {
-            Log("SymInitialize failed: %lu\n", GetLastError());
+            Log() << "SymInitialize failed: "<<GetLastError()<<"\n";
         }
 
-        printf("DbgHelp initialized\n");
+        Log()<<"DbgHelp initialized\n";
     });
 }
 
@@ -53,22 +53,14 @@ inline void* ResolveSymbol(const char* name)
 
     if (!SymFromName(GetCurrentProcess(), name, symbol))
     {
-        Log(
-            "Failed to resolve symbol '%s': %lu\n",
-            name,
-            GetLastError()
-        );
+        Log()<<"Failed to resolve symbol '"<<name<<"': "<<GetLastError()<<"\n";
         std::abort();
         return nullptr;
     }
     addr = reinterpret_cast<void*>(symbol->Address);
     if (addr == nullptr)
     {
-        Log(
-            "Failed to resolve symbol '%s': %lu\n",
-            name,
-            GetLastError()
-        );
+        Log()<<"Failed to resolve symbol '"<<name<<"': "<<GetLastError()<<"\n";
         std::abort();
     }
     // Log("Successfully resolved symbol '%s' at address %p\n",
@@ -78,7 +70,7 @@ inline void* ResolveSymbol(const char* name)
     return addr;
 }
 
-inline int PrimordialisLog(const char* text) { return reinterpret_cast<int(*)(const char*)>(ResolveSymbol("log_printf"))(text); }
+inline int PrimordialisLog(std::string text) { return reinterpret_cast<int(*)(const char*)>(ResolveSymbol("log_printf"))(text.c_str()); }
 
 bool HookWrapper(void* target, void* hook, void** trampoline)
 {
@@ -91,7 +83,7 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
 
     if (status != MH_OK)
     {
-        Log("MH_CreateHook failed: %d\n", status);
+        Log()<<"MH_CreateHook failed: "<<status<<"\n";
         return false;
     }
 
@@ -99,7 +91,7 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
 
     if (status != MH_OK)
     {
-        Log("MH_EnableHook failed: %d\n", status);
+        Log()<<"MH_EnableHook failed: "<<status<<"\n";
         return false;
     }
 
@@ -113,7 +105,7 @@ void* CreateHook(const char* name, void* hook){
     void* target = ResolveSymbol(name);
     void* trampoline = nullptr;
 
-    Log("Creating hook for %s at %p to %p\n", name, target, hook);
+    Log()<<"Creating hook for "<<name<<" at "<<target<<" to "<<hook<<"\n";
 
     HookWrapper(
         target,
@@ -135,7 +127,6 @@ void SetCurrentContext(void* context)
 {
     current_context = context;
 }
-
 
 Nucleus api
 {
@@ -166,10 +157,10 @@ void LoadMod(const char* path)
 
     if (!mod)
     {
-        Log("Failed to load mod %s\n", path);
+        Log()<<"Failed to load mod "<<path<<"\n";
         return;
     }
-    Log("Loading mod %s\n", path);
+    Log()<<"Loading mod "<<path<<"\n";
 
     auto mod_init =
         reinterpret_cast<ModInit>(
@@ -178,7 +169,7 @@ void LoadMod(const char* path)
 
     if (!mod_init)
     {
-        Log("mod_init not found\n");
+        Log()<<"mod_init not found\n";
         return;
     }
 
@@ -192,14 +183,14 @@ DWORD WINAPI MainThread(LPVOID)
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    Log("Hello from Nucleus %s!\n", NUCLEUS_VERSION);
+    Log()<<"Hello from Nucleus "<<NUCLEUS_VERSION<<"!\n";
 
      if (MH_Initialize() != MH_OK)
      {
-         Log("MinHook init failed\n");
+         Log()<<"MinHook init failed\n";
          return 0;
      }
-     Log("MinHook initialized\n");
+     Log()<<"MinHook initialized\n";
 
     InitDbgHelp();
 
@@ -226,7 +217,7 @@ DWORD WINAPI MainThread(LPVOID)
         "Nucleus_ModsInitialised"
         );
 
-    Log("Mod count: %i\n", shared->count);
+    Log()<<"Mod count: "<<shared->count<<"\n";
 
     std::string mod_names;
     for (uint32_t i = 0; i < shared->count; i++)
@@ -236,8 +227,9 @@ DWORD WINAPI MainThread(LPVOID)
         mod_names += mod.name;
         mod_names += "\n";
     }
-    PrimordialisLog(("\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODDING API "+NUCLEUS_VERSION+" AND THE FOLLOWING MODS:\n"
-                    +mod_names+"\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n").c_str());
+
+    PrimordialisLog("\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODDING API "+NUCLEUS_VERSION+" AND THE FOLLOWING MODS:\n"
+                    +mod_names+"\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n");
 
     for (uint32_t i = 0; i < shared->count; i++)
     {
@@ -247,7 +239,7 @@ DWORD WINAPI MainThread(LPVOID)
 
     SetEvent(nucleusModsInitialisedEvent);
 
-    Log("All Mods Initialised!\n");
+    Log()<<"All Mods Initialised!\n";
 
     while (true)
     {

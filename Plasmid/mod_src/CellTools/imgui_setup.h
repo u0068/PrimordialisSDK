@@ -221,7 +221,7 @@ inline void WindowInitHook(P::window_t* window)
     );
 
     imgui_initialized = true;
-    P::Log("ImGui Initialised!");
+    P::Log()<<"ImGui Initialised!";
 
     P::settings->hardware_cursor = false;
 }
@@ -231,5 +231,5 @@ inline void do_imgui_hooks()
     Hook<"init_gl_context">(WindowInitHook);
     Hook<"draw_cursor">(ImguiHook);
     Hook<"update_mouse_pos">(BlockInputs);
-    P::Log("Done ImGui Hooks!\n");
+    P::Log()<<"Done ImGui Hooks!\n";
 }

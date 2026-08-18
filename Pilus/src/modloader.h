@@ -1,18 +1,13 @@
 #pragma once
-#include <fstream>
 #include <vector>
 #include <variant>
 #include <windows.h>
 #include "../external/json.hpp"
+#include "logging.h"
 
 using json = nlohmann::json;
 
 namespace fs = std::filesystem;
-
-// inline fs::path pilus_log_path{fs::current_path() / "pilus_log.txt"};
-// inline std::fstream console_log(pilus_log_path, std::ios::out | std::ios::in);
-inline std::stringstream console_log;
-const std::string err{"[ERROR]\t"};
 
 // struct ConfigValue
 // {

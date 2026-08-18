@@ -136,7 +136,7 @@ void DrawConsole()
     // ImGui::TextWrapped(console_log.str().c_str());
 
     std::string stream_line{};
-    while (std::getline(console_log, stream_line))
+    while (std::getline(console_buffer, stream_line))
         Lines.push_back(stream_line);
 
     if (ImGui::SmallButton("Clear"))    Lines.clear();
