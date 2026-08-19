@@ -1,5 +1,4 @@
 #pragma once
-
 #include "hook_manager.h"
 #include "nucleus_interface.h"
 #include <windows.h>

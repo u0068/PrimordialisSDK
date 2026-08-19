@@ -138,6 +138,7 @@ void DrawConsole()
     std::string stream_line{};
     while (std::getline(console_buffer, stream_line))
         Lines.push_back(stream_line);
+    console_buffer.clear();
 
     if (ImGui::SmallButton("Clear"))    Lines.clear();
     ImGui::SameLine();

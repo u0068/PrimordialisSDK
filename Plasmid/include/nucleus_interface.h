@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include <format>
+
 #include "logging.h"
 
 struct HookChainBase
@@ -16,6 +17,7 @@ struct Nucleus
     std::unordered_map<std::string, HookChainBase*> chains;
     void* (*GetCurrentContext)();
     void (*SetCurrentContext)(void* context);
+    LogStream (*LogSourced)(const std::string& source);
 };
 
 inline Nucleus* nucleus;

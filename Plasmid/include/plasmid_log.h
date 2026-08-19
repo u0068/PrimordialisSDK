@@ -6,13 +6,13 @@ namespace P
 
     inline LogStream PlasmidLog()
     {
-        return LogSourced(
+        return nucleus->LogSourced(
             "PLASMID (" + mod_name + ")"
         );
     }
     inline LogStream Log()
     {
-        return LogSourced(
+        return nucleus->LogSourced(
             mod_name
         );
     }

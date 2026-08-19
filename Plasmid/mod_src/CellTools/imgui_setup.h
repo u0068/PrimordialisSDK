@@ -143,8 +143,8 @@ inline void DrawImgui()
     );;
 
     P::real_2 scale_factor{
-        (float)P::settings->resolution_x/(float)P::settings->window_x,
-        (float)P::settings->resolution_y/(float)P::settings->window_y};
+        (float)viewport[2]/(float)P::main_wnd->size.x,
+        (float)viewport[3]/(float)P::main_wnd->size.y};
     POINT mouse_pos;
     if (GetCursorPos(&mouse_pos))
     {
@@ -182,8 +182,12 @@ inline void WindowInitHook(P::window_t* window)
 
     if (!P::IsThreadSafe())
         return;
+
     if (imgui_initialized)
+    {
+        P::Log()<<"Restart the game to re-initialise ImGui!\n";
         return;
+    }
 
     ImGui_ImplWin32_EnableDpiAwareness();
 
@@ -221,7 +225,7 @@ inline void WindowInitHook(P::window_t* window)
     );
 
     imgui_initialized = true;
-    P::Log()<<"ImGui Initialised!";
+    P::Log()<<"ImGui Initialised!\n";
 
     P::settings->hardware_cursor = false;
 }

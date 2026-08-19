@@ -2,8 +2,8 @@
 #include <sstream>
 #include <streambuf>
 #include <filesystem>
-#include <fstream>
 #include <iostream>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -45,16 +45,6 @@ private:
     std::streambuf* b;
 };
 
-inline std::ofstream file_log("plasmid_log.txt");
-
-inline TeeBuf log_buffer(
-    std::cout.rdbuf(),
-    file_log.rdbuf()
-);
-
-inline std::ostream console_log(&log_buffer);
-const std::string err{"[ERROR]\t"};
-
 class LogStream
 {
 public:
@@ -86,11 +76,3 @@ private:
     std::string prefix;
     std::stringstream buffer;
 };
-
-LogStream LogSourced(const std::string& source)
-{
-    return LogStream(
-        console_log,
-        "[" + source + "]\n  "
-    );
-}

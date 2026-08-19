@@ -6,7 +6,7 @@ project(Nucleus)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_library(Nucleus SHARED
-        nucleus.cpp)
+        nucleus_main.cpp)
 
 add_subdirectory(external/minhook)
 

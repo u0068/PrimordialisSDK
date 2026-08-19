@@ -11,8 +11,8 @@ constexpr Version PILUS_VERSION{0, 5, 5};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
-    console_log << "Parsing Version: ";
-    console_log << tag << "\n";
+    // console_log << "Parsing Version: ";
+    // console_log << tag << "\n";
 
     Version version{0,0,0};
 
@@ -33,7 +33,7 @@ static std::optional<Version> ParseVersion(const std::string &tag)
         return version;
     }
 
-    console_log << err << "Failed to Parse Version\n";
+    console_log << err << "Failed to Parse Version: "<< tag <<"\n";
 
     return std::nullopt;
 }
@@ -96,6 +96,20 @@ bool DownloadVersionManifest()
     return true;
 }
 
+Version GetLatestVersion(json& version_json)
+{
+    Version latest_version{};
+    for (auto& el : version_json["versions"].items())
+    {
+        const auto& version = *ParseVersion(el.key());
+        if (version > latest_version)
+        {
+            latest_version = version;
+        }
+    }
+    return latest_version;
+}
+
 bool CheckAndUpdate(
     const char* name,
     const fs::path& update_path,
@@ -111,7 +125,7 @@ bool CheckAndUpdate(
         return false;
     }
 
-    std::string latest_version = version_json["latest_version"].get<std::string>();
+    Version latest_version = GetLatestVersion(version_json);
 
     std::stringstream ss;
     ss << name << "_installed_version";
@@ -127,9 +141,9 @@ bool CheckAndUpdate(
             installed_version = installed_version_json.get<std::string>();
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
-        console_log << "Latest " << name << " version: " << latest_version << "\n";
+        console_log << "Latest " << name << " version: " << latest_version.to_string() << "\n";
 
-        if (!(*ParseVersion(latest_version) > *ParseVersion(installed_version)))
+        if (!(latest_version > *ParseVersion(installed_version)))
         {
             console_log << name << " is up to date.\n";
             return false;
@@ -137,13 +151,13 @@ bool CheckAndUpdate(
     }
 
     console_log << "Downloading new " << name << " version: "
-        << version_json["latest_version"].get<std::string>()
+        << latest_version.to_string()
         << "\n";
 
-    auto download_path = version_json["versions"][latest_version]["download_url"].get<std::string>();
+    auto download_path = version_json["versions"][latest_version.to_string()]["download_url"].get<std::string>();
     if(DownloadFromURL(download_path, update_path))
     {
-        ModManager::pilus_config[installed_version_key] = latest_version;
+        ModManager::pilus_config[installed_version_key] = latest_version.to_string();
         return true;
     }
     return false;

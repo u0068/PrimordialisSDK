@@ -4,7 +4,8 @@
   "manifest_version" : 1,
 
   "Pilus" : {
-    "latest_version" : "0.5.4",
+    "latest_version" : "0.5.5",
+    "comment" : "latest_version is deprecated since v0.5.5, and will be removed once everyone has updated",
     "versions" : {
       "0.1.3" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.1.3-alpha/Pilus.exe",
@@ -45,6 +46,11 @@
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.4-alpha/Pilus.exe",
         "min_nucleus_version" : "0.1.0",
         "min_updater_version" : "0.1.0"
+      },
+      "0.5.5" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.5-alpha/Pilus.exe",
+        "min_nucleus_version" : "0.1.0",
+        "min_updater_version" : "0.1.0"
       }
     }
   },
@@ -71,6 +77,10 @@
       },
       "0.1.2" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.2/Nucleus.dll",
+        "min_pilus_version" : "0.1.3"
+      },
+      "0.1.3" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.3/Nucleus.dll",
         "min_pilus_version" : "0.1.3"
       }
     }
