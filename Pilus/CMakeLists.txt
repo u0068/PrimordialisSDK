@@ -40,7 +40,7 @@ project(Pilus)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-add_executable(Pilus
+add_executable(Pilus WIN32
         src/modloader_main.cpp
         src/modloader.h
         src/injector.cpp

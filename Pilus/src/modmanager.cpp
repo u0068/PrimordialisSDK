@@ -185,9 +185,7 @@ std::string ModConfigToLua(json config)
     std::stringstream lua;
     lua << "\t{\n";
     for (auto& el : config.items())
-    {
         lua << "\t\t" << el.key() << " = " << el.value() << ",\n";
-    }
     lua << "\t},\n";
     return lua.str();
 }
@@ -234,9 +232,8 @@ void ModManager::PatchInitLua()
     temp_init_file.open(temp_init_lua_path);
 
     std::string init_content, line;
-    while (std::getline(init_file, line)) {
+    while (std::getline(init_file, line))
         init_content += line + "\n";
-    }
 
     console_log << "Patching init.lua\n";
 
@@ -244,23 +241,15 @@ void ModManager::PatchInitLua()
 
     size_t pos = init_content.find(preline);
     if (pos == std::string::npos)
-    {
         init_content = preline + init_content;
-    }
     else
-    {
         console_log << "Mod loader content already found in init.lua, skipping preline append\n";
-    }
 
     pos = init_content.find(postline);
     if (pos == std::string::npos)
-    {
         init_content = init_content + postline;
-    }
     else
-    {
         console_log << "Mod loader content already found in init.lua, skipping postline append\n";
-    }
 
     temp_init_file << init_content;
     temp_init_file.close();

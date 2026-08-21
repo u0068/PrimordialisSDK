@@ -90,7 +90,9 @@ int main()
     ModManager::SaveLuaModlist();
     ModManager::SavePilusConfig();
 
-    // console_log.close();
-
     return 0;
+}
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    return main();
 }

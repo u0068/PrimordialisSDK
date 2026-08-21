@@ -103,9 +103,7 @@ Version GetLatestVersion(json& version_json)
     {
         const auto& version = *ParseVersion(el.key());
         if (version > latest_version)
-        {
             latest_version = version;
-        }
     }
     return latest_version;
 }
@@ -150,7 +148,8 @@ bool CheckAndUpdate(
         }
     }
 
-    console_log << "Downloading new " << name << " version: "
+    console_log
+        << "Downloading new " << name << " version: "
         << latest_version.to_string()
         << "\n";
 
@@ -167,13 +166,9 @@ bool UpdatePilus()
 {
     ModManager::pilus_config["Pilus_installed_version"] = PILUS_VERSION.to_string();
 
-    fs::path pilus_path =
-        absolute(
-            fs::path("Pilus.exe"));
+    fs::path pilus_path = absolute(fs::path("Pilus.exe"));
 
-    fs::path update_path =
-        pilus_path.parent_path() /
-        "Pilus.new.exe";
+    fs::path update_path = pilus_path.parent_path() / "Pilus.new.exe";
 
     if (!CheckAndUpdate("Pilus", update_path))
         return false;
@@ -182,9 +177,7 @@ bool UpdatePilus()
 
     DWORD pid = GetCurrentProcessId();
 
-    fs::path updater_path=
-        pilus_path.parent_path() /
-        "PilusUpdater.exe";
+    fs::path updater_path = pilus_path.parent_path() / "PilusUpdater.exe";
 
     if (!CheckAndUpdate("PilusUpdater", updater_path, updater_path))
     {
