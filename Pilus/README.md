@@ -8,7 +8,8 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - AUTOMATE PUBLISHING UPDATES
   - I keep making mistakes when I do it by hand
 ### Low Priority:
-- Log to a file
+- Auto mod refresh
+- Automate ImGui layout on first start
 - Modlist filter
 - Checkbox to hide disabled / not installed mods
 - Disable mods that are not installed (DONE)
@@ -23,9 +24,10 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - Compatibility detection.
 - Download updates for Mods.
 - Fix bugs:
-  - Subscript out of range crash
+  - Subscript out of range crash (FIXED?)
   - Corrupted config file causes memory leak
 ## DONE:
+- Log to a file (DONE)
 - Lua and C++ markers on mods (DONE)
 - Exclude Nucleus from modlist reordering (DONE)
 - Switch to DearImgui (DOING)
