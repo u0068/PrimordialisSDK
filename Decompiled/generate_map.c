@@ -43,7 +43,7 @@ void __cdecl generate_map(map_t *param_1)
   boss_gate *pbVar33;
   biome_node *pbVar34;
   biome_node *pbVar35;
-  biome_edge *pbVar36;
+  biome_edge *biome_edges;
   biome_entrance *pbVar37;
   uchar *puVar38;
   int iVar39;
@@ -587,7 +587,7 @@ void __cdecl generate_map(map_t *param_1)
                     /* WARNING: Read-only address (ram,0x0001401d0130) is written */
                     /* WARNING: Read-only address (ram,0x0001401d0150) is written */
   iVar42 = *piVar50;
-  if (param_1->map_type == 2) {
+  if (param_1->map_type == 2) { // Empty?
     if (iVar42 != 0) {
       return;
     }
@@ -641,7 +641,7 @@ void __cdecl generate_map(map_t *param_1)
     } while (lVar52 != 0x400000);
     return;
   }
-  if (param_1->map_type == 1) {
+  if (param_1->map_type == 1) {  // Circle?
     if (iVar42 != 0) {
       return;
     }
@@ -811,36 +811,36 @@ void __cdecl generate_map(map_t *param_1)
     pbVar111[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar106 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
-    lVar84 = (longlong)w.map.n_biome_edges;
-    pbVar91 = w.map.biome_edges + lVar84;
+    current_edge_idx = (longlong)w.map.n_biome_edges;
+    pbVar91 = w.map.biome_edges + current_edge_idx;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
-    pbVar6 = w.map.biome_edges + lVar84 + 1;
+    pbVar6 = w.map.biome_edges + current_edge_idx + 1;
     auVar262._0_12_ = ZEXT812(0);
     auVar262._12_4_ = 0;
-    pbVar25 = w.map.biome_edges + lVar84;
+    pbVar25 = w.map.biome_edges + current_edge_idx;
     pbVar25->next = (biome_edge *)auVar262._0_8_;
     pbVar25->dir = (real_2)auVar262._8_8_;
-    pbVar36[lVar84].spacing = 200.0;
-    pbVar36[lVar84].randomness = 0.2;
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = auVar197;
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = 200.0;
-    pbVar36[lVar84 + 1].randomness = 0.2;
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = pbVar131;
-    pbVar36[lVar84 + 1].node = pbVar76;
-    pbVar36[lVar84].next = pbVar1[lVar124].first_edge;
+    biome_edges[current_edge_idx].spacing = 200.0;
+    biome_edges[current_edge_idx].randomness = 0.2;
+    biome_edges[current_edge_idx].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[current_edge_idx].bias = auVar197;
+    biome_edges[current_edge_idx + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[current_edge_idx + 1].spacing = 200.0;
+    biome_edges[current_edge_idx + 1].randomness = 0.2;
+    biome_edges[current_edge_idx + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[current_edge_idx + 1].bias = 0;
+    *(undefined4 *)&biome_edges[current_edge_idx + 1].field_0x2c = 0;
+    biome_edges[current_edge_idx].node = pbVar131;
+    biome_edges[current_edge_idx + 1].node = pbVar76;
+    biome_edges[current_edge_idx].next = pbVar1[lVar124].first_edge;
     pbVar1[lVar124].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = pbVar111[lVar52].first_edge;
+    biome_edges[current_edge_idx + 1].next = pbVar111[lVar52].first_edge;
     pbVar111[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[current_edge_idx].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[current_edge_idx + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     auVar207 = ZEXT1664(in_ZMM3._0_16_);
     auVar231 = ZEXT1664(in_ZMM5._0_16_);
@@ -1076,7 +1076,7 @@ void __cdecl generate_map(map_t *param_1)
     auVar254 = ZEXT1664(auVar254._0_16_);
     fVar251 = cosf(fVar200);
     fVar208 = sinf(fVar200);
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1085,21 +1085,21 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar52].spacing = 3000.0;
-    pbVar36[lVar52].randomness = 0.2;
-    pbVar36[lVar52].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar52].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar52 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar52 + 1].spacing = 3000.0;
-    pbVar36[lVar52 + 1].randomness = 0.2;
-    pbVar36[lVar52 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar52 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar52 + 1].field_0x2c = 0;
-    pbVar36[lVar52].node = pbVar131;
-    pbVar36[lVar52 + 1].node = pbVar104;
-    pbVar36[lVar52].next = pbVar2[lVar84].first_edge;
+    biome_edges[lVar52].spacing = 3000.0;
+    biome_edges[lVar52].randomness = 0.2;
+    biome_edges[lVar52].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar52].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar52 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar52 + 1].spacing = 3000.0;
+    biome_edges[lVar52 + 1].randomness = 0.2;
+    biome_edges[lVar52 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar52 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar52 + 1].field_0x2c = 0;
+    biome_edges[lVar52].node = pbVar131;
+    biome_edges[lVar52 + 1].node = pbVar104;
+    biome_edges[lVar52].next = pbVar2[lVar84].first_edge;
     pbVar2[lVar84].first_edge = pbVar91;
-    pbVar36[lVar52 + 1].next = pbVar26[lVar99].first_edge;
+    biome_edges[lVar52 + 1].next = pbVar26[lVar99].first_edge;
     pbVar26[lVar99].first_edge = pbVar6;
     fVar200 = fVar208 * fVar208 + fVar251 * fVar251 + 0.0;
     fVar198 = 1e-06;
@@ -1111,7 +1111,7 @@ void __cdecl generate_map(map_t *param_1)
       auVar151 = vsqrtss_avx(ZEXT416((uint)fVar200),ZEXT416((uint)fVar200));
       fVar200 = 1.0 / auVar151._0_4_;
       rVar85 = (real_2_u_0_s_0)
-               (CONCAT44((int)((ulonglong)pbVar36 >> 0x20),fVar251 * fVar200) |
+               (CONCAT44((int)((ulonglong)biome_edges >> 0x20),fVar251 * fVar200) |
                (ulonglong)(uint)(fVar208 * fVar200) << 0x20);
     }
     (pbVar91->dir).field0_0x0._s_0 = rVar85;
@@ -1211,7 +1211,7 @@ void __cdecl generate_map(map_t *param_1)
     local_550[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar53 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -1222,24 +1222,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = 4000.0;
-    pbVar36[lVar84].randomness = 1.0;
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = auVar197;
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = 4000.0;
-    pbVar36[lVar84 + 1].randomness = 1.0;
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = local_520;
-    pbVar36[lVar84 + 1].node = local_548;
-    pbVar36[lVar84].next = local_528[lVar99].first_edge;
+    biome_edges[lVar84].spacing = 4000.0;
+    biome_edges[lVar84].randomness = 1.0;
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = auVar197;
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = 4000.0;
+    biome_edges[lVar84 + 1].randomness = 1.0;
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = local_520;
+    biome_edges[lVar84 + 1].node = local_548;
+    biome_edges[lVar84].next = local_528[lVar99].first_edge;
     local_528[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_550[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_550[lVar52].first_edge;
     local_550[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     local_528[lVar99].post_generation_fn = biome_gen_connector;
     auVar207 = ZEXT1664(auVar207._0_16_);
@@ -1298,7 +1298,7 @@ void __cdecl generate_map(map_t *param_1)
     local_4f8[lVar84].core_index =
          (int)((ulonglong)((longlong)pbVar55 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar99 = (longlong)w.map.n_biome_edges;
@@ -1309,24 +1309,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar99].spacing = 10000.0;
-    pbVar36[lVar99].randomness = 0.2;
-    pbVar36[lVar99].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar99].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar99 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar99 + 1].spacing = 10000.0;
-    pbVar36[lVar99 + 1].randomness = 0.2;
-    pbVar36[lVar99 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar99 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar99 + 1].field_0x2c = 0;
-    pbVar36[lVar99].node = pbVar131;
-    pbVar36[lVar99 + 1].node = pbVar1;
-    pbVar36[lVar99].next = pbVar2[lVar52].first_edge;
+    biome_edges[lVar99].spacing = 10000.0;
+    biome_edges[lVar99].randomness = 0.2;
+    biome_edges[lVar99].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar99].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar99 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar99 + 1].spacing = 10000.0;
+    biome_edges[lVar99 + 1].randomness = 0.2;
+    biome_edges[lVar99 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar99 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar99 + 1].field_0x2c = 0;
+    biome_edges[lVar99].node = pbVar131;
+    biome_edges[lVar99 + 1].node = pbVar1;
+    biome_edges[lVar99].next = pbVar2[lVar52].first_edge;
     pbVar2[lVar52].first_edge = pbVar91;
-    pbVar36[lVar99 + 1].next = local_4f8[lVar84].first_edge;
+    biome_edges[lVar99 + 1].next = local_4f8[lVar84].first_edge;
     local_4f8[lVar84].first_edge = pbVar6;
-    pbVar36[lVar99].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar99].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     auVar207 = ZEXT1664(auVar207._0_16_);
     auVar231 = ZEXT1664(auVar231._0_16_);
@@ -1367,7 +1367,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar55->mergable_cores =
          pbVar55->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar56 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar99 = (longlong)w.map.n_biome_edges;
@@ -1378,25 +1378,25 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar25 = pbVar36 + lVar99;
+    pbVar25 = biome_edges + lVar99;
     pbVar25->spacing = 12000.0;
     pbVar25->randomness = 0.2;
     *(undefined8 *)(&pbVar25->spacing + 2) = 0x3e99999a3d4ccccd;
-    *(undefined1 (*) [32])&pbVar36[lVar99].field_0x28 = ZEXT1232(ZEXT812(0));
-    pbVar25 = pbVar36 + lVar99 + 1;
+    *(undefined1 (*) [32])&biome_edges[lVar99].field_0x28 = ZEXT1232(ZEXT812(0));
+    pbVar25 = biome_edges + lVar99 + 1;
     pbVar25->spacing = 12000.0;
     pbVar25->randomness = 0.2;
     *(undefined8 *)(&pbVar25->spacing + 2) = 0x3e99999a3d4ccccd;
-    *(undefined8 *)&pbVar36[lVar99 + 1].field_0x28 = 0;
-    pbVar36[lVar99].node = pbVar131;
-    pbVar36[lVar99 + 1].node = pbVar26 + lVar84;
+    *(undefined8 *)&biome_edges[lVar99 + 1].field_0x28 = 0;
+    biome_edges[lVar99].node = pbVar131;
+    biome_edges[lVar99 + 1].node = pbVar26 + lVar84;
     local_2e0 = pbVar2;
-    pbVar36[lVar99].next = pbVar2[lVar52].first_edge;
+    biome_edges[lVar99].next = pbVar2[lVar52].first_edge;
     pbVar2[lVar52].first_edge = pbVar91;
-    pbVar36[lVar99 + 1].next = pbVar26[lVar84].first_edge;
+    biome_edges[lVar99 + 1].next = pbVar26[lVar84].first_edge;
     pbVar26[lVar84].first_edge = pbVar6;
-    pbVar36[lVar99].dir.field0_0x0 = (real_2_u_0)0xbf64f92e3ee4f92e;
-    pbVar36[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0x3f64f92ebee4f92e;
+    biome_edges[lVar99].dir.field0_0x0 = (real_2_u_0)0xbf64f92e3ee4f92e;
+    biome_edges[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0x3f64f92ebee4f92e;
 #pragma endregion
     auVar207 = ZEXT1664(auVar207._0_16_);
     auVar231 = ZEXT1664(auVar231._0_16_);
@@ -1490,7 +1490,7 @@ void __cdecl generate_map(map_t *param_1)
     local_310[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar56 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -1501,24 +1501,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = (float)(int)uVar252;
-    pbVar36[lVar84].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = auVar197;
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = (float)(int)uVar252;
-    pbVar36[lVar84 + 1].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = local_320;
-    pbVar36[lVar84 + 1].node = local_300;
-    pbVar36[lVar84].next = local_348[lVar99].first_edge;
+    biome_edges[lVar84].spacing = (float)(int)uVar252;
+    biome_edges[lVar84].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = auVar197;
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = (float)(int)uVar252;
+    biome_edges[lVar84 + 1].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = local_320;
+    biome_edges[lVar84 + 1].node = local_300;
+    biome_edges[lVar84].next = local_348[lVar99].first_edge;
     local_348[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_310[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_310[lVar52].first_edge;
     local_310[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     local_348[lVar99].post_generation_fn = biome_gen_connector;
     auVar207 = ZEXT1664(auVar207._0_16_);
@@ -1611,7 +1611,7 @@ void __cdecl generate_map(map_t *param_1)
     local_350[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar57 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -1622,24 +1622,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = 13000.0;
-    pbVar36[lVar84].randomness = 0.2;
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = 13000.0;
-    pbVar36[lVar84 + 1].randomness = 0.2;
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = pbVar2;
-    pbVar36[lVar84 + 1].node = pbVar26;
-    pbVar36[lVar84].next = local_368[lVar99].first_edge;
+    biome_edges[lVar84].spacing = 13000.0;
+    biome_edges[lVar84].randomness = 0.2;
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = 13000.0;
+    biome_edges[lVar84 + 1].randomness = 0.2;
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = pbVar2;
+    biome_edges[lVar84 + 1].node = pbVar26;
+    biome_edges[lVar84].next = local_368[lVar99].first_edge;
     local_368[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_350[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_350[lVar52].first_edge;
     local_350[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     auVar207 = ZEXT1664(auVar207._0_16_);
     auVar231 = ZEXT1664(auVar231._0_16_);
@@ -1732,7 +1732,7 @@ void __cdecl generate_map(map_t *param_1)
     local_390[lVar52].core_index =
          (int)((ulonglong)((longlong)local_540 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -1743,24 +1743,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = (float)(int)uVar252;
-    pbVar36[lVar84].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = auVar197;
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = (float)(int)uVar252;
-    pbVar36[lVar84 + 1].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = local_3a0;
-    pbVar36[lVar84 + 1].node = local_388;
-    pbVar36[lVar84].next = local_3b0[lVar99].first_edge;
+    biome_edges[lVar84].spacing = (float)(int)uVar252;
+    biome_edges[lVar84].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = auVar197;
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = (float)(int)uVar252;
+    biome_edges[lVar84 + 1].randomness = (float)(int)((ulonglong)uVar252 >> 0x20);
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = local_3a0;
+    biome_edges[lVar84 + 1].node = local_388;
+    biome_edges[lVar84].next = local_3b0[lVar99].first_edge;
     local_3b0[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_390[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_390[lVar52].first_edge;
     local_390[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     local_3b0[lVar99].post_generation_fn = biome_gen_connector;
     auVar207 = ZEXT1664(auVar207._0_16_);
@@ -1819,7 +1819,7 @@ void __cdecl generate_map(map_t *param_1)
     local_3c0[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar59 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -1830,24 +1830,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = 9000.0;
-    pbVar36[lVar84].randomness = 0.2;
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = auVar197;
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = 9000.0;
-    pbVar36[lVar84 + 1].randomness = 0.2;
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = pbVar3;
-    pbVar36[lVar84 + 1].node = local_3b8;
-    pbVar36[lVar84].next = local_3e0[lVar99].first_edge;
+    biome_edges[lVar84].spacing = 9000.0;
+    biome_edges[lVar84].randomness = 0.2;
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = auVar197;
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = 9000.0;
+    biome_edges[lVar84 + 1].randomness = 0.2;
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = pbVar3;
+    biome_edges[lVar84 + 1].node = local_3b8;
+    biome_edges[lVar84].next = local_3e0[lVar99].first_edge;
     local_3e0[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_3c0[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_3c0[lVar52].first_edge;
     local_3c0[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     auVar207 = ZEXT1664(auVar207._0_16_);
     auVar231 = ZEXT1664(auVar231._0_16_);
@@ -1975,7 +1975,7 @@ void __cdecl generate_map(map_t *param_1)
     local_420[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar62 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -1986,24 +1986,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = 16000.0;
-    pbVar36[lVar84].randomness = 1.0;
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = 16000.0;
-    pbVar36[lVar84 + 1].randomness = 1.0;
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = local_430;
-    pbVar36[lVar84 + 1].node = local_418;
-    pbVar36[lVar84].next = local_438[lVar99].first_edge;
+    biome_edges[lVar84].spacing = 16000.0;
+    biome_edges[lVar84].randomness = 1.0;
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = 16000.0;
+    biome_edges[lVar84 + 1].randomness = 1.0;
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = local_430;
+    biome_edges[lVar84 + 1].node = local_418;
+    biome_edges[lVar84].next = local_438[lVar99].first_edge;
     local_438[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_420[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_420[lVar52].first_edge;
     local_420[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     local_438[lVar99].post_generation_fn = biome_gen_connector;
     auVar207 = ZEXT1664(auVar207._0_16_);
@@ -2062,7 +2062,7 @@ void __cdecl generate_map(map_t *param_1)
     local_450[lVar52].core_index =
          (int)((ulonglong)((longlong)pbVar63 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -2073,24 +2073,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = (float)(int)uVar94;
-    pbVar36[lVar84].randomness = (float)(int)((ulonglong)uVar94 >> 0x20);
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = auVar197;
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = (float)(int)uVar94;
-    pbVar36[lVar84 + 1].randomness = (float)(int)((ulonglong)uVar94 >> 0x20);
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = local_468;
-    pbVar36[lVar84 + 1].node = local_448;
-    pbVar36[lVar84].next = local_480[lVar99].first_edge;
+    biome_edges[lVar84].spacing = (float)(int)uVar94;
+    biome_edges[lVar84].randomness = (float)(int)((ulonglong)uVar94 >> 0x20);
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = auVar197;
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = (float)(int)uVar94;
+    biome_edges[lVar84 + 1].randomness = (float)(int)((ulonglong)uVar94 >> 0x20);
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = local_468;
+    biome_edges[lVar84 + 1].node = local_448;
+    biome_edges[lVar84].next = local_480[lVar99].first_edge;
     local_480[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_450[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_450[lVar52].first_edge;
     local_450[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     local_480[lVar99].pre_generation_fn = gen_meat;
     auVar207 = ZEXT1664(auVar207._0_16_);
@@ -2184,7 +2184,7 @@ void __cdecl generate_map(map_t *param_1)
     local_4a0[lVar52].core_index =
          (int)((ulonglong)((longlong)local_508 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar84 = (longlong)w.map.n_biome_edges;
@@ -2195,24 +2195,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar84].spacing = 4200.0;
-    pbVar36[lVar84].randomness = 1.0;
-    pbVar36[lVar84].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar84].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar84 + 1].spacing = 4200.0;
-    pbVar36[lVar84 + 1].randomness = 1.0;
-    pbVar36[lVar84 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar84 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar84 + 1].field_0x2c = 0;
-    pbVar36[lVar84].node = local_4b0;
-    pbVar36[lVar84 + 1].node = local_490;
-    pbVar36[lVar84].next = local_4c0[lVar99].first_edge;
+    biome_edges[lVar84].spacing = 4200.0;
+    biome_edges[lVar84].randomness = 1.0;
+    biome_edges[lVar84].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar84].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar84 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar84 + 1].spacing = 4200.0;
+    biome_edges[lVar84 + 1].randomness = 1.0;
+    biome_edges[lVar84 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar84 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar84 + 1].field_0x2c = 0;
+    biome_edges[lVar84].node = local_4b0;
+    biome_edges[lVar84 + 1].node = local_490;
+    biome_edges[lVar84].next = local_4c0[lVar99].first_edge;
     local_4c0[lVar99].first_edge = pbVar91;
-    pbVar36[lVar84 + 1].next = local_4a0[lVar52].first_edge;
+    biome_edges[lVar84 + 1].next = local_4a0[lVar52].first_edge;
     local_4a0[lVar52].first_edge = pbVar6;
-    pbVar36[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
-    pbVar36[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+    biome_edges[lVar84].dir.field0_0x0 = (real_2_u_0)0x3f800000;
+    biome_edges[lVar84 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
 #pragma endregion
     local_4c0[lVar99].post_generation_fn = biome_gen_tunnel;
     auVar207 = ZEXT1664(auVar207._0_16_);
@@ -2469,7 +2469,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar35[lVar84].core_index =
          (int)((ulonglong)((longlong)pbVar67 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar99 = (longlong)w.map.n_biome_edges;
@@ -2480,24 +2480,24 @@ void __cdecl generate_map(map_t *param_1)
     auVar213 = auVar250._0_16_;
     pbVar25->next = (biome_edge *)auVar213._0_8_;
     pbVar25->dir = (real_2)auVar213._8_8_;
-    pbVar36[lVar99].spacing = 6000.0;
-    pbVar36[lVar99].randomness = 0.2;
-    pbVar36[lVar99].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar99].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar99 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar99 + 1].spacing = 6000.0;
-    pbVar36[lVar99 + 1].randomness = 0.2;
-    pbVar36[lVar99 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar99 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar99 + 1].field_0x2c = 0;
-    pbVar36[lVar99].node = pbVar4;
-    pbVar36[lVar99 + 1].node = pbVar5;
-    pbVar36[lVar99].next = pbVar34[lVar52].first_edge;
+    biome_edges[lVar99].spacing = 6000.0;
+    biome_edges[lVar99].randomness = 0.2;
+    biome_edges[lVar99].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar99].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar99 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar99 + 1].spacing = 6000.0;
+    biome_edges[lVar99 + 1].randomness = 0.2;
+    biome_edges[lVar99 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar99 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar99 + 1].field_0x2c = 0;
+    biome_edges[lVar99].node = pbVar4;
+    biome_edges[lVar99 + 1].node = pbVar5;
+    biome_edges[lVar99].next = pbVar34[lVar52].first_edge;
     pbVar34[lVar52].first_edge = pbVar91;
-    pbVar36[lVar99 + 1].next = pbVar35[lVar84].first_edge;
+    biome_edges[lVar99 + 1].next = pbVar35[lVar84].first_edge;
     pbVar35[lVar84].first_edge = pbVar6;
-    pbVar36[lVar99].dir.field0_0x0 = (real_2_u_0)0x3f64f92ebee4f92e;
-    pbVar36[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0xbf64f92e3ee4f92e;
+    biome_edges[lVar99].dir.field0_0x0 = (real_2_u_0)0x3f64f92ebee4f92e;
+    biome_edges[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0xbf64f92e3ee4f92e;
 #pragma endregion
     pbVar35[lVar84].post_generation_fn = biome_gen_nest;
 #pragma region inlined: merge_biomes
@@ -3410,7 +3410,7 @@ void __cdecl generate_map(map_t *param_1)
     auVar254 = ZEXT1664(auVar254._0_16_);
     fVar208 = sinf(fVar200);
     fVar146 = cosf(fVar200);
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -3418,21 +3418,21 @@ void __cdecl generate_map(map_t *param_1)
     pbVar25 = w.map.biome_edges + lVar52;
     pbVar25->next = (biome_edge *)SUB168(auVar250._0_16_,0);
     pbVar25->dir = (real_2)SUB168(auVar250._0_16_,8);
-    pbVar36[lVar52].spacing = 12000.0;
-    pbVar36[lVar52].randomness = 0.2;
-    pbVar36[lVar52].stiffness = 0.05;
-    *(undefined1 (*) [32])&pbVar36[lVar52].bias = ZEXT1232(ZEXT812(0));
-    pbVar36[lVar52 + 1].dir.field0_0x0._s_0.y = 0.0;
-    pbVar36[lVar52 + 1].spacing = 12000.0;
-    pbVar36[lVar52 + 1].randomness = 0.2;
-    pbVar36[lVar52 + 1].stiffness = 0.05;
-    *(undefined8 *)&pbVar36[lVar52 + 1].bias = 0;
-    *(undefined4 *)&pbVar36[lVar52 + 1].field_0x2c = 0;
-    pbVar36[lVar52].node = pbVar111;
-    pbVar36[lVar52 + 1].node = pbVar34 + lVar84;
-    pbVar36[lVar52].next = pbVar111->first_edge;
+    biome_edges[lVar52].spacing = 12000.0;
+    biome_edges[lVar52].randomness = 0.2;
+    biome_edges[lVar52].stiffness = 0.05;
+    *(undefined1 (*) [32])&biome_edges[lVar52].bias = ZEXT1232(ZEXT812(0));
+    biome_edges[lVar52 + 1].dir.field0_0x0._s_0.y = 0.0;
+    biome_edges[lVar52 + 1].spacing = 12000.0;
+    biome_edges[lVar52 + 1].randomness = 0.2;
+    biome_edges[lVar52 + 1].stiffness = 0.05;
+    *(undefined8 *)&biome_edges[lVar52 + 1].bias = 0;
+    *(undefined4 *)&biome_edges[lVar52 + 1].field_0x2c = 0;
+    biome_edges[lVar52].node = pbVar111;
+    biome_edges[lVar52 + 1].node = pbVar34 + lVar84;
+    biome_edges[lVar52].next = pbVar111->first_edge;
     pbVar111->first_edge = pbVar91;
-    pbVar36[lVar52 + 1].next = pbVar34[lVar84].first_edge;
+    biome_edges[lVar52 + 1].next = pbVar34[lVar84].first_edge;
     pbVar34[lVar84].first_edge = pbVar6;
     fVar200 = fVar146 * fVar146 + fVar251 + fVar208 * fVar208;
     if (fVar200 <= fVar198) {
@@ -3777,7 +3777,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar4->first_edge = pbVar25 + lVar52 + 1;
     pbVar25[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar25[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar52 = (longlong)w.map.n_biome_edges;
@@ -3787,24 +3787,24 @@ void __cdecl generate_map(map_t *param_1)
     pbVar25 = w.map.biome_edges + lVar52;
     pbVar25->next = (biome_edge *)auVar210._0_8_;
     pbVar25->dir = (real_2)auVar210._8_8_;
-    pbVar25 = pbVar36 + lVar52;
+    pbVar25 = biome_edges + lVar52;
     pbVar25->spacing = 10000.0;
     pbVar25->randomness = 0.2;
     *(undefined8 *)(&pbVar25->spacing + 2) = 0x3f8000003ca3d70a;
-    *(undefined1 (*) [32])&pbVar36[lVar52].field_0x28 = auVar197;
-    pbVar25 = pbVar36 + lVar52 + 1;
+    *(undefined1 (*) [32])&biome_edges[lVar52].field_0x28 = auVar197;
+    pbVar25 = biome_edges + lVar52 + 1;
     pbVar25->spacing = 10000.0;
     pbVar25->randomness = 0.2;
     *(undefined8 *)(&pbVar25->spacing + 2) = 0x3f8000003ca3d70a;
-    *(undefined8 *)&pbVar36[lVar52 + 1].field_0x28 = 0;
-    pbVar36[lVar52].node = pbVar26;
-    pbVar36[lVar52 + 1].node = unaff_R14;
-    pbVar36[lVar52].next = pbVar26->first_edge;
+    *(undefined8 *)&biome_edges[lVar52 + 1].field_0x28 = 0;
+    biome_edges[lVar52].node = pbVar26;
+    biome_edges[lVar52 + 1].node = unaff_R14;
+    biome_edges[lVar52].next = pbVar26->first_edge;
     pbVar26->first_edge = pbVar91;
-    pbVar36[lVar52 + 1].next = unaff_R14->first_edge;
+    biome_edges[lVar52 + 1].next = unaff_R14->first_edge;
     unaff_R14->first_edge = pbVar6;
-    pbVar36[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f3504f33f3504f3;
-    pbVar36[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf3504f3bf3504f3;
+    biome_edges[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f3504f33f3504f3;
+    biome_edges[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf3504f3bf3504f3;
     pbVar25 = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
@@ -3832,7 +3832,7 @@ void __cdecl generate_map(map_t *param_1)
     unaff_R14->first_edge = pbVar25 + lVar52 + 1;
     pbVar25[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar25[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
-    pbVar36 = w.map.biome_edges;
+    biome_edges = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge
     lVar52 = (longlong)w.map.n_biome_edges;
@@ -3842,24 +3842,24 @@ void __cdecl generate_map(map_t *param_1)
     pbVar25 = w.map.biome_edges + lVar52;
     pbVar25->next = (biome_edge *)auVar210._0_8_;
     pbVar25->dir = (real_2)auVar210._8_8_;
-    pbVar25 = pbVar36 + lVar52;
+    pbVar25 = biome_edges + lVar52;
     pbVar25->spacing = 10000.0;
     pbVar25->randomness = 0.2;
     *(undefined8 *)(&pbVar25->spacing + 2) = 0xbf8000003ca3d70a;
-    *(undefined1 (*) [32])&pbVar36[lVar52].field_0x28 = auVar197;
-    pbVar25 = pbVar36 + lVar52 + 1;
+    *(undefined1 (*) [32])&biome_edges[lVar52].field_0x28 = auVar197;
+    pbVar25 = biome_edges + lVar52 + 1;
     pbVar25->spacing = 10000.0;
     pbVar25->randomness = 0.2;
     *(undefined8 *)(&pbVar25->spacing + 2) = 0xbf8000003ca3d70a;
-    *(undefined8 *)&pbVar36[lVar52 + 1].field_0x28 = 0;
-    pbVar36[lVar52].node = unaff_R14;
-    pbVar36[lVar52 + 1].node = pbVar3;
-    pbVar36[lVar52].next = unaff_R14->first_edge;
+    *(undefined8 *)&biome_edges[lVar52 + 1].field_0x28 = 0;
+    biome_edges[lVar52].node = unaff_R14;
+    biome_edges[lVar52 + 1].node = pbVar3;
+    biome_edges[lVar52].next = unaff_R14->first_edge;
     unaff_R14->first_edge = pbVar91;
-    pbVar36[lVar52 + 1].next = pbVar3->first_edge;
+    biome_edges[lVar52 + 1].next = pbVar3->first_edge;
     pbVar3->first_edge = pbVar6;
-    pbVar36[lVar52].dir.field0_0x0 = (real_2_u_0)0xbf3504f33f3504f3;
-    pbVar36[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x3f3504f3bf3504f3;
+    biome_edges[lVar52].dir.field0_0x0 = (real_2_u_0)0xbf3504f33f3504f3;
+    biome_edges[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x3f3504f3bf3504f3;
     pbVar6 = w.map.biome_edges;
 #pragma endregion
 #pragma region inlined: add_biome_edge

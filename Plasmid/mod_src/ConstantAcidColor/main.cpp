@@ -1,4 +1,3 @@
-#define MOD_NAME "Constant Acid Color"
 #include "plasmid_api.h"
 
 namespace P

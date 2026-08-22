@@ -25,7 +25,6 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Mod versioning
   - Plasmid API versioning
 - Fix bugs
-  - CMake find_package warning
 ## DONE:
 - Nucleus API versioning (DONE)
 - Organisation (DONE FOR NOW)
@@ -53,3 +52,5 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
   - Simple hooks (DONE)
   - Multiple hooks per address (DONE)
   - Middleware (DONE)
+- Fix bugs:
+  - CMake find_package warning (DONE)

@@ -1,5 +1,3 @@
-find_package(Plasmid)
-
 set(MOD_NAME)
 get_filename_component(MOD_NAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 

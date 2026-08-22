@@ -2,9 +2,9 @@
 
 void OnInitMats()
 {
-    if (!P::IsThreadSafe())
-        return
     Next<void>();
+    if (!P::IsThreadSafe())
+        return;
     P::material_t* mats = P::materials_list;
     P::material_t cell_type{};
 
