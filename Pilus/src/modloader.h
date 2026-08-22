@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
-#include <variant>
 #include <windows.h>
-#include "../external/json.hpp"
+#include <json.hpp>
 #include "logging.h"
 
 using json = nlohmann::json;

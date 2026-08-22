@@ -42,15 +42,12 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_executable(Pilus WIN32
         src/modloader_main.cpp
-        src/modloader.h
-        src/injector.cpp
-        src/modmanager.cpp
-        src/updater.cpp
-        src/updater.h
-        src/ui.cpp
-        src/imgui_helpers.h
-        src/ui.h
 )
+
+target_include_directories(Pilus PUBLIC
+        external/
+)
+
 
 target_compile_definitions(Pilus PRIVATE
         NOMINMAX
