@@ -1,3 +1,4 @@
+#@category PrimordialisSDK
 import re
 
 from ghidra.program.model.data import *

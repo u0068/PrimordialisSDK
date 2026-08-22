@@ -407,6 +407,7 @@ void __cdecl generate_map(map_t *param_1)
   undefined1 local_58 [16];
   
   local_58 = in_ZMM15._0_16_;
+                    /* // inlined: get_context (line 1318) */
   piVar50 = TlsGetValue(tls_index);
   if (*piVar50 == 0) {
     w.spawn_x.field0_0x0 = (real_2_u_0)(real_2_u_0_s_0)0x0;
@@ -502,6 +503,7 @@ void __cdecl generate_map(map_t *param_1)
     auVar151._0_8_ = 0x8000000080000000;
     auVar151._12_4_ = 0x80000000;
     do {
+                    /* // inlined: norm (line 1382) */
       auVar241._0_4_ =
            (float)(int)(((uint)uVar83 & 0x3ff) + (param_1->map_range).l.field0_0x0._s_0.x);
       auVar241._4_8_ = SUB128(ZEXT812(0),4);
@@ -526,6 +528,7 @@ void __cdecl generate_map(map_t *param_1)
       uVar83 = uVar83 + 1;
       lVar121 = lVar121 + 3;
     } while (uVar83 != 0x100000);
+                    /* // inlined: get_creature_index (line 1392) */
     uVar44 = (w.seed >> 0x10 ^ w.seed) * 0x7feb352d;
     uVar44 = uVar44 >> 0xf ^ uVar44;
     uVar41 = uVar44 * -0x7b935975;
@@ -675,6 +678,7 @@ void __cdecl generate_map(map_t *param_1)
     auVar210._12_4_ = 0x80000000;
     lVar121 = 0;
     do {
+                    /* // inlined: norm (line 1404) */
       auVar240._0_4_ =
            (float)(int)(((uint)uVar83 & 0x3ff) + (param_1->map_range).l.field0_0x0._s_0.x);
       auVar240._4_8_ = SUB128(ZEXT812(0),4);
@@ -714,6 +718,7 @@ void __cdecl generate_map(map_t *param_1)
       lVar121 = lVar121 + 4;
     } while (lVar121 != 0x100000);
   }
+                    /* // inlined: lane_sync (line 1444) */
   pvVar51 = TlsGetValue(tls_index);
   iVar42 = 0;
   EnterSynchronizationBarrier(*(longlong *)((longlong)pvVar51 + 8) + 0x18);
@@ -736,8 +741,10 @@ void __cdecl generate_map(map_t *param_1)
       } while (lVar121 != lVar52);
     }
   }
+                    /* // inlined: lane_sync (line 1454) */
   pvVar51 = TlsGetValue(tls_index);
   EnterSynchronizationBarrier(*(longlong *)((longlong)pvVar51 + 8) + 0x18);
+                    /* // inlined: stalloc_checkpoint (line 1456) */
   pvVar51 = TlsGetValue(tls_index);
   auVar152 = in_ZMM15._0_16_;
   auVar241 = in_ZMM5._0_16_;
@@ -750,6 +757,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("TUTR");
     pbVar106 = create_biome_core(uVar41,6);
     pbVar1 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1465) */
     lVar124 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar131 = w.map.biome_nodes + lVar124;
@@ -774,6 +782,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar106 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar111 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1466) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar76 = w.map.biome_nodes + lVar52;
@@ -795,6 +804,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar106 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1467) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -830,6 +840,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("TOXC");
     pbVar53 = create_biome_core(uVar41,600);
     pbVar2 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1470) */
     lVar84 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar131 = w.map.biome_nodes + lVar84;
@@ -862,6 +873,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar116 = create_biome_core(uVar41,0x8fc);
     pbVar26 = w.map.biome_nodes;
     pbVar54 = param_1->cores;
+                    /* // inlined: add_biome_node (line 1475) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar186._0_12_ = ZEXT812(0);
@@ -885,6 +897,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar116 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar104 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1476) */
     lVar90 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar76 = w.map.biome_nodes + lVar90;
@@ -905,6 +918,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar116 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1477) */
     lVar122 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar122;
@@ -931,6 +945,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar104[lVar90].first_edge = pbVar6 + lVar122 + 1;
     pbVar6[lVar122].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar122 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+                    /* // inlined: merge_biomes (line 1479) */
     pbVar53->mergable_cores =
          pbVar53->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar116 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
@@ -947,6 +962,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar54 = create_biome_core(uVar41,1);
     pbVar54->no_creatures = 1;
     pbVar3 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1483) */
     lVar90 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar199._0_12_ = ZEXT812(0);
@@ -970,6 +986,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar54 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1485) */
     lVar122 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     local_4e0 = pbVar3 + lVar90;
@@ -995,6 +1012,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar1[lVar124].first_edge = pbVar6 + lVar122 + 1;
     pbVar6[lVar122].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar122 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+                    /* // inlined: merge_biomes (line 1486) */
     pbVar54->mergable_cores =
          pbVar54->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar106 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
@@ -1002,6 +1020,7 @@ void __cdecl generate_map(map_t *param_1)
          pbVar106->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar54 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1488) */
     lVar90 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar90;
@@ -1026,6 +1045,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar26[lVar99].first_edge = pbVar6 + lVar90 + 1;
     pbVar6[lVar90].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar90 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
+                    /* // inlined: add_biome_edge (line 1489) */
     uVar41 = (param_1->seed >> 0x10 ^ param_1->seed) * 0x7feb352d;
     uVar41 = (uVar41 >> 0xf ^ uVar41) * -0x7b935975;
     uVar41 = uVar41 >> 0x10 ^ uVar41;
@@ -1087,6 +1107,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("SAFE");
     pbVar54 = create_biome_core(uVar41,0x3c);
     pbVar1 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1492) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_510 = (undefined1 *)(lVar52 * 0x78);
@@ -1120,6 +1141,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("ICON");
     pbVar53 = create_biome_core(uVar41,0);
     local_528 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1496) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_4f0 = (undefined1 *)(lVar99 * 0x78);
@@ -1145,6 +1167,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar53 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_550 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1497) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_518 = (undefined1 *)(lVar52 * 0x78);
@@ -1167,6 +1190,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar53 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1498) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1202,6 +1226,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("ICEE");
     pbVar55 = create_biome_core(uVar41,5000);
     pbVar2 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1502) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar157._0_12_ = ZEXT812(0);
@@ -1226,6 +1251,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar55 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_4f8 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1503) */
     lVar84 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_500 = (biome_node *)(lVar84 * 0x78);
@@ -1248,6 +1274,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar55 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1504) */
     lVar99 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar99;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1281,6 +1308,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("BUZZ");
     pbVar56 = create_biome_core(uVar41,2000);
     pbVar26 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1507) */
     lVar84 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar158._0_12_ = ZEXT812(0);
@@ -1304,6 +1332,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar56 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_538._0_8_ = pbVar55;
+                    /* // inlined: merge_biomes (line 1508) */
     pbVar56->mergable_cores =
          pbVar56->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar55 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
@@ -1311,6 +1340,7 @@ void __cdecl generate_map(map_t *param_1)
          pbVar55->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar56 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1510) */
     lVar99 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar99;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1346,6 +1376,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("SAFE");
     pbVar55 = create_biome_core(uVar41,0x3c);
     pbVar26 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1513) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_2f0 = lVar52 * 0x78;
@@ -1379,6 +1410,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("FCON");
     pbVar56 = create_biome_core(uVar41,0);
     local_348 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1517) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_340 = lVar99 * 0x78;
@@ -1404,6 +1436,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar56 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_310 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1518) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_318 = lVar52 * 0x78;
@@ -1426,6 +1459,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar56 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1519) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1460,6 +1494,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("FENT");
     local_560 = create_biome_core(uVar41,0x20);
     pbVar26 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1523) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_330 = lVar52 * 0x78;
@@ -1492,6 +1527,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("FIRE");
     pbVar57 = create_biome_core(uVar41,0x1450);
     local_368 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1526) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_370 = lVar99 * 0x78;
@@ -1517,6 +1553,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar57 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_350 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1527) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_358 = lVar52 * 0x78;
@@ -1539,6 +1576,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar57 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1528) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1572,6 +1610,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("SAFE");
     pbVar58 = create_biome_core(uVar41,0x3c);
     pbVar27 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1531) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_378 = lVar52 * 0x78;
@@ -1605,6 +1644,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("JCON");
     local_540 = create_biome_core(uVar41,0);
     local_3b0 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1543) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_3a8 = lVar99 * 0x78;
@@ -1630,6 +1670,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_540 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     local_390 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1544) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_398 = lVar52 * 0x78;
@@ -1652,6 +1693,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_540 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1545) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1686,6 +1728,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("JNGL");
     pbVar59 = create_biome_core(uVar41,0x1194);
     local_3e0 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1549) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_3e8 = lVar99 * 0x78;
@@ -1711,6 +1754,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar59 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_3c0 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1550) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_3c8 = lVar52 * 0x78;
@@ -1733,6 +1777,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar59 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1551) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1767,6 +1812,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("JBOS");
     pbVar60 = create_biome_core(uVar41,0x78);
     pbVar28 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1554) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_408 = lVar52 * 0x78;
@@ -1799,6 +1845,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("SAFE");
     pbVar61 = create_biome_core(uVar41,0x3c);
     pbVar28 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1557) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_3f0 = lVar52 * 0x78;
@@ -1832,6 +1879,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("MCON");
     pbVar62 = create_biome_core(uVar41,0);
     local_438 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1561) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_440 = lVar99 * 0x78;
@@ -1857,6 +1905,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar62 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_420 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1562) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_428 = lVar52 * 0x78;
@@ -1879,6 +1928,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar62 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1563) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1913,6 +1963,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("MEAT");
     pbVar63 = create_biome_core(uVar41,0xdac);
     local_480 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1567) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_488 = lVar99 * 0x78;
@@ -1938,6 +1989,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar63 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     local_450 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1568) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_458 = lVar52 * 0x78;
@@ -1960,6 +2012,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar63 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1569) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -1994,6 +2047,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("SAFE");
     pbVar64 = create_biome_core(uVar41,0x3c);
     pbVar28 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1573) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_470 = lVar52 * 0x78;
@@ -2027,6 +2081,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("NCON");
     local_508 = create_biome_core(uVar41,0);
     local_4c0 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1577) */
     lVar99 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_4c8 = lVar99 * 0x78;
@@ -2052,6 +2107,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_508 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     local_4a0 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1578) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_4a8 = lVar52 * 0x78;
@@ -2074,6 +2130,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_508 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1579) */
     lVar84 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar84;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -2108,6 +2165,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("FINN");
     local_308 = create_biome_core(uVar41,0);
     pbVar28 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1583) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     local_4d0 = lVar52 * 0x78;
@@ -2142,6 +2200,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("GYRE");
     pbVar65 = create_biome_core(uVar41,0);
     pbVar28 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1590) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar173._0_12_ = ZEXT812(0);
@@ -2174,6 +2233,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("DARK");
     pbVar66 = create_biome_core(uVar41,8000);
     pbVar4 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1597) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar174._0_12_ = ZEXT812(0);
@@ -2198,6 +2258,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar66 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar5 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1598) */
     lVar84 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar28 = w.map.biome_nodes + lVar84;
@@ -2219,6 +2280,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar66 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar30 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1599) */
     lVar90 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar29 = w.map.biome_nodes + lVar90;
@@ -2238,6 +2300,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar66 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1600) */
     lVar99 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar99;
@@ -2264,6 +2327,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar99].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1601) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2294,6 +2358,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("NEST");
     pbVar67 = create_biome_core(uVar41,1000);
     pbVar34 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1604) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar4 = w.map.biome_nodes + lVar52;
@@ -2318,6 +2383,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar67 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar35 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1605) */
     lVar84 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     pbVar5 = w.map.biome_nodes + lVar84;
@@ -2339,6 +2405,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar67 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1606) */
     lVar99 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar99;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -2366,6 +2433,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar36[lVar99].dir.field0_0x0 = (real_2_u_0)0x3f64f92ebee4f92e;
     pbVar36[lVar99 + 1].dir.field0_0x0 = (real_2_u_0)0xbf64f92e3ee4f92e;
     pbVar35[lVar84].post_generation_fn = biome_gen_nest;
+                    /* // inlined: merge_biomes (line 1608) */
     pbVar66->mergable_cores =
          pbVar66->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar67 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
@@ -2380,6 +2448,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("RACE");
     pbVar68 = create_biome_core(uVar41,1000);
     pbVar30 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1611) */
     lVar52 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     auVar176._0_12_ = ZEXT812(0);
@@ -2403,6 +2472,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar68 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar30[lVar52].r = 4500.0;
+                    /* // inlined: rand (line 1615) */
     uVar41 = (param_1->seed >> 0x10 ^ param_1->seed) * 0x7feb352d;
     uVar41 = (uVar41 >> 0xf ^ uVar41) * -0x7b935975;
     uVar41 = uVar41 >> 0x10 ^ uVar41;
@@ -2428,6 +2498,7 @@ void __cdecl generate_map(map_t *param_1)
     uVar41 = str_to_id("BOSS");
     local_3d0 = create_biome_core(uVar41,4000);
     pbVar34 = w.map.biome_nodes;
+                    /* // inlined: add_biome_node (line 1632) */
     lVar84 = (longlong)w.map.n_biome_nodes;
     w.map.n_biome_nodes = w.map.n_biome_nodes + 1;
     unaff_RBP = (biome_core *)(lVar84 * 0x78);
@@ -2454,6 +2525,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar34[lVar84].core_index =
          (int)((ulonglong)((longlong)local_3d0 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
+                    /* // inlined: merge_biomes (line 1634) */
     iVar42 = (int)pbVar65;
     pbVar57->mergable_cores =
          pbVar57->mergable_cores |
@@ -2461,24 +2533,28 @@ void __cdecl generate_map(map_t *param_1)
     pbVar65->mergable_cores =
          pbVar65->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar57 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
+                    /* // inlined: merge_biomes (line 1635) */
     pbVar66->mergable_cores =
          pbVar66->mergable_cores |
          (longlong)(1 << ((char)((uint)(iVar42 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
     pbVar65->mergable_cores =
          pbVar65->mergable_cores |
          (longlong)(1 << ((char)((uint)(iVar43 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
+                    /* // inlined: merge_biomes (line 1636) */
     pbVar59->mergable_cores =
          pbVar59->mergable_cores |
          (longlong)(1 << ((char)((uint)(iVar42 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
     pbVar65->mergable_cores =
          pbVar65->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar59 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
+                    /* // inlined: merge_biomes (line 1637) */
     pbVar67->mergable_cores =
          pbVar67->mergable_cores |
          (longlong)(1 << ((char)((uint)(iVar42 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
     pbVar65->mergable_cores =
          pbVar65->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar67 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
+                    /* // inlined: merge_biomes (line 1638) */
     pbVar68->mergable_cores =
          pbVar68->mergable_cores |
          (longlong)(1 << ((char)((uint)(iVar42 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
@@ -2486,6 +2562,7 @@ void __cdecl generate_map(map_t *param_1)
          pbVar65->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)pbVar68 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1641) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2512,6 +2589,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1642) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2537,6 +2615,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1644) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2562,6 +2641,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1645) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2586,6 +2666,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1646) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2610,6 +2691,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1648) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2634,6 +2716,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1649) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2659,6 +2742,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1650) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2683,6 +2767,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1654) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2707,6 +2792,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1656) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2731,6 +2817,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1657) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2755,6 +2842,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1658) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2779,6 +2867,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1659) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2803,6 +2892,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1661) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2827,6 +2917,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1662) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2852,6 +2943,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1664) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2876,6 +2968,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1665) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -2900,6 +2993,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1668) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -2916,6 +3010,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar54 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1669) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -2933,6 +3028,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)(local_538._0_8_ - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1671) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -2949,6 +3045,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar55 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1672) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -2965,6 +3062,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_560 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1673) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -2988,6 +3086,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_560 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1678) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3004,6 +3103,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar58 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1679) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3020,6 +3120,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar60 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1680) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3036,6 +3137,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar59 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1682) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3052,6 +3154,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar61 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1683) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3068,6 +3171,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar63 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1685) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3084,6 +3188,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar64 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1686) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3100,6 +3205,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)local_308 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1688) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3122,6 +3228,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar66 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1689) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3145,6 +3252,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar66 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1690) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3166,14 +3274,17 @@ void __cdecl generate_map(map_t *param_1)
     pbVar37[lVar52].core_b =
          (int)((ulonglong)((longlong)pbVar66 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
+                    /* // inlined: rand (line 1693) */
     uVar41 = (param_1->seed >> 0x10 ^ param_1->seed) * 0x7feb352d;
     uVar41 = uVar41 >> 0xf ^ uVar41;
     uVar44 = uVar41 * -0x7b935975;
     fVar208 = (float)(uVar44 >> 0x10 ^ uVar44) * fVar200;
     iVar42 = (int)(fVar208 + fVar208);
+                    /* // inlined: randf (line 1694) */
     uVar41 = uVar41 * -0x63d2f291;
     uVar41 = (uVar41 >> 0xf ^ uVar41) * -0x7b935975;
     uVar41 = uVar41 >> 0x10 ^ uVar41;
+                    /* // inlined: add_biome_edge (line 1698) */
     pbVar111 = pbVar27;
     if (0 < iVar42) {
       pbVar111 = pbVar28;
@@ -3229,6 +3340,7 @@ void __cdecl generate_map(map_t *param_1)
     rVar79._0_4_ = (int)rVar98.x + -0x80000000;
     rVar79._s_0.y = (float)((int)rVar98.y + -0x80000000);
     pbVar91[1].dir.field0_0x0 = rVar79;
+                    /* // inlined: merge_biomes (line 1700) */
     pbVar66->mergable_cores =
          pbVar66->mergable_cores |
          (longlong)(1 << ((char)((uint)((int)local_3d0 - (int)w.map.cores) >> 3) * -0x2f & 0x1fU));
@@ -3236,6 +3348,7 @@ void __cdecl generate_map(map_t *param_1)
     unaff_R13 = (uchar *)(ulonglong)uVar41;
     local_3d0->mergable_cores =
          local_3d0->mergable_cores | (longlong)(1 << ((char)uVar41 * -0x2f & 0x1fU));
+                    /* // inlined: add_biome_entrance (line 1703) */
     auVar207 = ZEXT1664(auVar207._0_16_);
     auVar231 = ZEXT1664(auVar231._0_16_);
     uVar94 = 0x3e4ccccd463b8000;
@@ -3261,6 +3374,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar37[lVar52].core_b =
          (int)((ulonglong)((longlong)pbVar116 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3)
          * 0x1a1f58d1;
+                    /* // inlined: add_biome_entrance (line 1704) */
     uVar41 = str_to_id("DNUT");
     pbVar37 = w.map.biome_entrances;
     lVar52 = (longlong)w.map.n_biome_entrances;
@@ -3279,6 +3393,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar37[lVar52].core_b =
          (int)((ulonglong)((longlong)pbVar54 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
+                    /* // inlined: add_biome_entrance (line 1705) */
     uVar41 = str_to_id("B100");
     pbVar37 = w.map.biome_entrances;
     lVar52 = (longlong)w.map.n_biome_entrances;
@@ -3297,6 +3412,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar37[lVar52].core_b =
          (int)((ulonglong)((longlong)pbVar55 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
+                    /* // inlined: add_biome_entrance (line 1706) */
     uVar41 = str_to_id("BMSL");
     pbVar37 = w.map.biome_entrances;
     lVar52 = (longlong)w.map.n_biome_entrances;
@@ -3315,6 +3431,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar37[lVar52].core_b =
          (int)((ulonglong)((longlong)pbVar58 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
+                    /* // inlined: add_biome_entrance (line 1709) */
     uVar41 = str_to_id("PLNT");
     pbVar37 = w.map.biome_entrances;
     auVar152 = auVar254._0_16_;
@@ -3339,6 +3456,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar61 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1710) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3356,6 +3474,7 @@ void __cdecl generate_map(map_t *param_1)
          (int)((ulonglong)((longlong)pbVar64 - CONCAT44(w.map.cores._4_4_,(int)w.map.cores)) >> 3) *
          0x1a1f58d1;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1712) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3381,6 +3500,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1713) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3405,6 +3525,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1714) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3430,6 +3551,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1715) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3454,6 +3576,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1716) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3478,6 +3601,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar25 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1717) */
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -3503,6 +3627,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar25[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar25[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar25 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1719) */
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -3529,6 +3654,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar25[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f80000000000000;
     pbVar25[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf80000080000000;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1721) */
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -3555,6 +3681,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar36[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f3504f33f3504f3;
     pbVar36[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf3504f3bf3504f3;
     pbVar25 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1722) */
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -3580,6 +3707,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar25[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar25[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar36 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1723) */
     lVar52 = (longlong)w.map.n_biome_edges;
     pbVar91 = w.map.biome_edges + lVar52;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
@@ -3606,6 +3734,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar36[lVar52].dir.field0_0x0 = (real_2_u_0)0xbf3504f33f3504f3;
     pbVar36[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x3f3504f3bf3504f3;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1724) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3630,6 +3759,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f3504f3bf3504f3;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf3504f33f3504f3;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1726) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3654,6 +3784,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f800000;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0x80000000bf800000;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1727) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3678,6 +3809,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f3504f3bf3504f3;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf3504f33f3504f3;
     pbVar6 = w.map.biome_edges;
+                    /* // inlined: add_biome_edge (line 1728) */
     lVar52 = (longlong)w.map.n_biome_edges;
     w.map.n_biome_edges = w.map.n_biome_edges + 2;
     pbVar91 = w.map.biome_edges + lVar52;
@@ -3720,6 +3852,7 @@ void __cdecl generate_map(map_t *param_1)
     pbVar6[lVar52].dir.field0_0x0 = (real_2_u_0)0x3f3504f33f3504f3;
     pbVar6[lVar52 + 1].dir.field0_0x0 = (real_2_u_0)0xbf3504f3bf3504f3;
     pbVar37 = w.map.biome_entrances;
+                    /* // inlined: add_biome_entrance (line 1729) */
     lVar52 = (longlong)w.map.n_biome_entrances;
     w.map.n_biome_entrances = w.map.n_biome_entrances + 1;
     pbVar11 = w.map.biome_entrances + lVar52;
@@ -3745,6 +3878,7 @@ void __cdecl generate_map(map_t *param_1)
   else {
     local_4e0 = (biome_node *)0x0;
   }
+                    /* // inlined: lane_sync (line 1732) */
   auVar207 = ZEXT1664(auVar213);
   auVar231 = ZEXT1664(auVar151);
   auVar250 = ZEXT1664(auVar241);

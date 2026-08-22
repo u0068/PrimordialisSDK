@@ -1,3 +1,4 @@
+#@category PrimordialisSDK
 class TypeExporter:
 
     def __init__(self, currentProgram):

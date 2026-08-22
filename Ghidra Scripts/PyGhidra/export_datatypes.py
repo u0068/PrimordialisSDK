@@ -1,3 +1,4 @@
+#@category PrimordialisSDK
 # from ghidra.ghidra_builtins import currentProgram
 
 from cpp_emitter import CppEmitter

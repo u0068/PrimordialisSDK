@@ -19,3 +19,5 @@ add_dependencies(BuildAllModsNuc
 )
 
 add_subdirectory(Luazyme)
+
+add_subdirectory(Tools)
