@@ -3,7 +3,6 @@
 
 import json
 import os
-
 from ghidra.program.model.listing import CommentType
 
 JSON_FILE = os.path.join(
@@ -11,25 +10,24 @@ JSON_FILE = os.path.join(
     "inline_site_info.json"
 )
 
-LINE_TOLERANCE = 3
-
 def norm_path(path):
     return os.path.normcase(os.path.normpath(path))
 
-def find_function(function_info):
-    address = currentProgram.getImageBase().add(function_info["rva"])
+def find_function(rva):
+    address = currentProgram.getImageBase().add(rva)
     return getFunctionContaining(address)
 
-def find_line_address(function, source_file, source_line):
+def collect_source_lines(function):
     manager = currentProgram.getSourceFileManager()
-    target_file = norm_path(source_file)
-
     address_set = function.getBody()
-    address = address_set.getMinAddress()
 
-    best_address = None
-    best_line = None
-    best_distance = None
+    # (file, line) -> first address
+    lines = {}
+
+    # Keep addresses ordered so we can find the next source line.
+    ordered = []
+
+    address = address_set.getMinAddress()
 
     while address is not None and address_set.contains(address):
         for entry in manager.getSourceMapEntries(address):
@@ -38,44 +36,73 @@ def find_line_address(function, source_file, source_line):
             if source is None:
                 continue
 
-            if norm_path(str(source.getPath())) != target_file:
-                continue
+            key = (
+                norm_path(str(source.getPath())),
+                entry.getLineNumber()
+            )
 
-            line = entry.getLineNumber()
-            distance = abs(line - source_line)
-
-            if distance > LINE_TOLERANCE:
-                continue
-
-            if best_distance is None or distance < best_distance:
-                best_address = entry.getBaseAddress()
-                best_line = line
-                best_distance = distance
-
-                if distance == 0:
-                    return best_address, best_line, best_distance
+            if key not in lines:
+                lines[key] = entry.getBaseAddress()
+                ordered.append((entry.getBaseAddress(), key))
 
         address = address.add(1)
 
-    return best_address, best_line, best_distance
+    ordered.sort(key=lambda x: x[0].getOffset())
+
+    return lines, ordered
+
+def find_next_line(ordered, address, source_file, source_line):
+    target_file = norm_path(source_file)
+
+    for i, (line_address, key) in enumerate(ordered):
+        if line_address != address:
+            continue
+
+        # Find the next source-map entry belonging to this file
+        # with a different line number.
+        for next_address, (path, line) in ordered[i + 1:]:
+            if path == target_file and line != source_line:
+                return next_address
+
+        return None
+
+    return None
+
+def add_region(regions, start, end, name):
+    for region in regions:
+        if region["start"] == start and region["end"] == end:
+            if name not in region["names"]:
+                region["names"].append(name)
+            return
+
+    regions.append({
+        "start": start,
+        "end": end,
+        "names": [name]
+    })
 
 def annotate():
     with open(JSON_FILE, "r", encoding="utf-8") as f:
         data = json.load(f)
 
+    listing = currentProgram.getListing()
+
     for function_info in data["functions"]:
-        name = function_info["name"]
-        function = find_function(function_info)
+        function = find_function(function_info["rva"])
 
         if function is None:
             print(
-                "Function not found:",
-                name,
-                "RVA=0x%x" % function_info["rva"]
+                "Function not found at RVA:",
+                hex(function_info["rva"]),
+                function_info["name"]
             )
             continue
 
-        print("\nFUNCTION:", name)
+        print("\nFUNCTION:", function.getName())
+
+        lines, ordered = collect_source_lines(function)
+
+        regions = []
 
         for site in function_info["inline_sites"]:
             source_file = site.get("source_file")
@@ -85,13 +112,14 @@ def annotate():
                 print("  Missing source location:", site["name"])
                 continue
 
-            address, matched_line, distance = find_line_address(
-                function,
-                source_file,
+            key = (
+                norm_path(source_file),
                 source_line
             )
 
-            if address is None:
+            start = lines.get(key)
+
+            if start is None:
                 print(
                     "  Could not find:",
                     site["name"],
@@ -100,49 +128,69 @@ def annotate():
                 )
                 continue
 
-            code_unit = currentProgram.getListing().getCodeUnitContaining(
-                address
+            end = find_next_line(
+                ordered,
+                start,
+                source_file,
+                source_line
             )
 
-            if code_unit is None:
-                print(
-                    "  No code unit:",
-                    site["name"],
-                    address
-                )
-                continue
-
-            if distance == 0:
-                comment = "// inlined: %s (line %d)" % (
-                    site["name"],
-                    matched_line
-                )
-            else:
-                comment = "// inlined: %s (line %d, DIA line %d, distance %+d)" % (
-                    site["name"],
-                    matched_line,
-                    source_line,
-                    matched_line - source_line
-                )
-
-            code_unit.setComment(
-                CommentType.PRE,
-                comment
+            add_region(
+                regions,
+                start,
+                end,
+                site["name"]
             )
 
             print(
                 "  Annotated:",
                 site["name"],
                 "at",
-                address,
-                "(DIA line",
-                source_line,
-                "-> Ghidra line",
-                matched_line,
-                "distance",
-                matched_line - source_line,
-                ")"
+                start,
+                "line",
+                source_line
             )
+
+        for region in regions:
+            if region["end"]:
+                code_unit = listing.getCodeUnitContaining(region["end"])
+
+                if code_unit is None:
+                    print("  No code unit:", region["end"])
+                    continue
+
+                comment = "INLINE_REGION_END"
+
+                existing = code_unit.getComment(CommentType.PRE)
+
+                if existing:
+                    comment = existing + "\n" + comment
+
+                code_unit.setComment(
+                    CommentType.PRE,
+                    comment
+                )
+
+            code_unit = listing.getCodeUnitContaining(region["start"])
+
+            if code_unit is None:
+                print("  No code unit:", region["start"])
+                continue
+
+            names = ", ".join(region["names"])
+
+            comment = "INLINE_REGION_START: " + names
+
+            existing = code_unit.getComment(CommentType.PRE)
+
+            if existing:
+                comment = existing + "\n" + comment
+
+            code_unit.setComment(
+                CommentType.PRE,
+                comment
+            )
+
 
 
 annotate()
