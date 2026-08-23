@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <windows.h>
 #include "hook_manager.h"
 #include "nucleus_interface.h"
@@ -7,6 +8,8 @@
 
 namespace P
 {
+    inline fs::path mod_path;
+
     // TODO: Make this human readable with something like base64
     inline uint32_t HashCellId(
         const char *cell
@@ -199,9 +202,11 @@ namespace P
 };
 
 extern"C" __declspec(dllexport)
-inline void Initialise(Nucleus* api)
+inline void Initialise(Nucleus* api, const char* mod_path)
 {
     nucleus = api;
+    P::mod_path = mod_path;
+    P::mod_name = mod_path; // Path is better than nothing
     P::translation_values.reserve(2048);
     P::InitialiseMod();
     P::Log()<<"Initialised Mod!\n";
