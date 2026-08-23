@@ -3,7 +3,7 @@
 #include <iostream>
 #include <regex>
 #include <urlmon.h>
-#include "../external/miniz/zip_file.hpp"
+#include "miniz/zip_file.hpp"
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically

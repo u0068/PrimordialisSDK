@@ -1,9 +1,5 @@
 #include "plasmid_api.h"
-
-namespace P
-{
-#include "../include/generated/game_functions/cells.h"
-}
+#include "generated/game_functions/cells.h"
 
 void acid(P::cell* cell)
 {
@@ -24,6 +20,7 @@ void OnInitMats()
     Next<void>();
     if (!P::IsThreadSafe())
         return;
+
     P::material_t* mats = P::materials_list;
     P::material_t cell_type{};
 

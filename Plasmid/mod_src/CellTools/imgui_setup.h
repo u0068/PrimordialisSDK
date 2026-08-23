@@ -1,5 +1,4 @@
 #pragma once
-
 #include "plasmid_api.h"
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -12,13 +11,6 @@ void DrawUI();
 inline WNDPROC original_wndproc;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-// LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-// {
-//     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-//         return true;
-//     return ::DefWindowProcW(hWnd, msg, wParam, lParam);
-// }
 
 inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam)
 {
@@ -98,7 +90,6 @@ inline void BlockInputs(P::window_t* window)
     Next<void>(window);
     if (!P::IsThreadSafe())
         return;
-
     if (!ImGui::GetIO().WantCaptureMouse)
         return;
 
@@ -137,6 +128,7 @@ inline void DrawImgui()
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
+    // Set all the resolutions to what they should be
     io.DisplaySize = ImVec2(
         static_cast<float>(viewport[2]),
         static_cast<float>(viewport[3])
@@ -185,6 +177,7 @@ inline void WindowInitHook(P::window_t* window)
 
     if (imgui_initialized)
     {
+        // TODO: automatic re-initialisation without restarting
         P::Log()<<"Restart the game to re-initialise ImGui!\n";
         return;
     }
@@ -207,7 +200,7 @@ inline void WindowInitHook(P::window_t* window)
     for (int i = 0; i < ImGuiCol_COUNT; i++)
     {
         auto col = ImGui::GetStyleColorVec4(i);
-        float exponent = 1.75;
+        float exponent = 1.75; // Idk what it actually is but this seems good enough
         col = {pow(col.x, exponent), pow(col.y, exponent), pow(col.z, exponent),pow(col.w, exponent)};
         ImGui::PushStyleColor(i, col);
     }
@@ -227,6 +220,7 @@ inline void WindowInitHook(P::window_t* window)
     imgui_initialized = true;
     P::Log()<<"ImGui Initialised!\n";
 
+    // TODO: Make it work for hardware cursor
     P::settings->hardware_cursor = false;
 }
 

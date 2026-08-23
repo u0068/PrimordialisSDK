@@ -1,10 +1,8 @@
 #pragma once
-// #include <unordered_map>
-// #include <tlhelp32.h>
 #include <MinHook.h>
 #include <windows.h>
-#include "../Plasmid/include/nucleus_interface.h"
-#include "../Plasmid/include/logging.h"
+#include "nucleus_interface.h"
+#include "logging.h"
 
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
@@ -33,7 +31,7 @@ inline LogStream Log()
     );
 }
 
-void InitDbgHelp()
+inline void InitDbgHelp()
 {
     static std::once_flag flag;
     std::call_once(flag, []()
@@ -88,7 +86,7 @@ inline void* ResolveSymbol(const char* name)
 
 inline int PrimordialisLog(std::string text) { return reinterpret_cast<int(*)(const char*)>(ResolveSymbol("log_printf"))(text.c_str()); }
 
-bool HookWrapper(void* target, void* hook, void** trampoline)
+inline bool HookWrapper(void* target, void* hook, void** trampoline)
 {
     // Log("Attempting Hooking address %p\n", target);
 
@@ -116,7 +114,7 @@ bool HookWrapper(void* target, void* hook, void** trampoline)
     return true;
 }
 
-void* CreateHook(const char* name, void* hook){
+inline void* CreateHook(const char* name, void* hook){
 
     void* target = ResolveSymbol(name);
     void* trampoline = nullptr;
@@ -132,14 +130,14 @@ void* CreateHook(const char* name, void* hook){
     return trampoline;
 }
 
-thread_local void* current_context;
+inline thread_local void* current_context;
 
-void* GetCurrentContext()
+inline void* GetCurrentContext()
 {
     return current_context;
 }
 
-void SetCurrentContext(void* context)
+inline void SetCurrentContext(void* context)
 {
     current_context = context;
 }

@@ -42,16 +42,12 @@ struct HookContext : HookContextBase
         if(index < chain->hooks.size())
         {
             auto hook = chain->hooks[index++];
-            // PlasmidLog("HookChain %s: Invoking hook at %p\n", chain->name, hook);
             Ret result = hook(args...);
-            // PlasmidLog("HookChain %s: Returning from hook at %p\n", chain->name, hook);
             return result;
         }
 
         auto original = chain->original;
-        // PlasmidLog("HookChain %s: Invoking original at %p\n", chain->name, original);
         Ret result = original(args...);
-        // PlasmidLog("HookChain %s: Returning from original at %p\n", chain->name, original);
         return result;
     }
 };
@@ -67,16 +63,12 @@ struct HookContext<void, Args...> : HookContextBase
         if(index < chain->hooks.size())
         {
             auto hook = chain->hooks[index++];
-            // PlasmidLog("HookChain %s: Invoking hook at %p\n", chain->name, hook);
             hook(args...);
-            // PlasmidLog("HookChain %s: Returning from hook at %p\n", chain->name, hook);
         }
         else
         {
             auto original = chain->original;
-            // PlasmidLog("HookChain %s: Invoking original at %p\n", chain->name, original);
             original(args...);
-            // PlasmidLog("HookChain %s: Returning from original at %p\n", chain->name, original);
         }
     }
 };
@@ -97,8 +89,6 @@ struct Dispatcher
 
     static Ret Dispatch(Args... args)
     {
-        // PlasmidLog("Dispatching HookChain %s\n", chain->name);
-
         HookContext<Ret, Args...> context;
 
         context.chain = chain;
@@ -123,8 +113,6 @@ struct Dispatcher<name, void, Args...>
 
     static void Dispatch(Args... args)
     {
-        // PlasmidLog("Dispatching HookChain %s\n", chain->name);
-
         HookContext<void, Args...> context;
 
         context.chain = chain;
@@ -143,17 +131,12 @@ HookChain<void, Args...>* Dispatcher<name, void, Args...>::chain = nullptr;
 template<typename Chain>
 Chain* GetOrCreateChain(const char* name)
 {
-    // PlasmidLog("GetOrCreateChain: %s\n", name);
-
     auto it = nucleus->chains.find(name);
 
     if(it != nucleus->chains.end())
     {
-        // PlasmidLog("Getting existing chain for %s\n", name);
         return static_cast<Chain*>(it->second);
     }
-
-    // PlasmidLog("Existing chain not found, creating new chain for %s\n", name);
 
     auto chain = new Chain();
 

@@ -1,14 +1,13 @@
 #pragma once
+#include <windows.h>
 #include "hook_manager.h"
 #include "nucleus_interface.h"
-#include <windows.h>
-
-namespace P
-{
-    // #include "generated/resolve_functions.h"
 #include "generated/game_functions/essential.h"
 #include "generated/resolve_data.h"
 
+namespace P
+{
+    // TODO: Make this human readable with something like base64
     inline uint32_t HashCellId(
         const char *cell
     )
@@ -159,7 +158,7 @@ namespace P
 
     static std::vector<char*> translation_values;
 
-    inline void AddTranslation(char* _key, char* _value)
+    inline void AddTranslation(const char* _key, char* _value)
     {
         char* key = new char[strlen(_key)+1]{};
         memcpy_s(key, strlen(_key)+1, _key, strlen(_key));

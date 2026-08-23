@@ -8,6 +8,11 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 add_library(Nucleus SHARED
         nucleus_main.cpp)
 
+target_include_directories(Nucleus
+        PRIVATE
+        ../Plasmid/include/
+)
+
 add_subdirectory(external/minhook)
 
 target_link_libraries(Nucleus PRIVATE minhook)

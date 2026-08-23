@@ -1,9 +1,5 @@
 #include "plasmid_api.h"
-
-namespace P
-{
 #include "generated/game_functions/world.h"
-}
 
 void OnInitBiomeTypes()
 {
@@ -21,6 +17,7 @@ static bool insert_biome = false;
 P::biome_core* OnCreateBiomeCore(int id, int size)
 {
     auto result = Next<P::biome_core*>(id, size);
+    // Boilerplate for executing the hook AFTER the specified biome is defined, so the last node is in a known location
     if (id == P::str_to_id("ICEE"))
     {
         insert_biome = true;
@@ -31,8 +28,8 @@ P::biome_core* OnCreateBiomeCore(int id, int size)
     insert_biome = false;
 
     auto biome_core = P::create_biome_core(P::str_to_id("TEST"), 1000);
-    auto node_1 = &P::w->map.biome_nodes[P::w->map.n_biome_nodes-1];
-    auto node_2 = P::add_biome_node(biome_core);
+    auto node_1 = &P::w->map.biome_nodes[P::w->map.n_biome_nodes-1]; // Existing node at end of ICEE biome
+    auto node_2 = P::add_biome_node(biome_core);  // New node for our biome
     P::biome_edge new_edge{
         nullptr, nullptr,
         {1,0},

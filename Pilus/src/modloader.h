@@ -8,12 +8,6 @@ using json = nlohmann::json;
 
 namespace fs = std::filesystem;
 
-// struct ConfigValue
-// {
-//     std::string name{};
-//     std::variant<double, bool, std::string> value;
-// };
-
 struct Mod
 {
     // SAVED IN PILUS.CONFIG
@@ -30,8 +24,6 @@ struct Mod
     std::string plasmid_version{"Unknown"};
     std::string min_primordialis_version{"Unknown"};
 
-    // std::vector<ConfigValue> config{};
-    // std::unordered_map<std::string, std::variant<int, float, bool, std::string>> config{};
     nlohmann::ordered_json config_defaults{};
     json config_values{};
 

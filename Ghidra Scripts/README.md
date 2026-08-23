@@ -6,7 +6,7 @@ Ghidra scripts can be made in:
 - Java
   - More convenient Ghidra api, but less convenient string operations
   - Use only if you prefer java to python, or are doing very minor edits to existing java scripts.
-    - It's better to rewrite the old scripts in python than keep tweaking them.
+    - It's better to rewrite the old java scripts in python than keep tweaking them.
 - Jython
   - Pretty much just lobotomised Python 2.7
   - Limited external packages
@@ -33,3 +33,5 @@ Ghidra scripts can be made in:
 - Rewrite java scripts in PyGhidra
 
 # DONE:
+- Data type exporter
+- Inline annotator

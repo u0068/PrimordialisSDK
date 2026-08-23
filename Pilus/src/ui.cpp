@@ -61,7 +61,7 @@ void DrawSettings(Mod& mod)
             auto value = GetFromJson<int>(mod.config_values, name);
             auto min = GetFromJson<int>(setting, "min");
             auto max = GetFromJson<int>(setting, "max");
-            auto speed = GetFromJson<float>(setting, "speed", 0.1);
+            auto speed = GetFromJson<float>(setting, "speed", 0.1f);
             auto slider = GetFromJson<bool>(setting, "slider");
             if (slider)
             {
@@ -79,7 +79,7 @@ void DrawSettings(Mod& mod)
             auto value = GetFromJson<float>(mod.config_values, name);
             auto min = GetFromJson<float>(setting, "min");
             auto max = GetFromJson<float>(setting, "max");
-            auto speed = GetFromJson<float>(setting, "speed", 0.1);
+            auto speed = GetFromJson<float>(setting, "speed", 0.1f);
             auto slider = GetFromJson<bool>(setting, "slider");
             if (slider)
             {

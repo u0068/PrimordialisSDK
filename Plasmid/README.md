@@ -6,24 +6,23 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
 - Runtime API (Nucleus)
 - Extend the LUA API
 ## TODO:
-- Lua API
+- Debug tools (probably as a separate mod)
+  - Cell property view
+  - Material property view
+  - Body property view
+  - Biome node graph view
+  - Biome property view
+- Lua API Extension
 - External mod config and assets
 - Documentation
   - Examples
   - Tutorials
   - Comments
-- Optimise if easy to do while remaining readable
 - Helper functions
-  - mod_main() (DONE)
-  - Cell creation (DONE)
-  - Make thread safety trivial (DONE)
-  - Adding translation entries (DONE)
-  - Make generated cell ids human readable (eg BASE64)
-  - Ghidra script to output already organised stuff (DONE)
-  - Separate mod dev stuff from API dev (eg CMakeLists) (DONE)
-  - Collapse generated data types like field_0x1234 and _s_0 (DONE)
   - Mod versioning
   - Plasmid API versioning
+  - Make generated cell ids human readable (eg base64)
+- Optimise if easy to do while remaining readable
 - Fix bugs
 ## DONE:
 - Nucleus API versioning (DONE)
@@ -36,6 +35,14 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
     - Easily find, enable/disable relevant functions to speed up build time (DONE)
   - Organise data label resolutions (GOOD ENOUGH)
   - Organise data types (GOOD ENOUGH)
+- Helper functions
+  - mod_main() (DONE)
+  - Cell creation (DONE)
+  - Make thread safety trivial (DONE)
+  - Adding translation entries (DONE)
+  - Ghidra script to output already organised stuff (DONE)
+  - Separate mod dev stuff from API dev (eg CMakeLists) (DONE)
+  - Collapse generated data types like field_0x1234 and _s_0 (DONE)
 - Clean up logging (DONE)
 - Log to file (DONE)
 - Prefix mod name to log (DONE)

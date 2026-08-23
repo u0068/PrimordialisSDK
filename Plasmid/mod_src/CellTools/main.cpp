@@ -4,11 +4,7 @@
 
 #include "plasmid_api.h"
 #include "imgui_setup.h"
-
-namespace P
-{
-#include "../include/generated/game_functions/cells.h"
-}
+#include "generated/game_functions/cells.h"
 
 int n_vanilla_mats{};
 int copy_from = 1;
@@ -265,6 +261,7 @@ void DrawMaterialEditor(int idx, P::material_t &mat)
 
 void DrawMaterialsEditor()
 {
+    // If this runs during loading screen, the skies will split and woe will be upon us
     if (P::w->loading_screen) return;
 
     ImGui::Begin("Materials Editor");

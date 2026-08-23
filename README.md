@@ -5,9 +5,12 @@ Primordialis SDK is a modding SDK for Primordialis.
 - Plasmid C++ Modding API
 - Luasome Lua Modding API
 - Primordialis PDB files
+- Ghidra Scripts
+- Decompiled game code
+- Misc SDK dev tools
 
 ## Expect bugs.
-Everything is in very early development.
+Everything is in very early development and will break sooner or later.
 
 # Loading Mods into Primordialis:
 To load mods into Primordialis, you need to:
@@ -20,10 +23,11 @@ To load mods into Primordialis, you need to:
 - Launch Pilus.exe which will create a "mods" folder in Primordialis/mods and download everything else it needs.
 - Then, put your installed mods in the "mods" folder, configure and
 enable them to your liking, and launch Primordialis from Pilus by pressing "start".
+- Once installed, Pilus will update itself and its dependencies automatically.
 
 # Making Mods:
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build
-C++ shared libraries such as Visual Studio, VScode, or Clion.\
+C++ shared libraries such as Visual Studio, VSCode, or CLion.\
 You can download Plasmid.zip from releases, clone the entire SDK repo,
 or use the following git commands to get only Plasmid:
 ```bash
@@ -75,11 +79,11 @@ https://discord.gg/Fz5RaRBNj8
   - Asking AI to teach you programming concepts, e.g. C++ templates, pointers, references, etc
   - Using AI to generate **simple** pieces of code.
   - Using AI to generate boilerplate code.
-  - Using AI to make minor edits code.
+  - Using AI to make minor edits to code.
   - Using AI to find bugs.
-  - Using AI to help design systems, e.g. a hook management system
+  - Using AI to **help** design systems, e.g. a hook management system
     - AI usually overcomplicates things, and writes much more code than it needs,
-      which put a large burden on maintainers.\
+      which puts a large burden on maintainers.\
       If the AI's output seems complicated, that's usually because it is, and must be simplified.
     - If you don't know how to design most of the system yourself, you don't have a good enough
       understanding of it to verify that the AI's output is good.\
@@ -112,7 +116,7 @@ https://discord.gg/Fz5RaRBNj8
   - Loading mods
   - Making mods
   - Contributing to the SDK
-- Move TO-DOs to trello
+- Move TO-DOs to trello?
 - Improve error messages everywhere
 
 See the README.md's inside the projects for their TO-DO lists.

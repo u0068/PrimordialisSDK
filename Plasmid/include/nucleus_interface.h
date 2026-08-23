@@ -2,7 +2,6 @@
 #include <unordered_map>
 #include <string>
 #include <format>
-
 #include "logging.h"
 
 struct HookChainBase
