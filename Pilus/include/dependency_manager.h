@@ -23,7 +23,6 @@ inline std::vector<int> GetModDepIndices(Mod& mod)
     return deps;
 }
 
-
 inline void EnableDeps()
 {
     for (auto& mod : ModManager::mods)
@@ -37,10 +36,9 @@ inline void EnableDeps()
 inline void SortDeps()
 {
     for (auto& mod : ModManager::mods)
-        if (mod.is_enabled())
-            for (auto dep : GetModDeps(mod))
-                if (dep > &mod)
-                    std::iter_swap(dep, &mod);
+        for (auto dep : GetModDeps(mod))
+            if (dep > &mod)
+                std::iter_swap(dep, &mod);
 }
 
 inline bool DependsOn(int mod_idx, int dependency)
@@ -77,7 +75,7 @@ inline void CollectDependents(
             CollectDependents(idx, result);
 }
 
-inline void MoveMod(int mod_idx, int direction, std::unordered_set<int> group={})
+inline bool MoveMod(int mod_idx, int direction, std::unordered_set<int> group={})
 {
     auto& mods = ModManager::mods;
 
@@ -91,13 +89,14 @@ inline void MoveMod(int mod_idx, int direction, std::unordered_set<int> group={}
     int next = mod_idx + direction;
 
     if (next < 0 || next >= mods.size())
-        return;
+        return false;
 
     if (group.contains(next))
     {
         MoveMod(next, direction, group);
-        return;
+        return false;
     }
 
     std::swap(mods[mod_idx], mods[next]);
+    return true;
 }

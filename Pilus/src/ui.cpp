@@ -252,8 +252,6 @@ void DrawModList()
         {
             Mod& mod = mods[i];
             ImGui::PushID(mod.name.c_str());
-            // if (mod.name == "Nucleus")
-            //     ImGui::BeginDisabled();
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
             if (!exists(mod.dll_path) and !exists(mod.init_path))
@@ -289,16 +287,8 @@ void DrawModList()
                 if (dragged_mod_index == -1)
                     dragged_mod_index = i;
                 if (!is_hovered)
-                {
-                    move_direction =
-                        ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
-                }
+                    move_direction = ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
             }
-            // ImGui::Text("Active: %d", ImGui::IsItemActive());
-            // ImGui::Text("Hovered: %d", isHovered);
-            // ImGui::Text("Dragged: %d", draggedModIndex == i);
-            // if (mod.name == "Nucleus")
-            //     ImGui::EndDisabled();
             ImGui::TableNextColumn();
 
             ImGui::TextDisabled("(?)");
@@ -358,7 +348,8 @@ void DrawModList()
         ImGui::EndTable();
         if (move_direction != 0)
         {
-            MoveMod(dragged_mod_index, move_direction);
+            if (MoveMod(dragged_mod_index, move_direction))
+                ImGui::ResetMouseDragDelta();
             ModManager::SavePilusConfig();
         }
     }
