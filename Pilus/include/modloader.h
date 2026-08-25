@@ -5,8 +5,34 @@
 #include "logging.h"
 
 using json = nlohmann::json;
+using ord_json = nlohmann::ordered_json;
 
 namespace fs = std::filesystem;
+
+template<typename... Args>
+ord_json safe_parse(Args... args)
+{
+    try
+    {
+        return json::parse(args...);
+    }
+    catch (const json::parse_error& e)
+    {
+        console_log << err << "message: " << e.what() << "\n"
+                  << "exception id: " << e.id << "\n"
+                  << "byte position of error: " << e.byte << "\n";
+        return ord_json{};
+    }
+}
+template<typename T>
+T GetFromJson(json json, const char* name, const T& fallback=0)
+{
+    return json[name].empty() ? fallback : json[name].get<T>();
+}
+inline std::string GetStringFromJson(json json, const char* name, const char* fallback="")
+{
+    return json[name].empty() ? fallback : json[name].get<std::string>();
+}
 
 struct Mod
 {
@@ -24,7 +50,7 @@ struct Mod
     std::string plasmid_version{"Unknown"};
     std::string min_primordialis_version{"Unknown"};
 
-    nlohmann::ordered_json config_defaults{};
+    ord_json config_defaults{};
     json config_values{};
     json info{};
 

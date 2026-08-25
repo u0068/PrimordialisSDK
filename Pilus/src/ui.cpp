@@ -8,15 +8,6 @@
 int configured_mod = -1;
 bool config_open = true;
 
-template<typename T>
-T GetFromJson(json json, const char* name, const T& fallback=0)
-{
-    return json[name].empty() ? fallback : json[name].get<T>();
-}
-std::string GetStringFromJson(json json, const char* name, const char* fallback="")
-{
-    return json[name].empty() ? fallback : json[name].get<std::string>();
-}
 
 static void InfoMarker(const char* desc, const char* sign="(?)")
 {

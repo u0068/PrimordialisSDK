@@ -43,12 +43,12 @@ void ParseModInfo(Mod* mod)
         {
             std::string data = ReadFile(entry.path());
 
-            mod->info = json::parse(ReadFile(entry), nullptr, true, true);
-            mod->name = mod->info["name"].get<std::string>().c_str();
+            mod->info = safe_parse(ReadFile(entry), nullptr, true, true);
+            mod->name = GetStringFromJson(mod->info,"name").c_str();
         }
 
         else if (filename == "config.json")
-            mod->config_defaults = json::parse(ReadFile(entry), nullptr, true, true);
+            mod->config_defaults = safe_parse(ReadFile(entry), nullptr, true, true);
 
         else if (entry.path().extension() == ".dll")
         {
@@ -69,7 +69,7 @@ void ParseModInfo(Mod* mod)
         }
         else
         {
-            mod->dll_path = mod->info["main_dll"].get<std::string>();
+            mod->dll_path = GetStringFromJson(mod->info,"main_dll",mod->dll_path.string().c_str()).c_str();
         }
     }
 }
@@ -134,7 +134,7 @@ void ModManager::LoadPilusConfig()
         return;
     }
 
-    pilus_config = json::parse(file);
+    pilus_config = safe_parse(file);
 
     json mods_json = pilus_config["mods"];
 
