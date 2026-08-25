@@ -5,10 +5,10 @@ add_plasmid_mod(${MOD_NAME}
         main.cpp
 )
 
-include_directories(${MOD_NAME}
+target_include_directories(${MOD_NAME} PRIVATE
     ../ImGuiAPI
 )
 
 target_link_libraries(${MOD_NAME} PRIVATE
-        imgui
+        imgui_dll
 )

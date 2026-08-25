@@ -33,7 +33,7 @@ void LoadMod(const char* path)
 
     if (!mod_init)
     {
-        Log()<<"mod_init not found\n";
+        Log()<<"mod_init not found for "<<path<<"\n";
         return;
     }
 

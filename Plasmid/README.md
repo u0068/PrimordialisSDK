@@ -1,10 +1,6 @@
 # Plasmid API
-A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.com/u0068/Pilus)
+A WIP modding API for C++ mods, made for the Pilus Modloader
 
-## AIMS:
-- C++ API (Plasmid)
-- Runtime API (Nucleus)
-- Extend the LUA API
 ## TODO:
 - Debug tools (probably as a separate mod)
   - Cell property view
@@ -25,6 +21,7 @@ A WIP modding API for C++ mods, made for the [Pilus Modloader](https://github.co
 - Optimise if easy to do while remaining readable
 - Fix bugs
 ## DONE:
+- Shared mod resources / module manager (DONE)
 - Nucleus API versioning (DONE)
 - Organisation (DONE FOR NOW)
   - Organise directories (DONE)

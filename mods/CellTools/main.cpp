@@ -1,3 +1,4 @@
+#include <imgui_internal.h>
 #include "imgui_interface.h"
 #include <regex>
 #include <sstream>
@@ -308,10 +309,13 @@ void DrawMaterialsEditor()
     ImGui::End();
 }
 
+ImGuiAPI* imgui_api;
+
 void DrawUI()
 {
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+    ImGui::SetCurrentContext(imgui_api->context);
+    // if (show_demo_window)
+    //     ImGui::ShowDemoWindow(&show_demo_window);
 
     DrawMaterialsEditor();
 }
@@ -333,6 +337,7 @@ void P::InitialiseMod()
     Log() << "Hello World!\n";
     Hook<"init_materials_list">(InitMaterialsHook);
 
-    auto imgui_api = P::GetModule<ImGuiAPI>("ImGuiAPI");
+    imgui_api = P::GetModule<ImGuiAPI>("ImGuiAPI");
+    P::Log() << "Init Context: " << imgui_api->context << '\n';
     imgui_api->RegisterUI(DrawUI);
 }

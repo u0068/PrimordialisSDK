@@ -45,7 +45,7 @@ void GetModConfigValuesFromDefaults(Mod& mod)
 
 void ParseModInfo(Mod* mod)
 {
-    if (mod->path == mod->dll_path)
+    if (mod->path.has_extension())
         return; // Mod is raw dll so has no info
 
     fs::path modFolder = mod->path;

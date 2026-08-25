@@ -3,7 +3,6 @@
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_opengl3_loader.h>
 #include <imgui_impl_win32.h>
-#define IMGUI_BUILD_DLL
 #include "imgui_interface.h"
 
 // Use https://pthom.github.io/imgui_explorer/ for reference
