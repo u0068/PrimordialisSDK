@@ -1,6 +1,6 @@
 #include "updater.h"
 #include "modloader.h"
-#include <miniz_cpp.hpp>
+#include <zip_file.hpp>
 #include <regex>
 #include <urlmon.h>
 #pragma comment(lib, "urlmon.lib")
