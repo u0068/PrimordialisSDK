@@ -13,9 +13,9 @@ T GetFromJson(json json, const char* name, const T& fallback=0)
 {
     return json[name].empty() ? fallback : json[name].get<T>();
 }
-const char* GetStringFromJson(json json, const char* name, const std::string& fallback="")
+std::string GetStringFromJson(json json, const char* name, const char* fallback="")
 {
-    return json[name].empty() ? fallback.c_str() : json[name].get<std::string>().c_str();
+    return json[name].empty() ? fallback : json[name].get<std::string>();
 }
 
 static void InfoMarker(const char* desc, const char* sign="(?)")
@@ -100,15 +100,15 @@ void DrawSettings(Mod& mod)
         }
         else if (mod.config_values[name].type() == json::value_t::string)
         {
-            auto value = (char*)GetStringFromJson(mod.config_values, name);
-            auto hint = (char*)GetStringFromJson(setting, "default");
+            auto value = (char*)GetStringFromJson(mod.config_values, name).c_str();
+            auto hint = (char*)GetStringFromJson(setting, "default").c_str();
             if (ImGui::InputTextWithHint(name, hint, value, 128, ImGuiInputTextFlags_EnterReturnsTrue))
                 mod.config_values[name] = value;
         }
         if (!setting["description"].empty())
         {
             ImGui::SameLine();
-            InfoMarker(GetStringFromJson(setting, "description"));
+            InfoMarker(GetStringFromJson(setting, "description").c_str());
         }
     }
     ImGui::PopStyleVar();
@@ -305,9 +305,10 @@ void DrawModList()
             if (ImGui::BeginItemTooltip())
             {
                 ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-                ImGui::Text("Author: %s", GetStringFromJson(mod.info, "author", "Unknown Author"));
-                ImGui::Text("Description: %s", GetStringFromJson(mod.info, "description", "No Description"));
-                ImGui::Text("Version: %s", GetStringFromJson(mod.info, "version", "Unknown Version"));
+                // ImGui::Text("%s", mod.info.dump().c_str(), 2);
+                ImGui::Text("Author: %s", GetStringFromJson(mod.info, "author", "Unknown Author").c_str());
+                ImGui::Text("Description: %s", GetStringFromJson(mod.info, "description", "No Description").c_str());
+                ImGui::Text("Version: %s", GetStringFromJson(mod.info, "version", "Unknown Version").c_str());
                 if (not mod.info["dependencies"].empty())
                 {
                     ImGui::Text("Dependencies:");

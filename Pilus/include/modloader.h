@@ -78,6 +78,7 @@ namespace ModManager
 
 struct ModInfo
 {
+    char path[MAX_PATH];
     char name[MAX_PATH];
 };
 

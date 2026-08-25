@@ -18,29 +18,10 @@ std::string ReadFile(const fs::path& path)
     return buffer.str();
 }
 
-std::string GetValue(const std::string& data, const std::string& key)
-{
-    size_t find = data.find(key + ":");
-
-    if (find == std::string::npos)
-        return {};
-
-    find += key.length() + 1;
-
-    size_t end = data.find('\n', find);
-
-    if (end == std::string::npos)
-        end = data.length();
-
-    return data.substr(find, end - find);
-}
-
 void GetModConfigValuesFromDefaults(Mod& mod)
 {
     for (auto& el : mod.config_defaults.items())
         mod.config_values[el.key()] = el.value()["default"];
-    // std::cout << "Defaults: " << mod.config_defaults.dump();
-    // std::cout << "Values: " << mod.config_values.dump();
 }
 
 void ParseModInfo(Mod* mod)
@@ -50,6 +31,7 @@ void ParseModInfo(Mod* mod)
 
     fs::path modFolder = mod->path;
 
+    int dll_count = 0;
     for (const auto& entry : fs::recursive_directory_iterator(modFolder))
     {
         if (!entry.is_regular_file())
@@ -69,10 +51,26 @@ void ParseModInfo(Mod* mod)
             mod->config_defaults = json::parse(ReadFile(entry), nullptr, true, true);
 
         else if (entry.path().extension() == ".dll")
+        {
             mod->dll_path = entry.path();
+            dll_count++;
+        }
 
         else if (filename == "init.lua")
             mod->init_path = entry.path();
+    }
+    if (dll_count > 1)
+    {
+        if (mod->info["main_dll"].empty())
+        {
+            console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
+                                  "\tPlease specify a \"main_dll\" in info.json!\n"
+                                  "\tFallback: Loading " << mod->dll_path << "\n";
+        }
+        else
+        {
+            mod->dll_path = mod->info["main_dll"].get<std::string>();
+        }
     }
 }
 

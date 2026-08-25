@@ -1,0 +1,9 @@
+{
+  "name" : "Constant Acid Color",
+  "author" : "h",
+  "description" : "Tools for working with cells.",
+  "version": "0.1.0",
+  "dependencies" : {
+    "Nucleus" : "0.1.3"
+  }
+}

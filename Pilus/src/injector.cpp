@@ -249,8 +249,12 @@ void ModManager::InjectAll()
         console_log << ")\n";
 
         strcpy_s(
-            shared->mods[shared->count++].name,
+            shared->mods[shared->count++].path,
             mod.dll_path.filename().string().c_str()
+        );
+        strcpy_s(
+            shared->mods[shared->count++].name,
+            mod.name.c_str()
         );
     }
     if (failed)
@@ -259,10 +263,10 @@ void ModManager::InjectAll()
         console_log << "Mod injection finished successfully\n";
 
     // load nucleus api.dll last after all other mods
-    if (std::filesystem::exists("mods/Nucleus.dll"))
+    if (std::filesystem::exists("mods/Nucleus/Nucleus.dll"))
     {
         char dllpath[MAX_PATH];
-        if (Inject("mods/Nucleus.dll", dllpath, lpprocessname) != 0)
+        if (Inject("mods/Nucleus/Nucleus.dll", dllpath, lpprocessname) != 0)
         {
             console_log << err << "Failed to inject nucleus runtime API, major issues may occur !\n";
             failed++;

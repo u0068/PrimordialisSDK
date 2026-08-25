@@ -1,0 +1,10 @@
+{
+  "name" : "ImGui API",
+  "author" : "h",
+  "description" : "API to let mods use DearImGui\nShares ImGuiContext between all mods so they can interact with each other.",
+  "version": "0.1.0",
+  "dependencies" : {
+    "Nucleus" : "0.1.4"
+  },
+  "main_dll" : "ImGuiAPI.dll"
+}

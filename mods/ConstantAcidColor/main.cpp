@@ -31,7 +31,6 @@ void OnInitMats()
 
 void P::InitialiseMod()
 {
-    mod_name = "Constant Acid Color";
     Log() << "Hello World!\n";
     Hook<"init_materials_list">(OnInitMats);
 }
