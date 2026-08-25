@@ -5,8 +5,8 @@
 #include <urlmon.h>
 #pragma comment(lib, "urlmon.lib")
 
-// TODO: Make cmake generate the version number automatically
-constexpr Version PILUS_VERSION{0, 5, 5};
+// TODO: Make cmake increment the version number automatically
+constexpr Version PILUS_VERSION{0, 5, 6};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
