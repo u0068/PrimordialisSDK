@@ -46,13 +46,13 @@ https://discord.gg/AB48c9tZ57
 # Contributing to the SDK
 To contribute, clone the entire repo:
 ```bash
-git clone https://github.com/you/PrimordialisSDK
+git clone --recurse-submodules https://github.com/you/PrimordialisSDK
 ```
 Alternatively, you can sparsely checkout only the parts you want to contribute to.\
 For example, this is how you would only get Nucleus and Plasmid source code,
 without the Pilus source code:
 ```bash
-git clone --filter=blob:none --sparse https://github.com/u0068/PrimordialisSDK
+git clone --filter=blob:none --sparse --recurse-submodules https://github.com/u0068/PrimordialisSDK.git
 cd PrimordialisSDK
 git sparse-checkout set Plasmid
 git sparse-checkout set Nucleus

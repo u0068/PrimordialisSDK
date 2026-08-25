@@ -5,11 +5,13 @@ project(PrimordialisSDK)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
+add_subdirectory(third_party)
+
 add_subdirectory(Pilus)
 
-add_subdirectory(Nucleus)
-
 add_subdirectory(Plasmid)
+
+add_subdirectory(mods)
 
 add_custom_target(BuildAllModsNuc)
 
@@ -18,6 +20,6 @@ add_dependencies(BuildAllModsNuc
         BuildAllMods
 )
 
-add_subdirectory(Luazyme)
+add_subdirectory(lua/Luazyme)
 
-add_subdirectory(Tools)
+add_subdirectory(reverse_engineering/Tools)

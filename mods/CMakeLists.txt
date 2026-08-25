@@ -1,0 +1,46 @@
+# Add mod and copy to mods folder
+function(add_plasmid_mod NAME)
+
+    add_library(${NAME} SHARED
+            ${ARGN}
+    )
+
+    target_link_libraries(${NAME}
+            PRIVATE Plasmid
+    )
+
+    set_target_properties(${NAME}
+            PROPERTIES
+            OUTPUT_NAME ${NAME}
+    )
+
+    add_custom_command(
+            TARGET ${NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            $<TARGET_FILE:${NAME}>
+            "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods"
+    )
+
+endfunction()
+
+# Auto-detect mods
+file(GLOB MODS CONFIGURE_DEPENDS
+        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+        *)
+
+set(MOD_TARGETS)
+
+foreach(MOD ${MODS})
+    message("Found mod: ${MOD}")
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${MOD})
+        add_subdirectory(${MOD})
+        get_filename_component(MOD_NAME ${MOD} NAME)
+        list(APPEND MOD_TARGETS ${MOD_NAME})
+    endif()
+endforeach()
+
+add_custom_target(BuildAllMods)
+
+if(MOD_TARGETS)
+    add_dependencies(BuildAllMods ${MOD_TARGETS})
+endif()

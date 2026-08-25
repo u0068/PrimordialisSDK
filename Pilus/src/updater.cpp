@@ -1,9 +1,8 @@
 #include "updater.h"
 #include "modloader.h"
-#include <iostream>
+#include <miniz_cpp.hpp>
 #include <regex>
 #include <urlmon.h>
-#include "miniz/zip_file.hpp"
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake generate the version number automatically
