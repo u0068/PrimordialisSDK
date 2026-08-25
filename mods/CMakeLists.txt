@@ -37,9 +37,12 @@ function(add_plasmid_mod NAME)
 
     foreach(ASSET ${MOD_ASSETS})
         add_custom_command(TARGET ${NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${CMAKE_CURRENT_SOURCE_DIR}/${ASSET}"
                 "${MOD_DIR}"
+        )
+        target_sources(${NAME} PRIVATE
+                "${CMAKE_CURRENT_SOURCE_DIR}/${ASSET}"
         )
     endforeach()
 endfunction()
