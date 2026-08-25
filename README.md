@@ -1,13 +1,16 @@
 Primordialis SDK is a modding SDK for Primordialis.
 # Contents:
 - Pilus Modloader
-- Nucleus Runtime API
 - Plasmid C++ Modding API
-- Luasome Lua Modding API
-- Primordialis PDB files
-- Ghidra Scripts
-- Decompiled game code
-- Misc SDK dev tools
+- Mods:
+  - Various official and example mods
+  - Nucleus Runtime API
+- Lua:
+  - Luasome Lua Modding API
+- Reverse Engineering:
+  - Ghidra Scripts
+  - Decompiled game code
+  - Misc SDK dev tools
 
 ## Expect bugs.
 Everything is in very early development and will break sooner or later.
@@ -29,15 +32,17 @@ enable them to your liking, and launch Primordialis from Pilus by pressing "star
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build
 C++ shared libraries such as Visual Studio, VSCode, or CLion.\
 You can download Plasmid.zip from releases, clone the entire SDK repo,
-or use the following git commands to get only Plasmid:
+or use the following git commands to get only Plasmid and mod source code:
 ```bash
-git clone --filter=blob:none --sparse https://github.com/u0068/PrimordialisSDK
+git clone --filter=blob:none --sparse --recurse-submodules https://github.com/u0068/PrimordialisSDK
 cd PrimordialisSDK
 git sparse-checkout set Plasmid
+git sparse-checkout set mods
 ```
 To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).\
 Load the Primordialis PDB before decompiling, by following the steps given in the
 Ghidra Docs (or just search it up).\
+We work on the avx build rather than the sse3 build, but it probably doesn't make much difference.\
 Some decompiled functions are already in `PrimordialisSDK/Decompiled`.\
 Share your decompiled functions by putting them in there and pushing to the repo.\
 **Warning: Interpreting decompiled code is not for the faint of heart!**\
@@ -49,13 +54,12 @@ To contribute, clone the entire repo:
 git clone --recurse-submodules https://github.com/you/PrimordialisSDK
 ```
 Alternatively, you can sparsely checkout only the parts you want to contribute to.\
-For example, this is how you would only get Nucleus and Plasmid source code,
-without the Pilus source code:
+For example, this is how you would only get the Pilus source code,
+without anything else. 
 ```bash
 git clone --filter=blob:none --sparse --recurse-submodules https://github.com/u0068/PrimordialisSDK.git
 cd PrimordialisSDK
-git sparse-checkout set Plasmid
-git sparse-checkout set Nucleus
+git sparse-checkout set Pilus
 ```
 Use this invite to join the Primordialis Server and get the Mod SDK Dev role:\
 https://discord.gg/Fz5RaRBNj8
