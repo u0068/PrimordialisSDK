@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <windows.h>
 #include "hook_manager.h"
-#include "nucleus_interface.h"
+#include "module_manager.h"
 #include "generated/game_functions/essential.h"
 #include "generated/resolve_data.h"
 
