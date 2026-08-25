@@ -1,6 +1,6 @@
 #include "nucleus_api.h"
 
-const std::string NUCLEUS_VERSION = "v0.1.3";
+const std::string NUCLEUS_VERSION = "v0.1.4";
 
 struct ModInfo
 {

@@ -26,6 +26,7 @@ struct Mod
 
     nlohmann::ordered_json config_defaults{};
     json config_values{};
+    json info{};
 
     bool operator== (const Mod& other) const
     {

@@ -57,13 +57,12 @@ void ParseModInfo(Mod* mod)
 
         auto filename = entry.path().filename().string();
 
-        if (filename == "info.txt")
+        if (filename == "info.json")
         {
             std::string data = ReadFile(entry.path());
 
-            // mod->name = GetValue(data, "name");
-            mod->author = GetValue(data, "author");
-            mod->description = GetValue(data, "description");
+            mod->info = json::parse(ReadFile(entry), nullptr, true, true);
+            mod->name = mod->info["name"].get<std::string>().c_str();
         }
 
         else if (filename == "config.json")
