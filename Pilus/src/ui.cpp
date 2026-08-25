@@ -206,6 +206,7 @@ void DrawActionBox()
         (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x)/2,
         ImGui::GetContentRegionAvail().y}))
     {
+        SortDeps();
         ModManager::SaveLuaModlist();
         ModManager::PatchInitLua();
         ModManager::InjectAll();

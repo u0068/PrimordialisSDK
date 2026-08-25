@@ -100,3 +100,12 @@ inline bool MoveMod(int mod_idx, int direction, std::unordered_set<int> group={}
     std::swap(mods[mod_idx], mods[next]);
     return true;
 }
+
+inline bool ValidateDeps()
+{
+    for (int mod_idx=0; mod_idx<ModManager::mods.size(); mod_idx++)
+        for (int dep_idx : GetModDepIndices(ModManager::mods[mod_idx]))
+            if (dep_idx > mod_idx)
+                return false;
+    return true;
+}
