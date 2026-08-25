@@ -5,6 +5,6 @@
   "version": "0.1.0",
   "dependencies" : {
     "Nucleus" : "0.1.4",
-    "ImGuiAPI" : "0.1.0"
+    "ImGui API" : "0.1.0"
   }
 }

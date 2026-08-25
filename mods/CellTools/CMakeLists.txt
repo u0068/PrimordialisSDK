@@ -5,11 +5,12 @@ add_plasmid_mod(${MOD_NAME}
         main.cpp
 
         ASSETS
-        info.json
+            info.json
 )
 
 target_include_directories(${MOD_NAME} PRIVATE
-    ../ImGuiAPI
+        ${CMAKE_CURRENT_LIST_DIR}
+        ../ImGuiAPI
 )
 
 target_link_libraries(${MOD_NAME} PRIVATE
