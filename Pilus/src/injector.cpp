@@ -217,11 +217,15 @@ void ModManager::InjectAll()
 
     shared->count = 0;
 
+    bool nucleus_enabled = false;
     for (auto & mod : mods)
     {
         //skip runtime api in modlist because should be last
         if (mod.dll_path.filename().string() == "Nucleus.dll")
+        {
+            nucleus_enabled = mod.is_enabled();
             continue;
+        }
 
         if (mod.dll_path.empty())
             continue;
@@ -259,7 +263,7 @@ void ModManager::InjectAll()
         console_log << "Mod injection finished successfully\n";
 
     // load nucleus api.dll last after all other mods
-    if (std::filesystem::exists("mods/Nucleus/Nucleus.dll"))
+    if (nucleus_enabled and std::filesystem::exists("mods/Nucleus/Nucleus.dll"))
     {
         char dllpath[MAX_PATH];
         if (Inject("mods/Nucleus/Nucleus.dll", dllpath, lpprocessname) != 0)
