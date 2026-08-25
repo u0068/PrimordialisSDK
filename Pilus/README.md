@@ -19,8 +19,7 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - Ask before updating, auto-update setting.
 - Download updates for Mods.
 - Fix bugs:
-  - Subscript out of range crash (FIXED?)
-  - Corrupted config file causes memory leak
+  - Can't close through CLion in release mode
 ## DONE:
 - Checkbox to hide disabled / not installed mods (DONE)
 - Disable mods that are not installed (DONE)
@@ -60,4 +59,5 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
   - Multiple DLLs (DONE)
   - Mod config editor (DONE)
 - Fixed Bugs:
-  - Can't close through CLion (DONE)
+  - Corrupted config file causes memory leak (FIXED)
+  - Subscript out of range crash (FIXED?)
