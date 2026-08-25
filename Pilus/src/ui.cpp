@@ -225,6 +225,16 @@ void DrawActionBox()
 void DrawModList()
 {
     ImGui::Begin("Mods");
+
+    static ImGuiTextFilter filter;
+    if (ImGui::IsWindowAppearing())
+    {
+        ImGui::SetKeyboardFocusHere();
+        filter.Clear();
+    }
+    ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+    filter.Draw("##Filter", -FLT_MIN);
+
     auto& mods = ModManager::mods;
     if (ImGui::BeginTable(
         "ModList",
@@ -249,9 +259,13 @@ void DrawModList()
             );
         int move_direction = 0;
         int dragged_mod_index = -1;
-        for (int i = 0; i < mods.size(); ++i)
+
+        int row_idx = 0;
+        for (int mod_idx = 0; mod_idx < mods.size(); ++mod_idx)
         {
-            Mod& mod = mods[i];
+            Mod& mod = mods[mod_idx];
+            if (not filter.PassFilter(mod.name.c_str()))
+                continue;
             ImGui::PushID(mod.name.c_str());
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
@@ -282,11 +296,11 @@ void DrawModList()
             if (not mod.user_enabled)
                 ImGui::PopStyleColor();
 
-            bool is_hovered = ImGui::TableGetHoveredRow() == i;
+            bool is_hovered = ImGui::TableGetHoveredRow() == row_idx;
             if (ImGui::IsItemActive())
             {
                 if (dragged_mod_index == -1)
-                    dragged_mod_index = i;
+                    dragged_mod_index = mod_idx;
                 if (!is_hovered)
                     move_direction = ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
             }
@@ -335,7 +349,7 @@ void DrawModList()
                 ImGui::BeginDisabled();
             if (ImGui::Button("Config"))
             {
-                configured_mod = i;
+                configured_mod = mod_idx;
                 config_open = true;
             }
             if (mod.config_defaults.empty())
@@ -345,6 +359,7 @@ void DrawModList()
                 ImGui::EndDisabled();
             }
             ImGui::PopID();
+            row_idx++;
         }
         ImGui::EndTable();
         if (move_direction != 0)
