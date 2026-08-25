@@ -37,6 +37,11 @@ struct Mod
     {
         return !dll_path.empty();
     }
+
+    [[nodiscard]] bool is_enabled() const
+    {
+        return user_enabled or dep_enabled;
+    }
 };
 
 namespace ModManager

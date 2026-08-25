@@ -226,7 +226,7 @@ void ModManager::InjectAll()
         if (mod.dll_path.empty())
             continue;
 
-        if (!mod.user_enabled)
+        if (!mod.is_enabled())
         {
             console_log << "Encountered disabled mod, skipping...\n";
             continue;
