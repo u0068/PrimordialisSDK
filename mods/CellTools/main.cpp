@@ -1,9 +1,8 @@
-#include <imgui_internal.h>
+#include "imgui_interface.h"
 #include <regex>
 #include <sstream>
 
 #include "plasmid_api.h"
-#include "imgui_setup.h"
 #include "generated/game_functions/cells.h"
 
 int n_vanilla_mats{};
@@ -333,5 +332,7 @@ void P::InitialiseMod()
     mod_name = "Cell Tools";
     Log() << "Hello World!\n";
     Hook<"init_materials_list">(InitMaterialsHook);
-    do_imgui_hooks();
+
+    auto imgui_api = P::GetModule<ImGuiAPI>("ImGuiAPI");
+    imgui_api->RegisterUI(DrawUI);
 }

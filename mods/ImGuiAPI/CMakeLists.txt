@@ -6,7 +6,7 @@ add_plasmid_mod(${MOD_NAME}
 )
 
 include_directories(${MOD_NAME}
-    ../ImGuiAPI
+    ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_link_libraries(${MOD_NAME} PRIVATE
