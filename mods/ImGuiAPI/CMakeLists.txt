@@ -10,5 +10,5 @@ target_include_directories(${MOD_NAME} PUBLIC
 )
 
 target_link_libraries(${MOD_NAME} PRIVATE
-        imgui_dll
+        imgui
 )

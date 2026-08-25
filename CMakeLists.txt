@@ -13,13 +13,6 @@ add_subdirectory(Plasmid)
 
 add_subdirectory(mods)
 
-add_custom_target(BuildAllModsNuc)
-
-add_dependencies(BuildAllModsNuc
-        Nucleus
-        BuildAllMods
-)
-
 add_subdirectory(lua/Luazyme)
 
 add_subdirectory(reverse_engineering/Tools)

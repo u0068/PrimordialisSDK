@@ -355,7 +355,7 @@ void UpdateAll()
 
     UpdatePilus();
 
-    CheckAndUpdate("Nucleus", ModManager::mod_path / "Nucleus.dll", ModManager::mod_path / "Nucleus.dll");
+    CheckAndUpdate("Nucleus", ModManager::mod_path / "Nucleus/Nucleus.dll", ModManager::mod_path / "Nucleus/Nucleus.dll");
 
     fs::path luasome_temp_zip_path{ModManager::pilus_files_path / "luasome_tmp.zip"};
     if (CheckAndUpdate("Luasome", luasome_temp_zip_path, ModManager::luasome_path))
