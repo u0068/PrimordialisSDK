@@ -202,11 +202,11 @@ namespace P
 };
 
 extern"C" __declspec(dllexport)
-inline void Initialise(Nucleus* api, const char* mod_path, const char* mod_name)
+inline void Initialise(Nucleus* api, const char* mod_path)
 {
     nucleus = api;
     P::mod_path = mod_path;
-    P::mod_name = mod_name;
+    P::mod_name = mod_path; // path is better than nothing
     P::translation_values.reserve(2048);
     P::InitialiseMod();
     P::Log()<<"Initialised Mod!\n";

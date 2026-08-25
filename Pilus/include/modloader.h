@@ -1,38 +1,9 @@
 #pragma once
 #include <vector>
 #include <windows.h>
-#include <json.hpp>
-#include "logging.h"
-
-using json = nlohmann::json;
-using ord_json = nlohmann::ordered_json;
+#include "json_helpers.h"
 
 namespace fs = std::filesystem;
-
-template<typename... Args>
-ord_json safe_parse(Args... args)
-{
-    try
-    {
-        return json::parse(args...);
-    }
-    catch (const json::parse_error& e)
-    {
-        console_log << err << "message: " << e.what() << "\n"
-                  << "exception id: " << e.id << "\n"
-                  << "byte position of error: " << e.byte << "\n";
-        return ord_json{};
-    }
-}
-template<typename T>
-T GetFromJson(json json, const char* name, const T& fallback=0)
-{
-    return json[name].empty() ? fallback : json[name].get<T>();
-}
-inline std::string GetStringFromJson(json json, const char* name, const char* fallback="")
-{
-    return json[name].empty() ? fallback : json[name].get<std::string>();
-}
 
 struct Mod
 {
@@ -43,12 +14,7 @@ struct Mod
     bool enabled = true;
 
     // UNSAVED:
-    std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.txt
-    std::string author{"Unknown"}; // defaults for no info.txt
-    std::string description{"No Description"};
-    std::string mod_version{"Unknown"};
-    std::string plasmid_version{"Unknown"};
-    std::string min_primordialis_version{"Unknown"};
+    std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
 
     ord_json config_defaults{};
     json config_values{};
@@ -104,7 +70,6 @@ namespace ModManager
 
 struct ModInfo
 {
-    char path[MAX_PATH];
     char name[MAX_PATH];
 };
 

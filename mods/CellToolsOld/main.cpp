@@ -1,9 +1,8 @@
-#include <imgui_internal.h>
-#include "imgui_interface.h"
+
+#include "imgui_setup.h"
 #include <regex>
 #include <sstream>
 
-#include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
 
 int n_vanilla_mats{};
@@ -309,11 +308,8 @@ void DrawMaterialsEditor()
     ImGui::End();
 }
 
-ImGuiAPI* imgui_api;
-
 void DrawUI()
 {
-    ImGui::SetCurrentContext(imgui_api->context);
     // if (show_demo_window)
     //     ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -333,10 +329,6 @@ void InitMaterialsHook()
 
 void P::InitialiseMod()
 {
-    mod_name = "Cell Tools";
     Hook<"init_materials_list">(InitMaterialsHook);
-
-    imgui_api = P::GetModule<ImGuiAPI>("ImGuiAPI");
-    P::Log() << "Init Context: " << imgui_api->context << '\n';
-    imgui_api->RegisterUI(DrawUI);
+    do_imgui_hooks();
 }

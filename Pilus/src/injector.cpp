@@ -249,12 +249,8 @@ void ModManager::InjectAll()
         console_log << ")\n";
 
         strcpy_s(
-            shared->mods[shared->count++].path,
-            mod.dll_path.filename().string().c_str()
-        );
-        strcpy_s(
             shared->mods[shared->count++].name,
-            mod.name.c_str()
+            mod.dll_path.filename().string().c_str()
         );
     }
     if (failed)

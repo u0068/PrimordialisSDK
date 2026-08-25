@@ -8,7 +8,6 @@
 int configured_mod = -1;
 bool config_open = true;
 
-
 static void InfoMarker(const char* desc, const char* sign="(?)")
 {
     ImGui::TextDisabled(sign);
@@ -296,8 +295,8 @@ void DrawModList()
             if (ImGui::BeginItemTooltip())
             {
                 ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-                // ImGui::Text("%s", mod.info.dump().c_str(), 2);
-                ImGui::Text("Author: %s", GetStringFromJson(mod.info, "author", "Unknown Author").c_str());
+                // ImGui::Text("%s", mod.info.dump().c_str());
+                ImGui::Text("Author: %s", GetStringFromJson(mod.info, "author", "Unknown").c_str());
                 ImGui::Text("Description: %s", GetStringFromJson(mod.info, "description", "No Description").c_str());
                 ImGui::Text("Version: %s", GetStringFromJson(mod.info, "version", "Unknown Version").c_str());
                 if (not mod.info["dependencies"].empty())
@@ -310,6 +309,13 @@ void DrawModList()
                         ImGui::Text("\t%s\t%s", name, version);
                     }
                 }
+                ImGui::Text("Directory: %s", mod.path.filename().string().c_str());
+                if (not mod.dll_path.empty())
+                    ImGui::Text("main dll path: %s",
+                        mod.dll_path.lexically_relative(mod.path.parent_path()).string().c_str());
+                if (not mod.init_path.empty())
+                    ImGui::Text("init.lua path: %s",
+                        mod.init_path.lexically_relative(mod.path.parent_path()).string().c_str());
                 ImGui::PopTextWrapPos();
                 ImGui::EndTooltip();
             }
