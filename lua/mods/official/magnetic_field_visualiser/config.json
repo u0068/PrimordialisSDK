@@ -1,0 +1,54 @@
+{
+  "field_line_length": {
+    "default": 100, "min": 0, "max": 200, "slider": true,
+    "description": "max length of the field lines"
+  },
+  "field_line_step_size": {
+    "default": 2, "min": 0, "max": 5, "slider": true,
+    "description": "distance between field line dots"
+  },
+  "field_line_count": {
+    "default": 18, "min": 0, "max": 60, "slider": true,
+    "description": "number of field lines per update, works best with a multiple of 6 but not 4"
+  },
+  "grid_mode": {
+    "default": true,
+    "description": "spawn field lines in a grid instead of around each magnets. better for high magnet density"
+  },
+  "grid_size": {
+    "default": 16, "min": 0, "max": 64, "slider": true,
+    "description": "size of grid around visualiser"
+  },
+  "grid_spacing": {
+    "default": 3, "min": 0, "max": 10, "slider": true,
+    "description": "spacing between field spawners on grid"
+  },
+  "grid_field_line_length": {
+    "default": 3, "min": 0, "max": 50, "slider": true,
+    "description": "max length of grid field lines"
+  },
+  "show_dir_fields": {
+    "default": true,
+    "description": "show fields of directional (exposed) magnets"
+  },
+  "show_z_fields": {
+    "default": true,
+    "description": "show fields of z-facing (enclosed) magnets"
+  },
+  "flow_speed": {
+    "default": 4, "min": 0, "max": 10, "slider": true,
+    "description": "dot flow speed"
+  },
+  "max_dot_size": {
+    "default": 0.125, "min": 0, "max": 10, "slider": true,
+    "description": "max dot size"
+  },
+  "dot_saturation": {
+    "default": 0.5, "min": 0, "max": 1, "slider": true,
+    "description": "dot color saturation"
+  },
+  "dot_opacity": {
+    "default": 0.5, "min": 0, "max": 1, "slider": true,
+    "description": "dot opacity"
+  }
+}
