@@ -309,32 +309,11 @@ bool UpdatePDB()
     }
 
     if (fs::exists("pdbs.zip"))
-    {
         ExtractZip("pdbs.zip", ModManager::game_path);
-    }
     else
     {
-        console_log << err << "pdbs.zip not found, downloading from github.\n"
-                              "You should only see this error on the v0.1 build of the game.\n";
-        // AVX
-        std::string pdb_file_name = "primordialis_avx_" + std::to_string(actual_build_id) + ".pdb";
-        std::string pdb_source_path = "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/PDBs/" + pdb_file_name;
-        if (!DownloadFromURL(pdb_source_path, ModManager::game_path / "primordialis_avx.pdb"))
-        {
-            console_log << err << "AVX PDB download failed\n";
-            return false;
-        }
-        console_log << "AVX PDB downloaded successfully\n";
-
-        // SSE3
-        pdb_file_name = "primordialis_sse3_" + std::to_string(actual_build_id) + ".pdb";
-        pdb_source_path = "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/PDBs/" + pdb_file_name;
-        if (!DownloadFromURL(pdb_source_path, ModManager::game_path / "primordialis_sse3.pdb"))
-        {
-            console_log << err << "SSE3 PDB download failed\n";
-            return false;
-        }
-        console_log << "SSE3 PDB downloaded successfully\n";
+        console_log << err << "pdbs.zip not found. If you are on Primordialis v0.1, switch to the beta branch!\n";
+        return false;
     }
 
     console_log << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
