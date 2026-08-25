@@ -222,9 +222,11 @@ void DrawActionBox()
     ImGui::End();
 }
 
+bool hide_uninstalled = false;
 void DrawModList()
 {
     ImGui::Begin("Mods");
+    auto& mods = ModManager::mods;
 
     static ImGuiTextFilter filter;
     if (ImGui::IsWindowAppearing())
@@ -233,9 +235,20 @@ void DrawModList()
         filter.Clear();
     }
     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
-    filter.Draw("##Filter", -FLT_MIN);
+    filter.Draw("##Filter", -ImGui::CalcTextSize(" Options ").x);
 
-    auto& mods = ModManager::mods;
+    // Options menu
+    if (ImGui::BeginPopup("Options"))
+    {
+        ImGui::Checkbox("Hide Uninstalled Mods", &hide_uninstalled);
+        if (ImGui::Button("Forget Uninstalled Mods"))
+            std::erase_if(mods, [](auto& mod){return not mod.is_installed();});
+        ImGui::EndPopup();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Options"))
+        ImGui::OpenPopup("Options");
+
     if (ImGui::BeginTable(
         "ModList",
         3,
@@ -264,16 +277,17 @@ void DrawModList()
         for (int mod_idx = 0; mod_idx < mods.size(); ++mod_idx)
         {
             Mod& mod = mods[mod_idx];
-            if (not filter.PassFilter(mod.name.c_str()))
+            if (not filter.PassFilter(mod.name.c_str())
+                or hide_uninstalled and not mod.is_installed())
                 continue;
             ImGui::PushID(mod.name.c_str());
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
-            if (!exists(mod.dll_path) and !exists(mod.init_path))
+            if (not mod.is_installed())
                 ImGui::BeginDisabled();
             if (ImGui::Checkbox("##Enabled", &mod.user_enabled))
                 ModManager::SavePilusConfig();
-            if (!exists(mod.dll_path) and !exists(mod.init_path))
+            if (not mod.is_installed())
             {
                 mod.user_enabled = false;
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
@@ -283,10 +297,12 @@ void DrawModList()
             ImGui::TableNextColumn();
             if (not mod.user_enabled)
             {
-                if (mod.dep_enabled)
+                if (not mod.is_installed())
+                    ImGui::PushStyleColor(ImGuiCol_Text, {0.8, 0.3, 0.3, 1.});
+                else if (mod.dep_enabled)
                     ImGui::PushStyleColor(ImGuiCol_Text, {1., 1., 0.5, 1.});
                 else
-                    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+                    ImGui::PushStyleColor(ImGuiCol_Text, {0.8, 0.8, 0.8, 1.});
             }
 
             ImGui::Selectable(
@@ -295,6 +311,15 @@ void DrawModList()
                 );
             if (not mod.user_enabled)
                 ImGui::PopStyleColor();
+            if (not mod.is_installed() and ImGui::BeginPopupContextItem())
+            {
+                if (ImGui::Button("Forget this mod"))
+                {
+                    std::erase(mods, mod);
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::EndPopup();
+            }
 
             bool is_hovered = ImGui::TableGetHoveredRow() == row_idx;
             if (ImGui::IsItemActive())

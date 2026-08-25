@@ -42,6 +42,11 @@ struct Mod
     {
         return user_enabled or dep_enabled;
     }
+
+    [[nodiscard]] bool is_installed() const
+    {
+        return exists(path);
+    }
 };
 
 namespace ModManager

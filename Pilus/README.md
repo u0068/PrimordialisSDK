@@ -11,23 +11,23 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - Button to open mods folder
 - Auto mod refresh
 - Automate ImGui layout on first start
-- Modlist filter
-- Checkbox to hide disabled / not installed mods
-- Disable mods that are not installed (DONE)
-  - Button to remove them from the modlist
-- Don't inject nucleus if no C++ mods are enabled
 - Save and load modlists
   - Modlists contain mod configs (DONE)
 - Restore mod .zip support
 - Uninstaller
 - Only run Luasome when starting the game through Pilus
 - Ask before updating, auto-update setting.
-- Compatibility detection.
 - Download updates for Mods.
 - Fix bugs:
   - Subscript out of range crash (FIXED?)
   - Corrupted config file causes memory leak
 ## DONE:
+- Checkbox to hide disabled / not installed mods (DONE)
+- Disable mods that are not installed (DONE)
+  - Button to remove them from the modlist (DONE)
+- Don't inject nucleus if no C++ mods are enabled (DONE)
+- Modlist filter (DONE)
+- Compatibility detection. (DONE)
 - Log to a file (DONE)
 - Lua and C++ markers on mods (DONE)
 - Exclude Nucleus from modlist reordering (DONE)

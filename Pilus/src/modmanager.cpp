@@ -91,35 +91,28 @@ void ModManager::RefreshMods()
         installed_mods.push_back(nmod);
     }
 
-    std::vector<Mod> final_mods;
-
-    for (auto & installed_mod : installed_mods)
-        for (const auto &  mod: mods)
+    for (auto & mod : mods)
+        for (auto &  installed_mod: installed_mods)
             if (mod == installed_mod)
             {
-                final_mods.push_back(installed_mod);
-                final_mods[final_mods.size() - 1].user_enabled = mod.user_enabled;
-                final_mods[final_mods.size() - 1].config_values = mod.config_values;
+                installed_mod.user_enabled = mod.user_enabled;
+                installed_mod.config_values = mod.config_values;
+                mod = installed_mod;
                 break;
             }
     for (const auto & installed_mod : installed_mods)
     {
         bool add_this_mod = true;
-        for (const auto & final_mod : final_mods)
-            if (installed_mod == final_mod)
+        for (const auto & mod : mods)
+            if (installed_mod == mod)
             {
                 add_this_mod = false;
                 break;
             }
         if (add_this_mod)
-            final_mods.push_back(installed_mod);
+            mods.push_back(installed_mod);
     }
-    for (auto i=0; i<final_mods.size(); i++)
-        if (final_mods[i].name == "Nucleus")
-            std::swap(final_mods[i], final_mods[0]);
 
-    mods.clear();
-    mods = final_mods;
     SortDeps();
     SavePilusConfig();
 }
