@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_set>
+
 #include "modloader.h"
 
 inline std::vector<Mod*> GetModDeps(Mod& mod)
@@ -11,6 +13,17 @@ inline std::vector<Mod*> GetModDeps(Mod& mod)
     return deps;
 }
 
+inline std::vector<int> GetModDepIndices(Mod& mod)
+{
+    std::vector<int> deps{};
+    for (auto& dep : mod.info["dependencies"].items())
+        for (int idx=0; idx<ModManager::mods.size(); idx++)
+            if (ModManager::mods[idx].name == dep.key())
+                deps.push_back(idx);
+    return deps;
+}
+
+
 inline void EnableDeps()
 {
     for (auto& mod : ModManager::mods)
@@ -21,25 +34,6 @@ inline void EnableDeps()
                 dep->dep_enabled = true;
 }
 
-// inline std::unordered_map<std::string, int> CountAllRefs()
-// {
-//     std::unordered_map<std::string, int> ref_map{};
-//     for (auto& mod : ModManager::mods)
-//         if (mod.is_enabled())
-//             for (auto dep : GetModDeps(mod))
-//                 ref_map[dep->name]++;
-//     return ref_map;
-// }
-//
-// inline void SortDeps()
-// {
-//     auto ref_map = CountAllRefs();
-//     for (auto& mod : ModManager::mods)
-//     {
-//
-//     }
-// }
-
 inline void SortDeps()
 {
     for (auto& mod : ModManager::mods)
@@ -47,4 +41,63 @@ inline void SortDeps()
             for (auto dep : GetModDeps(mod))
                 if (dep > &mod)
                     std::iter_swap(dep, &mod);
+}
+
+inline bool DependsOn(int mod_idx, int dependency)
+{
+    for (auto dep : GetModDeps(ModManager::mods[mod_idx]))
+    {
+        if (dep == &ModManager::mods[dependency])
+            return true;
+    }
+
+    return false;
+}
+
+inline bool IsDependentOf(int mod_idx, int dependency)
+{
+    return DependsOn(mod_idx, dependency);
+}
+
+inline void CollectDependencies(
+    int mod_idx,
+    std::unordered_set<int>& result)
+{
+    for (auto dep : GetModDepIndices(ModManager::mods[mod_idx]))
+        if (result.insert(dep).second)
+            CollectDependencies(dep, result);
+}
+
+inline void CollectDependents(
+    int mod_idx,
+    std::unordered_set<int>& result)
+{
+    for (int idx=0; idx<ModManager::mods.size(); idx++)
+        if (DependsOn(idx, mod_idx) && result.insert(idx).second)
+            CollectDependents(idx, result);
+}
+
+inline void MoveMod(int mod_idx, int direction, std::unordered_set<int> group={})
+{
+    auto& mods = ModManager::mods;
+
+    group.insert(mod_idx);
+
+    if (direction < 0)
+        CollectDependencies(mod_idx, group);
+    else
+        CollectDependents(mod_idx, group);
+
+    int next = mod_idx + direction;
+
+    if (next < 0 || next >= mods.size())
+        return;
+
+    if (group.contains(next))
+    {
+        MoveMod(next, direction, group);
+        return;
+    }
+
+    std::swap(mods[mod_idx], mods[next]);
 }

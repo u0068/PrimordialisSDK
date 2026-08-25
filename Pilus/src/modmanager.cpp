@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "dependency_manager.h"
 #include "modloader.h"
 
 namespace fs = std::filesystem;
@@ -119,6 +120,7 @@ void ModManager::RefreshMods()
 
     mods.clear();
     mods = final_mods;
+    SortDeps();
     SavePilusConfig();
 }
 

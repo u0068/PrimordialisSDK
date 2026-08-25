@@ -292,9 +292,6 @@ void DrawModList()
                 {
                     move_direction =
                         ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
-                    int next = i + move_direction;
-                    if (next >= 0 and next < mods.size())
-                        ImGui::ResetMouseDragDelta();
                 }
             }
             // ImGui::Text("Active: %d", ImGui::IsItemActive());
@@ -361,12 +358,8 @@ void DrawModList()
         ImGui::EndTable();
         if (move_direction != 0)
         {
-            int next = dragged_mod_index + move_direction;
-            if (next >= 0 && next < mods.size())
-            {
-                std::swap(mods[dragged_mod_index], mods[next]);
-                ModManager::SavePilusConfig();
-            }
+            MoveMod(dragged_mod_index, move_direction);
+            ModManager::SavePilusConfig();
         }
     }
     ImGui::End();

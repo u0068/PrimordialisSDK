@@ -62,7 +62,7 @@ int main()
         ImGui::DockSpaceOverViewport();
 
         EnableDeps();
-        SortDeps();
+        // SortDeps();
 
         DrawUI();
 
