@@ -11,10 +11,11 @@ struct Mod
     fs::path path{};
     fs::path dll_path{};
     fs::path init_path{};
-    bool enabled = true;
+    bool user_enabled = true;
 
     // UNSAVED:
     std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
+    bool dep_enabled = false;
 
     ord_json config_defaults{};
     json config_values{};

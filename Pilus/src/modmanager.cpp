@@ -92,12 +92,12 @@ void ModManager::RefreshMods()
 
     std::vector<Mod> final_mods;
 
-    for (auto & mod : mods)
-        for (const auto & installed_mod : installed_mods)
+    for (auto & installed_mod : installed_mods)
+        for (const auto &  mod: mods)
             if (mod == installed_mod)
             {
                 final_mods.push_back(installed_mod);
-                final_mods[final_mods.size() - 1].enabled = mod.enabled;
+                final_mods[final_mods.size() - 1].user_enabled = mod.user_enabled;
                 final_mods[final_mods.size() - 1].config_values = mod.config_values;
                 break;
             }
@@ -117,6 +117,7 @@ void ModManager::RefreshMods()
         if (final_mods[i].name == "Nucleus")
             std::swap(final_mods[i], final_mods[0]);
 
+    mods.clear();
     mods = final_mods;
     SavePilusConfig();
 }
@@ -131,21 +132,31 @@ void ModManager::LoadPilusConfig()
         return;
     }
 
-    pilus_config = safe_parse(file);
-
-    json mods_json = pilus_config["mods"];
-
-    for (auto& el : mods_json.items())
+    try
     {
-        json mod_json = el.value();
-        Mod mod{};
-        mod.name = el.key();
-        mod.path = mod_json["path"].get<std::string>();
-        mod.dll_path = mod_json["dll_path"].get<std::string>();
-        mod.init_path = mod_json["init_path"].get<std::string>();
-        mod.enabled = mod_json["enabled"].get<bool>();
-        mod.config_values = mod_json["config"];
-        mods.push_back(mod);
+        pilus_config = safe_parse(file);
+
+        json mods_json = pilus_config["mods"];
+        mods.clear();
+
+        for (auto& el : mods_json.items())
+        {
+            json mod_json = el.value();
+            Mod mod{};
+            mod.name = mod_json["name"].get<std::string>();
+            mod.path = mod_json["path"].get<std::string>();
+            mod.dll_path = mod_json["dll_path"].get<std::string>();
+            mod.init_path = mod_json["init_path"].get<std::string>();
+            mod.user_enabled = mod_json["enabled"].get<bool>();
+            mod.config_values = mod_json["config"];
+            mods.push_back(mod);
+        }
+    }
+    catch (const json::other_error& e)
+    {
+        console_log << err << e.what() << "\n"
+                  << "exception id: " << e.id << "\n";
+        pilus_config = {};
     }
 }
 
@@ -155,17 +166,18 @@ void ModManager::SavePilusConfig()
 
     if (!file) return;
 
-    pilus_config["mod_count"] = mods.size();
+    pilus_config["mods"] = json::array();
 
     for (auto mod : mods)
     {
         json mod_json;
+        mod_json["name"] = mod.name;
         mod_json["path"] = mod.path;
         mod_json["dll_path"] = mod.dll_path;
         mod_json["init_path"] = mod.init_path;
-        mod_json["enabled"] = mod.enabled;
+        mod_json["enabled"] = mod.user_enabled;
         mod_json["config"] = mod.config_values;
-        pilus_config["mods"][mod.name] = mod_json;
+        pilus_config["mods"].push_back(mod_json);
     }
 
     file.clear();
@@ -197,7 +209,7 @@ void ModManager::SaveLuaModlist()
     {
         if (!mod.is_lua())
             continue;
-        if (!mod.enabled)
+        if (!mod.user_enabled)
             continue;
         if (mod.config_defaults.empty())
             file << "\t\"" << mod.name << "\",\n";

@@ -14,7 +14,7 @@ ord_json safe_parse(Args... args)
     }
     catch (const json::parse_error& e)
     {
-        console_log << err << "message: " << e.what() << "\n"
+        console_log << err << e.what() << "\n"
                   << "exception id: " << e.id << "\n"
                   << "byte position of error: " << e.byte << "\n";
         return ord_json{};

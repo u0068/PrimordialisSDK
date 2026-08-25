@@ -1,6 +1,7 @@
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601
 #endif
+#include "dependency_manager.h"
 #include "imgui_helpers.h"
 #include "ui.h"
 #include "updater.h"
@@ -59,6 +60,8 @@ int main()
         ImGui::NewFrame();
 
         ImGui::DockSpaceOverViewport();
+
+        EnableDeps();
 
         DrawUI();
 

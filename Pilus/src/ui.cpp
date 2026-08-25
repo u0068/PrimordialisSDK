@@ -1,5 +1,7 @@
 #include "ui.h"
 #include <imgui_internal.h>
+
+#include "dependency_manager.h"
 #include "imgui_helpers.h"
 #include "modloader.h"
 
@@ -117,8 +119,9 @@ void DrawModConfig()
     ImGui::End();
 }
 
-bool AutoScroll = true;
-bool ScrollToBottom = false;
+bool auto_scroll = true;
+bool scroll_to_bottom = false;
+bool wrap_text = true;
 std::vector<std::string> Lines{};
 void DrawConsole()
 {
@@ -138,8 +141,9 @@ void DrawConsole()
     // Options menu
     if (ImGui::BeginPopup("Options"))
     {
-        ImGui::Checkbox("Auto-scroll", &AutoScroll);
-        if (ImGui::SmallButton("Scroll to bottom")) ScrollToBottom = true;
+        ImGui::Checkbox("Wrap text", &wrap_text);
+        ImGui::Checkbox("Auto-scroll", &auto_scroll);
+        if (ImGui::SmallButton("Scroll to bottom")) scroll_to_bottom = true;
         ImGui::EndPopup();
     }
     ImGui::SameLine();
@@ -148,7 +152,7 @@ void DrawConsole()
 
     ImGui::Separator();
 
-    if (ImGui::BeginChild("ScrollingRegion", {0, 0}, ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
+    if (ImGui::BeginChild("ScrollingRegion", {0, 0}, ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar * !wrap_text))
     {
         if (ImGui::BeginPopupContextWindow())
         {
@@ -166,7 +170,10 @@ void DrawConsole()
             else if (strncmp(line.c_str(), "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
             if (has_color)
                 ImGui::PushStyleColor(ImGuiCol_Text, color);
-            ImGui::TextUnformatted(line.c_str());
+            if (wrap_text)
+                ImGui::TextWrapped(line.c_str());
+            else
+                ImGui::Text(line.c_str());
             if (has_color)
                 ImGui::PopStyleColor();
         }
@@ -175,9 +182,9 @@ void DrawConsole()
 
         // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
         // Using a scrollbar or mouse-wheel will take away from the bottom edge.
-        if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
+        if (scroll_to_bottom || (auto_scroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
             ImGui::SetScrollHereY(1.0f);
-        ScrollToBottom = false;
+        scroll_to_bottom = false;
 
         ImGui::PopStyleVar();
     }
@@ -239,56 +246,62 @@ void DrawModList()
             ImGuiTableColumnFlags_WidthFixed,
             ImGui::CalcTextSize("(i) Mod  Config ").x
             );
-        int moveDirection = 0;
-        int draggedModIndex = -1;
+        int move_direction = 0;
+        int dragged_mod_index = -1;
         for (int i = 0; i < mods.size(); ++i)
         {
             Mod& mod = mods[i];
             ImGui::PushID(mod.name.c_str());
-            if (mod.name == "Nucleus")
-                ImGui::BeginDisabled();
+            // if (mod.name == "Nucleus")
+            //     ImGui::BeginDisabled();
             ImGui::TableNextRow();
             ImGui::TableNextColumn();
             if (!exists(mod.dll_path) and !exists(mod.init_path))
                 ImGui::BeginDisabled();
-            if (ImGui::Checkbox("##Enabled", &mod.enabled))
+            if (ImGui::Checkbox("##Enabled", &mod.user_enabled))
                 ModManager::SavePilusConfig();
             if (!exists(mod.dll_path) and !exists(mod.init_path))
             {
-                mod.enabled = false;
+                mod.user_enabled = false;
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
                     ImGui::SetTooltip("This mod is not installed");
                 ImGui::EndDisabled();
             }
             ImGui::TableNextColumn();
-            if (!mod.enabled)
-                ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+            if (not mod.user_enabled)
+            {
+                if (mod.dep_enabled)
+                    ImGui::PushStyleColor(ImGuiCol_Text, {1., 1., 0.5, 1.});
+                else
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+            }
+
             ImGui::Selectable(
                 mod.name.c_str(),
                 true
                 );
-            if (!mod.enabled)
+            if (not mod.user_enabled)
                 ImGui::PopStyleColor();
 
-            bool isHovered = ImGui::TableGetHoveredRow() == i;
+            bool is_hovered = ImGui::TableGetHoveredRow() == i;
             if (ImGui::IsItemActive())
             {
-                if (draggedModIndex == -1)
-                    draggedModIndex = i;
-                if (!isHovered)
+                if (dragged_mod_index == -1)
+                    dragged_mod_index = i;
+                if (!is_hovered)
                 {
-                    moveDirection =
+                    move_direction =
                         ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
-                    int next = i + moveDirection;
-                    if (next >= 1 and next < mods.size())
+                    int next = i + move_direction;
+                    if (next >= 0 and next < mods.size())
                         ImGui::ResetMouseDragDelta();
                 }
             }
             // ImGui::Text("Active: %d", ImGui::IsItemActive());
             // ImGui::Text("Hovered: %d", isHovered);
             // ImGui::Text("Dragged: %d", draggedModIndex == i);
-            if (mod.name == "Nucleus")
-                ImGui::EndDisabled();
+            // if (mod.name == "Nucleus")
+            //     ImGui::EndDisabled();
             ImGui::TableNextColumn();
 
             ImGui::TextDisabled("(?)");
@@ -346,12 +359,12 @@ void DrawModList()
             ImGui::PopID();
         }
         ImGui::EndTable();
-        if (moveDirection != 0)
+        if (move_direction != 0)
         {
-            int next = draggedModIndex + moveDirection;
-            if (next >= 1 && next < mods.size())
+            int next = dragged_mod_index + move_direction;
+            if (next >= 0 && next < mods.size())
             {
-                std::swap(mods[draggedModIndex], mods[next]);
+                std::swap(mods[dragged_mod_index], mods[next]);
                 ModManager::SavePilusConfig();
             }
         }
