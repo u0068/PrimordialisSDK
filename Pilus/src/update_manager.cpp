@@ -1,12 +1,12 @@
-#include "updater.h"
-#include "modloader.h"
+#include "update_manager.h"
+#include "mod_loader.h"
 #include <zip_file.hpp>
 #include <regex>
 #include <urlmon.h>
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake increment the version number automatically
-constexpr Version PILUS_VERSION{0, 5, 6};
+constexpr Version PILUS_VERSION{0, 6, 0};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
@@ -61,12 +61,12 @@ void ExtractZip(
 }
 
 bool DownloadFromURL(
-    const std::string &source_path,
+    const std::string &source_url,
     const fs::path &dest_path)
 {
-    console_log << "Downloading " << source_path << "...\n";
+    console_log << "Downloading " << source_url << "...\n";
 
-    HRESULT hr = URLDownloadToFileA(nullptr, source_path.c_str(), dest_path.string().c_str(), 0, nullptr);
+    HRESULT hr = URLDownloadToFileA(nullptr, source_url.c_str(), dest_path.string().c_str(), 0, nullptr);
     if (SUCCEEDED(hr))
     {
         console_log << "Downloaded to " << dest_path << "\n";
@@ -76,29 +76,48 @@ bool DownloadFromURL(
     return false;
 }
 
-bool DownloadVersionManifest()
+// Merges the downloaded manifest and the local manifest
+bool GetVersionManifest(
+    const std::string &source_url)
 {
-    DownloadFromURL(ModManager::version_manifest_url, ModManager::version_manifest_path);
-
-    auto file = ReadFile(ModManager::version_manifest_path);
-
-    if (file.empty())
+    fs::path temp_path = ModManager::version_manifest_path.string()+".tmp";
+    if (not DownloadFromURL(source_url, temp_path))
     {
-        console_log << err << "Version manifest not found, unable to check compatibility or download updates.\n";
+        console_log << err << "Unable to download version manifest from"<<source_url<<"\n";
         return false;
     }
 
-    ModManager::version_manifest = json::parse(file);
+    auto file = ReadFile(temp_path);
 
-    json mods_json = ModManager::version_manifest["mods"];
+    if (file.empty())
+    {
+        console_log << err << "Unable to read version manifest from "<<source_url<<".\n";
+        return false;
+    }
 
+    json parsed = safe_parse(file);
+    if (parsed.empty())
+    {
+        console_log << err << "Unable to parse version manifest json from "<<source_url<<".\n";
+        return false;
+    }
+
+    ModManager::version_manifest.merge_patch(parsed);
     return true;
 }
 
-Version GetLatestVersion(json& version_json)
+void SaveVersionManifest()
+{
+    std::ofstream file(ModManager::version_manifest_path);
+    file.clear();
+    file << ModManager::version_manifest.dump();
+    file.close();
+}
+
+Version GetLatestVersion(json& version_manifest)
 {
     Version latest_version{};
-    for (auto& el : version_json["versions"].items())
+    for (auto& el : version_manifest["versions"].items())
     {
         const auto& version = *ParseVersion(el.key());
         if (version > latest_version)
@@ -107,133 +126,60 @@ Version GetLatestVersion(json& version_json)
     return latest_version;
 }
 
-bool CheckAndUpdate(
+std::string CheckForUpdates(
     const char* name,
-    const fs::path& update_path,
+    json& version_json,
     const fs::path& check_path = "")
 {
     console_log << "Checking for " << name << " updates...\n";
 
-    json version_json = ModManager::version_manifest[name];
-
     if (version_json.empty())
     {
         console_log << err << "Version JSON for " << name << " not found, unable to update.\n";
-        return false;
+        return "";
     }
 
     Version latest_version = GetLatestVersion(version_json);
+    json installed_version_json = ModManager::pilus_config["installed_versions"][name];
 
-    std::stringstream ss;
-    ss << name << "_installed_version";
-    auto installed_version_key = ss.str();
-
-    if (check_path != "" and !exists(check_path))
+    if ((check_path != "" and not exists(check_path)) or installed_version_json.empty())
         console_log << name << " not installed!\n";
     else
     {
-        json installed_version_json = ModManager::pilus_config[installed_version_key];
-        std::string installed_version = "0.0.0";
-        if (!installed_version_json.empty())
-            installed_version = installed_version_json.get<std::string>();
+        auto installed_version = GetStringFromJson(installed_version, "0.0.0");
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
         console_log << "Latest " << name << " version: " << latest_version.to_string() << "\n";
 
-        if (!(latest_version > *ParseVersion(installed_version)))
+        if (not (latest_version> *ParseVersion(installed_version)))
         {
             console_log << name << " is up to date.\n";
-            return false;
+            return "";
         }
     }
 
     console_log
-        << "Downloading new " << name << " version: "
+        << "Update found for " << name << ", version: "
         << latest_version.to_string()
         << "\n";
 
-    auto download_path = version_json["versions"][latest_version.to_string()]["download_url"].get<std::string>();
-    if(DownloadFromURL(download_path, update_path))
-    {
-        ModManager::pilus_config[installed_version_key] = latest_version.to_string();
-        return true;
-    }
-    return false;
+    return GetStringFromJson(version_json["versions"][latest_version.to_string()], "download_url");
 }
 
-bool UpdatePilus()
+void UpdateLocalVersionManifest()
 {
-    ModManager::pilus_config["Pilus_installed_version"] = PILUS_VERSION.to_string();
-
-    fs::path pilus_path = absolute(fs::path("Pilus.exe"));
-
-    fs::path update_path = pilus_path.parent_path() / "Pilus.new.exe";
-
-    if (!CheckAndUpdate("Pilus", update_path))
-        return false;
-
-    // Find our own PID and launch the updater.
-
-    DWORD pid = GetCurrentProcessId();
-
-    fs::path updater_path = pilus_path.parent_path() / "PilusUpdater.exe";
-
-    if (!CheckAndUpdate("PilusUpdater", updater_path, updater_path))
+    ModManager::version_manifest.merge_patch(safe_parse(ReadFile(ModManager::version_manifest_path)));
+    GetVersionManifest(ModManager::version_manifest_url);
+    for (auto& mod : ModManager::mods)
     {
-        DeleteFileW(update_path.c_str());
-        return false;
+        if (ModManager::version_manifest.contains(mod.name))
+            continue;
+        std::string manifest_url = mod.info["version_manifest_url"];
+        if (manifest_url.empty())
+            continue;
+        GetVersionManifest(manifest_url);
     }
-
-    std::wstring commandLine =
-        L"\"" + updater_path.wstring() + L"\" " +
-        std::to_wstring(pid) + L" \"" +
-        pilus_path.wstring() + L"\" \"" +
-        update_path.wstring() + L"\"";
-
-    STARTUPINFOW si{};
-    si.cb = sizeof(si);
-
-    PROCESS_INFORMATION pi{};
-
-    std::vector<wchar_t> buffer(
-        commandLine.begin(),
-        commandLine.end());
-
-    buffer.push_back(L'\0');
-
-    if (!CreateProcessW(
-            nullptr,
-            buffer.data(),
-            nullptr,
-            nullptr,
-            FALSE,
-            0,
-            nullptr,
-            updater_path.parent_path().c_str(),
-            &si,
-            &pi))
-    {
-        console_log
-            << err << "Failed to start updater: "
-            << GetLastError()
-            << "\n";
-
-        DeleteFileW(updater_path.c_str());
-
-        return false;
-    }
-
-    Sleep(200000);
-
-    CloseHandle(pi.hThread);
-    CloseHandle(pi.hProcess);
-
-    // The updater now owns the update process.
-    // We MUST exit Pilus, or reality will collapse.
-
-    ExitProcess(0);
-
-    // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
+    SaveVersionManifest();
 }
 
 int CheckSteamBuild()
@@ -346,23 +292,125 @@ void CreateDirectories()
     }
 }
 
-void UpdateAll()
+void CheckAllForUpdates()
 {
+    ModManager::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION.to_string();
+
     CreateDirectories();
 
-    if (!DownloadVersionManifest())
-        return;
+    UpdateLocalVersionManifest();
 
-    UpdatePilus();
+    for (auto& el : ModManager::version_manifest.items())
+        CheckForUpdates(el.key().c_str(), el.value());
+}
 
-    CheckAndUpdate("Nucleus", ModManager::mod_path / "Nucleus/Nucleus.dll", ModManager::mod_path / "Nucleus/Nucleus.dll");
-
-    fs::path luasome_temp_zip_path{ModManager::pilus_files_path / "luasome_tmp.zip"};
-    if (CheckAndUpdate("Luasome", luasome_temp_zip_path, ModManager::luasome_path))
+bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path)
+{
+    std::string download_url_json = GetStringFromJson(
+        ModManager::version_manifest[name][version.to_string()], "download_url");
+    if (download_url_json.empty())
     {
-        ExtractZip(luasome_temp_zip_path, ModManager::luasome_path);
-        fs::remove(luasome_temp_zip_path);
+        console_log << err << "No download url found for " << name << "\n";
+        return false;
     }
+    if (download_url_json.ends_with(".zip"))
+    {
+        fs::path temp_zip_path{dest_path.string()+".tmp"};
+        if (not DownloadFromURL(download_url_json, temp_zip_path))
+            return false;
+        ExtractZip(temp_zip_path, dest_path);
+        fs::remove(temp_zip_path);
+        return true;
+    }
+    return DownloadFromURL(download_url_json, dest_path);
+}
+
+bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
+{
+    ModManager::pilus_config["Pilus_installed_version"] = PILUS_VERSION.to_string();
+
+    fs::path pilus_path = absolute(fs::path("Pilus.exe"));
+
+    fs::path update_path = pilus_path.parent_path() / "Pilus.new.exe";
+
+    if (not DownloadUpdate("Pilus", pilus_version, update_path))
+        return false;
+
+    // Find our own PID and launch the updater.
+
+    DWORD pid = GetCurrentProcessId();
+
+    fs::path updater_path = pilus_path.parent_path() / "PilusUpdater.exe";
+
+    if (not DownloadUpdate("PilusUpdater", updater_version, updater_path))
+    {
+        DeleteFileW(update_path.c_str());
+        return false;
+    }
+
+    std::wstring commandLine =
+        L"\"" + updater_path.wstring() + L"\" " +
+        std::to_wstring(pid) + L" \"" +
+        pilus_path.wstring() + L"\" \"" +
+        update_path.wstring() + L"\"";
+
+    STARTUPINFOW si{};
+    si.cb = sizeof(si);
+
+    PROCESS_INFORMATION pi{};
+
+    std::vector<wchar_t> buffer(
+        commandLine.begin(),
+        commandLine.end());
+
+    buffer.push_back(L'\0');
+
+    if (!CreateProcessW(
+            nullptr,
+            buffer.data(),
+            nullptr,
+            nullptr,
+            FALSE,
+            0,
+            nullptr,
+            updater_path.parent_path().c_str(),
+            &si,
+            &pi))
+    {
+        console_log
+            << err << "Failed to start updater: "
+            << GetLastError()
+            << "\n";
+
+        DeleteFileW(updater_path.c_str());
+
+        return false;
+    }
+
+    Sleep(200000);
+
+    CloseHandle(pi.hThread);
+    CloseHandle(pi.hProcess);
+
+    // The updater now owns the update process.
+    // We MUST exit Pilus, or reality will collapse.
+
+    ExitProcess(0);
+
+    // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
+}
+
+void UpdateSDK()
+{
+    // Get the latest versions for now.
+
+    UpdatePilus(GetLatestVersion(ModManager::version_manifest["Pilus"]),
+    GetLatestVersion(ModManager::version_manifest["PilusUpdater"])
+        );
+
+    DownloadUpdate("Luasome",
+        GetLatestVersion(ModManager::version_manifest["Luasome"]),
+        ModManager::luasome_path);
 
     UpdatePDB();
 }

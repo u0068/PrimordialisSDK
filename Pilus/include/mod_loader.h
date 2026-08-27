@@ -60,10 +60,10 @@ namespace ModManager
 
     const std::string version_manifest_url{
         "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/version_manifest.json"};
-    const fs::path version_manifest_path{pilus_files_path.string()+"pilus_version_manifest.json"};
+    const fs::path version_manifest_path{pilus_files_path/"pilus_version_manifest.json"};
     inline json version_manifest{};
 
-    const fs::path config_path{pilus_files_path.string()+"pilus_config.json"};
+    const fs::path config_path{pilus_files_path/"pilus_config.json"};
     inline json pilus_config{};
 
     inline fs::path mod_path{game_path / "mods"};

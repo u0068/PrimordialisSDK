@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "dependency_manager.h"
-#include "modloader.h"
+#include "mod_loader.h"
 
 namespace fs = std::filesystem;
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_set>
 
-#include "modloader.h"
+#include "mod_loader.h"
 
 inline std::vector<Mod*> GetModDeps(Mod& mod)
 {

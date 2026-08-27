@@ -3,7 +3,7 @@
 
 #include "dependency_manager.h"
 #include "imgui_helpers.h"
-#include "modloader.h"
+#include "mod_loader.h"
 
 // Use the demo window or https://pthom.github.io/imgui_explorer/ for reference
 

@@ -1,0 +1,21 @@
+{
+  "name" : "Cell Tools Pack",
+  "mods" : {
+    "Nucleus" : {
+      "min_version" : "0.1.4",
+      "max_version" : "latest"
+    },
+    "ImGuiAPI" : {
+      "min_version" : "0.1.0",
+      "max_version" : "latest"
+    },
+    "Cell Tools" : {
+      "min_version" : "0.2.0",
+      "max_version" : "latest"
+    }
+  },
+  "manifests" : [
+    "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/mods/official/version_manifest.json",
+    "https://raw.githubusercontent.com/user/ModRepository/master/version_manifest.json"
+  ]
+}

@@ -1,9 +1,0 @@
-{
-  "name" : "Example Biome Mod",
-  "author" : "h",
-  "description" : "Example mod demonstrating how to add a biome.",
-  "version": "0.1.0",
-  "dependencies" : {
-    "Nucleus" : "0.1.3"
-  }
-}

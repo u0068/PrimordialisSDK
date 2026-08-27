@@ -1,6 +1,3 @@
 {
-  "name" : "Nucleus",
-  "author" : "h",
-  "description" : "Runtime API, which runs C++ mods, handles mod communication with other mods and Primordialis.",
-  "version": "0.1.4"
+  "version_manifest_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/mods/official/version_manifest.json"
 }

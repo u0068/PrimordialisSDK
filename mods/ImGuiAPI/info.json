@@ -1,10 +1,3 @@
 {
-  "name" : "ImGui API",
-  "author" : "h",
-  "description" : "API to let mods use DearImGui\nShares ImGuiContext between all mods so they can interact with each other.",
-  "version": "0.1.0",
-  "dependencies" : {
-    "Nucleus" : "0.1.4"
-  },
-  "main_dll" : "ImGuiAPI.dll"
+  "version_manifest_url" : "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/mods/official/version_manifest.json"
 }

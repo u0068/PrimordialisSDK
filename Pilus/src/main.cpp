@@ -4,7 +4,7 @@
 #include "dependency_manager.h"
 #include "imgui_helpers.h"
 #include "ui.h"
-#include "updater.h"
+#include "update_manager.h"
 
 int main()
 {

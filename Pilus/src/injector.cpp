@@ -2,7 +2,7 @@
 #include <tchar.h>
 #include <tlhelp32.h>
 #include <fstream>
-#include "modloader.h"
+#include "mod_loader.h"
 
 DWORD GetProcessByName(const char* lpProcessName)
 {

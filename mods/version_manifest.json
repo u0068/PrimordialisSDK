@@ -1,0 +1,93 @@
+{
+  "schema" : 1,
+
+  "Nucleus" : {
+    "author" : "h",
+    "description" : "Runtime API, which runs C++ mods, handles mod communication with other mods and Primordialis.",
+    "versions" : {
+      "0.1.4" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.4/Nucleus.dll",
+        "dependencies" : {
+          "Pilus" : {
+            "min_version" : "0.6.0",
+            "max_version" : "latest"
+          }
+        }
+      }
+    }
+  },
+
+  "CellTools" : {
+    "author" : "h",
+    "description" : "Tools for working with cells.",
+    "versions" : {
+      "0.2.0" : {
+        "download_url" : "",
+        "dependencies" : {
+          "Nucleus" : {
+            "min_version" : "0.1.4",
+            "max_version" : "latest",
+            "load_order" : "before"
+          },
+          "ImGuiAPI" : {
+            "min_version" : "0.1.0",
+            "max_version" : "latest",
+            "load_order" : "before"
+          }
+        }
+      }
+    }
+  },
+
+  "ImGuiAPI" : {
+    "author" : "h",
+    "description" : "API to let mods use DearImGui\nShares ImGuiContext between all mods so they can interact with each other.",
+    "main_dll" : "ImGuiAPI.dll",
+    "versions" : {
+      "0.1.0" : {
+        "download_url" : "",
+        "dependencies" : {
+          "Nucleus" : {
+            "min_version" : "0.1.4",
+            "max_version" : "latest",
+            "load_order" : "before"
+          }
+        }
+      }
+    }
+  },
+
+  "Constant Acid Color" : {
+    "author" : "h",
+    "description" : "Makes acid not change color",
+    "versions" : {
+      "0.1.0" : {
+        "download_url" : "",
+        "dependencies" : {
+          "Nucleus" : {
+            "min_version" : "0.1.4",
+            "max_version" : "latest",
+            "load_order" : "before"
+          }
+        }
+      }
+    }
+  },
+
+  "ExampleBiomeMod" : {
+    "author" : "h",
+    "description" : "Example mod demonstrating how to add a biome.",
+    "versions" : {
+      "0.1.0" : {
+        "download_url" : "",
+        "dependencies" : {
+          "Nucleus" : {
+            "min_version" : "0.1.4",
+            "max_version" : "latest",
+            "load_order" : "before"
+          }
+        }
+      }
+    }
+  }
+}
