@@ -5,49 +5,7 @@
 
 namespace fs = std::filesystem;
 
-struct Mod
-{
-    // SAVED IN PILUS.CONFIG
-    fs::path path{};
-    fs::path dll_path{};
-    fs::path init_path{};
-    bool user_enabled = true;
-
-    // UNSAVED:
-    std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
-    bool dep_enabled = false;
-
-    ord_json config_defaults{};
-    json config_values{};
-    json info{};
-
-    bool operator== (const Mod& other) const
-    {
-        if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
-            return true;
-        return false;
-    }
-
-    [[nodiscard]] bool is_lua() const
-    {
-        return !init_path.empty();
-    }
-
-    [[nodiscard]] bool is_cpp() const
-    {
-        return !dll_path.empty();
-    }
-
-    [[nodiscard]] bool is_enabled() const
-    {
-        return user_enabled or dep_enabled;
-    }
-
-    [[nodiscard]] bool is_installed() const
-    {
-        return exists(path);
-    }
-};
+struct Mod;
 
 namespace ModManager
 {
@@ -77,7 +35,56 @@ namespace ModManager
 
     void SavePilusConfig();
     void LoadPilusConfig();
+}
+
+struct Mod
+{
+    // SAVED IN PILUS.CONFIG
+    fs::path path{};
+    fs::path dll_path{};
+    fs::path init_path{};
+    json config_values{};
+    bool user_enabled = true;
+
+    // UNSAVED:
+    std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
+    ord_json config_defaults{};
+    json local_info{};
+    bool dep_enabled = false;
+
+    bool operator== (const Mod& other) const
+    {
+        if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
+            return true;
+        return false;
+    }
+
+    [[nodiscard]] bool is_lua() const
+    {
+        return !init_path.empty();
+    }
+
+    [[nodiscard]] bool is_cpp() const
+    {
+        return !dll_path.empty();
+    }
+
+    [[nodiscard]] bool is_enabled() const
+    {
+        return user_enabled or dep_enabled;
+    }
+
+    [[nodiscard]] bool is_installed() const
+    {
+        return exists(path);
+    }
+
+    [[nodiscard]] json& manifest_ref() const
+    {
+        return ModManager::version_manifest[name];
+    }
 };
+
 
 struct ModInfo
 {

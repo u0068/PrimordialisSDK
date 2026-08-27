@@ -39,31 +39,14 @@ function(add_plasmid_mod NAME)
 
     foreach(ASSET ${MOD_ASSETS})
         add_custom_command(TARGET ${NAME} PRE_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                COMMAND ${CMAKE_COMMAND} -E copy
                 "${CMAKE_CURRENT_SOURCE_DIR}/${ASSET}"
                 "${MOD_DIR}"
         )
     endforeach()
 endfunction()
 
-# Auto-detect mods
-file(GLOB MODS CONFIGURE_DEPENDS
-        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-        *)
 
-set(MOD_TARGETS)
+add_subdirectory(example)
 
-foreach(MOD ${MODS})
-    message("Found mod: ${MOD}")
-    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${MOD})
-        add_subdirectory(${MOD})
-        get_filename_component(MOD_NAME ${MOD} NAME)
-        list(APPEND MOD_TARGETS ${MOD_NAME})
-    endif()
-endforeach()
-
-add_custom_target(BuildAllMods)
-
-if(MOD_TARGETS)
-    add_dependencies(BuildAllMods ${MOD_TARGETS})
-endif()
+add_subdirectory(official)

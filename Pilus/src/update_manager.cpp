@@ -78,16 +78,22 @@ bool DownloadFromURL(
 
 // Merges the downloaded manifest and the local manifest
 bool GetVersionManifest(
-    const std::string &source_url)
+    const std::string &source_url,
+    bool temporary=true)
 {
-    fs::path temp_path = ModManager::version_manifest_path.string()+".tmp";
-    if (not DownloadFromURL(source_url, temp_path))
+    fs::path path = ModManager::version_manifest_path.string();
+    if (temporary)
+        path += ".tmp";
+    if (not DownloadFromURL(source_url, path))
     {
-        console_log << err << "Unable to download version manifest from"<<source_url<<"\n";
+        console_log << err << "Unable to download version manifest from "<<source_url<<"\n";
         return false;
     }
 
-    auto file = ReadFile(temp_path);
+    auto file = ReadFile(path);
+
+    if (temporary)
+        std::remove(path.string().c_str());
 
     if (file.empty())
     {
@@ -110,7 +116,7 @@ void SaveVersionManifest()
 {
     std::ofstream file(ModManager::version_manifest_path);
     file.clear();
-    file << ModManager::version_manifest.dump();
+    file << ModManager::version_manifest.dump(2);
     file.close();
 }
 
@@ -169,15 +175,17 @@ std::string CheckForUpdates(
 void UpdateLocalVersionManifest()
 {
     ModManager::version_manifest.merge_patch(safe_parse(ReadFile(ModManager::version_manifest_path)));
-    GetVersionManifest(ModManager::version_manifest_url);
+    GetVersionManifest(ModManager::version_manifest_url, false);
     for (auto& mod : ModManager::mods)
     {
         if (ModManager::version_manifest.contains(mod.name))
             continue;
-        std::string manifest_url = mod.info["version_manifest_url"];
+
+        std::string manifest_url = mod.local_info["version_manifest_url"];
         if (manifest_url.empty())
             continue;
         GetVersionManifest(manifest_url);
+        // mod.manifest_ref() = ModManager::version_manifest[mod.name];
     }
     SaveVersionManifest();
 }

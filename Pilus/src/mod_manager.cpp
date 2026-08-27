@@ -25,12 +25,13 @@ void GetModConfigValuesFromDefaults(Mod& mod)
         mod.config_values[el.key()] = el.value()["default"];
 }
 
-void ParseModInfo(Mod* mod)
+void ParseModInfo(Mod& mod)
 {
-    if (mod->path.has_extension())
+    if (mod.path.has_extension())
         return; // Mod is raw dll so has no info
 
-    fs::path modFolder = mod->path;
+    fs::path modFolder = mod.path;
+    mod.name = modFolder.filename().string();
 
     int dll_count = 0;
     for (const auto& entry : fs::recursive_directory_iterator(modFolder))
@@ -44,30 +45,29 @@ void ParseModInfo(Mod* mod)
         {
             std::string data = ReadFile(entry.path());
 
-            mod->info = safe_parse(ReadFile(entry), nullptr, true, true);
-            mod->name = GetStringFromJson(mod->info,"name");
+            mod.local_info = safe_parse(ReadFile(entry), nullptr, true, true);
         }
 
         else if (filename == "config.json")
-            mod->config_defaults = safe_parse(ReadFile(entry), nullptr, true, true);
+            mod.config_defaults = safe_parse(ReadFile(entry), nullptr, true, true);
 
         else if (entry.path().extension() == ".dll")
         {
-            mod->dll_path = entry.path();
+            mod.dll_path = entry.path();
             dll_count++;
         }
 
         else if (filename == "init.lua")
-            mod->init_path = entry.path();
+            mod.init_path = entry.path();
     }
     if (dll_count > 1)
     {
-        if (mod->info["main_dll"].empty())
+        if (mod.manifest_ref()["main_dll"].empty())
             console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
                                   "\tPlease specify a \"main_dll\" in info.json!\n"
-                                  "\tFallback: Loading " << mod->dll_path << "\n";
+                                  "\tFallback: Loading " << mod.dll_path << "\n";
         else
-            mod->dll_path = mod->path/GetStringFromJson(mod->info,"main_dll",mod->dll_path.string());
+            mod.dll_path = mod.path/GetStringFromJson(mod.local_info,"main_dll",mod.dll_path.string());
     }
 }
 
@@ -87,7 +87,7 @@ void ModManager::RefreshMods()
 
         if (entry.path().extension() == ".dll")
             nmod.dll_path = entry.path();
-        ParseModInfo(&nmod);
+        ParseModInfo(nmod);
         installed_mods.push_back(nmod);
     }
 
