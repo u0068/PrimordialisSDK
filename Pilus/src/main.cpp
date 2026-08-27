@@ -12,7 +12,7 @@ int main()
 
     console_log << "Pilus Starting\n";
 
-    UpdateAll();
+    // UpdateAll();
     ModManager::RefreshMods();
 
     glfwSetErrorCallback(glfwErrorCallback);

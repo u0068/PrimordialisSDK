@@ -146,7 +146,7 @@ std::string CheckForUpdates(
         console_log << name << " not installed!\n";
     else
     {
-        auto installed_version = GetStringFromJson(installed_version, "0.0.0");
+        auto installed_version = GetStringFromJson(installed_version_json, "0.0.0");
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
         console_log << "Latest " << name << " version: " << latest_version.to_string() << "\n";
@@ -400,7 +400,7 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
     // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
 }
 
-void UpdateSDK()
+void UpdateModloader()
 {
     // Get the latest versions for now.
 

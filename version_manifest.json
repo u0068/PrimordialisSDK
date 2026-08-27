@@ -1,62 +1,17 @@
 {
   "schema" : 1,
 
-  "manifest_version" : 1,
-
   "Pilus" : {
     "latest_version" : "0.5.5",
     "comment" : "latest_version is deprecated since v0.5.5, and will be removed once everyone has updated",
     "versions" : {
-      "0.1.3" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.1.3-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.2.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.2.0-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.3.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.3.0-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.4.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.4.0-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.4.1" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.4.1-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.5.2" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.2-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.5.3" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.3-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
-      "0.5.4" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.4-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
-      },
       "0.5.5" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.5-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.5-alpha/Pilus.exe"
       }
     }
   },
 
   "PilusUpdater" : {
-    "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/PilusUpdater-v0.1.0/PilusUpdater.exe"
@@ -64,63 +19,53 @@
     }
   },
 
-  "Nucleus" : {
-    "latest_version" : "0.1.2",
-    "versions" : {
-      "0.1.0" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.0/Nucleus.dll",
-        "min_pilus_version" : "0.1.3"
-      },
-      "0.1.1" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.1/Nucleus.dll",
-        "min_pilus_version" : "0.1.3"
-      },
-      "0.1.2" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.2/Nucleus.dll",
-        "min_pilus_version" : "0.1.3"
-      },
-      "0.1.3" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.1.3/Nucleus.dll",
-        "min_pilus_version" : "0.1.3"
-      }
-    }
-  },
-
   "Plasmid" : {
     "versions" : {
       "0.0.0" : {
-        "min_nucleus_version" : "0.0.0"
+        "download_url" : "",
+        "dependencies" : {
+          "Nucleus" : {
+            "min_version" : "0.1.4",
+            "max_version" : "latest"
+          }
+        }
       }
     }
   },
 
   "Luasome" : {
-    "latest_version" : "6.0.0",
     "versions" : {
       "6.0.0" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Luasome-v6/Luasome.zip",
-        "min_pilus_version" : "0.3.0"
+        "dependencies" : {
+          "Pilus" : {
+            "min_version" : "0.3.0",
+            "max_version" : "latest"
+          }
+        }
       }
     }
   },
 
   "Luazyme" : {
-    "latest_version" : "0.1.0",
     "versions" : {
       "0.1.0" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.3.0-alpha/Luazyme.exe",
-        "min_luasome_version" : "6"
+        "dependencies" : {
+          "Luasome" : {
+            "min_version" : "6.0.0",
+            "max_version" : "latest"
+          }
+        }
       }
     }
   },
 
   "pilus" : {
-    "latest_version" : "0.5.2",
+    "latest_version" : "0.5.5",
     "versions" : {
-      "0.5.2" : {
-        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.2-alpha/Pilus.exe",
-        "min_nucleus_version" : "0.1.0",
-        "min_updater_version" : "0.1.0"
+      "0.5.5" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.5.5-alpha/Pilus.exe"
       }
     },
     "comment" : "this is a temporary fix because some old versions of pilus had a typo. this can be removed when everyone has the fixed version"
