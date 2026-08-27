@@ -91,16 +91,16 @@ struct Mod
     }
 };
 
-
 struct ModInfo
 {
     char name[MAX_PATH];
 };
 
+constexpr int MAX_MODS = 256; // Don't forget to keep this in sync with Nucleus!
 struct ModListShared
 {
     uint32_t count;
-    ModInfo mods[256];
+    ModInfo mods[MAX_MODS];
 };
 
 std::string ReadFile(const fs::path& path);

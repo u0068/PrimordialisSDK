@@ -19,12 +19,13 @@ function(add_plasmid_mod NAME)
             PRIVATE Plasmid
     )
 
+    set(MOD_DIR "${MODS_DIR}/${NAME}")
+
     set_target_properties(${NAME}
             PROPERTIES
             OUTPUT_NAME ${NAME}
+#            RUNTIME_OUTPUT_DIRECTORY ${MOD_DIR}
     )
-
-    set(MOD_DIR "${MODS_DIR}/${NAME}")
 
     add_custom_command(TARGET ${NAME} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E make_directory

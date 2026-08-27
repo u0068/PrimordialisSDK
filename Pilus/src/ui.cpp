@@ -344,9 +344,13 @@ void DrawModList()
                     ImGui::Text("Dependencies:");
                     for (auto& dep : mod.get_deps().items())
                     {
-                        const auto& name = dep.key();
-                        auto version = dep.value().empty() ? "" : dep.value().get<std::string>();
-                        ImGui::Text("\t%s\t%s", name, version);
+                        const char* name = dep.key().c_str();
+                        const auto& dep_config = dep.value();
+                        const char* min_version = GetStringFromJson(
+                            dep_config, "min_version", "Unknown").c_str();
+                        const char* max_version = GetStringFromJson(
+                            dep_config, "max_version", "Unknown").c_str();
+                        ImGui::Text("\t%s %s to %s", name, min_version, max_version);
                     }
                 }
                 ImGui::Text("Directory: %s", mod.path.filename().string().c_str());

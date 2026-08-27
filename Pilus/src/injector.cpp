@@ -13,35 +13,36 @@ DWORD GetProcessByName(const char* lpProcessName)
     if (hProcList == INVALID_HANDLE_VALUE)
         return -1;
 
-    if (!Process32First(hProcList, &ProcList))
-        return -1;
+    if (Process32First(hProcList, &ProcList))
+        do
+            if (lstrcmpA(ProcList.szExeFile, lpProcessName) == 0)
+            {
+                CloseHandle(hProcList);
+                return ProcList.th32ProcessID;
+            }
+        while (Process32Next(hProcList, &ProcList));
 
-    while (Process32Next(hProcList, &ProcList))
-    {
-        if (lstrcmpA(ProcList.szExeFile, lpProcessName) == 0)
-            return ProcList.th32ProcessID;
-    }
-
+    CloseHandle(hProcList);
     return -1;
 }
 
-bool IsProcessRunning(const char* processName) {
+bool IsProcessRunning(const char* processName)
+{
     PROCESSENTRY32 entry;
     entry.dwSize = sizeof(PROCESSENTRY32);
 
     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (snapshot == INVALID_HANDLE_VALUE) {
+    if (snapshot == INVALID_HANDLE_VALUE)
         return false;
-    }
 
-    if (Process32First(snapshot, &entry)) {
-        do {
-            if (_tcsicmp(entry.szExeFile, processName) == 0) { // Case-insensitive comparison
+    if (Process32First(snapshot, &entry))
+        do
+            if (_tcsicmp(entry.szExeFile, processName) == 0) // Case-insensitive comparison
+            {
                 CloseHandle(snapshot);
                 return true;
             }
-        } while (Process32Next(snapshot, &entry));
-    }
+        while (Process32Next(snapshot, &entry));
 
     CloseHandle(snapshot);
     return false;
@@ -106,7 +107,7 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     }
 
     const HANDLE &hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
-    if (hTargetProcess == INVALID_HANDLE_VALUE)
+    if (!hTargetProcess)
     {
         console_log << err << "An error occurred when trying to open the target process.\n";
         return -1;
@@ -115,7 +116,8 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     console_log << "[PROCESS INJECTION]\n";
     console_log << "Process opened successfully.\n";
 
-    const LPVOID &lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr, lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    const LPVOID &lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr,
+        lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (lpPathAddress == nullptr)
     {
         console_log << err << "An error occurred when trying to allocate memory in the target process.\n";
@@ -126,7 +128,8 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     console_log << std::to_string((UINT)(uintptr_t)lpPathAddress);
     console_log << "\n";
 
-    const DWORD dwWriteResult = WriteProcessMemory(hTargetProcess, lpPathAddress, lpFullDLLPath, lstrlenA(lpFullDLLPath) + 1, nullptr);
+    const DWORD dwWriteResult = WriteProcessMemory(hTargetProcess, lpPathAddress, lpFullDLLPath,
+        lstrlenA(lpFullDLLPath) + 1, nullptr);
     if (dwWriteResult == 0)
     {
         console_log << err << "An error occurred when trying to write the DLL path in the target process.\n";
@@ -150,8 +153,9 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     console_log << std::to_string((UINT)(uintptr_t)lpFunctionAddress);
     console_log << "\n";
 
-    const HANDLE &hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
-    if (hThreadCreationResult == INVALID_HANDLE_VALUE)
+    const HANDLE &hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0,
+        (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
+    if (!hThreadCreationResult)
     {
         console_log << err << "An error occurred when trying to create the thread in the target process.\n";
         return -1;
@@ -185,7 +189,8 @@ void ModManager::InjectAll()
     {
         char cmdLine[] = "primordialis.exe --steamless --autoreload";
         ownProcess = true;
-        if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE, CREATE_SUSPENDED | SYNCHRONIZE, nullptr, nullptr, &startI, &procI))
+        if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE,
+            CREATE_SUSPENDED | SYNCHRONIZE, nullptr, nullptr, &startI, &procI))
         {
             console_log << "Failed to start primordialis: ";
             console_log << std::to_string(GetLastError());
@@ -217,13 +222,13 @@ void ModManager::InjectAll()
 
     shared->count = 0;
 
-    bool nucleus_enabled = false;
+    fs::path nucleus_path{};
     for (auto & mod : mods)
     {
         //skip runtime api in modlist because should be last
         if (mod.dll_path.filename().string() == "Nucleus.dll")
         {
-            nucleus_enabled = mod.is_enabled();
+            nucleus_path = mod.dll_path;
             continue;
         }
 
@@ -252,6 +257,11 @@ void ModManager::InjectAll()
         console_log << mod.dll_path.filename().string();
         console_log << ")\n";
 
+        if (shared->count >= std::size(shared->mods))
+        {
+            console_log << err << "Mod count exceeds the "<< std::size(shared->mods) <<" mod limit!\n";
+            console_log << "\tIf you are genuinely using that many mods, contact the SDK devs to increase the limit.";
+        }
         strcpy_s(
             shared->mods[shared->count++].name,
             mod.dll_path.filename().string().c_str()
@@ -262,16 +272,17 @@ void ModManager::InjectAll()
     else
         console_log << "Mod injection finished successfully\n";
 
-    // load nucleus api.dll last after all other mods
-    if (nucleus_enabled and std::filesystem::exists("mods/Nucleus/Nucleus.dll"))
+    // inject nucleus api last after all other mods
+    if (not nucleus_path.empty())
     {
         char dllpath[MAX_PATH];
-        if (Inject("mods/Nucleus/Nucleus.dll", dllpath, lpprocessname) != 0)
+        if (Inject(nucleus_path.string().c_str(), dllpath, lpprocessname) != 0)
         {
             console_log << err << "Failed to inject nucleus runtime API, major issues may occur !\n";
             failed++;
         }
-        console_log << "[INJECTION SUCCESS] (Nucleus)\n";
+        else
+            console_log << "[INJECTION SUCCESS] (Nucleus)\n";
     }
 
     if (ownProcess)
@@ -286,10 +297,13 @@ void ModManager::InjectAll()
 
         WaitForSingleObject(
         nucleusModsInitialisedEvent,
-        INFINITE);
+        5e3);
 
         ResumeThread(procI.hThread);
 
+        // UnmapViewOfFile(shared);
+        // CloseHandle(mapping);
+        // CloseHandle(nucleusModsInitialisedEvent);
         CloseHandle(procI.hThread);
         CloseHandle(procI.hProcess);
     }

@@ -33,7 +33,7 @@ void ParseModInfo(Mod& mod)
     fs::path modFolder = mod.path;
     mod.name = modFolder.filename().string();
 
-    int dll_count = 0;
+    std::vector<fs::path> dlls{};
     for (const auto& entry : fs::recursive_directory_iterator(modFolder))
     {
         if (!entry.is_regular_file())
@@ -43,8 +43,6 @@ void ParseModInfo(Mod& mod)
 
         if (filename == "info.json")
         {
-            std::string data = ReadFile(entry.path());
-
             mod.local_info = safe_parse(ReadFile(entry), nullptr, true, true);
             mod.installed_version = GetStringFromJson(mod.local_info, "version");
         }
@@ -54,22 +52,32 @@ void ParseModInfo(Mod& mod)
 
         else if (entry.path().extension() == ".dll")
         {
-            mod.dll_path = entry.path();
-            dll_count++;
+            dlls.push_back(entry.path());
         }
 
         else if (filename == "init.lua")
             mod.init_path = entry.path();
     }
-    if (dll_count > 1)
+    if (dlls.size() > 1)
     {
-        if (mod.local_info["main_dll"].empty())
+        for (auto& dll_path : dlls)
+        {
+            // console_log << modFolder.filename() << "\n";
+            // console_log << dll_path.filename() << "\n";
+            if (dll_path.filename() == "main.dll" or
+                dll_path.filename().replace_extension("") == modFolder.filename())
+            {
+                mod.dll_path = dll_path;
+                break;
+            }
+        }
+        if (mod.dll_path.empty())
             console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
-                                  "\tPlease specify a \"main_dll\" in info.json!\n"
-                                  "\tFallback: Loading " << mod.dll_path << "\n";
-        else
-            mod.dll_path = mod.path/GetStringFromJson(mod.local_info,"main_dll",mod.dll_path.string());
+                                  "\tPlease specify a \"main_dll\" in info.json,\n"
+                                  "or make the dll that should be loaded have same filename as the mod folder!\n";
     }
+    else if (dlls.size() == 1)
+        mod.dll_path = dlls[0];
 }
 
 void ModManager::RefreshMods()
@@ -148,7 +156,7 @@ void ModManager::LoadPilusConfig()
             mods.push_back(mod);
         }
     }
-    catch (const json::other_error& e)
+    catch (const json::exception& e)
     {
         console_log << err << e.what() << "\n"
                   << "exception id: " << e.id << "\n";
@@ -201,14 +209,17 @@ void ModManager::SaveLuaModlist()
     file.clear();
     file << "LUA_MODLOADER_MOD_LIST = {\n";
 
-    for (auto mod : mods)
+    for (auto& mod : mods)
     {
         if (!mod.is_lua())
             continue;
         if (!mod.user_enabled)
             continue;
         if (mod.config_defaults.empty())
+        {
             file << "\t\"" << mod.name << "\",\n";
+            continue;
+        }
         if (mod.config_values.empty())
             GetModConfigValuesFromDefaults(mod);
 

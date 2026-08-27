@@ -8,6 +8,7 @@ A WIP modloader for Primordialis C++ and Lua mods made using Luasome, Plasmid an
 - AUTOMATE PUBLISHING UPDATES
   - I keep making mistakes when I do it by hand
 ### Low Priority:
+- Dependency load order before/any/after
 - Button to open mods folder
 - Auto mod refresh
 - Automate ImGui layout on first start

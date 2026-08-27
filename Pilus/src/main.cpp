@@ -12,6 +12,7 @@ int main()
 
     console_log << "Pilus Starting\n";
 
+    ModManager::LoadPilusConfig();
     ModManager::RefreshMods();
     UpdateLocalVersionManifest();
     // UpdateAll();
