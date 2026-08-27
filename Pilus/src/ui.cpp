@@ -404,6 +404,7 @@ void DrawVersionManager()
     for (auto& mod : ModManager::mods)
     {
         ImGui::Text("%s: %s", mod.name.c_str(), GetStringFromJson(mod.local_info, "version_manifest_url", "Unknown").c_str());
+        ImGui::Text(mod.get_deps().dump(2).c_str());
     }
 
     ImGui::TextWrapped(ModManager::version_manifest.dump(2).c_str());

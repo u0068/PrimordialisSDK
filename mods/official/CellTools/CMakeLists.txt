@@ -9,7 +9,7 @@ add_plasmid_mod(${MOD_NAME}
 )
 
 target_include_directories(${MOD_NAME} PRIVATE
-        .
+        ${CMAKE_CURRENT_LIST_DIR}
         ../ImGuiAPI
 )
 

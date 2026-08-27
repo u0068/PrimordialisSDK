@@ -42,7 +42,6 @@
   "ImGuiAPI" : {
     "author" : "h",
     "description" : "API to let mods use DearImGui\nShares ImGuiContext between all mods so they can interact with each other.",
-    "main_dll" : "ImGuiAPI.dll",
     "versions" : {
       "0.1.0" : {
         "download_url" : "",

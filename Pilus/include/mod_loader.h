@@ -80,14 +80,14 @@ struct Mod
         return exists(path);
     }
 
-    [[nodiscard]] json get_manifest() const
+    [[nodiscard]] json& get_manifest() const
     {
         return ModManager::version_manifest[name];
     }
 
-    [[nodiscard]] json get_deps() const
+    [[nodiscard]] json& get_deps() const
     {
-        return ModManager::version_manifest[name]["versions"][installed_version]["dependencies"];
+        return get_manifest()["versions"][installed_version]["dependencies"];
     }
 };
 

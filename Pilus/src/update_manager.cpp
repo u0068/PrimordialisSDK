@@ -10,25 +10,15 @@ constexpr Version PILUS_VERSION{0, 6, 0};
 
 static std::optional<Version> ParseVersion(const std::string &tag)
 {
-    // console_log << "Parsing Version: ";
-    // console_log << tag << "\n";
-
     Version version{0,0,0};
 
     std::regex tag_regex(R"((\d+)(?:.(\d+))?(?:.(\d+))?)");
 
     std::smatch match;
     if (std::regex_search(tag, match, tag_regex)) {
-        // console_log << "Tag: " << match[0].str() << "\n";
-
         version.major = std::stoi(match[1].str());
         version.minor = std::stoi(match[2].matched ? match[2].str() : "0");
         version.patch = std::stoi(match[3].matched ? match[3].str() : "0");
-
-        // console_log << "Major: " << version.major << "\n";
-        // console_log << "Minor: " << version.minor << "\n";
-        // console_log << "Patch: " << version.patch << "\n";
-
         return version;
     }
 

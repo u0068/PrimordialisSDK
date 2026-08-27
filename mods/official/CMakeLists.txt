@@ -26,23 +26,30 @@ function(add_plasmid_mod NAME)
 
     set(MOD_DIR "${MODS_DIR}/${NAME}")
 
-    add_custom_command(TARGET ${NAME} POST_BUILD
+    add_custom_command(TARGET ${NAME} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E make_directory
             "${MOD_DIR}"
-
+    )
+    add_custom_command(TARGET ${NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             "$<TARGET_FILE:${NAME}>"
             "${MOD_DIR}"
     )
 
     foreach(ASSET ${MOD_ASSETS})
-        add_custom_command(TARGET ${NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        set(ASSET_PATH
                 "${CMAKE_CURRENT_SOURCE_DIR}/${ASSET}"
-                "${MOD_DIR}"
         )
-        target_sources(${NAME} PRIVATE
-                "${CMAKE_CURRENT_SOURCE_DIR}/${ASSET}"
+
+        set_property(
+                DIRECTORY
+                APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+                "${ASSET_PATH}"
+        )
+
+        file(COPY
+                "${ASSET_PATH}"
+                DESTINATION "${MOD_DIR}"
         )
     endforeach()
 endfunction()

@@ -1,6 +1,5 @@
 #pragma once
 #include <unordered_set>
-
 #include "mod_loader.h"
 
 inline std::vector<Mod*> GetModDeps(Mod& mod)
@@ -9,7 +8,7 @@ inline std::vector<Mod*> GetModDeps(Mod& mod)
     for (auto& dep : mod.get_deps().items())
         for (auto& other : ModManager::mods)
             if (other.name == dep.key())
-                console_log << other.name << "\n";
+                deps.push_back(&other);
     return deps;
 }
 
@@ -62,8 +61,9 @@ inline void CollectDependencies(
     std::unordered_set<int>& result)
 {
     for (auto dep : GetModDepIndices(ModManager::mods[mod_idx]))
-        if (result.insert(dep).second)
-            CollectDependencies(dep, result);
+        result.insert(dep).second;
+        // if (result.insert(dep).second)
+        //     CollectDependencies(dep, result);
 }
 
 inline void CollectDependents(

@@ -63,7 +63,7 @@ void ParseModInfo(Mod& mod)
     }
     if (dll_count > 1)
     {
-        if (mod.get_manifest()["main_dll"].empty())
+        if (mod.local_info["main_dll"].empty())
             console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
                                   "\tPlease specify a \"main_dll\" in info.json!\n"
                                   "\tFallback: Loading " << mod.dll_path << "\n";
