@@ -336,15 +336,15 @@ void DrawModList()
             {
                 ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
                 // ImGui::Text("%s", mod.info.dump().c_str());
-                ImGui::Text("Author: %s", GetStringFromJson(mod.manifest_ref(), "author", "Unknown").c_str());
-                ImGui::Text("Description: %s", GetStringFromJson(mod.manifest_ref(), "description", "No Description").c_str());
-                ImGui::Text("Version: %s", GetStringFromJson(mod.manifest_ref(), "version", "Unknown Version").c_str());
-                if (not mod.manifest_ref()["dependencies"].empty())
+                ImGui::Text("Author: %s", GetStringFromJson(mod.get_manifest(), "author", "Unknown").c_str());
+                ImGui::Text("Description: %s", GetStringFromJson(mod.get_manifest(), "description", "No Description").c_str());
+                ImGui::Text("Version: %s", mod.installed_version.c_str());
+                if (not mod.get_deps().empty())
                 {
                     ImGui::Text("Dependencies:");
-                    for (auto& dep : mod.manifest_ref()["dependencies"].items())
+                    for (auto& dep : mod.get_deps().items())
                     {
-                        auto name = dep.key();
+                        const auto& name = dep.key();
                         auto version = dep.value().empty() ? "" : dep.value().get<std::string>();
                         ImGui::Text("\t%s\t%s", name, version);
                     }
@@ -403,7 +403,7 @@ void DrawVersionManager()
 
     for (auto& mod : ModManager::mods)
     {
-        ImGui::Text("%s: %s", mod.name, GetStringFromJson(mod.local_info, "version_manifest_url", "Unknown").c_str());
+        ImGui::Text("%s: %s", mod.name.c_str(), GetStringFromJson(mod.local_info, "version_manifest_url", "Unknown").c_str());
     }
 
     ImGui::TextWrapped(ModManager::version_manifest.dump(2).c_str());

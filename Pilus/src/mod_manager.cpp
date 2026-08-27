@@ -46,6 +46,7 @@ void ParseModInfo(Mod& mod)
             std::string data = ReadFile(entry.path());
 
             mod.local_info = safe_parse(ReadFile(entry), nullptr, true, true);
+            mod.installed_version = GetStringFromJson(mod.local_info, "version");
         }
 
         else if (filename == "config.json")
@@ -62,7 +63,7 @@ void ParseModInfo(Mod& mod)
     }
     if (dll_count > 1)
     {
-        if (mod.manifest_ref()["main_dll"].empty())
+        if (mod.get_manifest()["main_dll"].empty())
             console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
                                   "\tPlease specify a \"main_dll\" in info.json!\n"
                                   "\tFallback: Loading " << mod.dll_path << "\n";

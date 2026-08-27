@@ -6,17 +6,17 @@
 inline std::vector<Mod*> GetModDeps(Mod& mod)
 {
     std::vector<Mod*> deps{};
-    for (auto& dep : mod.manifest_ref()["dependencies"].items())
+    for (auto& dep : mod.get_deps().items())
         for (auto& other : ModManager::mods)
             if (other.name == dep.key())
-                deps.push_back(&other);
+                console_log << other.name << "\n";
     return deps;
 }
 
 inline std::vector<int> GetModDepIndices(Mod& mod)
 {
     std::vector<int> deps{};
-    for (auto& dep : mod.manifest_ref()["dependencies"].items())
+    for (auto& dep : mod.get_deps().items())
         for (int idx=0; idx<ModManager::mods.size(); idx++)
             if (ModManager::mods[idx].name == dep.key())
                 deps.push_back(idx);

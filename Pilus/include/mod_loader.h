@@ -48,6 +48,7 @@ struct Mod
 
     // UNSAVED:
     std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
+    std::string installed_version = "0.0.0";
     ord_json config_defaults{};
     json local_info{};
     bool dep_enabled = false;
@@ -79,9 +80,14 @@ struct Mod
         return exists(path);
     }
 
-    [[nodiscard]] json& manifest_ref() const
+    [[nodiscard]] json get_manifest() const
     {
         return ModManager::version_manifest[name];
+    }
+
+    [[nodiscard]] json get_deps() const
+    {
+        return ModManager::version_manifest[name]["versions"][installed_version]["dependencies"];
     }
 };
 

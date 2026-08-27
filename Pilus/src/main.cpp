@@ -14,7 +14,6 @@ int main()
 
     ModManager::RefreshMods();
     UpdateLocalVersionManifest();
-    ModManager::RefreshMods();
     // UpdateAll();
 
     glfwSetErrorCallback(glfwErrorCallback);

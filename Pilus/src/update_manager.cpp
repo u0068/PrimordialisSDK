@@ -178,10 +178,7 @@ void UpdateLocalVersionManifest()
     GetVersionManifest(ModManager::version_manifest_url, false);
     for (auto& mod : ModManager::mods)
     {
-        if (ModManager::version_manifest.contains(mod.name))
-            continue;
-
-        std::string manifest_url = mod.local_info["version_manifest_url"];
+        std::string manifest_url = GetStringFromJson(mod.local_info, "version_manifest_url");
         if (manifest_url.empty())
             continue;
         GetVersionManifest(manifest_url);
@@ -395,7 +392,7 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
         return false;
     }
 
-    Sleep(200000);
+    Sleep(2000);
 
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
