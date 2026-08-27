@@ -57,7 +57,7 @@
     }
   },
 
-  "Constant Acid Color" : {
+  "ConstantAcidColor" : {
     "author" : "h",
     "description" : "Makes acid not change color",
     "versions" : {
