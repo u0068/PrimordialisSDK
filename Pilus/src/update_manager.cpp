@@ -8,7 +8,7 @@
 // TODO: Make cmake increment the version number automatically
 constexpr Version PILUS_VERSION{0, 6, 0};
 
-static std::optional<Version> ParseVersion(const std::string &tag)
+std::optional<Version> ParseVersion(const std::string &tag)
 {
     Version version{0,0,0};
 
@@ -305,7 +305,7 @@ bool DownloadUpdate(const char* name, const Version& version, const fs::path& de
         ModManager::version_manifest[name][version.to_string()], "download_url");
     if (download_url_json.empty())
     {
-        console_log << err << "No download url found for " << name << "\n";
+        console_log << err << "No download url found for " << name << " " << version.to_string() << "\n";
         return false;
     }
     if (download_url_json.ends_with(".zip"))

@@ -1,6 +1,11 @@
 {
   "schema" : 1,
 
+  "name" : "Official Mods Manifest",
+  "description": [
+    "This is the manifest for the official mods made by the PrimordialisSDK developers."
+  ],
+
   "Nucleus" : {
     "author" : "h",
     "description" : "Runtime API, which runs C++ mods, handles mod communication with other mods and Primordialis.",

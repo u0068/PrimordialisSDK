@@ -1,5 +1,6 @@
 {
   "name" : "Cell Tools Pack",
+  "description" : ["This is just an example."],
   "mods" : {
     "Nucleus" : {
       "min_version" : "0.1.4",

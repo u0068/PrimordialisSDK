@@ -1,9 +1,10 @@
 #include "ui.h"
 #include <imgui_internal.h>
 
-#include "dependency_manager.h"
+#include "dependency_manager.cpp"
 #include "imgui_helpers.h"
 #include "mod_loader.h"
+#include "update_manager.h"
 
 // Use the demo window or https://pthom.github.io/imgui_explorer/ for reference
 
@@ -222,6 +223,35 @@ void DrawActionBox()
     ImGui::End();
 }
 
+void DrawModInfo(Mod& mod)
+{
+    // ImGui::Text("%s", mod.info.dump().c_str());
+    ImGui::Text("Author: %s", GetStringFromJson(mod.get_manifest(), "author", "Unknown").c_str());
+    ImGui::TextWrapped("Description:\n\t%s", GetStringFromJson(mod.get_manifest(), "description", "No Description").c_str());
+    ImGui::Text("Installed Version: %s", mod.installed_version.c_str());
+    if (not mod.get_deps().empty())
+    {
+        ImGui::Text("Dependencies:");
+        for (auto& dep : mod.get_deps().items())
+        {
+            const char* name = dep.key().c_str();
+            const auto& dep_config = dep.value();
+            const char* min_version = GetStringFromJson(
+                dep_config, "min_version", "Unknown").c_str();
+            const char* max_version = GetStringFromJson(
+                dep_config, "max_version", "Unknown").c_str();
+            ImGui::Text("\t%s %s to %s", name, min_version, max_version);
+        }
+    }
+    ImGui::Text("Directory: %s", mod.path.filename().string().c_str());
+    if (not mod.dll_path.empty())
+        ImGui::Text("main dll path: %s",
+            mod.dll_path.lexically_relative(mod.path.parent_path()).string().c_str());
+    if (not mod.init_path.empty())
+        ImGui::Text("init.lua path: %s",
+            mod.init_path.lexically_relative(mod.path.parent_path()).string().c_str());
+}
+
 bool hide_uninstalled = false;
 void DrawModList()
 {
@@ -298,11 +328,11 @@ void DrawModList()
             if (not mod.user_enabled)
             {
                 if (not mod.is_installed())
-                    ImGui::PushStyleColor(ImGuiCol_Text, {0.8, 0.3, 0.3, 1.});
+                    ImGui::PushStyleColor(ImGuiCol_Text, {0.8f, 0.3f, 0.3f, 1.0f});
                 else if (mod.dep_enabled)
-                    ImGui::PushStyleColor(ImGuiCol_Text, {1., 1., 0.5, 1.});
+                    ImGui::PushStyleColor(ImGuiCol_Text, {1.0f, 1.0f, 0.5f, 1.0f});
                 else
-                    ImGui::PushStyleColor(ImGuiCol_Text, {0.8, 0.8, 0.8, 1.});
+                    ImGui::PushStyleColor(ImGuiCol_Text, {0.8f, 0.8f, 0.8f, 1.0f});
             }
 
             ImGui::Selectable(
@@ -335,31 +365,7 @@ void DrawModList()
             if (ImGui::BeginItemTooltip())
             {
                 ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-                // ImGui::Text("%s", mod.info.dump().c_str());
-                ImGui::Text("Author: %s", GetStringFromJson(mod.get_manifest(), "author", "Unknown").c_str());
-                ImGui::Text("Description: %s", GetStringFromJson(mod.get_manifest(), "description", "No Description").c_str());
-                ImGui::Text("Version: %s", mod.installed_version.c_str());
-                if (not mod.get_deps().empty())
-                {
-                    ImGui::Text("Dependencies:");
-                    for (auto& dep : mod.get_deps().items())
-                    {
-                        const char* name = dep.key().c_str();
-                        const auto& dep_config = dep.value();
-                        const char* min_version = GetStringFromJson(
-                            dep_config, "min_version", "Unknown").c_str();
-                        const char* max_version = GetStringFromJson(
-                            dep_config, "max_version", "Unknown").c_str();
-                        ImGui::Text("\t%s %s to %s", name, min_version, max_version);
-                    }
-                }
-                ImGui::Text("Directory: %s", mod.path.filename().string().c_str());
-                if (not mod.dll_path.empty())
-                    ImGui::Text("main dll path: %s",
-                        mod.dll_path.lexically_relative(mod.path.parent_path()).string().c_str());
-                if (not mod.init_path.empty())
-                    ImGui::Text("init.lua path: %s",
-                        mod.init_path.lexically_relative(mod.path.parent_path()).string().c_str());
+                DrawModInfo(mod);
                 ImGui::PopTextWrapPos();
                 ImGui::EndTooltip();
             }
@@ -401,17 +407,39 @@ void DrawModList()
     ImGui::End();
 }
 
+void DrawVersionConfig(const char* name, json& version_json, fs::path& download_path)
+{
+    auto installed_version = GetStringFromJson(ModManager::pilus_config["installed_versions"], name, "Unknown Version").c_str();
+    if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview))
+    {
+        for (auto& el : version_json["versions"].items())
+        {
+            auto& version = el.key();
+            if (version.empty())
+                continue;
+            if (ImGui::Button(version.c_str()))
+            {
+                DownloadUpdate(name, *ParseVersion(version), download_path);
+            }
+        }
+        ImGui::EndCombo();
+    }
+}
+
 void DrawVersionManager()
 {
     ImGui::Begin("Version Manager");
 
     for (auto& mod : ModManager::mods)
     {
-        ImGui::Text("%s: %s", mod.name.c_str(), GetStringFromJson(mod.local_info, "version_manifest_url", "Unknown").c_str());
-        ImGui::Text(mod.get_deps().dump(2).c_str());
+        ImGui::PushID(mod.name.c_str());
+        if (ImGui::CollapsingHeader(mod.name.c_str()))
+        {
+            DrawVersionConfig(mod.name.c_str(), mod.get_manifest(), mod.path);
+            DrawModInfo(mod);
+        }
+        ImGui::PopID();
     }
-
-    ImGui::TextWrapped(ModManager::version_manifest.dump(2).c_str());
 
     ImGui::End();
 }

@@ -225,19 +225,19 @@ void ModManager::InjectAll()
     fs::path nucleus_path{};
     for (auto & mod : mods)
     {
-        //skip runtime api in modlist because should be last
-        if (mod.dll_path.filename().string() == "Nucleus.dll")
-        {
-            nucleus_path = mod.dll_path;
-            continue;
-        }
-
         if (mod.dll_path.empty())
             continue;
 
         if (!mod.is_enabled())
         {
-            console_log << "Encountered disabled mod, skipping...\n";
+            // console_log << "Encountered disabled mod, skipping...\n";
+            continue;
+        }
+
+        //skip runtime api in modlist because should be last
+        if (mod.dll_path.filename().string() == "Nucleus.dll")
+        {
+            nucleus_path = mod.dll_path;
             continue;
         }
 
@@ -277,10 +277,7 @@ void ModManager::InjectAll()
     {
         char dllpath[MAX_PATH];
         if (Inject(nucleus_path.string().c_str(), dllpath, lpprocessname) != 0)
-        {
             console_log << err << "Failed to inject nucleus runtime API, major issues may occur !\n";
-            failed++;
-        }
         else
             console_log << "[INJECTION SUCCESS] (Nucleus)\n";
     }

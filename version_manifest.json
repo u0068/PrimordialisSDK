@@ -1,6 +1,11 @@
 {
   "schema" : 1,
 
+  "name" : "PrimordialisSDK Manifest",
+  "description": [
+    "This is the manifest for the PrimordialisSDK."
+  ],
+
   "Pilus" : {
     "latest_version" : "0.5.5",
     "comment" : "latest_version is deprecated since v0.5.5, and will be removed once everyone has updated",

@@ -1,7 +1,7 @@
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0601
 #endif
-#include "dependency_manager.h"
+#include "dependency_manager.cpp"
 #include "imgui_helpers.h"
 #include "ui.h"
 #include "update_manager.h"

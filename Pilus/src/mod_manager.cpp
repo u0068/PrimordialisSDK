@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "dependency_manager.h"
+#include "dependency_manager.cpp"
 #include "mod_loader.h"
 
 namespace fs = std::filesystem;
@@ -225,7 +225,7 @@ void ModManager::SaveLuaModlist()
 
         file << "\t{\"" << mod.name << "\",\n";
         file << ModConfigToLua(mod.config_values);
-        file << "\t}\n";
+        file << "\t},\n";
     }
 
     file << "} -- Make sure that all mods are before this line!!!";

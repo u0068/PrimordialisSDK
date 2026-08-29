@@ -7,6 +7,6 @@
   ],
   "mods" : {},
   "manifests" : [
-    "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/mods/version_manifest.json"
+    "https://raw.githubusercontent.com/u0068/PrimordialisSDK/master/mods/official/version_manifest.json"
   ]
 }
