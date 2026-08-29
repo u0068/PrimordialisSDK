@@ -160,11 +160,24 @@ inline void DrawImgui()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-inline void ImguiHook(P::render_context *param_1,P::real_3 *param_2,float param_3,P::real_4 *param_4,int param_5)
+inline void ImguiHookSoftwareCursor(
+    P::render_context *param_1,P::real_3 *param_2,float param_3,P::real_4 *param_4,int param_5)
 {
     if (P::IsThreadSafe())
         DrawImgui();
     Next<void>(param_1, param_2, param_3, param_4, param_5);
+}
+
+inline void ImguiHookHardwareCursor(
+    P::render_context* param_1, P::render_context* param_2, P::user_input* param_3,
+    P::recording_buffer* param_4, float param_5, P::window_t* param_6)
+{
+    Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
+    if (P::IsThreadSafe() and P::settings->hardware_cursor)
+    {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+        DrawImgui();
+    }
 }
 
 inline bool imgui_initialized = false;
@@ -219,15 +232,13 @@ inline void WindowInitHook(P::window_t* window)
 
     imgui_initialized = true;
     P::Log()<<"ImGui Initialised!\n";
-
-    // TODO: Make it work for hardware cursor
-    P::settings->hardware_cursor = false;
 }
 
 inline void do_imgui_hooks()
 {
     Hook<"init_gl_context">(WindowInitHook);
-    Hook<"draw_cursor">(ImguiHook);
+    Hook<"draw_cursor">(ImguiHookSoftwareCursor);
+    Hook<"render_game">(ImguiHookHardwareCursor);
     Hook<"update_mouse_pos">(BlockInputs);
     P::Log()<<"Done ImGui Hooks!\n";
 }
