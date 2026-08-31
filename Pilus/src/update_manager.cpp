@@ -322,7 +322,7 @@ bool DownloadUpdate(const char* name, const Version& version, const fs::path& de
 
 bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
 {
-    ModManager::pilus_config["Pilus_installed_version"] = PILUS_VERSION.to_string();
+    // ModManager::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION.to_string();
 
     fs::path pilus_path = absolute(fs::path("Pilus.exe"));
 
