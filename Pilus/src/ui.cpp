@@ -236,11 +236,11 @@ void DrawModInfo(Mod& mod)
         {
             const char* name = dep.key().c_str();
             const auto& dep_config = dep.value();
-            const char* min_version = GetStringFromJson(
-                dep_config, "min_version", "Unknown").c_str();
-            const char* max_version = GetStringFromJson(
-                dep_config, "max_version", "Unknown").c_str();
-            ImGui::Text("\t%s %s to %s", name, min_version, max_version);
+            std::string min_version = GetStringFromJson(
+                dep_config, "min_version", "Unknown");
+            std::string max_version = GetStringFromJson(
+                dep_config, "max_version", "Unknown");
+            ImGui::Text("\t%s %s to %s", name, min_version.c_str(), max_version.c_str());
         }
     }
     ImGui::Text("Directory: %s", mod.path.filename().string().c_str());
