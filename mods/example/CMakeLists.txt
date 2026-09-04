@@ -1,6 +1,6 @@
 # Auto-detect mods
-file(GLOB ../../lua/mods CONFIGURE_DEPENDS
-        RELATIVE ..
+file(GLOB MODS CONFIGURE_DEPENDS
+        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         *)
 
 set(MOD_TARGETS)

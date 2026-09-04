@@ -11,8 +11,7 @@ add_subdirectory(Pilus)
 
 add_subdirectory(Plasmid)
 
-add_subdirectory(mods/official)
-add_subdirectory(mods/example)
+add_subdirectory(mods)
 
 add_subdirectory(lua/Luazyme)
 
