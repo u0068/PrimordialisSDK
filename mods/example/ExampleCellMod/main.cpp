@@ -1,5 +1,5 @@
 #include "plasmid_api.h"
-#include "generated/game_functions/cells.h"
+#include "generated/game_functions/cells.h" // Get all the cell functions
 
 void acid_no_color_change(P::cell* cell)
 {
@@ -24,15 +24,24 @@ void OnInitMats()
         return;
 
     P::material_t* mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
-    P::material_t material{}; // Initialise the material
+    P::material_t material{}; // The variable we use to store the material we are working on
 
+    // First, lets make the Acid Cell spew acid that doesn't change color
     material = mats[P::CellRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
     material.physics_update_fn = acid_no_color_change; // We simply overwrite cell functions like this instead of using the Hook utility
     mats[P::CellRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
+
+    // Next, lets make our own cell
+    // We want to have a cell that is quite stiff but not entirely rigid.
+    material = mats[P::CellRef{"Hard cell"}.GetIndex()]; // Copy the Hard cell material
+    material.is_hard = false; // Make it not rigid
+    material.base_color = {0.8f, 0.8f, 1.0f, 1.0f}; // Slightly bluish to distinguish it from Hard cell
+    P::SetCellNameAndDesc(material, "Stiff Cell", "A stiff cell resistant to spikes and explosions");
+    mats[P::n_materials++] = material; // Add our material to the end of the materials list
 }
 
 void P::InitialiseMod()
 {
-    mod_name = "Constant Acid Color";
+    mod_name = "Example Cell Mod";
     Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
 }
