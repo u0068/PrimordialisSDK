@@ -15,25 +15,23 @@ static void UnregisterUI(void (*callback)())
     std::erase(ui_callbacks, callback);
 }
 
-int test2 = 1;
-
 inline ImGuiAPI imgui_api{
     nullptr,
     RegisterUI,
     UnregisterUI,
 };
 
-
+bool show_demo_window = true;
 void DrawUI()
 {
     imgui_api.context = ImGui::GetCurrentContext();
     P::Log() << "Context: " << imgui_api.context << '\n';
-    ImGui::ShowDemoWindow();
+
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
 
     for (auto callback : ui_callbacks)
-    {
         callback();
-    }
 }
 
 void P::InitialiseMod()
