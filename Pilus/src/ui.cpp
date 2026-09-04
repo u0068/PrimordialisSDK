@@ -228,7 +228,7 @@ void DrawModInfo(Mod& mod)
     // ImGui::Text("%s", mod.info.dump().c_str());
     ImGui::Text("Author: %s", GetStringFromJson(mod.get_manifest(), "author", "Unknown").c_str());
     ImGui::TextWrapped("Description:\n\t%s", GetStringFromJson(mod.get_manifest(), "description", "No Description").c_str());
-    ImGui::Text("Installed Version: %s", mod.installed_version.c_str());
+    ImGui::Text("Installed Version: %s", mod.get_installed_version().c_str());
     if (not mod.get_deps().empty())
     {
         ImGui::Text("Dependencies:");
@@ -450,5 +450,5 @@ void DrawUI()
     DrawModList();
     DrawConsole();
     DrawModConfig();
-    DrawVersionManager();
+    // DrawVersionManager();
 }

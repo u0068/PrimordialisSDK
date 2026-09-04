@@ -44,7 +44,7 @@ void ParseModInfo(Mod& mod)
         if (filename == "info.json")
         {
             mod.local_info = safe_parse(ReadFile(entry), nullptr, true, true);
-            mod.installed_version = GetStringFromJson(mod.local_info, "version");
+            ModManager::pilus_config["installed_versions"][mod.name] = GetStringFromJson(mod.local_info, "version");
         }
 
         else if (filename == "config.json")
