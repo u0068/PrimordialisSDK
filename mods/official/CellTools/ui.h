@@ -43,8 +43,12 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat)
         }
         if (ImGui::Button("Give"))
         {
-            P::cell_item cell_item = {idx, {}, false};
+            P::cell_item cell_item = {0, idx, false};
             P::create_cell_item(&cell_item);
+        }
+        if (ImGui::Button("Duplicate"))
+        {
+            P::materials_list[P::n_materials++] = CopyMaterial(P::materials_list[idx]);
         }
         ImGui::EndPopup();
     }
@@ -179,30 +183,6 @@ inline void DrawMaterialsEditor()
     ImGui::SameLine();
     if (ImGui::Button("Load Materials"))
         LoadAllMats();
-    if (ImGui::Button("Create New From: "))
-        P::materials_list[P::n_materials++] = CopyMaterial(P::materials_list[copy_from]);
-    ImGui::SameLine();
-    auto combo_preview_value = P::materials_list[copy_from].name;
-    if (ImGui::BeginCombo("##copy_from", combo_preview_value, ImGuiComboFlags_WidthFitPreview))
-    {
-        static ImGuiTextFilter filter;
-        if (ImGui::IsWindowAppearing())
-        {
-            ImGui::SetKeyboardFocusHere();
-            filter.Clear();
-        }
-        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
-        filter.Draw("##Filter", -FLT_MIN);
-
-        for (int n = 0; n < P::n_materials; n++)
-        {
-            const bool is_selected = (copy_from == n);
-            if (filter.PassFilter(P::materials_list[n].name))
-                if (ImGui::Selectable(P::materials_list[n].name, is_selected))
-                    copy_from = n;
-        }
-        ImGui::EndCombo();
-    }
     for (int i = 0; i < P::n_materials; i++)
     {
         P::material_t& mat = P::materials_list[i];

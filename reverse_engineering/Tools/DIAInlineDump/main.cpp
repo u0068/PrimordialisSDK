@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <dia2.h>
 #include <comdef.h>
-#include <json.hpp>
+#include <nlohmann_json/json.hpp>
 
 #include <fstream>
 #include <iostream>

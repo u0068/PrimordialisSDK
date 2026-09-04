@@ -183,11 +183,11 @@ namespace P
         AddTranslation(key, desc);
     }
 
-    inline void SetCellNameAndDesc(material_t &cell_type, char* name, char* desc)
+    inline void SetCellNameAndDesc(material_t &cell_type, const char* name, const char* desc)
     {
-        cell_type.name = name;
+        cell_type.name = (char*)name;
         cell_type.id = HashCellId(name);
-        AddCellDescription(CellRef{cell_type.id}, desc);
+        AddCellDescription(CellRef{cell_type.id}, (char*)desc);
     }
 
     inline bool IsThreadSafe()

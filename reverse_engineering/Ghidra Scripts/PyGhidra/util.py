@@ -3,7 +3,6 @@ import re
 
 from ghidra.program.model.data import *
 
-
 def indent(level):
     return "    " * level
 
@@ -44,8 +43,23 @@ def is_primordialis_type(dt, currentProgram):
 
     return manager == currentProgram.getDataTypeManager() and "primordialis_avx.pbd" in dt.getCategoryPath()
 
+def inspect_type(dt, level=0):
+    print(" " * level, dt.getClass().getName())
+    print(" " * level, "name:", dt.getName())
+    print(" " * level, "display:", dt.getDisplayName())
+
+    if hasattr(dt, "getDataType"):
+        base = dt.getDataType()
+        if base and base != dt:
+            inspect_type(base, level + 2)
+
 def cpp_name(dt):
     name = dt.getDisplayName()
+
+    if hasattr(dt, "getDataType"):
+        base = dt.getDataType()
+        print("base:", base.getClass().getName())
+        print("base name:", base.getDisplayName())
 
     if ":" in name:
         name = name.split(":")[0]

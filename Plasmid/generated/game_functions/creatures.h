@@ -8,9 +8,9 @@ namespace P
     inline void work_on_saving_world_and_player() { return Resolve<void(*)()>("work_on_saving_world_and_player")(); }
     inline void platform_queue_saving_world_and_player() { return Resolve<void(*)()>("platform_queue_saving_world_and_player")(); }
     inline void find_audio_device_or_give_up() { return Resolve<void(*)()>("find_audio_device_or_give_up")(); }
-    inline void on_workshop_create_body_plan(steam_callbacks* this, CreateItemResult_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, CreateItemResult_t*, bool)>("on_workshop_create_body_plan")(this, param_1, param_2); }
+    // inline void on_workshop_create_body_plan(steam_callbacks* this, CreateItemResult_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, CreateItemResult_t*, bool)>("on_workshop_create_body_plan")(this, param_1, param_2); }
     inline void find_published_body_plans(uint param_1) { return Resolve<void(*)(uint)>("find_published_body_plans")(param_1); }
-    inline void on_workshop_find_published_body_plans(steam_callbacks* this, SteamUGCQueryCompleted_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, SteamUGCQueryCompleted_t*, bool)>("on_workshop_find_published_body_plans")(this, param_1, param_2); }
+    // inline void on_workshop_find_published_body_plans(steam_callbacks* this, SteamUGCQueryCompleted_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, SteamUGCQueryCompleted_t*, bool)>("on_workshop_find_published_body_plans")(this, param_1, param_2); }
     inline body_id_table* init_body_id_table(body_id_table* __return_storage_ptr__, int param_1) { return Resolve<body_id_table*(*)(body_id_table*, int)>("init_body_id_table")(__return_storage_ptr__, param_1); }
     inline void expand_body_id_table(body_id_table* param_1, int param_2) { return Resolve<void(*)(body_id_table*, int)>("expand_body_id_table")(param_1, param_2); }
     inline void expand_body_aux_data(int param_1) { return Resolve<void(*)(int)>("expand_body_aux_data")(param_1); }
@@ -99,9 +99,9 @@ namespace P
     inline void add_creature_spawn_chance(int param_1, uint param_2, float param_3, int param_4, float param_5) { return Resolve<void(*)(int, uint, float, int, float)>("add_creature_spawn_chance")(param_1, param_2, param_3, param_4, param_5); }
     inline void add_plant_spawn_chance(int param_1, uint param_2, float param_3, int param_4) { return Resolve<void(*)(int, uint, float, int)>("add_plant_spawn_chance")(param_1, param_2, param_3, param_4); }
     inline void biome_safe_creature(body* param_1) { return Resolve<void(*)(body*)>("biome_safe_creature")(param_1); }
-    inline void on_workshop_submit_body_plan(steam_callbacks* this, SubmitItemUpdateResult_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, SubmitItemUpdateResult_t*, bool)>("on_workshop_submit_body_plan")(this, param_1, param_2); }
+    // inline void on_workshop_submit_body_plan(steam_callbacks* this, SubmitItemUpdateResult_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, SubmitItemUpdateResult_t*, bool)>("on_workshop_submit_body_plan")(this, param_1, param_2); }
     inline void get_published_body_plans() { return Resolve<void(*)()>("get_published_body_plans")(); }
-    inline void on_workshop_find_subscribed_body_plans(steam_callbacks* this, SteamUGCQueryCompleted_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, SteamUGCQueryCompleted_t*, bool)>("on_workshop_find_subscribed_body_plans")(this, param_1, param_2); }
+    // inline void on_workshop_find_subscribed_body_plans(steam_callbacks* this, SteamUGCQueryCompleted_t* param_1, bool param_2) { return Resolve<void(*)(steam_callbacks*, SteamUGCQueryCompleted_t*, bool)>("on_workshop_find_subscribed_body_plans")(this, param_1, param_2); }
     inline void find_subscribed_body_plans() { return Resolve<void(*)()>("find_subscribed_body_plans")(); }
     inline void get_subscribed_body_plans() { return Resolve<void(*)()>("get_subscribed_body_plans")(); }
 }

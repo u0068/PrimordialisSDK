@@ -1503,7 +1503,7 @@ namespace P
     {
         uint id;
         uint ___id_null_termination;
-        char* filename;
+        const char* filename;
         mutation_item mutations[32];
         int n_mutations;
         float cost_discount;
