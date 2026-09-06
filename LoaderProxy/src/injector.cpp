@@ -1,8 +1,6 @@
-#include <windows.h>
-#include <tchar.h>
+#include "mod_loader.h"
 #include <tlhelp32.h>
 #include <fstream>
-#include "mod_loader.h"
 
 DWORD GetProcessByName(const char* lpProcessName)
 {
@@ -179,14 +177,12 @@ void ModManager::InjectAll()
     constexpr const char *lpprocessname = "primordialis.exe";
     int failed = 0;
 
-    PROCESS_INFORMATION procI{nullptr};
-
     for (auto & mod : mods)
     {
-        if (mod.dll_path.empty())
+        if (not mod.is_cpp())
             continue;
 
-        if (!mod.is_enabled())
+        if (!mod.enabled)
         {
             // Log() << "Encountered disabled mod, skipping...\n";
             continue;
@@ -212,12 +208,7 @@ void ModManager::InjectAll()
     if (failed)
         Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(mods.size()) + " mods\n";
     else
-        Log() << "Mod injection finished successfully\n";
+        Log() << "Mod injection finished successfully!\n";
 
     // Sleep(1000); // Sleep to give you time to attach a debugger
-
-    // ResumeThread(procI.hThread);
-
-    // CloseHandle(procI.hThread);
-    // CloseHandle(procI.hProcess);
 }

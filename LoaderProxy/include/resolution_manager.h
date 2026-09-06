@@ -1,5 +1,5 @@
 #pragma once
-#include "loader_logging.h"
+#include "log_setup.h"
 #include <windows.h>
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")

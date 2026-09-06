@@ -1,6 +1,6 @@
 #pragma once
 #include <json.hpp>
-#include "loader_logging.h"
+#include "log_setup.h"
 
 using json = nlohmann::json;
 using ord_json = nlohmann::ordered_json;

@@ -1,11 +1,11 @@
 #pragma once
-#include <logging.h>
+#include <dual_buffer_log.h>
 
-inline std::ofstream log_file("pilus_log.txt");
+inline std::ofstream log_file("mod_log.txt");
 
 inline std::string err = "[ERROR]: ";
 
-inline TeeBuf log_buffer(
+inline DualBuf log_buffer(
     std::cout.rdbuf(),
     log_file.rdbuf()
 );

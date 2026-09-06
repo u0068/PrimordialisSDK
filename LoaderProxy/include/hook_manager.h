@@ -1,5 +1,5 @@
 #pragma once
-#include "loader_logging.h"
+#include "log_setup.h"
 #include <MinHook.h>
 
 inline bool HookWrapper(void* target, void* hook, void** trampoline)

@@ -21,6 +21,7 @@ target_link_libraries(LoaderProxy PRIVATE
         minhook
         nlohmann_json
         miniz
+        yaml-cpp::yaml-cpp
 )
 
 set_target_properties(LoaderProxy PROPERTIES

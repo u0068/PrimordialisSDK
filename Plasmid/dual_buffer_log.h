@@ -6,10 +6,10 @@
 
 namespace fs = std::filesystem;
 
-class TeeBuf : public std::streambuf
+class DualBuf : public std::streambuf
 {
 public:
-    TeeBuf(std::streambuf* a, std::streambuf* b)
+    DualBuf(std::streambuf* a, std::streambuf* b)
         : a(a), b(b)
     {
     }

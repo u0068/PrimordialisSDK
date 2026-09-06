@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
-#include "logging.h"
+#include "dual_buffer_log.h"
 
 struct HookChainBase
 {

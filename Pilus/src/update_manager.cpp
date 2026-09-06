@@ -265,9 +265,9 @@ bool UpdatePDB()
 
 void CreateDirectories()
 {
-    if (!exists(ModManager::pilus_files_path))
+    if (!exists(ModManager::loader_files_path))
     {
-        create_directory(ModManager::pilus_files_path);
+        create_directory(ModManager::loader_files_path);
         console_log << "Created pilus_files directory\n";
     }
 

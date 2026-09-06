@@ -1,11 +1,14 @@
 #include <Windows.h>
-
+#include <filesystem>
+#include <string>
 #include "steam_exports.h"
 #include "mod_loader.h"
 #include "nucleus_api.h"
 #include "plasmid_api.h"
 
 using ModInit = void(*)(Nucleus*, const char*);
+
+void P::InitialiseMod(){}
 
 void LoadMod(const char* path)
 {
@@ -37,7 +40,7 @@ void LoadMods()
     std::string mod_names;
     for (auto& mod : ModManager::mods)
     {
-        if (not mod.is_enabled())
+        if (not mod.enabled)
             continue;
         mod_names += "\t";
         mod_names += mod.name;
@@ -49,7 +52,7 @@ void LoadMods()
 
     for (auto& mod : ModManager::mods)
     {
-        if (not mod.is_enabled())
+        if (not mod.enabled)
             continue;
         LoadMod(mod.name.c_str());
     }
@@ -57,16 +60,13 @@ void LoadMods()
     Log()<<"All Mods Initialised!\n";
 }
 
-void P::InitialiseMod(){}
-
 void* trampoline;
 uint64_t ThreadMainHook(void *context)
 {
     if (*(int*)context == 0)
     {
         Log() << "Hello from the hook!\n";
-        ModManager::LoadPilusConfig();
-        ModManager::RefreshMods();
+        ModManager::ParseMods();
         Log() << "Mod Count:"<<ModManager::mods.size()<<"\n";
         ModManager::InjectAll();
         LoadMods();
