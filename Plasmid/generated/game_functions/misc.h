@@ -203,7 +203,6 @@ namespace P
     inline void exit_fn() { return Resolve<void(*)()>("exit_fn")(); }
     inline long unhandled_exception_filter(_EXCEPTION_POINTERS* param_1) { return Resolve<long(*)(_EXCEPTION_POINTERS*)>("unhandled_exception_filter")(param_1); }
     inline int calculate_n_threads() { return Resolve<int(*)()>("calculate_n_threads")(); }
-    inline ulong thread_main(void* param_1) { return Resolve<ulong(*)(void*)>("thread_main")(param_1); }
     inline int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) { return Resolve<int(*)(HINSTANCE, HINSTANCE, LPSTR, int)>("WinMain")(hInstance, hPrevInstance, lpCmdLine, nShowCmd); }
     inline undefined8 resample_row_1(undefined8 param_1, undefined8 param_2) { return Resolve<undefined8(*)(undefined8, undefined8)>("resample_row_1")(param_1, param_2); }
     inline uint get_bits(longlong param_1, uint param_2) { return Resolve<uint(*)(longlong, uint)>("get_bits")(param_1, param_2); }

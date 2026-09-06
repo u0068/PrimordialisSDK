@@ -5,6 +5,7 @@
 
 namespace P
 {
+    inline ulong thread_main(void* param_1) { return Resolve<ulong(*)(void*)>("thread_main")(param_1); }
     inline uint add_entry(translation_map* param_1, const char* param_2, translation_list* param_3) { return Resolve<uint(*)(translation_map*, const char*, translation_list*)>("add_entry")(param_1, param_2, param_3); }
     inline void update_gamepad_clicks(user_input* param_1) { return Resolve<void(*)(user_input*)>("update_gamepad_clicks")(param_1); }
     inline void begin_trace_stage(const char* param_1) { return Resolve<void(*)(const char*)>("begin_trace_stage")(param_1); }

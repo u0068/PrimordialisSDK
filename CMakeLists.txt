@@ -16,3 +16,5 @@ add_subdirectory(mods)
 add_subdirectory(lua/Luazyme)
 
 add_subdirectory(reverse_engineering/Tools)
+
+add_subdirectory(LoaderProxy)
