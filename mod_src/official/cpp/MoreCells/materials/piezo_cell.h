@@ -18,7 +18,6 @@ inline void PiezoCell(P::cell* cell)
             // Use Hooke's law (F = -kx) to calculate stress force from extension and stiffness
             const float extension = cell->spacing[0x10*i] - cell->target_spacing;
             stress -= extension * stiffness;
-            P::Log() << stress;
         }
     }
 
