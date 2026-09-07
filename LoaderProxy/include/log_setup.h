@@ -1,28 +1,33 @@
 #pragma once
+#include <fstream>
+#include <iostream>
 #include <dual_buffer_log.h>
-
-inline std::ofstream log_file("mod_log.txt");
 
 inline std::string err = "[ERROR]: ";
 
-inline DualBuf log_buffer(
-    std::cout.rdbuf(),
-    log_file.rdbuf()
-);
+inline std::ostream& GetDualLog()
+{
+    static std::ofstream log_file("mod_log.txt");
 
-inline std::ostream console_log(&log_buffer);
+    static DualBuf log_buffer(
+        std::cout.rdbuf(),
+        log_file.rdbuf()
+    );
+
+    static std::ostream dual_log(&log_buffer);
+
+    return dual_log;
+}
 
 inline LogStream LogSourced(const std::string& source)
 {
     return LogStream(
-        console_log,
+        GetDualLog(),
         "[" + source + "]\n  "
     );
 }
 
 inline LogStream Log()
 {
-    return LogSourced(
-        "NUCLEUS"
-    );
+    return LogSourced("NUCLEUS");
 }
