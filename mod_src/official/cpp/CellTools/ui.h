@@ -175,9 +175,18 @@ inline void DrawMaterialsEditor()
 
     ImGui::Begin("Materials Editor");
 
+    static ImGuiTextFilter filter;
+    if (ImGui::IsWindowAppearing())
+    {
+        ImGui::SetKeyboardFocusHere();
+        filter.Clear();
+    }
+
     ImGui::Checkbox("Show Combos",  &show_combos); ImGui::SameLine();
-    ImGui::Checkbox("Show Vanilla", &show_vanilla); ImGui::SameLine();
+    ImGui::Checkbox("Show Vanilla",  &show_vanilla); ImGui::SameLine();
     ImGui::Checkbox("Reset on Reload",  &reset_on_reload);
+    ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
+    filter.Draw("##Filter");
     if (ImGui::Button("Save Materials"))
         SaveAllMats();
     ImGui::SameLine();
@@ -186,8 +195,9 @@ inline void DrawMaterialsEditor()
     for (int i = 0; i < P::n_materials; i++)
     {
         P::material_t& mat = P::materials_list[i];
+        if (not filter.PassFilter(mat.name)) continue;
         if (((std::string)mat.name).starts_with("Combo") && !show_combos) continue;
-        if (i < n_vanilla_mats && !show_vanilla) continue;
+        if (i < 80 && !show_vanilla) continue;
         DrawMaterialEditor(i, mat);
     }
 

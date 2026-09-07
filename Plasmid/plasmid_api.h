@@ -198,6 +198,12 @@ namespace P
         return *static_cast<int*>(tls_value) == 0;
     }
 
+    inline void LaneSync()
+    {
+        auto tls_value = TlsGetValue(tls_index);
+        EnterSynchronizationBarrier(LPSYNCHRONIZATION_BARRIER(*(longlong *) ((longlong) tls_value + 8) + 0x18),0);
+    }
+
     inline void InitialiseMod();
 };
 

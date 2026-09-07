@@ -1,8 +1,8 @@
 #pragma once
 #include "plasmid_api.h"
 
-inline int n_vanilla_mats{};
 inline bool reset_on_reload = false;
+inline bool has_initialised_mats = false;
 
 union material_u
 {
@@ -97,11 +97,10 @@ inline void LoadAllMats()
 
 inline void InitMaterialsHook()
 {
-    if (!reset_on_reload and n_vanilla_mats > 0)
+    if (not reset_on_reload and has_initialised_mats)
         return;
     Next<void>();
     if (!P::IsThreadSafe())
         return;
-    if (n_vanilla_mats == 0)
-        n_vanilla_mats = P::n_materials;
+    has_initialised_mats = true;
 }

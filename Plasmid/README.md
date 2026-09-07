@@ -8,7 +8,8 @@ A WIP modding API for C++ mods, made for the Pilus Modloader
   - Body property view
   - Biome node graph view
   - Biome property view
-- Struct member functions
+- Member functions
+- Figure out how to properly access cell extra fields
 - Lua API Extension
 - External mod config and assets
 - Documentation

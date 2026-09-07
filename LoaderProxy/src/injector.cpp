@@ -156,16 +156,16 @@ void ModManager::InjectAll()
 
         if (Inject(injectPath.c_str(), dllpath, lpprocessname) != 0)
         {
-            Log() << err << "[INJECTION FAILED] (";
-            Log() << mod.dll_path.filename().string();
-            Log() << ") Skipped\n";
+            Log() << err << "[INJECTION FAILED] ("
+                  << mod.dll_path.filename().string()
+                  << ") Skipped\n";
 
             failed++;
             continue;
         }
-        Log() << "[INJECTION SUCCESS] (";
-        Log() << mod.dll_path.filename().string();
-        Log() << ")\n";
+        Log() << "[INJECTION SUCCESS] ("
+              << mod.dll_path.filename().string()
+              << ")\n";
 
     }
     if (failed)

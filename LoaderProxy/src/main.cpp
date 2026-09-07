@@ -59,12 +59,13 @@ void LoadMods()
 void* trampoline;
 uint64_t ThreadMainHook(void *context)
 {
-    if (*(int*)context == 0)
+    if (*(int*)context == 0 and not ModManager::loader_files_path.empty())
     {
         Log() << "Hello from the hook!\n";
         ModManager::ParseMods();
         Log() << "Mod Count:"<<ModManager::enabled_mods.size()<<"\n";
         ModManager::InjectAll();
+        nucleus = &api;
         LoadMods();
     }
 
