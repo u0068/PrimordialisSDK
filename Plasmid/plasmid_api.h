@@ -189,6 +189,7 @@ inline void Initialise(Nucleus* api, const char* mod_path)
     P::mod_path = mod_path;
     P::mod_name = mod_path; // path is better than nothing
     P::translation_values.reserve(2048);
+    P::PlasmidLog()<<"Initialised Plasmid!\n";
     P::InitialiseMod();
     P::Log()<<"Initialised Mod!\n";
 }

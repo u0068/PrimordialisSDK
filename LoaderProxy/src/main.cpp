@@ -79,6 +79,11 @@ void Bootstrap()
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
+    std::cout << "cout test\n";
+    log_file << "log_file test\n";
+    console_log << "console_log test\n";
+    Log() << "Log() test\n";
+
     Log()<<"Hello world!\n";
 
     if (MH_Initialize() != MH_OK)

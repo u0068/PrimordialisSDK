@@ -77,8 +77,8 @@ void ParseModInfo(Mod& mod)
     {
         for (auto& dll_path : dlls)
         {
-            // console_log << modFolder.filename() << "\n";
-            // console_log << dll_path.filename() << "\n";
+            // Log() << modFolder.filename() << "\n";
+            // Log() << dll_path.filename() << "\n";
             if (dll_path.filename() == "main.dll" or
                 dll_path.filename().replace_extension("") == modFolder.filename())
             {
@@ -87,7 +87,7 @@ void ParseModInfo(Mod& mod)
             }
         }
         if (mod.dll_path.empty())
-            console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
+            Log() << err << "Multiple .dll files detected! I don't know which one to load.\n"
                                   "\tPlease specify a \"main_dll\" in info.json,\n"
                                   "or make the dll that should be loaded have same filename as the mod folder!\n";
     }
@@ -102,9 +102,9 @@ void ModManager::ParseMods()
     std::vector<Mod> installed_mods{};
     for (const auto& entry : std::filesystem::directory_iterator(mod_path))
     {
-        console_log << "Found Mod: ";
-        console_log << entry.path().filename().stem().string();
-        console_log << "\n";
+        Log() << "Found Mod: ";
+        Log() << entry.path().filename().stem().string();
+        Log() << "\n";
 
         Mod nmod;
         nmod.path = entry.path();
