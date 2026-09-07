@@ -181,6 +181,29 @@ namespace P
         EnterSynchronizationBarrier(LPSYNCHRONIZATION_BARRIER(*(longlong *) ((longlong) tls_value + 8) + 0x18),0);
     }
 
+    inline cell** GetNeighborTable(cell* current_cell)
+    {
+        constexpr uintptr_t CellAlignmentMask = ~uintptr_t(0x3F);
+        constexpr uintptr_t NeighborTableOffset = 0x16B0;
+        constexpr uintptr_t CellStride = 0xB0;
+
+        const auto address = reinterpret_cast<uintptr_t>(current_cell);
+        const auto block = address & CellAlignmentMask;
+        const auto index = (address >> 2) & 0xF;
+
+        return reinterpret_cast<cell**>(
+            block + NeighborTableOffset + index * CellStride
+        );
+    }
+
+    inline cell* GetNeighboringCell(cell* current_cell, int neighbor_index)
+    {
+        if ((current_cell->flags & (1 << neighbor_index)) != 0)
+            return nullptr;
+
+        return GetNeighborTable(current_cell)[neighbor_index];
+    }
+
     inline void InitialiseMod();
 };
 
