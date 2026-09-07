@@ -8,7 +8,7 @@ inline void AngVelMeter(P::cell* cell)
     const float angle = atan2(cell->rot_y, cell->rot_x);
     const float prev_angle = cell->value;
 
-    const float ang_vel = angle-prev_angle;
+    const float ang_vel = P::AngleTo(prev_angle, angle);
 
     cell->value = angle;
     cell->voltage = cell->voltage_multiplier * multiplier * ang_vel;
