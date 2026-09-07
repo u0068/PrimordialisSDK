@@ -24,37 +24,6 @@ DWORD GetProcessByName(const char* lpProcessName)
     return -1;
 }
 
-// bool IsProcessRunning(const char* processName)
-// {
-//     PROCESSENTRY32 entry;
-//     entry.dwSize = sizeof(PROCESSENTRY32);
-//
-//     HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-//     if (snapshot == INVALID_HANDLE_VALUE)
-//         return false;
-//
-//     if (Process32First(snapshot, &entry))
-//         do
-//             if (_tcsicmp(entry.szExeFile, processName) == 0) // Case-insensitive comparison
-//             {
-//                 CloseHandle(snapshot);
-//                 return true;
-//             }
-//         while (Process32Next(snapshot, &entry));
-//
-//     CloseHandle(snapshot);
-//     return false;
-// }
-
-// std::filesystem::path GetExePath()
-// {
-//     wchar_t buffer[MAX_PATH];
-//     DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
-//     if (len == 0)
-//         throw std::runtime_error("Failed to get executable path");
-//     return buffer;
-// }
-
 bool IsDLL(const std::string& filePath)
 {
     std::ifstream f(filePath, std::ios::binary);
