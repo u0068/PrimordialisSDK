@@ -56,4 +56,4 @@ function(add_plasmid_mod NAME)
 endfunction()
 
 add_subdirectory(official/cpp)
-add_subdirectory(example/cpp)
+add_subdirectory(examples/cpp)
