@@ -67,8 +67,10 @@ namespace P
                 }
                 if (strcmp(materials_list[i].name, name) == 0)
                 {
-                    PlasmidLog()<<"Found cell type '"<<name<<"' with index "<<i<<"\n";
-                    numeric = HashCellId(name);
+                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i<<"\n";
+                    numeric = materials_list[i].id;
+                    if (numeric == 0)
+                        numeric = HashCellId(name);
                     index = i;
                     return i;
                 }
