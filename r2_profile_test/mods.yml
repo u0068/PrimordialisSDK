@@ -1,0 +1,8 @@
+- name: ExampleCellMod
+  enabled: false
+- name: ImGuiAPI
+  enabled: true
+- name: CellTools
+  enabled: true
+- name: MoreCells
+  enabled: false
