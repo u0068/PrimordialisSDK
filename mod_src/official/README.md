@@ -10,24 +10,12 @@ You can use them as examples.
 
 ### Potentially doable:
 - Cells:
-  - Raycasting cell
-  - Negative ability triggers
-  - Increase prox detector range
-  - Intake cell / Directional vac / Jet sucks inwards
-  - Anti-seeker
-  - Electrical seeker
-  - Infinite ability triggers
+  - More cells mod
   - Inflating/Muscle revert
-  - Cell detector
-  - Pin cell
-  - Piezo cell
-  - Ang vel meter
-  - Better power switch
-  - Damage detector
-  - Wall detector
+  - Infinite ability triggers
   - Common but expensive heart cells
   - Negative stasis speeds cells up
-  - Family prox detector
+  - Increase prox detector range
   - Custom cell maker
     - Simple stat changer (DONE)
     - Logic cells
@@ -94,7 +82,3 @@ You can use them as examples.
     - Show cell q and r
   - Daily Run
   - Recenter editor
-### Done:
-- Cells
-  - Aero-gel cell
-    - Very light, brittle and insulating

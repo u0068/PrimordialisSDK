@@ -1,6 +1,6 @@
 # Add mod and copy to mods folder
 
-set(MODS_DIR "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods")
+set(MODS_DIR "${CMAKE_SOURCE_DIR}/r2_profile_test/mods")
 
 function(add_plasmid_mod NAME)
     cmake_parse_arguments(
