@@ -20,6 +20,7 @@ void acid_no_color_change(P::cell* cell)
 void OnInitMats()
 {
     Next<void>(); // Call original function
+    P::LaneSync(); // Wait until all threads have finished their job
     if (not P::IsThreadSafe()) // Make sure we are only on the main thread
         return;
 
