@@ -6,6 +6,7 @@
 #include "wall_detector.h"
 #include "damage_detector.h"
 #include "ang_vel_meter.h"
+#include "piezo_cell.h"
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats()
@@ -21,6 +22,7 @@ void OnInitMats()
     AddWallDetector();
     AddDamageDetector();
     AddAngVelMeter();
+    AddPiezoCell();
 }
 
 void P::InitialiseMod()
