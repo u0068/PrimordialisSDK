@@ -4,11 +4,11 @@ You can use them as examples.
 
 # TO-DO:
 - Publish on thunderstore (once possible)
-- Re-add multiplayer mod
+- C++ multiplayer mod
 - Convert popular lua mods
 - Thoroughly document everything
 
-## Potentially doable:
+### Potentially doable:
 - Cells:
   - Raycasting cell
   - Negative ability triggers
@@ -16,21 +16,21 @@ You can use them as examples.
   - Intake cell / Directional vac / Jet sucks inwards
   - Anti-seeker
   - Electrical seeker
-  - Lighter lightweight cell
   - Infinite ability triggers
   - Inflating/Muscle revert
-  - Super insulator
   - Cell detector
   - Pin cell
   - Piezo cell
-  - Old hard cell
   - Ang vel meter
   - Better power switch
   - Damage detector
   - Wall detector
   - Common but expensive heart cells
   - Negative stasis speeds cells up
-  - Family prox trigger
+  - Family prox detector
+  - Custom cell maker
+    - Simple stat changer (DONE)
+    - Logic cells
   - Directing cell
     - Treated as empty cell for determining cell direction
   - Cell spawn rate config
@@ -94,3 +94,7 @@ You can use them as examples.
     - Show cell q and r
   - Daily Run
   - Recenter editor
+### Done:
+- Cells
+  - Aero-gel cell
+    - Very light, brittle and insulating
