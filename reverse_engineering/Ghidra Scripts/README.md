@@ -30,6 +30,9 @@ Ghidra scripts can be made in:
   - Default working directory is `ghidra_installation_dir/support/`
 
 # TODO:
+- Custom PDB reader because Ghidra's sucks
+- Correctly identify const stuff
+- Get member functions
 - Rewrite java scripts in PyGhidra
 
 # DONE:
