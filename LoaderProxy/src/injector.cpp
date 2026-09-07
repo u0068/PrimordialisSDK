@@ -146,16 +146,10 @@ void ModManager::InjectAll()
     constexpr const char *lpprocessname = "primordialis.exe";
     int failed = 0;
 
-    for (auto & mod : mods)
+    for (auto & mod : enabled_mods)
     {
         if (not mod.is_cpp())
             continue;
-
-        if (!mod.enabled)
-        {
-            // Log() << "Encountered disabled mod, skipping...\n";
-            continue;
-        }
 
         std::string injectPath = mod.dll_path.string();
         char dllpath[MAX_PATH];
@@ -175,7 +169,7 @@ void ModManager::InjectAll()
 
     }
     if (failed)
-        Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(mods.size()) + " mods\n";
+        Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(enabled_mods.size()) + " mods\n";
     else
         Log() << "Mod injection finished successfully!\n";
 

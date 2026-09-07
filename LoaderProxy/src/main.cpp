@@ -38,10 +38,8 @@ void LoadMod(const char* path)
 void LoadMods()
 {
     std::string mod_names;
-    for (auto& mod : ModManager::mods)
+    for (auto& mod : ModManager::enabled_mods)
     {
-        if (not mod.enabled)
-            continue;
         mod_names += "\t";
         mod_names += mod.name;
         mod_names += "\n";
@@ -50,10 +48,8 @@ void LoadMods()
     PrimordialisLog("\nTHIS SESSION HAS BEEN MODIFIED USING THE PILUS MODLOADER AND THE FOLLOWING MODS:\n"+mod_names+
                     "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n");
 
-    for (auto& mod : ModManager::mods)
+    for (auto& mod : ModManager::enabled_mods)
     {
-        if (not mod.enabled)
-            continue;
         LoadMod(mod.name.c_str());
     }
 
@@ -67,7 +63,7 @@ uint64_t ThreadMainHook(void *context)
     {
         Log() << "Hello from the hook!\n";
         ModManager::ParseMods();
-        Log() << "Mod Count:"<<ModManager::mods.size()<<"\n";
+        Log() << "Mod Count:"<<ModManager::enabled_mods.size()<<"\n";
         ModManager::InjectAll();
         LoadMods();
     }

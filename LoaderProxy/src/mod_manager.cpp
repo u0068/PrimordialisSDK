@@ -18,7 +18,7 @@ std::string ReadFile(const fs::path& path)
     return buffer.str();
 }
 
-std::filesystem::path GetLoaderFilesFolder()
+std::filesystem::path ModManager::GetLoaderFilesFolder()
 {
     int argc = 0;
     LPWSTR* argv = CommandLineToArgvW(
@@ -99,6 +99,7 @@ void ModManager::ParseMods()
 {
     Log() << "Parsing Mods...\n";
 
+    std::vector<Mod> installed_mods{};
     for (const auto& entry : std::filesystem::directory_iterator(mod_path))
     {
         console_log << "Found Mod: ";
@@ -112,15 +113,15 @@ void ModManager::ParseMods()
         if (entry.path().extension() == ".dll")
             nmod.dll_path = entry.path();
         ParseModInfo(nmod);
-        mods.push_back(nmod);
+        installed_mods.push_back(nmod);
     }
 
-    loader_files_path = GetLoaderFilesFolder();
     YAML::Node mods_yml = YAML::LoadFile((loader_files_path/"mods.yml").string());
     for (std::size_t i=0;i<mods_yml.size();i++)
-        for (auto& mod : mods)
-            if (mod.name == mods_yml[i]["name"].as<std::string>())
-                mod.enabled = mods_yml[i]["enabled"].as<bool>();
+        for (auto& mod : installed_mods)
+            if (mod.name == mods_yml[i]["name"].as<std::string>()
+            and mods_yml[i]["enabled"].as<bool>())
+                enabled_mods.push_back(mod);
 }
 
 // std::string ModConfigToLua(json config)
@@ -142,7 +143,7 @@ void ModManager::SaveLuaModlist()
     file.clear();
     file << "LUA_MODLOADER_MOD_LIST = {\n";
 
-    for (auto& mod : mods)
+    for (auto& mod : enabled_mods)
     {
         // if (!mod.is_lua())
         //     continue;

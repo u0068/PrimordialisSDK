@@ -11,15 +11,14 @@ struct Mod;
 
 namespace ModManager
 {
-    inline std::vector<Mod> mods{};
+    inline std::vector<Mod> enabled_mods{};
 
+    std::filesystem::path GetLoaderFilesFolder();
     inline fs::path game_path = fs::current_path();
-    inline fs::path loader_files_path{};
+    inline fs::path loader_files_path{GetLoaderFilesFolder()};
     inline fs::path luasome_path{loader_files_path / "luasome"};
     inline fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
-
     inline fs::path mod_path{loader_files_path / "mods"};
-    inline std::string last_description_trunc{};
 
     void ParseMods();
     void InjectAll();
@@ -34,7 +33,6 @@ struct Mod
     fs::path path{};
     fs::path dll_path{};
     fs::path init_path{};
-    bool enabled = false;
 
     bool operator== (const Mod& other) const
     {
