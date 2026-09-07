@@ -29,4 +29,5 @@ void P::InitialiseMod()
 {
     mod_name = "More Cells";
     Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
+    Log()<<"test\n";
 }

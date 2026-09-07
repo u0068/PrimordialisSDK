@@ -3,12 +3,23 @@
 
 inline void PiezoCell(P::cell* cell)
 {
-    constexpr float multiplier = 25.0f;
+    constexpr float multiplier = 50.0f;
 
     float stress = 0.0f;
     for (int i=0; i<6; i++)
     {
-        stress += cell->spacing[i*0x10];
+        auto neighbor = P::GetNeighboringCell(cell, i);
+        if (neighbor != nullptr)
+        {
+            // Calculate connection stiffness from inverse mean of compliances
+            const float stiffness = 2.0f/(
+                P::materials_list[neighbor->material_index].radial_compliance +
+                P::materials_list[cell->material_index].radial_compliance);
+            // Use Hooke's law (F = -kx) to calculate stress force from extension and stiffness
+            const float extension = cell->spacing[0x10*i] - cell->target_spacing;
+            stress -= extension * stiffness;
+            P::Log() << stress;
+        }
     }
 
     cell->voltage = cell->voltage_multiplier * multiplier * stress;
@@ -18,9 +29,9 @@ inline void AddPiezoCell()
 {
     auto material = P::materials_list[P::CellRef{"Proximity detecting cell"}.GetIndex()];
     material.electric_update_fn = PiezoCell;
-    material.radial_compliance *= 16.0f;
+    material.radial_compliance *= 8.0f;
     material.uv = P::materials_list[P::CellRef{"Power switch cell"}.GetIndex()].uv;
-    material.base_color = {1.5f, 2.0f, 0.5f, 0.5f};
-    SetCellNameAndDesc(material, "Angular velocity meter cell", "Creates a voltage proportional to the rate of rotation of the cell.");
+    material.base_color = {0.3f, 0.0f, 1.0f, 0.8f};
+    SetCellNameAndDesc(material, "Piezoelectric cell", "Creates a voltage proportional to how much the cell is squeezed.");
     P::materials_list[P::n_materials++] = material;
 }
