@@ -24,7 +24,7 @@ function(add_plasmid_mod NAME)
     set_target_properties(${NAME}
             PROPERTIES
             OUTPUT_NAME ${NAME}
-            #            RUNTIME_OUTPUT_DIRECTORY ${MOD_DIR}
+            # RUNTIME_OUTPUT_DIRECTORY ${MOD_DIR}
     )
 
     add_custom_command(TARGET ${NAME} PRE_BUILD
