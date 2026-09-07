@@ -9,7 +9,6 @@ Does what it says in the title.
 - Electrical seeker
 - Cell detector
 - Pin cell
-- Piezo cell
 - Better power switch
 - Family prox detector
 # Done:
@@ -19,3 +18,4 @@ Does what it says in the title.
 - Damage detector
 - Wall detector
 - Ang vel meter
+- Piezo cell
