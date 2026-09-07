@@ -11,6 +11,12 @@ Does what it says in the title.
 - Pin cell
 - Better power switch
 - Family prox detector
+- Flamethrower
+  - Shoots hot acid
+  - Particles emit light
+  - Reverse entropy compatibility
+- Teflon cell
+  - Does not connect to rigid cells
 # Done:
 - Stiff cell (old hard cell)
 - Aero-gel cell
