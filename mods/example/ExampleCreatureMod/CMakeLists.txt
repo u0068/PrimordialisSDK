@@ -5,5 +5,4 @@ add_plasmid_mod(${MOD_NAME}
         main.cpp
 
         ASSETS
-            info.json
 )
