@@ -5,8 +5,26 @@
 
 inline std::string err = "[ERROR]: ";
 
+static void InitConsole()
+{
+    if (!AllocConsole())
+    {
+        if (GetLastError() != ERROR_ACCESS_DENIED)
+            return;
+    }
+
+    FILE* file;
+    freopen_s(&file, "CONOUT$", "w", stdout);
+    freopen_s(&file, "CONOUT$", "w", stderr);
+
+    // std::cout.clear();
+    // std::cerr.clear();
+}
+
 inline std::ostream& GetDualLog()
 {
+    InitConsole();
+
     static std::ofstream log_file("mod_log.txt");
 
     static DualBuf log_buffer(

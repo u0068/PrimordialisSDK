@@ -74,10 +74,6 @@ uint64_t ThreadMainHook(void *context)
 
 void Bootstrap()
 {
-    AllocConsole();
-
-    FILE* file;
-    freopen_s(&file, "CONOUT$", "w", stdout);
 
     Log()<<"Hello world!\n";
 
