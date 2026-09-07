@@ -3,38 +3,13 @@
 #include <windows.h>
 #include "hook_manager.h"
 #include "module_manager.h"
+#include "math_utils.h"
 #include "generated/game_functions/essential.h"
 #include "generated/resolve_data.h"
 
 namespace P
 {
     inline fs::path mod_path;
-
-    // TODO: Make this human readable with something like base64
-    inline uint32_t HashCellId(
-        const char *cell
-    )
-    {
-        uint32_t hash = 2166136261;
-
-        auto hash_byte = [&](uint8_t c)
-        {
-            hash ^= c;
-            hash *= 16777619;
-        };
-
-        for (char c : (std::string_view)mod_name)
-            hash_byte(c);
-
-        hash_byte(':');
-
-        for (char c : (std::string_view)cell)
-            hash_byte(c);
-
-        PlasmidLog() << "Generated '"<<cell<<"' id: "<<hash<<"\n";
-
-        return hash;
-    }
 
     struct CellRef
     {
