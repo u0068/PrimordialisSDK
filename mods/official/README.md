@@ -3,4 +3,94 @@ Mods made by the SDK dev team.
 You can use them as examples.
 
 # TO-DO:
-- 
+- Publish on thunderstore (once possible)
+- Re-add multiplayer mod
+- Convert popular lua mods
+- Thoroughly document everything
+
+## Potentially doable:
+- Cells:
+  - Raycasting cell
+  - Negative ability triggers
+  - Increase prox detector range
+  - Intake cell / Directional vac / Jet sucks inwards
+  - Anti-seeker
+  - Electrical seeker
+  - Lighter lightweight cell
+  - Infinite ability triggers
+  - Inflating/Muscle revert
+  - Super insulator
+  - Cell detector
+  - Pin cell
+  - Piezo cell
+  - Old hard cell
+  - Ang vel meter
+  - Better power switch
+  - Damage detector
+  - Wall detector
+  - Common but expensive heart cells
+  - Negative stasis speeds cells up
+  - Family prox trigger
+  - Directing cell
+    - Treated as empty cell for determining cell direction
+  - Cell spawn rate config
+  - Combo rework
+      - Combine stats commutatively and associatively
+      - Combine based on the stats' deviation from basic cell
+- Mutations:
+  - Acid resist
+  - Poison resist
+  - See through ink (Does echolocation do this already?)
+  - Creatures spawn with random mutations
+  - Damage indicator
+  - Negative voltage
+  - Chromosomal polyploidy
+    - Increases max genome size and cell cost
+- Biome modifiers:
+  - Everything gangs up on player
+- Cosmetic
+  - Heat glow uses blackbody emission spectrum
+  - Uncap zoom
+  - Boss zone cosmetic overhaul
+  - Fix mutation sidebar on overflow
+  - Hide biomass cost and genome size
+  - Show material stats
+  - Lower min fps
+  - Large scale variety in biomes
+  - C++ mag field vis
+  - Voltage visibility toggle
+  - Continuous zoom
+  - Camera pan fix
+- Lua API extension
+  - Set creature position
+  - Spawn cell
+  - Spawn creature
+  - All currently loaded bodies api command
+  - update-body_plan
+- Editor
+  - More brush shapes
+  - Drop cell hotkey
+  - Precise color picker
+  - Colors in edit mode
+  - Floodfill selection
+  - Symmetry hotkey
+  - Cell sorter
+  - Save cell layout
+  - Apply fill symmetrically
+  - Center of mass and cost indicators
+- World
+  - Map markers
+- Sandbox tools
+  - Pin tool
+  - Drag by cell
+  - Deterministic rotation
+  - Delete cell pickup
+  - Clear debris
+  - Drag delete
+  - Delete highlight
+- Misc:
+  - Debug tools
+    - Inspector overhaul
+    - Show cell q and r
+  - Daily Run
+  - Recenter editor

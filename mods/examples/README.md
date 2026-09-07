@@ -21,5 +21,13 @@ Mods that show and explain various features.
   - Adding biomes
   - Modifying biomes
 - UI
-  - Vanilla UI example
-  - ImGui example
+  - Vanilla UI
+  - ImGui
+- Mutations
+- Console commands
+  - Lua
+  - C++
+- Custom Lua-C++ bindings
+- Inter-mod communication
+- Custom cell icons
+- Shaders
