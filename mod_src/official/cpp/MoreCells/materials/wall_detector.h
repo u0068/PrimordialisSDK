@@ -4,9 +4,11 @@
 
 inline void WallDetector(P::cell* cell)
 {
+    constexpr float max_voltage = 1.0f;
+    constexpr float falloff = 0.005f;
     P::wall_t walls;
-    P::wall_map_extended(&walls, &P::w->map, P::real_2{cell->x, cell->y});
-    cell->voltage = 300.0 * cell->voltage_multiplier / walls.dist;
+    P::wall_map(&walls, &P::w->map, P::real_2{cell->x, cell->y}, false);
+    cell->voltage = cell->voltage_multiplier * max_voltage / (max(0, falloff * walls.dist) + 1.0f);
 }
 
 inline void AddWallDetector()
