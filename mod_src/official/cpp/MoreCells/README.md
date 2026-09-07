@@ -10,13 +10,12 @@ Does what it says in the title.
 - Cell detector
 - Pin cell
 - Piezo cell
-- Ang vel meter
 - Better power switch
-- Damage detector
-- Wall detector
 - Family prox detector
 # Done:
-- Cells
-  - Stiff cell (old hard cell)
-  - Aero-gel cell
-    - Very light, brittle and insulating
+- Stiff cell (old hard cell)
+- Aero-gel cell
+  - Very light, brittle and insulating
+- Damage detector
+- Wall detector
+- Ang vel meter
