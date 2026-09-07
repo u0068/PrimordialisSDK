@@ -4,6 +4,8 @@ Uses ImGui in-game.
 
 ## TO-DO:
 - Cell Property view + edit
+- Material filter
+- 
 ## DONE:
 - Material editing (DONE)
 - Add material (DONE)
