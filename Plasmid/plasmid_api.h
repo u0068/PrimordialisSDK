@@ -56,26 +56,21 @@ namespace P
                 return -1;
             }
 
-            PlasmidLog()<<"Searching for cell type '"<<name<<"' with id "<<numeric<<"\n";
+            if (numeric)
+                return get_material_index(numeric);
+
+            PlasmidLog()<<"Searching for cell type '"<<name<<"'\n";
             for (int i = 1; i < n_materials; i++)
-            {
-                if (numeric != 0 and materials_list[i].id == numeric)
-                {
-                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i<<"\n";
-                    index = i;
-                    return i;
-                }
                 if (strcmp(materials_list[i].name, name) == 0)
                 {
-                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i<<"\n";
                     numeric = materials_list[i].id;
+                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i<<"\n";
                     if (numeric == 0)
                         numeric = HashCellId(name);
                     index = i;
                     return i;
                 }
-            }
-            PlasmidLog()<<"Failed to find cell type '"<<name<<"' with id "<<numeric<<"\n";
+            PlasmidLog()<<"Failed to find cell type '"<<name<<"'\n";
             return -1;
         }
 
@@ -181,6 +176,7 @@ namespace P
         EnterSynchronizationBarrier(LPSYNCHRONIZATION_BARRIER(*(longlong *) ((longlong) tls_value + 8) + 0x18),0);
     }
 
+    // TODO: fix member functions and use extra_fields
     inline cell** GetNeighborTable(cell* current_cell)
     {
         constexpr uintptr_t CellAlignmentMask = ~uintptr_t(0x3F);

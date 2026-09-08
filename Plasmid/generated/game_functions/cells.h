@@ -126,7 +126,6 @@ namespace P
     inline void cell_wall_anchor(cell* param_1) { return Resolve<void(*)(cell*)>("cell_wall_anchor")(param_1); }
     inline void cell_portal(cell* param_1) { return Resolve<void(*)(cell*)>("cell_portal")(param_1); }
     inline void cell_cancer(cell* param_1) { return Resolve<void(*)(cell*)>("cell_cancer")(param_1); }
-    inline int get_material_index(uint param_1) { return Resolve<int(*)(uint)>("get_material_index")(param_1); }
     inline cell_item* create_cell_item(cell_item* param_1) { return Resolve<cell_item*(*)(cell_item*)>("create_cell_item")(param_1); }
     inline mutation_pickup* generate_mutation_pickup(real_2 param_1, real_2 param_2, uint param_3) { return Resolve<mutation_pickup*(*)(real_2, real_2, uint)>("generate_mutation_pickup")(param_1, param_2, param_3); }
     inline void check_collisions_for_cell(cell* param_1, __uint64* param_2, int* param_3) { return Resolve<void(*)(cell*, __uint64*, int*)>("check_collisions_for_cell")(param_1, param_2, param_3); }

@@ -16,4 +16,5 @@ namespace P
     inline void update_game(render_context* param_1, render_context* param_2, user_input* param_3) { return Resolve<void(*)(render_context*, render_context*, user_input*)>("update_game")(param_1, param_2, param_3); }
     inline uint str_to_id(const char* param_1) { return Resolve<uint(*)(const char*)>("str_to_id")(param_1); }
     inline int log_printf(const char* param_1) { return Resolve<int(*)(const char*)>("log_printf")(param_1); }
+    inline int get_material_index(uint param_1) { return Resolve<int(*)(uint)>("get_material_index")(param_1); }
 }
