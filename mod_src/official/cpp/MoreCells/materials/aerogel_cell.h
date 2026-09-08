@@ -20,7 +20,8 @@ inline void AddAeroGelCell()
     material.restitution = 0.9f;
     material.drag = 0.1f;
     material.heat_conductivity = 0.0f;
-    material.heat_capacity = 10.0f;
+    material.leak_heat_conductivity = 10.0f;
+    material.heat_capacity = 1e4f;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.5f, 1.5f, 2.0f, 0.3f};
     SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
