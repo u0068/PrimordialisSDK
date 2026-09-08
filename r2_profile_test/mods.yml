@@ -1,6 +1,6 @@
 - name: ImGuiAPI
-  enabled: false
+  enabled: true
 - name: CellTools
-  enabled: false
+  enabled: true
 - name: MoreCells
   enabled: true
