@@ -231,7 +231,8 @@ inline void WindowInitHook(P::window_t* window)
     );
 
     imgui_initialized = true;
-    P::Log()<<"ImGui Initialised!\n";
+    P::Log() << "ImGui Initialised\n";
+    P::Log() << "ImGui Context: " << ImGui::GetCurrentContext() << '\n';
 }
 
 inline void do_imgui_hooks()

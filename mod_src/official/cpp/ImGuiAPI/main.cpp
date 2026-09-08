@@ -39,5 +39,4 @@ void P::InitialiseMod()
     P::RegisterModule("ImGuiAPI", &imgui_api);
     mod_name = "ImGuiAPI";
     do_imgui_hooks();
-    P::Log() << "ImGui Context: " << imgui_api.context << '\n';
 }
