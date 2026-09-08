@@ -2,6 +2,7 @@
 Does what it says in the title.
 
 # TO-DO:
+- Config
 - Raycasting cell
 - Negative ability triggers
 - Intake cell / Directional vac / Jet sucks inwards
