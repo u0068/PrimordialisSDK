@@ -197,7 +197,7 @@ inline void DrawMaterialsEditor()
         P::material_t& mat = P::materials_list[i];
         if (not filter.PassFilter(mat.name)) continue;
         if (((std::string)mat.name).starts_with("Combo") && !show_combos) continue;
-        if (i < 80 && !show_vanilla) continue;
+        if (i < 83 && !show_vanilla) continue;
         DrawMaterialEditor(i, mat);
     }
 
