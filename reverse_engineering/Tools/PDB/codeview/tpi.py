@@ -1,6 +1,7 @@
-from PDB.parse_info_stream import BinaryReader, msf
+from PDB.binary_reader import BinaryReader, msf
 from dataclasses import dataclass
-import struct
+from typing import Callable, Any
+from PDB.codeview.types import *
 
 class TPIHeader:
 	def __init__(self, reader):
@@ -10,13 +11,21 @@ class TPIHeader:
 		self.maximum_type_index = reader.u32()
 		self.type_record_bytes = reader.u32()
 
+@dataclass(frozen=True)
+class TypeRef:
+	index: int
+
 @dataclass
-class TypeRecord:
+class Type:
+	index: int
+
+@dataclass
+class RawTypeRecord:
 	index: int
 	kind: int
 	data: bytes
 
-def read_type_records(data: bytes, first_index: int):
+def iter_type_records(data: bytes, first_index: int):
 	reader = BinaryReader(data)
 	index = first_index
 
@@ -29,13 +38,51 @@ def read_type_records(data: bytes, first_index: int):
 		kind = reader.u16()
 		payload = reader.read(length - 2)
 
-		yield TypeRecord(
+		yield RawTypeRecord(
 			index=index,
 			kind=kind,
 			data=payload,
 		)
 
 		index += 1
+
+@dataclass(frozen=True)
+class FieldParser:
+	name: str
+	parser: Callable[[BinaryReader], Any]
+def u8(name):
+	return FieldParser(name, lambda r: r.u8())
+def u16(name):
+	return FieldParser(name, lambda r: r.u16())
+def u32(name):
+	return FieldParser(name, lambda r: r.u32())
+def u64(name):
+	return FieldParser(name, lambda r: r.u64())
+def i32(name):
+	return FieldParser(name, lambda r: r.i32())
+def type_index(name):
+	return FieldParser(
+		name,
+		lambda r: TypeRef(r.u32())
+	)
+
+class RecordSchema:
+	def __init__(self, *fields: FieldParser):
+		self.fields = fields
+
+	def parse(self, reader: BinaryReader):
+		result = {}
+
+		for field in self.fields:
+			result[field.name] = field.parser(reader)
+
+		return result
+
+@dataclass(frozen=True)
+class RecordParser:
+	schema: RecordSchema
+	converter: Callable
+	parse_remaining: Callable | None = None
 
 LF_POINTER   = 0x1002
 LF_PROCEDURE = 0x1008
@@ -53,6 +100,8 @@ LF_STMEMBER  = 0x150E
 LF_METHOD    = 0x150F
 LF_ONEMETHOD = 0x1511
 LF_BCLASS    = 0x1400
+LF_NESTTYPE = 0x1510
+LF_INDEX = 0x1404
 
 TYPE_NAMES = {
 	LF_POINTER: "LF_POINTER",
@@ -72,175 +121,54 @@ TYPE_NAMES = {
 	LF_ONEMETHOD: "LF_ONEMETHOD",
 	LF_BCLASS: "LF_BCLASS",
 }
+RECORD_PARSERS = {}
 
-@dataclass
-class ModifierType:
-	underlying: int
-	const: bool
-	volatile: bool
-	unaligned: bool
+def parse_type_record(record):
+	parser = RECORD_PARSERS.get(record.kind)
 
-def parse_modifier(record):
+	if parser is None:
+		return record
+
 	reader = BinaryReader(record.data)
 
-	underlying = reader.u32()
-	attributes = reader.u16()
+	fields = parser.schema.parse(reader)
 
-	return ModifierType(
-		underlying=underlying,
-		const=bool(attributes & 1),
-		volatile=bool(attributes & 2),
-		unaligned=bool(attributes & 4),
+	result = parser.converter(
+		record.index,
+		fields,
+		reader,
 	)
 
-@dataclass
-class PointerType:
-	pointee: int
-	const: bool = False
-	volatile: bool = False
+	if reader.remaining() != 0:
+		raise ValueError(
+			f"Parser for {record.kind:#x} left "
+			f"{reader.remaining()} bytes"
+		)
 
-def parse_pointer(record):
-	reader = BinaryReader(record.data)
+	return result
 
-	underlying = reader.u32()
-	attributes = reader.u16()
+class TPI:
+	def __init__(self, data):
+		self.types = {}
 
-	return PointerType(
-		pointee=underlying,
-		const=bool(attributes & 1),
-		volatile=bool(attributes & 2),
-	)
+		reader = BinaryReader(data)
+		header = TPIHeader(reader)
 
-@dataclass
-class ProcedureType:
-	return_type: int
-	calling_convention: int
-	attributes: int
-	argument_list: int
+		for record in iter_type_records(
+				data[header.header_size:],
+				header.minimum_type_index,
+		):
+			name = TYPE_NAMES[record.kind] if record.kind in TYPE_NAMES else "Unknown"
+			print(
+				f"{record.index:#x}: "
+				f"kind={record.kind:#x}, "
+				f"name={name}"
+			)
+			parsed_record = parse_type_record(record)
+			self.types[record.index] = parsed_record
+			# print(parsed_record)
 
-def parse_procedure(record):
-	reader = BinaryReader(record.data)
+tpi = TPI(msf.read_stream(2))
 
-	unpacked = struct.unpack("<IIII", reader.data)
-
-	return ProcedureType(
-		return_type = unpacked[0],
-		calling_convention = unpacked[1],
-		attributes = unpacked[2],
-		argument_list = unpacked[3]
-	)
-
-@dataclass
-class MemberFunctionType:
-	return_type: int
-	class_type: int
-	this_adjust: int
-	calling_convention: int
-	attributes: int
-	argument_list: int
-
-def parse_member_function(record):
-	reader = BinaryReader(record.data)
-
-	unpacked = struct.unpack("<IIIIII", reader.data)
-
-	return MemberFunctionType(
-		return_type = unpacked[0],
-		class_type = unpacked[1],
-		this_adjust = unpacked[2],
-		calling_convention = unpacked[3],
-		attributes = unpacked[4],
-		argument_list = unpacked[5]
-	)
-
-@dataclass
-class StructureType:
-	count: int
-	properties: int
-	field_list: int
-	derived_from: int
-	vshape: int
-	size: int
-	name: str
-
-def parse_structure(record):
-	reader = BinaryReader(record.data)
-
-	unpacked = struct.unpack("<IIIIIIs", reader.data)
-
-	return StructureType(
-		count = unpacked[0],
-		properties = unpacked[1],
-		field_list = unpacked[2],
-		derived_from = unpacked[3],
-		vshape = unpacked[4],
-		size = unpacked[5],
-		name = unpacked[6]
-	)
-
-@dataclass
-class Field:
-	name: str
-	type: int
-	offset: int
-
-def parse_field(record):
-	reader = BinaryReader(record.data)
-
-	unpacked = struct.unpack("<sII", reader.data)
-
-	return Field(
-		name = unpacked[0],
-		type = unpacked[1],
-		offset = unpacked[2]
-	)
-
-@dataclass
-class StructureType:
-	name: str
-	size: int
-	fields: list[Field]
-
-def parse_structure(record):
-	reader = BinaryReader(record.data)
-
-	unpacked = struct.unpack("<sIp", reader.data)
-
-	return StructureType(
-		name = unpacked[0],
-		size = unpacked[1],
-		fields = unpacked[2]
-	)
-
-tpi = BinaryReader(msf.read_stream(2))
-
-header = TPIHeader(tpi)
-
-print(f"Version:            {header.version:#x}")
-print(f"Header size:        {header.header_size}")
-print(f"Min type index:     {header.minimum_type_index:#x}")
-print(f"Max type index:     {header.maximum_type_index:#x}")
-print(f"Type index range:   {header.maximum_type_index - header.minimum_type_index:#x}")
-print(f"Type record bytes:  {header.type_record_bytes}")
-
-records = list(
-	read_type_records(
-		msf.read_stream(2)[header.header_size:],
-		header.minimum_type_index,
-	)
-)
-
-types = {
-	record.index: record
-	for record in records
-}
-
-for record in records[:20]:
-	name = TYPE_NAMES.get(record.kind, f"{record.kind:#x}")
-	print(
-		f"{record.index:#x}: "
-		f"{name=}, "
-		f"kind={record.kind:#x}, "
-		f"size={len(record.data)}"
-	)
-
+# for type, record in tpi.types.items():
+# 	print(record)

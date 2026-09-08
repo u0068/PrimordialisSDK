@@ -1,5 +1,9 @@
-import struct
 from msf_stream import MSF
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class TypeRef:
+	index: int
 
 class BinaryReader:
 	def __init__(self, data: bytes):
@@ -8,20 +12,30 @@ class BinaryReader:
 
 	def read(self, size: int) -> bytes:
 		if self.offset + size > len(self.data):
-			raise EOFError("Unexpected end of stream")
+			raise EOFError(
+				f"Read past end of buffer at {self.offset:#x}"
+			)
 
 		result = self.data[self.offset:self.offset + size]
 		self.offset += size
 		return result
 
-	def u32(self) -> int:
-		return struct.unpack("<I", self.read(4))[0]
-
-	def u16(self) -> int:
-		return struct.unpack("<H", self.read(2))[0]
-
 	def u8(self) -> int:
 		return self.read(1)[0]
+
+	def u16(self) -> int:
+		return int.from_bytes(self.read(2), "little")
+
+	def u32(self) -> int:
+		return int.from_bytes(self.read(4), "little")
+
+	def u64(self) -> int:
+		return int.from_bytes(self.read(8), "little")
+
+	def i32(self) -> int:
+		return int.from_bytes(
+			self.read(4), "little", signed=True
+		)
 
 	def remaining(self) -> int:
 		return len(self.data) - self.offset
