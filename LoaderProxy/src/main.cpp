@@ -59,9 +59,18 @@ void LoadMods()
 void* trampoline;
 uint64_t ThreadMainHook(void *context)
 {
-    if (*(int*)context == 0 and not ModManager::loader_files_path.empty())
+    auto original = reinterpret_cast<uint64_t(*)(void*)>(trampoline);
+    if (*(int*)context == 0)
     {
-        Log() << "Hello from the hook!\n";
+        Log() << "Starting mod loader\n";
+
+        // Log() << "RVA = " << ResolveSymbol("get_material_index") << "\n";
+
+        if (ModManager::loader_files_path.empty())
+        {
+            Log() << "Loader file path not given!\nNo mods will be loaded.\n";
+            return original(context);
+        }
         ModManager::ParseMods();
         Log() << "Mod Count:"<<ModManager::enabled_mods.size()<<"\n";
         ModManager::InjectAll();
@@ -69,7 +78,7 @@ uint64_t ThreadMainHook(void *context)
         LoadMods();
     }
 
-    return reinterpret_cast<uint64_t(*)(void*)>(trampoline)(context);
+    return original(context);
 }
 
 void Bootstrap()
