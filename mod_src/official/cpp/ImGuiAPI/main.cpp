@@ -25,7 +25,7 @@ bool show_demo_window = true;
 void DrawUI()
 {
     imgui_api.context = ImGui::GetCurrentContext();
-    P::Log() << "Context: " << imgui_api.context << '\n';
+    // P::Log() << "Context: " << imgui_api.context << '\n';
 
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
@@ -39,4 +39,5 @@ void P::InitialiseMod()
     P::RegisterModule("ImGuiAPI", &imgui_api);
     mod_name = "ImGuiAPI";
     do_imgui_hooks();
+    P::Log() << "ImGui Context: " << imgui_api.context << '\n';
 }
