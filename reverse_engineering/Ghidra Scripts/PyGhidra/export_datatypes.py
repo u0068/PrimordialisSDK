@@ -25,4 +25,4 @@ cpp.emit_forward_declarations(types)
 for t in sort_types(types):
     cpp.emit_definition(t)
 
-cpp.write(r"C:\Users\g3nio\CLionProjects\PrimordialisSDK\Plasmid\include\generated\data_types.h")
+cpp.write(r"C:\Users\g3nio\CLionProjects\PrimordialisSDK\Plasmid\generated\data_types.h")
