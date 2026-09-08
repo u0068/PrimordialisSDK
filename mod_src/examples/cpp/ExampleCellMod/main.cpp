@@ -1,5 +1,6 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h" // Get all the cell functions
+#include "aerogel_cell.h" // Include cells from other files
 
 void acid_no_color_change(P::cell* cell)
 {
@@ -11,7 +12,7 @@ void acid_no_color_change(P::cell* cell)
     {
         int n = P::w->n_acid_particles - n_acid_per_tick + i; // The index of the particle that was just produced
         auto new_color = P::w->acid_particles[n/16].color_initial[n%16]; // Get the initial color
-        new_color.w = 0.0f; // Set alpha to 0 (xyzw correspond to rgba channels)
+        new_color.w = 0.0f; // Set opacity to 0 (xyzw correspond to rgba channels)
         P::w->acid_particles[n/16].color_final[n%16] = new_color; // Overwrite the final color with our new color
     }
 }
@@ -32,16 +33,29 @@ void OnInitMats()
     material.physics_update_fn = acid_no_color_change; // We simply overwrite cell functions like this instead of using the Hook utility
     mats[P::CellRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
 
-    // Next, lets make our own cell
+    // Next, lets make our own cell!
     // We want to have a cell that is quite stiff but not entirely rigid.
-    material = mats[P::CellRef{"Hard cell"}.GetIndex()]; // Copy the Hard cell material
+    material = mats[P::CellRef{"Hard cell"}.GetIndex()]; // Copy the Hard cell material to use as the base
+    // There are lots of different material properties we can tweak
+    // Use the official Cell Tools mod to tweak material properties in-game
+    // Any properties that we don't set will use the properties of the base material that we copied from
     material.is_hard = false; // Make it not rigid
+    // Colors are in the format: {red, green, blue, opacity}, where each color channel is a float from 0.0f to 1.0f
+    // Going outside that range will work to make super vibrant or negative colors, but may cause rendering weirdness
     material.base_color = {0.8f, 0.8f, 1.0f, 1.0f}; // Slightly bluish to distinguish it from Hard cell
-    P::SetCellNameAndDesc(material, "Stiff Cell", "A stiff cell resistant to spikes and explosions");
+    SetCellNameAndDesc(material, "Stiff Cell", "A stiff cell resistant to spikes and explosions");
     mats[P::n_materials++] = material; // Add our material to the end of the materials list
+
+    // If your mod adds a lot of materials, using the same file for all of them will quickly turn into a mess
+    // To organise your materials, put your material definitions in their own files
+    // Do #include "file_path" to import the code from that file (see top of this file)
+    // Once you have included a file, you can use the code from it:
+    AddAeroGelCell(); // Add Aero-gel cell, defined in "materials/aerogel_cell.h"
 }
 
 void P::InitialiseMod()
 {
-    Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
+    // Hooks are used to add our code to the game's functions
+    // Hook our OnInitMats function to the game's init_materials_list
+    Hook<"init_materials_list">(OnInitMats);
 }
