@@ -40,7 +40,7 @@ namespace P
                 name = id;
         }
 
-        bool IsInitialised()
+        bool IsInitialised() const
         {
             return index >= 0 or numeric > 0;
         }
@@ -52,25 +52,25 @@ namespace P
 
             if (numeric == 0 && name == nullptr)
             {
-                PlasmidLog()<<"CellRef not initialised\n";
+                PlasmidLog()<<"CellRef not initialised";
                 return -1;
             }
 
             if (numeric)
                 return get_material_index(numeric);
 
-            PlasmidLog()<<"Searching for cell type '"<<name<<"'\n";
+            PlasmidLog()<<"Searching for cell type '"<<name<<"'";
             for (int i = 1; i < n_materials; i++)
                 if (strcmp(materials_list[i].name, name) == 0)
                 {
                     numeric = materials_list[i].id;
-                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i<<"\n";
+                    PlasmidLog()<<"Found cell type '"<<name<<"' with id "<<numeric<<" at index "<<i;
                     if (numeric == 0)
                         numeric = HashCellId(name);
                     index = i;
                     return i;
                 }
-            PlasmidLog()<<"Failed to find cell type '"<<name<<"'\n";
+            PlasmidLog()<<"Failed to find cell type '"<<name<<"'";
             return -1;
         }
 
@@ -210,7 +210,7 @@ inline void Initialise(Nucleus* api, const char* mod_path)
     P::mod_path = mod_path;
     P::mod_name = mod_path; // path is better than nothing
     P::translation_values.reserve(2048);
-    P::PlasmidLog()<<"Initialised Plasmid!\n";
+    P::PlasmidLog()<<"Initialised Plasmid!";
     P::InitialiseMod();
-    P::Log()<<"Initialised Mod!\n";
+    P::Log()<<"Initialised Mod!";
 }

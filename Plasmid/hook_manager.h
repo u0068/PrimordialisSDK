@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
 #include "nucleus_interface.h"
-#include "plasmid_log.h"
+// #include "plasmid_log.h"
 
 template<size_t N>
 struct FixedString
 {
-    char data[N];
+    char data[N]{};
 
     constexpr FixedString(const char (&str)[N])
     {

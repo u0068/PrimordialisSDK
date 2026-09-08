@@ -29,7 +29,7 @@ bool IsDLL(const std::string& filePath)
     std::ifstream f(filePath, std::ios::binary);
     if (!f.is_open())
     {
-        Log() << err << "Mod could not be opened\n";
+        Log() << err << "Mod could not be opened";
         return false;
     }
 
@@ -54,56 +54,56 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
 
     if (dwProcessID == (DWORD)-1)
     {
-        Log() << err << "An error occurred when trying to find the target process. Is Primordialis open?\n";
+        Log() << err << "An error occurred when trying to find the target process. Is Primordialis open?";
         return -1;
     }
 
-    Log() << "[DLL Injector]\n";
+    Log() << "[DLL Injector]";
 
     const DWORD dwFullPathResult = GetFullPathNameA(lpDLLName, MAX_PATH, lpFullDLLPath, nullptr);
     if (dwFullPathResult == 0)
     {
-        Log() << err << "Attempted to load a missing mod.\n";
+        Log() << err << "Attempted to load a missing mod.";
         return -1;
     }
 
     if (!IsDLL(lpFullDLLPath))
     {
-        Log() << err << "Attempted to load an invalid .DLL\n";
+        Log() << err << "Attempted to load an invalid .DLL";
         return -1;
     }
 
     const HANDLE &hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
     if (!hTargetProcess)
     {
-        Log() << err << "An error occurred when trying to open the target process.\n";
+        Log() << err << "An error occurred when trying to open the target process.";
         return -1;
     }
 
-    Log() << "[PROCESS INJECTION]\n";
-    Log() << "Process opened successfully.\n";
+    Log() << "[PROCESS INJECTION]";
+    Log() << "Process opened successfully.";
 
     const LPVOID &lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr,
         lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (lpPathAddress == nullptr)
     {
-        Log() << err << "An error occurred when trying to allocate memory in the target process.\n";
+        Log() << err << "An error occurred when trying to allocate memory in the target process.";
         return -1;
     }
 
     Log() << "Memory allocate at 0x";
     Log() << std::to_string((UINT)(uintptr_t)lpPathAddress);
-    Log() << "\n";
+    Log() << "";
 
     const DWORD dwWriteResult = WriteProcessMemory(hTargetProcess, lpPathAddress, lpFullDLLPath,
         lstrlenA(lpFullDLLPath) + 1, nullptr);
     if (dwWriteResult == 0)
     {
-        Log() << err << "An error occurred when trying to write the DLL path in the target process.\n";
+        Log() << err << "An error occurred when trying to write the DLL path in the target process.";
         return -1;
     }
 
-    Log() << "DLL path written successfully.\n";
+    Log() << "DLL path written successfully.";
 
     const HMODULE hModule = GetModuleHandleA("kernel32.dll");
     if (hModule == INVALID_HANDLE_VALUE || hModule == nullptr)
@@ -112,28 +112,27 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     const FARPROC &lpFunctionAddress = GetProcAddress(hModule, "LoadLibraryA");
     if (lpFunctionAddress == nullptr)
     {
-        Log() << err << "An error occurred when trying to get \"LoadLibraryA\" address.\n";
+        Log() << err << "An error occurred when trying to get \"LoadLibraryA\" address.";
         return -1;
     }
 
-    Log() << "LoadLibraryA address at 0x";
-    Log() << std::to_string((UINT)(uintptr_t)lpFunctionAddress);
-    Log() << "\n";
+    Log() << "LoadLibraryA address at 0x"
+          << std::to_string((UINT)(uintptr_t)lpFunctionAddress);
 
     const HANDLE &hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0,
         (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
     if (!hThreadCreationResult)
     {
-        Log() << err << "An error occurred when trying to create the thread in the target process.\n";
+        Log() << err << "An error occurred when trying to create the thread in the target process.";
         return -1;
     }
 
-    Log() << "DLL Injected !\n";
+    Log() << "DLL Injected !";
 
     WaitForSingleObject(hThreadCreationResult, INFINITE);
     CloseHandle(hThreadCreationResult);
 
-    Log() << "Mod injected !\n";
+    Log() << "Mod injected !";
 
     VirtualFreeEx(hTargetProcess, lpPathAddress, 0, MEM_RELEASE);
     CloseHandle(hTargetProcess);
@@ -158,20 +157,20 @@ void ModManager::InjectAll()
         {
             Log() << err << "[INJECTION FAILED] ("
                   << mod.dll_path.filename().string()
-                  << ") Skipped\n";
+                  << ") Skipped";
 
             failed++;
             continue;
         }
         Log() << "[INJECTION SUCCESS] ("
               << mod.dll_path.filename().string()
-              << ")\n";
+              << ")";
 
     }
     if (failed)
-        Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(enabled_mods.size()) + " mods\n";
+        Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(enabled_mods.size()) + " mods";
     else
-        Log() << "Mod injection finished successfully!\n";
+        Log() << "Mod injection finished successfully!";
 
     // Sleep(1000); // Sleep to give you time to attach a debugger
 }

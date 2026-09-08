@@ -18,10 +18,10 @@ inline void InitDbgHelp()
             nullptr,
             TRUE))
         {
-            Log() << "SymInitialize failed: "<<GetLastError()<<"\n";
+            Log() << "SymInitialize failed: "<<GetLastError();
         }
 
-        Log()<<"DbgHelp initialized\n";
+        Log()<<"DbgHelp initialized";
     });
 }
 
@@ -40,19 +40,15 @@ inline void* ResolveSymbol(const char* name)
 
     if (!SymFromName(GetCurrentProcess(), name, symbol))
     {
-        Log()<<"Failed to resolve symbol '"<<name<<"': "<<GetLastError()<<"\n";
+        Log()<<"Failed to resolve symbol '"<<name<<"': "<<GetLastError();
         std::abort();
         return nullptr;
     }
     addr = reinterpret_cast<void*>(symbol->Address);
     if (addr == nullptr)
     {
-        Log()<<"Failed to resolve symbol '"<<name<<"': "<<GetLastError()<<"\n";
+        Log()<<"Failed to resolve symbol '"<<name<<"': "<<GetLastError();
         std::abort();
     }
-    // Log("Successfully resolved symbol '%s' at address %p\n",
-    //     name,
-    //     addr
-    // );
     return addr;
 }

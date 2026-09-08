@@ -1,5 +1,5 @@
 #pragma once
-#include <json.hpp>
+#include <nlohmann_json/json.hpp>
 #include "log_setup.h"
 
 using json = nlohmann::json;
@@ -14,9 +14,9 @@ ord_json safe_parse(Args... args)
     }
     catch (const json::parse_error& e)
     {
-        console_log << err << e.what() << "\n"
+        Log() << err << e.what() << "\n"
                   << "exception id: " << e.id << "\n"
-                  << "byte position of error: " << e.byte << "\n";
+                  << "byte position of error: " << e.byte;
         return ord_json{};
     }
 }

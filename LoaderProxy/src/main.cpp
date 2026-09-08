@@ -16,10 +16,10 @@ void LoadMod(const char* path)
 
     if (!mod)
     {
-        Log()<<"Failed to load mod "<<path<<"\n";
+        Log()<<"Failed to load mod "<<path;
         return;
     }
-    Log()<<"Loading mod "<<path<<"\n";
+    Log()<<"Loading mod "<<path;
 
     auto mod_init =
         reinterpret_cast<ModInit>(
@@ -28,7 +28,7 @@ void LoadMod(const char* path)
 
     if (!mod_init)
     {
-        Log()<<"mod_init not found for "<<path<<"\n";
+        Log()<<"mod_init not found for "<<path;
         return;
     }
 
@@ -53,7 +53,7 @@ void LoadMods()
         LoadMod(mod.name.c_str());
     }
 
-    Log()<<"All Mods Initialised!\n";
+    Log()<<"All Mods Initialised!";
 }
 
 void* trampoline;
@@ -62,17 +62,17 @@ uint64_t ThreadMainHook(void *context)
     auto original = reinterpret_cast<uint64_t(*)(void*)>(trampoline);
     if (*(int*)context == 0)
     {
-        Log() << "Starting mod loader\n";
+        Log() << "Starting mod loader";
 
-        // Log() << "RVA = " << ResolveSymbol("get_material_index") << "\n";
+        // Log() << "RVA = " << ResolveSymbol("get_material_index") << "";
 
         if (ModManager::loader_files_path.empty())
         {
-            Log() << "Loader file path not given!\nNo mods will be loaded.\n";
+            Log() << "Loader file path not given!\nNo mods will be loaded.";
             return original(context);
         }
         ModManager::ParseMods();
-        Log() << "Mod Count:"<<ModManager::enabled_mods.size()<<"\n";
+        Log() << "Mod Count:"<<ModManager::enabled_mods.size();
         ModManager::InjectAll();
         nucleus = &api;
         LoadMods();
@@ -84,14 +84,14 @@ uint64_t ThreadMainHook(void *context)
 void Bootstrap()
 {
 
-    Log()<<"Hello world!\n";
+    Log()<<"Hello world!";
 
     if (MH_Initialize() != MH_OK)
     {
-        Log()<<"MinHook init failed\n";
+        Log()<<"MinHook init failed";
         return;
     }
-    Log()<<"MinHook initialized\n";
+    Log()<<"MinHook initialized";
 
     InitDbgHelp();
 

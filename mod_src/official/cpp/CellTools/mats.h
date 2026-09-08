@@ -23,9 +23,8 @@ inline std::string SaveMat(P::material_t& mat)
     std::stringstream output;
     output << mat.name << "\n";
     output << "{";
-    for (int i = 0; i < 280; i++)
+    for (unsigned char data : material_u{mat}.data)
     {
-        byte data = material_u{mat}.data[i];
         if (data < 100)
             output << "0";
         if (data < 10)
