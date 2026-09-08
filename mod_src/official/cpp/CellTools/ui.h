@@ -43,7 +43,7 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat)
         }
         if (ImGui::Button("Give"))
         {
-            P::cell_item cell_item = {0, idx, false};
+            P::cell_item cell_item = {0, idx};
             P::create_cell_item(&cell_item);
         }
         if (ImGui::Button("Duplicate"))
