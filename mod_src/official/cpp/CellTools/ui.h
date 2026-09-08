@@ -82,7 +82,7 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat)
             ImGui::DragFloat("drag", &mat.drag, speed);
             ImGui::DragFloat("tangent_drag", &mat.tangent_drag, speed);
             ImGui::DragFloat("movement_force", &mat.movement_force, speed);
-            ImGui::CheckboxFlags("is_hard", &mat.flags, 1<<10);
+            ImGui::CheckboxFlags("is_hard", &mat.flags, 1<<11);
 
             ImGui::TreePop();
         }
@@ -154,9 +154,16 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat)
                 ImGui::TableNextColumn();
                 ImGui::CheckboxFlags("show_direction", &mat.flags, 1<<9);
                 ImGui::TableNextColumn();
-                ImGui::CheckboxFlags("play_note", &mat.flags, 1<<11);
+                ImGui::CheckboxFlags("show_neighbor_direction", &mat.flags, 1<<10);
                 ImGui::TableNextColumn();
-                ImGui::CheckboxFlags("no_recolor", &mat.flags, 1<<12);
+                ImGui::CheckboxFlags("play_note", &mat.flags, 1<<12);
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::CheckboxFlags("no_recolor", &mat.flags, 1<<13);
+                ImGui::TableNextColumn();
+                ImGui::CheckboxFlags("sync_health", &mat.flags, 1<<14);
+                ImGui::TableNextColumn();
+                ImGui::CheckboxFlags("is_stem", &mat.flags, 1<<15);
                 ImGui::EndTable();
             }
 
