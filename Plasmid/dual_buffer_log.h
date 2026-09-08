@@ -56,8 +56,8 @@ private:
 class LogStream
 {
 public:
-    LogStream(std::ostream& output, std::string prefix)
-        : output(output), prefix(std::move(prefix))
+    LogStream(std::ostream& output, std::string prefix, std::string suffix="\n")
+        : output(output), prefix(std::move(prefix)), suffix(std::move(suffix))
     {
     }
 
@@ -76,11 +76,12 @@ public:
 private:
     void Write()
     {
-        output << prefix << buffer.str();
+        output << prefix << buffer.str() << suffix;
         output.flush();
     }
 
     std::ostream& output;
     std::string prefix;
+    std::string suffix;
     std::stringstream buffer;
 };

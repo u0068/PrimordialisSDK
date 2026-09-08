@@ -41,7 +41,8 @@ inline LogStream LogSourced(const std::string& source)
 {
     return LogStream(
         GetDualLog(),
-        "\n[" + source + "]\n  "
+        "[" + source + "]\n  ",
+        "\n"
     );
 }
 
