@@ -34,6 +34,7 @@ Ghidra scripts can be made in:
 - Correctly identify const stuff
 - Get member functions
 - Rewrite java scripts in PyGhidra
+- Figure out material tags and cell flags
 
 # DONE:
 - Data type exporter
