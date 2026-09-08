@@ -6,20 +6,20 @@
 #include "nucleus_api.h"
 #include "plasmid_api.h"
 
-using ModInit = void(*)(Nucleus*, const char*);
+using ModInit = void(*)(Nucleus*, const char*, const char*);
 
 void P::InitialiseMod(){}
 
-void LoadMod(const char* path)
+void LoadMod(const char* path, const char* name)
 {
-    HMODULE mod = LoadLibraryA(path);
+    HMODULE mod = LoadLibraryA(name);
 
     if (!mod)
     {
-        Log()<<"Failed to load mod "<<path;
+        Log()<<"Failed to load mod "<<name;
         return;
     }
-    Log()<<"Loading mod "<<path;
+    Log()<<"Loading mod "<<name;
 
     auto mod_init =
         reinterpret_cast<ModInit>(
@@ -28,11 +28,11 @@ void LoadMod(const char* path)
 
     if (!mod_init)
     {
-        Log()<<"mod_init not found for "<<path;
+        Log()<<"mod_init not found for "<<name;
         return;
     }
 
-    mod_init(&api, path);
+    mod_init(&api, path, name);
 }
 
 void LoadMods()
@@ -50,7 +50,7 @@ void LoadMods()
 
     for (auto& mod : ModManager::enabled_mods)
     {
-        LoadMod(mod.name.c_str());
+        LoadMod(mod.path.string().c_str(), mod.name.c_str());
     }
 
     Log()<<"All Mods Initialised!";
@@ -83,7 +83,6 @@ uint64_t ThreadMainHook(void *context)
 
 void Bootstrap()
 {
-
     Log()<<"Hello world!";
 
     if (MH_Initialize() != MH_OK)

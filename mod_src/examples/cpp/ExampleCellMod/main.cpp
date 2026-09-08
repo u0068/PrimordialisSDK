@@ -43,6 +43,5 @@ void OnInitMats()
 
 void P::InitialiseMod()
 {
-    mod_name = "Example Cell Mod";
     Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
 }

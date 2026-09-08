@@ -19,6 +19,5 @@ void OnInitCreatures()
 
 void P::InitialiseMod()
 {
-    mod_name = "Example Creature Mod";
     Hook<"init_creature_list">(OnInitCreatures); // Hook our OnInitMats function to the game's init_materials_list
 }

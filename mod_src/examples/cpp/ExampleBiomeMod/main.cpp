@@ -52,7 +52,6 @@ P::biome_core* OnCreateBiomeCore(int id, int size)
 
 void P::InitialiseMod()
 {
-    mod_name = "Example Biome Mod";
     Hook<"init_biome_types">(OnInitBiomeTypes);
     Hook<"create_biome_core">(OnCreateBiomeCore);
 }
