@@ -7,7 +7,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 add_subdirectory(third_party)
 
-add_subdirectory(Pilus)
+#add_subdirectory(Pilus)
 
 add_subdirectory(Plasmid)
 
@@ -15,6 +15,6 @@ add_subdirectory(mod_src)
 
 add_subdirectory(lua/Luazyme)
 
-add_subdirectory(reverse_engineering/Tools)
+add_subdirectory(reverse_engineering/Tools/cpp)
 
 add_subdirectory(LoaderProxy)

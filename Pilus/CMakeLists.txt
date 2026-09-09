@@ -23,7 +23,7 @@ target_compile_definitions(Pilus PRIVATE
 )
 
 target_link_libraries(Pilus PRIVATE
-        imgui_static
+        imgui
         nlohmann_json
         miniz
 )

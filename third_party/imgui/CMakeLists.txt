@@ -20,23 +20,24 @@ set(IMGUI_SOURCES
         backends/imgui_impl_win32.cpp
 )
 
-add_library(imgui_static STATIC ${IMGUI_SOURCES})
-add_library(imgui SHARED ${IMGUI_SOURCES})
+# I had to use imgui as a shared library earlier but then static spontaneously started working so its no longer necessary
+#add_library(imgui_static STATIC ${IMGUI_SOURCES})
+add_library(imgui STATIC ${IMGUI_SOURCES})
 
-target_include_directories(imgui_static PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/backends
-)
+#target_include_directories(imgui_static PUBLIC
+#        ${CMAKE_CURRENT_SOURCE_DIR}
+#        ${CMAKE_CURRENT_SOURCE_DIR}/backends
+#)
 
 target_include_directories(imgui PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/backends
 )
 
-target_link_libraries(imgui_static PUBLIC
-        glfw
-        opengl32
-)
+#target_link_libraries(imgui_static PUBLIC
+#        glfw
+#        opengl32
+#)
 
 target_link_libraries(imgui PUBLIC
         glfw
