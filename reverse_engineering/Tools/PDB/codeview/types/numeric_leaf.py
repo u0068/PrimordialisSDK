@@ -2,17 +2,18 @@ from PDB.codeview.tpi import *
 
 LF_NUMERIC = 0x8000
 
-LF_CHAR      = 0x8000
-LF_SHORT     = 0x8001
-LF_USHORT    = 0x8002
-LF_LONG      = 0x8003
-LF_ULONG     = 0x8004
-LF_REAL32    = 0x8005
-LF_REAL64    = 0x8006
-LF_REAL80    = 0x8007
-LF_REAL128   = 0x8008
-LF_QUADWORD  = 0x8009
+LF_CHAR = 0x8000
+LF_SHORT = 0x8001
+LF_USHORT = 0x8002
+LF_LONG = 0x8003
+LF_ULONG = 0x8004
+LF_REAL32 = 0x8005
+LF_REAL64 = 0x8006
+LF_REAL80 = 0x8007
+LF_REAL128 = 0x8008
+LF_QUADWORD = 0x8009
 LF_UQUADWORD = 0x800A
+
 
 def numeric_leaf(reader: BinaryReader) -> int:
 	kind = reader.u16()
@@ -52,6 +53,7 @@ def numeric_leaf(reader: BinaryReader) -> int:
 	raise NotImplementedError(
 		f"Unsupported numeric leaf {kind:#x}"
 	)
+
 
 def numeric(name):
 	return FieldParser(name, numeric_leaf)

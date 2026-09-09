@@ -1,6 +1,8 @@
 ﻿/.vs
 /.idea
+/reverse_engineering/Tools/.idea
 /out/build/x64-Debug
 /cmake-build-debug
 /cmake-build-release
 /r2_profile_test
+/.venv

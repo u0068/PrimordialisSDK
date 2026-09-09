@@ -1,5 +1,6 @@
 from PDB.codeview.tpi import *
-from dataclasses import dataclass
+from .registry import register_parser
+
 
 @dataclass
 class ProcedureType(Type):
@@ -8,6 +9,8 @@ class ProcedureType(Type):
 	options: int
 	parameter_count: int
 	argument_list: TypeRef
+
+
 LF_PROCEDURE = 0x1008
 LF_MFUNCTION = 0x1009
 PROCEDURE_SCHEMA = RecordSchema(
@@ -17,6 +20,8 @@ PROCEDURE_SCHEMA = RecordSchema(
 	u16("parameter_count"),
 	type_index("argument_list"),
 )
+
+
 def convert_procedure(index, fields, reader):
 	result = ProcedureType(
 		index=index,
@@ -28,8 +33,10 @@ def convert_procedure(index, fields, reader):
 	)
 	print(result)
 	return result
+
+
 PROCEDURE_PARSER = RecordParser(
 	schema=PROCEDURE_SCHEMA,
 	converter=convert_procedure,
 )
-RECORD_PARSERS[LF_PROCEDURE] = PROCEDURE_PARSER
+register_parser(LF_PROCEDURE, PROCEDURE_PARSER)

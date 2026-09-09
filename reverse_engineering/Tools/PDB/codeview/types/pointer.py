@@ -1,20 +1,21 @@
 from PDB.codeview.tpi import *
-from dataclasses import dataclass
+from .registry import register_parser
 
-POINTER_KIND_MASK       = 0x1F
-POINTER_MODE_MASK       = 0x07
-POINTER_MODIFIER_MASK   = 0x1F
-POINTER_SIZE_MASK       = 0xFF
-POINTER_FLAGS_MASK      = 0x07
+POINTER_KIND_MASK = 0x1F
+POINTER_MODE_MASK = 0x07
+POINTER_MODIFIER_MASK = 0x1F
+POINTER_SIZE_MASK = 0xFF
+POINTER_FLAGS_MASK = 0x07
 
-POINTER_KIND_SHIFT      = 0
-POINTER_MODE_SHIFT      = 5
-POINTER_MODIFIER_SHIFT  = 8
-POINTER_SIZE_SHIFT      = 13
-POINTER_FLAGS_SHIFT     = 16
+POINTER_KIND_SHIFT = 0
+POINTER_MODE_SHIFT = 5
+POINTER_MODIFIER_SHIFT = 8
+POINTER_SIZE_SHIFT = 13
+POINTER_FLAGS_SHIFT = 16
 
 POINTER_TO_DATA_MEMBER = 2
 POINTER_TO_MEMBER_FUNCTION = 3
+
 
 @dataclass
 class PointerAttributes:
@@ -23,6 +24,8 @@ class PointerAttributes:
 	modifiers: int
 	size: int
 	flags: int
+
+
 def parse_pointer_attributes(value: int) -> PointerAttributes:
 	return PointerAttributes(
 		kind=(value >> POINTER_KIND_SHIFT) & POINTER_KIND_MASK,
@@ -32,15 +35,19 @@ def parse_pointer_attributes(value: int) -> PointerAttributes:
 		flags=(value >> POINTER_FLAGS_SHIFT) & POINTER_FLAGS_MASK,
 	)
 
+
 @dataclass
 class MemberPointerInfo:
 	containing_type: TypeRef
 	representation: int
+
+
 @dataclass
 class PointerType(Type):
 	pointee: TypeRef
 	attributes: PointerAttributes
 	member_info: MemberPointerInfo | None
+
 
 def convert_pointer(index, fields, reader):
 	attributes = parse_pointer_attributes(
@@ -64,6 +71,8 @@ def convert_pointer(index, fields, reader):
 		attributes=attributes,
 		member_info=member_info,
 	)
+
+
 def parse_pointer_remaining(reader, fields):
 	attributes = fields["attributes"]
 	if attributes.mode in (
@@ -89,6 +98,8 @@ def parse_pointer_remaining(reader, fields):
 			f"{len(remaining)} bytes: {remaining.hex(' ')}"
 		)
 	return {}
+
+
 POINTER_PARSER = RecordParser(
 	schema=RecordSchema(
 		type_index("pointee"),
@@ -97,4 +108,4 @@ POINTER_PARSER = RecordParser(
 	converter=convert_pointer,
 	parse_remaining=parse_pointer_remaining
 )
-RECORD_PARSERS[LF_POINTER] = POINTER_PARSER
+register_parser(LF_POINTER, POINTER_PARSER)

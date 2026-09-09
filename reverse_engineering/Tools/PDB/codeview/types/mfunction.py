@@ -1,5 +1,7 @@
 from PDB.codeview.tpi import *
-from dataclasses import dataclass
+from .registry import register_parser
+
+
 @dataclass
 class MemberFunctionType(Type):
 	return_type: TypeRef
@@ -10,6 +12,8 @@ class MemberFunctionType(Type):
 	parameter_count: int
 	argument_list: TypeRef
 	this_adjustment: int
+
+
 MFUNCTION_SCHEMA = RecordSchema(
 	type_index("return_type"),
 	type_index("class_type"),
@@ -20,6 +24,8 @@ MFUNCTION_SCHEMA = RecordSchema(
 	type_index("argument_list"),
 	i32("this_adjustment"),
 )
+
+
 def convert_mfunction(index, fields, reader):
 	return MemberFunctionType(
 		index=index,
@@ -32,8 +38,10 @@ def convert_mfunction(index, fields, reader):
 		argument_list=fields["argument_list"],
 		this_adjustment=fields["this_adjustment"],
 	)
+
+
 MFUNCTION_PARSER = RecordParser(
 	schema=MFUNCTION_SCHEMA,
 	converter=convert_mfunction,
 )
-RECORD_PARSERS[LF_MFUNCTION] = MFUNCTION_PARSER
+register_parser(LF_MFUNCTION, MFUNCTION_PARSER)

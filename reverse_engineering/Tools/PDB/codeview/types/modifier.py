@@ -1,5 +1,6 @@
 from PDB.codeview.tpi import *
-from dataclasses import dataclass
+from .registry import register_parser
+
 
 @dataclass
 class ModifierType(Type):
@@ -7,9 +8,13 @@ class ModifierType(Type):
 	const: bool
 	volatile: bool
 	unaligned: bool
+
+
 MODIFIER_CONST = 0x0001
 MODIFIER_VOLATILE = 0x0002
 MODIFIER_UNALIGNED = 0x0004
+
+
 def convert_modifier(index, fields, reader):
 	attributes = fields["attributes"]
 
@@ -20,6 +25,8 @@ def convert_modifier(index, fields, reader):
 		volatile=bool(attributes & MODIFIER_VOLATILE),
 		unaligned=bool(attributes & MODIFIER_UNALIGNED),
 	)
+
+
 MODIFIER_PARSER = RecordParser(
 	schema=RecordSchema(
 		type_index("underlying"),
@@ -27,4 +34,4 @@ MODIFIER_PARSER = RecordParser(
 	),
 	converter=convert_modifier,
 )
-RECORD_PARSERS[LF_MODIFIER] = MODIFIER_PARSER
+register_parser(LF_MODIFIER, MODIFIER_PARSER)
