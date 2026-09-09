@@ -85,3 +85,6 @@ TYPE_NAMES = {
 	LF_ENUMERATE: "LF_ENUMERATE",
 	LF_INDEX: "LF_INDEX",
 }
+
+def kind_name(kind: int) -> str:
+	return TYPE_NAMES.get(kind, f"Unknown ({kind:#x})")

@@ -51,7 +51,7 @@ def numeric_leaf(reader: BinaryReader) -> int:
 		)
 
 	raise NotImplementedError(
-		f"Unsupported numeric leaf {kind:#x}"
+		f"Unsupported numeric leaf {kind_name(kind)}"
 	)
 
 

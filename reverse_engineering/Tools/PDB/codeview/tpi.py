@@ -3,6 +3,8 @@ from typing import Callable, Any
 from PDB.codeview.types.type_names import *
 
 from PDB.binary_reader import BinaryReader
+from .types.padding import consume_padding, is_padding_start
+
 
 class TPIHeader:
     def __init__(self, reader):
@@ -127,9 +129,14 @@ def parse_type_record(record):
     )
 
     remaining = reader.remaining()
+    # print(f"Remaining: {remaining}")
+    if remaining > 0 and is_padding_start(reader):
+        consume_padding(reader)
+        remaining = reader.remaining()
+        # print(f"Remaining: {remaining}")
     if remaining != 0:
         raise ValueError(
-            f"Parser for {record.kind:#x} left "
+            f"Parser for {kind_name(record.kind)} left "
             f"{remaining} bytes: {reader.data[-remaining:].hex(' ')}"
         )
 
@@ -148,18 +155,17 @@ class TPI:
                 header.minimum_type_index,
                 header.header_size
         ):
-            name = TYPE_NAMES[record.kind] if record.kind in TYPE_NAMES else "Unknown"
             print(
                 f"{record.index:#x}: "
                 f"pos={record.position:#x}, "
                 f"kind={record.kind:#x}, "
-                f"name={name}"
+                f"name={kind_name(record.kind)}"
             )
             try:
                 parsed_record = parse_type_record(record)
                 self.types[record.index] = parsed_record
             except Exception as e:
-                print(f"Failed to parse {name}: {e}\n"
+                print(f"Failed to parse {kind_name(record.kind)}: {e}\n"
                       f"Data: {data[record.position: record.position + len(record.data)].hex(' ')}"
                       f" | {data[record.position + len(record.data): record.position + 2 * len(record.data)].hex(' ')}")
                 raise
