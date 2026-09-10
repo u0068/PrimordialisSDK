@@ -55,7 +55,7 @@ def iter_type_records(reader: BinaryReader, first_index: int):
         except Exception as e:
             print(f"Failed to parse padding: {e}")
             reader.offset = record_start
-            print(f"Payload: " + reader.read(length+4).hex(' ') + " || " + reader.read(16).hex(' '))
+            print(f"Payload: " + reader.read(length+2).hex(' ') + " || " + reader.read(16).hex(' '))
             raise
 
         yield RawTypeRecord(
