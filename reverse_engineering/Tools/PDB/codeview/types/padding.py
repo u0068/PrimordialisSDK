@@ -2,38 +2,45 @@ from PDB.binary_reader import BinaryReader
 
 
 def is_padding_start(reader: BinaryReader) -> bool:
-	if reader.remaining() == 0:
-		return False
+    if reader.remaining() == 0:
+        return False
 
-	value = reader.data[reader.offset]
+    value = reader.data[reader.offset]
 
-	if 0xF0 <= value <= 0xFF:
-		print(f"Found padding start: {value:#x}")
-		return True
-	return False
+    if 0xF0 <= value <= 0xFF:
+        print(f"Found padding start: {value:#x}")
+        return True
+    return False
 
 
-def consume_padding(reader: BinaryReader):
-	expected = reader.u8()
+def consume_padding(reader, terminal=False):
+    remaining = reader.remaining()
 
-	if not 0xF0 <= expected <= 0xFF:
-		raise ValueError(
-			f"Expected LF_PADn, got {expected:#x}"
-		)
+    if remaining == 0:
+        return
 
-	# LF_PADn means n padding bytes remain,
-	# including this byte.
-	count = expected - 0xF0
+    first = reader.data[reader.offset]
 
-	for i in range(1, count):
-		value = reader.u8()
+    if not 0xF1 <= first <= 0xF3:
+        raise ValueError(
+            f"Invalid padding start: {first:#x}"
+        )
 
-		print(f"Consumed padding: {value:#x}")
+    count = first - 0xF0
 
-		expected -= 1
+    if terminal and reader.remaining() != count:
+        raise ValueError(
+            f"Padding marker {first:#x} claims {count} bytes, "
+            f"but {reader.remaining()} bytes remain"
+        )
 
-		if value != expected:
-			raise ValueError(
-				f"Invalid LF_PADn sequence: "
-				f"expected {expected:#x}, got {value:#x}"
-			)
+    for i in range(count, 0, -1):
+        value = reader.u8()
+        expected = 0xF0 + i
+
+        if value != expected:
+            raise ValueError(
+                f"Invalid padding: expected {expected:#x}, "
+                f"got {value:#x}"
+            )
+    return count
