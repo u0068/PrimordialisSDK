@@ -176,28 +176,23 @@ namespace P
         EnterSynchronizationBarrier(LPSYNCHRONIZATION_BARRIER(*(longlong *) ((longlong) tls_value + 8) + 0x18),0);
     }
 
-    // TODO: fix member functions and use extra_fields
-    inline cell** GetNeighborTable(cell* current_cell)
+    // TODO: fix member functions and use cell.extra
+    inline cell_extra* GetExtraFields(cell* current_cell)
     {
-        constexpr uintptr_t CellAlignmentMask = ~uintptr_t(0x3F);
-        constexpr uintptr_t NeighborTableOffset = 0x16B0;
-        constexpr uintptr_t CellStride = 0xB0;
-
-        const auto address = reinterpret_cast<uintptr_t>(current_cell);
-        const auto block = address & CellAlignmentMask;
-        const auto index = (address >> 2) & 0xF;
-
-        return reinterpret_cast<cell**>(
-            block + NeighborTableOffset + index * CellStride
-        );
-    }
-
-    inline cell* GetNeighboringCell(cell* current_cell, int neighbor_index)
-    {
-        if ((current_cell->flags & (1 << neighbor_index)) != 0)
-            return nullptr;
-
-        return GetNeighborTable(current_cell)[neighbor_index];
+        union {
+            cell *ptr;
+            __uint64 ptr_i;
+        };
+        union {
+            cell *rounded;
+            __uint64 rounded_i;
+        };
+        ptr = current_cell;
+        // This doesn't seem to be necessary
+        // asm("" : "+r"(ptr)); //stop the compiler from assuming the pointer is 8 byte aligned and turning the &0xf into &0xe
+        rounded_i = (ptr_i) & ~63;
+        int index = (ptr_i >> 2) & 0xF;
+        return rounded->extra_fields + index;
     }
 
     inline void InitialiseMod();

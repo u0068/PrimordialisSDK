@@ -8,17 +8,16 @@ inline void PiezoCell(P::cell* cell)
     float stress = 0.0f;
     for (int i=0; i<6; i++)
     {
-        auto neighbor = P::GetNeighboringCell(cell, i);
-        if (neighbor != nullptr)
-        {
-            // Calculate connection stiffness from inverse mean of compliances
-            const float stiffness = 2.0f/(
-                P::materials_list[neighbor->material_index].radial_compliance +
-                P::materials_list[cell->material_index].radial_compliance);
-            // Use Hooke's law (F = -kx) to calculate stress force from extension and stiffness
-            const float extension = cell->spacing[0x10*i] - cell->target_spacing;
-            stress -= extension * stiffness;
-        }
+        auto neighbor = GetExtraFields(cell)->neighbors[i];
+        if (not neighbor)
+            continue;
+        // Calculate connection stiffness from inverse mean of compliances
+        const float stiffness = 2.0f/(
+            P::materials_list[neighbor->material_index].radial_compliance +
+            P::materials_list[cell->material_index].radial_compliance);
+        // Use Hooke's law (F = -kx) to calculate stress force from extension and stiffness
+        const float extension = cell->spacing[0x10*i] - cell->target_spacing;
+        stress -= extension * stiffness;
     }
 
     cell->voltage = cell->voltage_multiplier * multiplier * stress;
