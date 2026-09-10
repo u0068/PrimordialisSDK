@@ -23,6 +23,6 @@ inline void AddFatCell()
     material.physics_update_fn = FatCell;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.0f, 0.9f, 0.2f, 1.0f}; // Yellow
-    SetCellNameAndDesc(material, "Fat cell", "A fatty cell with high biomass storage.");
+    SetCellNameAndDesc(material, "Fat cell", "A soft, fatty cell with high biomass storage. Swells when storing biomass. Insulates heat.");
     P::materials_list[P::n_materials++] = material;
 }

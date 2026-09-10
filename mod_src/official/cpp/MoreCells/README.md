@@ -9,8 +9,7 @@ Does what it says in the title.
 - Anti-seeker
 - Electrical seeker
 - Cell detector
-- Pin cell
-- Better power switch
+- Better toggle
 - Family prox detector
 - Flamethrower
   - Shoots hot acid
@@ -26,3 +25,5 @@ Does what it says in the title.
 - Wall detector
 - Ang vel meter
 - Piezo cell
+- Fat cell
+- Pin cell

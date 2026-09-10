@@ -8,6 +8,7 @@
 #include "ang_vel_meter.h"
 #include "piezo_cell.h"
 #include "fat_cell.h"
+#include "pin_cell.h"
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats()
@@ -25,6 +26,7 @@ void OnInitMats()
     AddAngVelMeter();
     AddPiezoCell();
     AddFatCell();
+    AddPinCell();
 }
 
 void P::InitialiseMod()
