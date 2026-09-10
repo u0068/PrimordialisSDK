@@ -50,7 +50,7 @@ def iter_type_records(reader: BinaryReader, first_index: int):
 
         padding_amount = 0
         try:
-            if is_padding_start(reader):
+            if reader.offset % 4 and is_padding_start(reader):
                 padding_amount = consume_padding(reader)
         except Exception as e:
             print(f"Failed to parse padding: {e}")
