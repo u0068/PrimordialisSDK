@@ -48,21 +48,27 @@ def iter_type_records(reader: BinaryReader, first_index: int):
         payload_len = length - 2
         payload = reader.read(payload_len)
 
-        padding_amount = 0
-        try:
-            if reader.offset % 4 and is_padding_start(reader):
-                padding_amount = consume_padding(reader)
-        except Exception as e:
-            print(f"Failed to parse padding: {e}")
-            reader.offset = record_start
-            print(f"Payload: " + reader.read(length+2).hex(' ') + " || " + reader.read(16).hex(' '))
-            raise
+        # padding_amount = 0
+        # try:
+        #     if reader.offset % 4:
+        #         if is_padding_start(reader):
+        #             padding_amount = consume_padding(reader)
+        #         else:
+        #             raise ValueError(
+        #                 f"Expected TPI padding at {reader.offset:#x}, "
+        #                 f"got {reader.data[reader.offset]:#x}"
+        #             )
+        # except Exception as e:
+        #     print(f"Failed to parse padding: {e}")
+        #     reader.offset = record_start
+        #     print(f"Payload: " + reader.read(length+2).hex(' ') + " || " + reader.read(16).hex(' '))
+        #     raise
 
         yield RawTypeRecord(
             index=index,
             position=record_start,
             kind=kind,
-            data=payload[:payload_len - padding_amount],
+            data=payload#[:payload_len - padding_amount],
         )
 
         index += 1
@@ -141,9 +147,10 @@ def parse_type_record(record):
     )
 
     remaining = reader.remaining()
-    if remaining != 0 and is_padding_start(reader):
-        consume_padding(reader, True)
-        remaining = reader.remaining()
+    if remaining:
+        if is_padding_start(reader):
+            consume_padding(reader)
+            remaining = reader.remaining()
     if remaining != 0:
         raise ValueError(
             f"Parser for {kind_name(record.kind)} left "
@@ -176,9 +183,13 @@ class TPI:
                 parsed_record = parse_type_record(record)
                 self.types[record.index] = parsed_record
             except Exception as e:
+                prev_offset = reader.offset
+                extra = 64
+                reader.offset = record.position-extra
                 print(f"Failed to parse {kind_name(record.kind)}: {e}\n"
-                      f"Data: {data[record.position : record.position+len(record.data)+4].hex(' ')}"
-                      f" || {data[record.position+len(record.data)+4 : record.position+len(record.data)+16].hex(' ')}\n"
-                      "Pos:  " + " ".join([("0" if i < 0x10 else "") + f"{i:x}" for i in range(0, reader.offset-record.position)]) + " ^READER\n"
-                      f"READER POS: {reader.offset:#x}")
+                      f"Prev: {reader.read(extra).hex(' ')}\n"
+                      f"Data: {reader.read(len(record.data)+4).hex(' ')}"
+                      f" || {reader.read(16+extra).hex(' ')}\n"
+                      "Pos:  " + " ".join([("0" if i < 0x10 else "") + f"{i:x}" for i in range(0, prev_offset-record.position)]) + " ^READER\n"
+                      f"READER POS: {prev_offset:#x}")
                 raise
