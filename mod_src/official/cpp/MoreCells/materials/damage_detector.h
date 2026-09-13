@@ -34,6 +34,6 @@ inline void AddDamageDetector()
     // material.transfer_rate *= 0.5f;
     material.max_health = 5.0f;
     material.base_color = {0.4f, 0.01f, 0.0f, 1.0f}; // Dark reddish
-    SetCellNameAndDesc(material, "Damage detector cell", "Creates a voltage when damaged.");
+    SetCellNameAndDesc(material, "Damage detector cell", "Produces a voltage proportional to damage to it.");
     P::materials_list[P::n_materials++] = material;
 }

@@ -17,6 +17,6 @@ inline void AddWallDetector()
     material.electric_update_fn = WallDetector;
     material.uv = P::materials_list[P::CellRef{"Power switch cell"}.GetIndex()].uv;
     material.base_color = {0.5f, 0.4f, 0.6f, 1.0f}; // Bluish gray
-    SetCellNameAndDesc(material, "Wall detector cell", "Creates a voltage inversely proportional to its distance from a wall.");
+    SetCellNameAndDesc(material, "Wall detector cell", "Produces a voltage inversely proportional to its distance from a wall.");
     P::materials_list[P::n_materials++] = material;
 }

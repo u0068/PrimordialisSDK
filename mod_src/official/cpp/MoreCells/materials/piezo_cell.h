@@ -30,6 +30,6 @@ inline void AddPiezoCell()
     material.radial_compliance *= 8.0f;
     material.uv = P::materials_list[P::CellRef{"Power switch cell"}.GetIndex()].uv;
     material.base_color = {0.3f, 0.0f, 1.0f, 0.8f};
-    SetCellNameAndDesc(material, "Piezoelectric cell", "Creates a voltage proportional to how much the cell is squeezed.");
+    SetCellNameAndDesc(material, "Piezoelectric cell", "Produces a voltage proportional to how much the cell is squeezed.");
     P::materials_list[P::n_materials++] = material;
 }
