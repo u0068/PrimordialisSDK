@@ -43,7 +43,8 @@ git sparse-checkout set mods
 To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).\
 Load the Primordialis PDB before decompiling, by following the steps given in the
 Ghidra Docs (or just search it up).\
-We work on the avx build rather than the sse3 build, but it probably doesn't make much difference.\
+Primordialis is compiled with clang version 22.1.8\
+We work on the avx build rather than the sse3 build, but it probably doesn't make much difference which one you use.\
 Some decompiled functions are already in `PrimordialisSDK/Decompiled`.\
 Share your decompiled functions by putting them in there and pushing to the repo.\
 **Warning: Interpreting decompiled code is not for the faint of heart!**\
