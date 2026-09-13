@@ -19,7 +19,7 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat)
     if (ImGui::BeginPopupContextItem(mat.name))
     {
         ImGui::PushItemFlag(ImGuiItemFlags_LiveEditOnInputText, false);
-        if (ImGui::InputText("##name", mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue))
+        if (ImGui::InputText("##name", (char*)mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue))
             mat.id = P::HashCellId(mat.name);
         ImGui::PopItemFlag();
         if (ImGui::Button("Copy to Clipboard"))

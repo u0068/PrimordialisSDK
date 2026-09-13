@@ -3,6 +3,7 @@
 
 inline bool reset_on_reload = false;
 inline bool has_initialised_mats = false;
+inline bool has_initialised_muts = false;
 
 union material_u
 {
@@ -97,7 +98,11 @@ inline void LoadAllMats()
 inline void InitMaterialsHook()
 {
     if (not reset_on_reload and has_initialised_mats)
+    {
+        // TO-DO: Get number of vanilla cells automatically
+        P::next_icon_index = 82;
         return;
+    }
     Next<void>();
     if (!P::IsThreadSafe())
         return;
