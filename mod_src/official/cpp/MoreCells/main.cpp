@@ -9,24 +9,25 @@
 #include "piezo_cell.h"
 #include "fat_cell.h"
 #include "pin_cell.h"
+#include "trigger_variants.h"
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats()
 {
     Next<void>(); // Call original function
-    P::LaneSync(); // Wait until all threads have finished their job
-    if (not P::IsThreadSafe()) // Make sure we are only on the main thread
-        return;
-
-    // Add cells using their respective functions
-    AddStiffCell();
-    AddAeroGelCell();
-    AddWallDetector();
-    AddDamageDetector();
-    AddAngVelMeter();
-    AddPiezoCell();
-    AddFatCell();
-    AddPinCell();
+    if (P::IsThreadSafe()) // Make sure we are only on the main thread
+    {
+        // Add cells using their respective functions
+        AddStiffCell();
+        AddAeroGelCell();
+        AddWallDetector();
+        AddDamageDetector();
+        AddAngVelMeter();
+        AddPiezoCell();
+        AddFatCell();
+        AddPinCell();
+        //AddTriggerVariants();
+    }
 }
 
 void P::InitialiseMod()
