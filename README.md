@@ -11,6 +11,7 @@ Primordialis SDK is a modding SDK for Primordialis.
   - Ghidra Scripts
   - Decompiled game code
   - Misc SDK dev tools
+  - PDB parser (WIP)
 
 ## Expect bugs.
 Everything is in very early development and will break sooner or later.
@@ -120,7 +121,6 @@ https://discord.gg/Fz5RaRBNj8
   - Loading mods
   - Making mods
   - Contributing to the SDK
-- Move TO-DOs to trello?
 - Improve error messages everywhere
 
 See the README.md's inside the projects for their TO-DO lists.
