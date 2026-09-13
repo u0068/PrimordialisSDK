@@ -20,7 +20,7 @@ inline void PiezoCell(P::cell* cell)
         stress -= extension * stiffness;
     }
 
-    cell->voltage = cell->voltage_multiplier * multiplier * stress;
+    PowerCell(cell, multiplier * stress);
 }
 
 inline void AddPiezoCell()

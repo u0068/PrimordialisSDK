@@ -11,7 +11,7 @@ inline void AngVelMeter(P::cell* cell)
     const float ang_vel = P::AngleTo(prev_angle, angle);
 
     cell->value = angle;
-    cell->voltage = cell->voltage_multiplier * multiplier * ang_vel;
+    PowerCell(cell, multiplier * ang_vel);
 }
 
 inline void AddAngVelMeter()

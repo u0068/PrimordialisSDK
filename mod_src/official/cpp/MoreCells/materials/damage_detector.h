@@ -24,7 +24,7 @@ inline void DamageDetector(P::cell* cell)
 
     cell->value = filtered_health;
     cell->value2 = filtered_damage;
-    cell->voltage = filtered_damage * multiplier * cell->voltage_multiplier;
+    PowerCell(cell, filtered_damage * multiplier);
 }
 
 inline void AddDamageDetector()

@@ -195,6 +195,15 @@ namespace P
         return rounded->extra_fields + index;
     }
 
+    // Power a cell while respecting the voltage already present in it, and applying voltage multipliers
+    inline void PowerCell(cell* current_cell, float power_voltage)
+    {
+        float output = current_cell->voltage_multiplier * power_voltage;
+        if (abs(current_cell->voltage) < abs(output)) {
+            current_cell->voltage = output;
+        }
+    }
+
     inline void InitialiseMod();
 };
 

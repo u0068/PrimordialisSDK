@@ -2,27 +2,21 @@
 #include <generated/game_functions/creatures.h>
 #include "plasmid_api.h"
 
-void __cdecl NegativeTrigger(P::cell* cell)
+void NegativeTrigger(P::cell* cell)
 {
     auto body = P::get_living_body(cell->body_id);
     if (body->brain.abilities[0])
     {
-        float output = -cell->voltage_multiplier;
-        if (abs(cell->voltage) < abs(output)) {
-            cell->voltage = output;
-        }
+        PowerCell(cell, -1.0f);
     }
 }
 
-void __cdecl InvertedTrigger(P::cell* cell)
+void InvertedTrigger(P::cell* cell)
 {
     auto body = P::get_living_body(cell->body_id);
     if (not body->brain.abilities[0])
     {
-        float output = cell->voltage_multiplier;
-        if (abs(cell->voltage) < abs(output)) {
-            cell->voltage = output;
-        }
+        PowerCell(cell, 1.0f);
     }
 }
 
