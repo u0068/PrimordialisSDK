@@ -131,15 +131,15 @@ namespace P
         }
     };
 
-    static std::vector<char*> translation_values;
+    static std::vector<const char*> translation_values;
 
-    inline void AddTranslation(const char* _key, char* _value)
+    inline void AddTranslation(const char* _key, const char* _value)
     {
         char* key = new char[strlen(_key)+1]{};
         memcpy_s(key, strlen(_key)+1, _key, strlen(_key));
 
         translation_values.push_back(_value);
-        char** value = &translation_values.back();
+        const char** value = &translation_values.back();
 
         translation_list t_list{};
         t_list.text = value;
@@ -148,7 +148,7 @@ namespace P
         add_entry(&w->translations, key, &t_list);
     }
 
-    inline void AddCellDescription(const char* id, char* desc)
+    inline void AddCellDescription(const char* id, const char* desc)
     {
         char key[15];
         sprintf_s(key, "cell_%s_desc", id);
@@ -157,9 +157,9 @@ namespace P
 
     inline void SetCellNameAndDesc(material_t &cell_type, const char* name, const char* desc)
     {
-        cell_type.name = (char*)name;
+        cell_type.name = name;
         cell_type.id = HashCellId(name);
-        AddCellDescription(CellRef{cell_type.id}, (char*)desc);
+        AddCellDescription(CellRef{cell_type.id}, desc);
     }
 
     inline bool IsThreadSafe()

@@ -13,7 +13,7 @@ void OnInitCreatures()
     memset(P::creature_list + P::n_creatures,0,0x678); // Clear out the memory we wil be using
     creature.id = P::str_to_id("TEST");
     creature.filename = "body plans/target_dummy.bod";
-    P::load_body_plan(&creature.plan, (char*)creature.filename); // Load the bodyplan
+    P::load_body_plan(&creature.plan, creature.filename); // Load the bodyplan
     P::creature_list[P::n_creatures++] = creature;  // Save the creature
 }
 

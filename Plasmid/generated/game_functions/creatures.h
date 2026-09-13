@@ -28,10 +28,10 @@ namespace P
     inline bone* get_element(bone_id_table* param_1, int param_2) { return Resolve<bone*(*)(bone_id_table*, int)>("get_element")(param_1, param_2); }
     inline void delete_element(bone_id_table* param_1, int param_2) { return Resolve<void(*)(bone_id_table*, int)>("delete_element")(param_1, param_2); }
     inline void upload_body_plan_to_workshop(__uint64 param_1) { return Resolve<void(*)(__uint64)>("upload_body_plan_to_workshop")(param_1); }
-    inline void give_achievement(char* param_1) { return Resolve<void(*)(char*)>("give_achievement")(param_1); }
+    inline void give_achievement(const char* param_1) { return Resolve<void(*)(const char*)>("give_achievement")(param_1); }
     inline void give_mutation(body* param_1, int param_2, int* param_3, int param_4) { return Resolve<void(*)(body*, int, int*, int)>("give_mutation")(param_1, param_2, param_3, param_4); }
     inline void reset_player_position(real_2 param_1, real_2 param_2) { return Resolve<void(*)(real_2, real_2)>("reset_player_position")(param_1, param_2); }
-    inline int resave_single_body_plan(char* param_1) { return Resolve<int(*)(char*)>("resave_single_body_plan")(param_1); }
+    inline int resave_single_body_plan(const char* param_1) { return Resolve<int(*)(const char*)>("resave_single_body_plan")(param_1); }
     inline body* spawn_creature_to_grow(int param_1, real_2 param_2, float param_3, spawn_creature_params* param_4) { return Resolve<body*(*)(int, real_2, float, spawn_creature_params*)>("spawn_creature_to_grow")(param_1, param_2, param_3, param_4); }
     inline body* spawn_creature(int param_1, real_2 param_2, spawn_creature_params* param_3) { return Resolve<body*(*)(int, real_2, spawn_creature_params*)>("spawn_creature")(param_1, param_2, param_3); }
     inline body* get_body_of_plan(body_plan* param_1) { return Resolve<body*(*)(body_plan*)>("get_body_of_plan")(param_1); }
@@ -39,12 +39,12 @@ namespace P
     inline uchar* body_auxiliary_data_from_id(int param_1) { return Resolve<uchar*(*)(int)>("body_auxiliary_data_from_id")(param_1); }
     inline uchar* body_auxiliary_data_from_body(body* param_1) { return Resolve<uchar*(*)(body*)>("body_auxiliary_data_from_body")(param_1); }
     inline serialized_data* serialize_body_plan(serialized_data* __return_storage_ptr__, body_plan* param_1, uchar** param_2, __uint64 param_3, __uint64* param_4, int* param_5) { return Resolve<serialized_data*(*)(serialized_data*, body_plan*, uchar**, __uint64, __uint64*, int*)>("serialize_body_plan")(__return_storage_ptr__, param_1, param_2, param_3, param_4, param_5); }
-    inline void save_body_plan(body_plan* param_1, char* param_2) { return Resolve<void(*)(body_plan*, char*)>("save_body_plan")(param_1, param_2); }
+    inline void save_body_plan(body_plan* param_1, const char* param_2) { return Resolve<void(*)(body_plan*, const char*)>("save_body_plan")(param_1, param_2); }
     inline void load_body_plan_legacy(body_plan* param_1, _iobuf* param_2, int param_3) { return Resolve<void(*)(body_plan*, _iobuf*, int)>("load_body_plan_legacy")(param_1, param_2, param_3); }
-    inline int load_body_plan_from_file(body_plan* param_1, _iobuf* param_2, char* param_3, int** param_4) { return Resolve<int(*)(body_plan*, _iobuf*, char*, int**)>("load_body_plan_from_file")(param_1, param_2, param_3, param_4); }
-    inline int load_body_plan(body_plan* param_1, char* param_2) { return Resolve<int(*)(body_plan*, char*)>("load_body_plan")(param_1, param_2); }
+    inline int load_body_plan_from_file(body_plan* param_1, _iobuf* param_2, const char* param_3, int** param_4) { return Resolve<int(*)(body_plan*, _iobuf*, const char*, int**)>("load_body_plan_from_file")(param_1, param_2, param_3, param_4); }
+    inline int load_body_plan(body_plan* param_1, const char* param_2) { return Resolve<int(*)(body_plan*, const char*)>("load_body_plan")(param_1, param_2); }
     inline void copy_body_plan(body_plan* param_1, body_plan* param_2) { return Resolve<void(*)(body_plan*, body_plan*)>("copy_body_plan")(param_1, param_2); }
-    inline void load_user_body_plans_in_dir(char* param_1, int param_2) { return Resolve<void(*)(char*, int)>("load_user_body_plans_in_dir")(param_1, param_2); }
+    inline void load_user_body_plans_in_dir(const char* param_1, int param_2) { return Resolve<void(*)(const char*, int)>("load_user_body_plans_in_dir")(param_1, param_2); }
     inline void load_user_body_plans() { return Resolve<void(*)()>("load_user_body_plans")(); }
     inline void give_mutation(body* param_1, int param_2, int* param_3, int param_4, bool param_5) { return Resolve<void(*)(body*, int, int*, int, bool)>("give_mutation")(param_1, param_2, param_3, param_4, param_5); }
     inline body* create_body(bounding_box_2* param_1) { return Resolve<body*(*)(bounding_box_2*)>("create_body")(param_1); }
@@ -64,13 +64,13 @@ namespace P
     inline void floodfill_body(body* param_1) { return Resolve<void(*)(body*)>("floodfill_body")(param_1); }
     inline void floodfill_bone(bone* param_1) { return Resolve<void(*)(bone*)>("floodfill_bone")(param_1); }
     inline int floodfill_plan(body* param_1, body_plan* param_2, floodfill_piece* param_3, plan_cell** param_4) { return Resolve<int(*)(body*, body_plan*, floodfill_piece*, plan_cell**)>("floodfill_plan")(param_1, param_2, param_3, param_4); }
-    inline void add_saved_body_plan(edit_menu* param_1, body_plan* param_2, char* param_3) { return Resolve<void(*)(edit_menu*, body_plan*, char*)>("add_saved_body_plan")(param_1, param_2, param_3); }
-    inline void copy_saved_body_plan(edit_menu* param_1, char* param_2, char* param_3) { return Resolve<void(*)(edit_menu*, char*, char*)>("copy_saved_body_plan")(param_1, param_2, param_3); }
+    inline void add_saved_body_plan(edit_menu* param_1, body_plan* param_2, const char* param_3) { return Resolve<void(*)(edit_menu*, body_plan*, const char*)>("add_saved_body_plan")(param_1, param_2, param_3); }
+    inline void copy_saved_body_plan(edit_menu* param_1, const char* param_2, const char* param_3) { return Resolve<void(*)(edit_menu*, const char*, const char*)>("copy_saved_body_plan")(param_1, param_2, param_3); }
     inline void update_edit_menu_plan(edit_menu* param_1, int* param_2) { return Resolve<void(*)(edit_menu*, int*)>("update_edit_menu_plan")(param_1, param_2); }
     inline body* get_best_hovered_body(real_2 param_1, float param_2) { return Resolve<body*(*)(real_2, float)>("get_best_hovered_body")(param_1, param_2); }
-    inline int get_creature_index(char* param_1) { return Resolve<int(*)(char*)>("get_creature_index")(param_1); }
+    inline int get_creature_index(const char* param_1) { return Resolve<int(*)(const char*)>("get_creature_index")(param_1); }
     inline bool update_body_plan(body* param_1, body_plan* param_2, bool param_3) { return Resolve<bool(*)(body*, body_plan*, bool)>("update_body_plan")(param_1, param_2, param_3); }
-    inline void spawn_text_creatures(char* param_1, real_2 param_2, real_2 param_3, float param_4) { return Resolve<void(*)(char*, real_2, real_2, float)>("spawn_text_creatures")(param_1, param_2, param_3, param_4); }
+    inline void spawn_text_creatures(const char* param_1, real_2 param_2, real_2 param_3, float param_4) { return Resolve<void(*)(const char*, real_2, real_2, float)>("spawn_text_creatures")(param_1, param_2, param_3, param_4); }
     inline int get_creature_index_no_warning(uint param_1) { return Resolve<int(*)(uint)>("get_creature_index_no_warning")(param_1); }
     inline void player_death(body* param_1) { return Resolve<void(*)(body*)>("player_death")(param_1); }
     inline void handle_body_death(body* param_1) { return Resolve<void(*)(body*)>("handle_body_death")(param_1); }

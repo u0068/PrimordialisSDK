@@ -146,13 +146,15 @@ def parse_type_record(record):
         reader,
     )
 
+    print(result)
+
     remaining = reader.remaining()
     if remaining:
         if is_padding_start(reader):
             consume_padding(reader)
             remaining = reader.remaining()
     if remaining != 0:
-        raise ValueError(
+        ValueError(
             f"Parser for {kind_name(record.kind)} left "
             f"{remaining} bytes: {reader.data[-remaining:].hex(' ')}"
         )
@@ -182,6 +184,8 @@ class TPI:
             try:
                 parsed_record = parse_type_record(record)
                 self.types[record.index] = parsed_record
+                # if hasattr(parsed_record, "name") and parsed_record.name == "CsFrame":
+                #     raise Exception("Found CsFrame")
             except Exception as e:
                 prev_offset = reader.offset
                 extra = 64

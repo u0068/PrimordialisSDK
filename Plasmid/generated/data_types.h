@@ -347,7 +347,7 @@ namespace P
         trace_node* last_child;
         bool traversed_children;
         bool traversed;
-        char* name;
+        const char* name;
         double start_time;
         double end_time;
     };
@@ -549,9 +549,9 @@ namespace P
     };
     struct print_buffer_t
     {
-        char* base;
-        char* end;
-        char* buffer;
+        const char* base;
+        const char* end;
+        const char* buffer;
     };
     // struct lfClass2
     // {
@@ -595,12 +595,12 @@ namespace P
     };
     struct translation_map_kash_t
     {
-        char* key;
+        const char* key;
         uint hash;
     };
     struct textbox
     {
-        char* text;
+        const char* text;
         int max_text;
         int n_text;
         int cursor;
@@ -757,7 +757,7 @@ namespace P
         int n_warnings[3];
         int warning_index[3];
         real_2 warning_box_size[3];
-        char* stash_dir;
+        const char* stash_dir;
         tooltip_t tooltip;
     };
     struct circle_render_info
@@ -797,7 +797,7 @@ namespace P
         void* map_edits_file;
         void* map_edits_filemapping;
         uchar* map_edits_mapview;
-        char* save_dir;
+        const char* save_dir;
         char settings_filename[1024];
         char run_history_filename[1024];
         char recording_dir[1024];
@@ -823,8 +823,8 @@ namespace P
     };
     struct translation_list
     {
-        char ** text;
-        char* formatted;
+        const char ** text;
+        const char* formatted;
         ulonglong max_formatted;
     };
     struct uint8_3
@@ -884,7 +884,7 @@ namespace P
     {
         uint id;
         uint ___id_null_termination;
-        char* filename;
+        const char* filename;
         mutation_item mutations[32];
         int n_mutations;
         float cost_discount;
@@ -958,7 +958,7 @@ namespace P
     };
     struct strand
     {
-        char* str;
+        const char* str;
         int len;
     };
     struct spawn_creature_params
@@ -1435,7 +1435,7 @@ namespace P
     struct material_t
     {
         uint id;
-        char* name;
+        const char* name;
         int next_variant;
         uint tags;
         uint tier;
@@ -1921,7 +1921,7 @@ namespace P
     };
     struct text_info
     {
-        char* text;
+        const char* text;
         real_2 x;
         real_4 color;
         real_2 alignment;
@@ -2028,7 +2028,7 @@ namespace P
         uchar type;
         union
         {
-            char c;
+            const char* c;
             uchar modifiers;
         };
     };
@@ -2438,7 +2438,7 @@ namespace P
     struct stashed_body_plan
     {
         body_plan plan;
-        char name[512];
+        const char* name[512];
         real_2 pos;
     };
     struct sound_params
@@ -2595,7 +2595,7 @@ namespace P
     };
     struct biome_modifier
     {
-        char* id;
+        const char* id;
         void* generation_fn;
         void* creature_fn;
         float chance;
@@ -2776,7 +2776,7 @@ namespace P
     struct pcharNode
     {
         longlong _padding_;
-        char* me;
+        const char* me;
         int myLen;
     };
     struct acid_particle_16
@@ -2793,9 +2793,9 @@ namespace P
     };
     struct command_result_t
     {
-        char* command;
-        char* result;
-        char* error;
+        const char* command;
+        const char* result;
+        const char* error;
     };
     struct player_command_t
     {
@@ -3121,7 +3121,7 @@ namespace P
         int frame_number;
         double last_frame_time;
         int tutorial_stage;
-        char* current_tutorial;
+        const char* current_tutorial;
         int map_prompt_timer;
         real_2 end_text_x;
         float fade_in;
@@ -3162,7 +3162,7 @@ namespace P
         int n_console_history;
         int selected_command;
         bool show_console;
-        char* stash_dir;
+        const char* stash_dir;
         translation_map translations;
         int n_languages;
         int language_index;
@@ -3203,16 +3203,16 @@ namespace P
     };
     // struct lconv
     // {
-    //     char* decimal_point;
-    //     char* thousands_sep;
-    //     char* grouping;
-    //     char* int_curr_symbol;
-    //     char* currency_symbol;
-    //     char* mon_decimal_point;
-    //     char* mon_thousands_sep;
-    //     char* mon_grouping;
-    //     char* positive_sign;
-    //     char* negative_sign;
+    //     const char* decimal_point;
+    //     const char* thousands_sep;
+    //     const char* grouping;
+    //     const char* int_curr_symbol;
+    //     const char* currency_symbol;
+    //     const char* mon_decimal_point;
+    //     const char* mon_thousands_sep;
+    //     const char* mon_grouping;
+    //     const char* positive_sign;
+    //     const char* negative_sign;
     //     char int_frac_digits;
     //     char frac_digits;
     //     char p_cs_precedes;

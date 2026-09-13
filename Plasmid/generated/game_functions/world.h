@@ -10,7 +10,7 @@ namespace P
     inline void platform_queue_saving_map_edits() { return Resolve<void(*)()>("platform_queue_saving_map_edits")(); }
     inline void init_hashmap(translation_map* param_1, int param_2) { return Resolve<void(*)(translation_map*, int)>("init_hashmap")(param_1, param_2); }
     inline void clear_hashmap(translation_map* param_1) { return Resolve<void(*)(translation_map*)>("clear_hashmap")(param_1); }
-    inline bool in_map(translation_map* param_1, char* param_2) { return Resolve<bool(*)(translation_map*, char*)>("in_map")(param_1, param_2); }
+    inline bool in_map(translation_map* param_1, const char* param_2) { return Resolve<bool(*)(translation_map*, const char*)>("in_map")(param_1, param_2); }
     inline void set_wall_map(render_context* param_1, map_t* param_2) { return Resolve<void(*)(render_context*, map_t*)>("set_wall_map")(param_1, param_2); }
     inline void update_wall_values(render_context* param_1, map_t* param_2) { return Resolve<void(*)(render_context*, map_t*)>("update_wall_values")(param_1, param_2); }
     inline void update_wall_temperature(render_context* param_1, map_t* param_2) { return Resolve<void(*)(render_context*, map_t*)>("update_wall_temperature")(param_1, param_2); }
@@ -25,11 +25,11 @@ namespace P
     inline serialized_data* serialize_world(serialized_data* __return_storage_ptr__, uchar** param_1, __uint64* param_2) { return Resolve<serialized_data*(*)(serialized_data*, uchar**, __uint64*)>("serialize_world")(__return_storage_ptr__, param_1, param_2); }
     inline serialized_data* serialize_map_region(serialized_data* __return_storage_ptr__, uchar** param_1, __uint64* param_2, uchar* param_3, int_2 param_4) { return Resolve<serialized_data*(*)(serialized_data*, uchar**, __uint64*, uchar*, int_2)>("serialize_map_region")(__return_storage_ptr__, param_1, param_2, param_3, param_4); }
     inline serialized_data* serialize_map_edits(serialized_data* __return_storage_ptr__, uchar** param_1, __uint64* param_2) { return Resolve<serialized_data*(*)(serialized_data*, uchar**, __uint64*)>("serialize_map_edits")(__return_storage_ptr__, param_1, param_2); }
-    inline decompressed_map_data* decompress_map_file(decompressed_map_data* __return_storage_ptr__, char* param_1) { return Resolve<decompressed_map_data*(*)(decompressed_map_data*, char*)>("decompress_map_file")(__return_storage_ptr__, param_1); }
-    inline int load_map_edits(char* param_1) { return Resolve<int(*)(char*)>("load_map_edits")(param_1); }
+    inline decompressed_map_data* decompress_map_file(decompressed_map_data* __return_storage_ptr__, const char* param_1) { return Resolve<decompressed_map_data*(*)(decompressed_map_data*, const char*)>("decompress_map_file")(__return_storage_ptr__, param_1); }
+    inline int load_map_edits(const char* param_1) { return Resolve<int(*)(const char*)>("load_map_edits")(param_1); }
     inline int get_biome_index(int param_1) { return Resolve<int(*)(int)>("get_biome_index")(param_1); }
-    inline int load_map_template(char* param_1, map_template* param_2) { return Resolve<int(*)(char*, map_template*)>("load_map_template")(param_1, param_2); }
-    inline void save_map_template(char* param_1) { return Resolve<void(*)(char*)>("save_map_template")(param_1); }
+    inline int load_map_template(const char* param_1, map_template* param_2) { return Resolve<int(*)(const char*, map_template*)>("load_map_template")(param_1, param_2); }
+    inline void save_map_template(const char* param_1) { return Resolve<void(*)(const char*)>("save_map_template")(param_1); }
     inline void queue_saving_map_edits() { return Resolve<void(*)()>("queue_saving_map_edits")(); }
     inline void queue_saving_world() { return Resolve<void(*)()>("queue_saving_world")(); }
     inline void load_world(render_context* param_1, bool param_2) { return Resolve<void(*)(render_context*, bool)>("load_world")(param_1, param_2); }
@@ -68,8 +68,8 @@ namespace P
     inline biome_type* new_biome_type() { return Resolve<biome_type*(*)()>("new_biome_type")(); }
     inline biome_modifier* new_biome_modifier() { return Resolve<biome_modifier*(*)()>("new_biome_modifier")(); }
     inline float trial_wall_value(float* param_1, float* param_2, real_2 param_3, real_2 param_4) { return Resolve<float(*)(float*, float*, real_2, real_2)>("trial_wall_value")(param_1, param_2, param_3, param_4); }
-    inline char* get_biome_name(int param_1) { return Resolve<char*(*)(int)>("get_biome_name")(param_1); }
-    inline int get_biome_modifier_index(char* param_1) { return Resolve<int(*)(char*)>("get_biome_modifier_index")(param_1); }
+    inline const char* get_biome_name(int param_1) { return Resolve<const char*(*)(int)>("get_biome_name")(param_1); }
+    inline int get_biome_modifier_index(const char* param_1) { return Resolve<int(*)(const char*)>("get_biome_modifier_index")(param_1); }
     inline void init_biome_types() { return Resolve<void(*)()>("init_biome_types")(); }
     inline void adjust_biome_nodes(float param_1) { return Resolve<void(*)(float)>("adjust_biome_nodes")(param_1); }
     inline int assign_biome_core(int_2 param_1, biome_core* param_2) { return Resolve<int(*)(int_2, biome_core*)>("assign_biome_core")(param_1, param_2); }
