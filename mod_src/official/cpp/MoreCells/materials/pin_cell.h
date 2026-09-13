@@ -7,6 +7,11 @@ inline void PinCell(P::cell* cell)
     cell->y -= cell->y_dot;
     cell->x_dot = 0.0f;
     cell->y_dot = 0.0f;
+    auto extra_fields = GetExtraFields(cell);
+    extra_fields->old_x.x -= extra_fields->old_x_dot.x;
+    extra_fields->old_x.y -= extra_fields->old_x_dot.y;
+    extra_fields->old_x_dot = {0,0};
+    extra_fields->attached_world_pos = extra_fields->old_x;
 }
 
 inline void AddPinCell()
