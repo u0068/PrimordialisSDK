@@ -1,14 +1,15 @@
 #pragma once
 #include <fstream>
 #include <iostream>
-#include <dual_buffer_log.h>
+#include <internal/dual_buffer_log.h>
 
 inline std::string err = "[ERROR]: ";
 
 static void InitConsole() {
     if (!AllocConsole()) {
-        if (GetLastError() != ERROR_ACCESS_DENIED)
+        if (GetLastError() != ERROR_ACCESS_DENIED) {
             return;
+        }
     }
 
     FILE *file;

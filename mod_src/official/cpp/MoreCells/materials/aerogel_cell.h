@@ -2,7 +2,7 @@
 #include "plasmid_api.h"
 
 inline void AddAeroGelCell() {
-    auto material = P::materials_list[P::CellRef{"Lightweight cell"}.GetIndex()];
+    auto material = P::materials_list[P::MatRef{"Lightweight cell"}.GetIndex()];
     material.is_hard = true;
     material.density = 0.1f;
     material.base_cost = 2.0f;
@@ -23,6 +23,6 @@ inline void AddAeroGelCell() {
     material.heat_capacity = 1e4f;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.5f, 1.5f, 2.0f, 0.3f};
-    SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
+    P::SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
     P::materials_list[P::n_materials++] = material;
 }

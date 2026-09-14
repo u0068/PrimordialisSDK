@@ -7,8 +7,9 @@ DWORD GetProcessByName(const char *lpProcessName) {
     ProcList.dwSize = sizeof(ProcList);
 
     const HANDLE &hProcList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hProcList == INVALID_HANDLE_VALUE)
+    if (hProcList == INVALID_HANDLE_VALUE) {
         return -1;
+    }
 
     if (Process32First(hProcList, &ProcList))
         do
@@ -31,14 +32,16 @@ bool IsDLL(const std::string &filePath) {
 
     IMAGE_DOS_HEADER dosHeader{};
     f.read(reinterpret_cast<char *>(&dosHeader), sizeof(dosHeader));
-    if (!f || dosHeader.e_magic != IMAGE_DOS_SIGNATURE)
+    if (!f || dosHeader.e_magic != IMAGE_DOS_SIGNATURE) {
         return false;
+    }
 
     f.seekg(dosHeader.e_lfanew, std::ios::beg);
     IMAGE_NT_HEADERS ntHeaders{};
     f.read(reinterpret_cast<char *>(&ntHeaders), sizeof(ntHeaders));
-    if (!f || ntHeaders.Signature != IMAGE_NT_SIGNATURE)
+    if (!f || ntHeaders.Signature != IMAGE_NT_SIGNATURE) {
         return false;
+    }
 
     f.close();
     return (ntHeaders.FileHeader.Characteristics & IMAGE_FILE_DLL) != 0;
@@ -133,8 +136,9 @@ void ModManager::InjectAll() {
     int failed = 0;
 
     for (auto &mod: enabled_mods) {
-        if (not mod.is_cpp())
+        if (not mod.is_cpp()) {
             continue;
+        }
 
         std::string injectPath = mod.dll_path.string();
         char dllpath[MAX_PATH];
@@ -151,10 +155,12 @@ void ModManager::InjectAll() {
                 << mod.dll_path.filename().string()
                 << ")";
     }
-    if (failed)
+    if (failed) {
         Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(enabled_mods.size()) + " mods";
-    else
+    }
+    else {
         Log() << "Mod injection finished successfully!";
+    }
 
     // Sleep(1000); // Sleep to give you time to attach a debugger
 }

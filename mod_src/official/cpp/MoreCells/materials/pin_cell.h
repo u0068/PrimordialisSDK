@@ -14,11 +14,11 @@ inline void PinCell(P::cell *cell) {
 }
 
 inline void AddPinCell() {
-    auto material = P::materials_list[P::CellRef{"Heavy cell"}.GetIndex()];
+    auto material = P::materials_list[P::MatRef{"Heavy cell"}.GetIndex()];
     material.density = 1e30f; // Very big number, but not big enough to worry about overflow.
     material.is_hard = false; // Pn cell does not play nice with rigid physics
     material.physics_update_fn = PinCell;
     material.base_color = {0.9f, 0.8f, 0.9f, 1.0f};
-    SetCellNameAndDesc(material, "Pin cell", "An nigh immovable cell.");
+    P::SetCellNameAndDesc(material, "Pin cell", "An nigh immovable cell.");
     P::materials_list[P::n_materials++] = material;
 }

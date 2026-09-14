@@ -17,22 +17,23 @@ void acid_no_color_change(P::cell *cell) {
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats() {
-    Next<void>(); // Call original function
-    if (not P::IsThreadSafe()) // Make sure we are only on the main thread
+    P::Next<void>(); // Call original function
+    if (not P::IsThreadSafe()) { // Make sure we are only on the main thread
         return;
+    }
 
     P::material_t *mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
     P::material_t material{}; // The variable we use to store the material we are working on
 
     // First, lets make the Acid Cell spew acid that doesn't change color
-    material = mats[P::CellRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
+    material = mats[P::MatRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
     material.physics_update_fn = acid_no_color_change;
     // We simply overwrite cell functions like this instead of using the Hook utility
-    mats[P::CellRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
+    mats[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
 
     // Next, lets make our own cell!
     // We want to have a cell that is quite stiff but not entirely rigid.
-    material = mats[P::CellRef{"Hard cell"}.GetIndex()]; // Copy the Hard cell material to use as the base
+    material = mats[P::MatRef{"Hard cell"}.GetIndex()]; // Copy the Hard cell material to use as the base
     // There are lots of different material properties we can tweak
     // Use the official Cell Tools mod to tweak material properties in-game
     // Any properties that we don't set will use the properties of the base material that we copied from
@@ -53,5 +54,5 @@ void OnInitMats() {
 void P::InitialiseMod() {
     // Hooks are used to add our code to the game's functions
     // Hook our OnInitMats function to the game's init_materials_list
-    Hook<"init_materials_list">(OnInitMats);
+    P::Hook<"init_materials_list">(OnInitMats);
 }

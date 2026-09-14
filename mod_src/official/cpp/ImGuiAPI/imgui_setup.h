@@ -15,8 +15,9 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam) {
     BYTE keyboard_state[256];
 
-    if (!GetKeyboardState(keyboard_state))
+    if (!GetKeyboardState(keyboard_state)) {
         return;
+    }
 
     WCHAR chars[8];
 
@@ -33,8 +34,9 @@ inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam) {
     );
 
     if (count > 0) {
-        for (int i = 0; i < count; ++i)
+        for (int i = 0; i < count; ++i) {
             ImGui::GetIO().AddInputCharacter(chars[i]);
+        }
     }
 }
 
@@ -82,10 +84,12 @@ inline LRESULT CALLBACK imgui_wndproc(
 
 inline void BlockInputs(P::window_t *window) {
     Next<void>(window);
-    if (!P::IsThreadSafe())
+    if (!P::IsThreadSafe()) {
         return;
-    if (!ImGui::GetIO().WantCaptureMouse)
+    }
+    if (!ImGui::GetIO().WantCaptureMouse) {
         return;
+    }
 
     window->input.buttons_blocked = true;
     window->input.click_blocked = true;
@@ -155,15 +159,16 @@ inline void DrawImgui() {
 
 inline void ImguiHookSoftwareCursor(
     P::render_context *param_1, P::real_3 *param_2, float param_3, P::real_4 *param_4, int param_5) {
-    if (P::IsThreadSafe())
+    if (P::IsThreadSafe()) {
         DrawImgui();
-    Next<void>(param_1, param_2, param_3, param_4, param_5);
+    }
+    P::Next<void>(param_1, param_2, param_3, param_4, param_5);
 }
 
 inline void ImguiHookHardwareCursor(
     P::render_context *param_1, P::render_context *param_2, P::user_input *param_3,
     P::recording_buffer *param_4, float param_5, P::window_t *param_6) {
-    Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
+    P::Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
     if (P::IsThreadSafe() and P::settings->hardware_cursor) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
         DrawImgui();
@@ -173,10 +178,11 @@ inline void ImguiHookHardwareCursor(
 inline bool imgui_initialized = false;
 
 inline void WindowInitHook(P::window_t *window) {
-    Next<void>(window);
+    P::Next<void>(window);
 
-    if (!P::IsThreadSafe())
+    if (!P::IsThreadSafe()) {
         return;
+    }
 
     if (imgui_initialized) {
         // TODO: automatic re-initialisation without restarting
@@ -225,9 +231,9 @@ inline void WindowInitHook(P::window_t *window) {
 }
 
 inline void do_imgui_hooks() {
-    Hook<"init_gl_context">(WindowInitHook);
-    Hook<"draw_cursor">(ImguiHookSoftwareCursor);
-    Hook<"render_game">(ImguiHookHardwareCursor);
-    Hook<"update_mouse_pos">(BlockInputs);
+    P::Hook<"init_gl_context">(WindowInitHook);
+    P::Hook<"draw_cursor">(ImguiHookSoftwareCursor);
+    P::Hook<"render_game">(ImguiHookHardwareCursor);
+    P::Hook<"update_mouse_pos">(BlockInputs);
     P::Log() << "Done ImGui Hooks!";
 }

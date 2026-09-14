@@ -1,62 +1,66 @@
 # Plasmid API
+
 A WIP modding API for C++ mods, made for the Pilus Modloader
 
 ## TODO:
+
 - Debug tools (probably as a separate mod)
-  - Cell property view
-  - Material property view
-  - Body property view
-  - Biome node graph view
-  - Biome property view
+    - Cell property view
+    - Material property view
+    - Body property view
+    - Biome node graph view
+    - Biome property view
 - Member functions
 - Figure out how to properly access cell extra fields
 - Lua API Extension
 - External mod config and assets
 - Documentation
-  - Examples
-  - Tutorials
-  - Comments
+    - Examples
+    - Tutorials
+    - Comments
 - Helper functions
-  - Mod versioning
-  - Plasmid API versioning
-  - Make generated cell ids human readable (eg base64)
+    - Mod versioning
+    - Plasmid API versioning
+    - Make generated cell ids human readable (eg base64)
 - Optimise if easy to do while remaining readable
 - Fix bugs
+
 ## DONE:
+
 - Shared mod resources / module manager (DONE)
 - Nucleus API versioning (DONE)
 - Organisation (DONE FOR NOW)
-  - Organise directories (DONE)
-  - Organise files (DONE)
-    - Make file names make sense (DONE)
-  - Organise code (DONE)
-  - Organise function resolutions (DONE)
-    - Easily find, enable/disable relevant functions to speed up build time (DONE)
-  - Organise data label resolutions (GOOD ENOUGH)
-  - Organise data types (GOOD ENOUGH)
+    - Organise directories (DONE)
+    - Organise files (DONE)
+        - Make file names make sense (DONE)
+    - Organise code (DONE)
+    - Organise function resolutions (DONE)
+        - Easily find, enable/disable relevant functions to speed up build time (DONE)
+    - Organise data label resolutions (GOOD ENOUGH)
+    - Organise data types (GOOD ENOUGH)
 - Helper functions
-  - mod_main() (DONE)
-  - Cell creation (DONE)
-  - Make thread safety trivial (DONE)
-  - Adding translation entries (DONE)
-  - Ghidra script to output already organised stuff (DONE)
-  - Separate mod dev stuff from API dev (eg CMakeLists) (DONE)
-  - Collapse generated data types like field_0x1234 and _s_0 (DONE)
+    - mod_main() (DONE)
+    - Cell creation (DONE)
+    - Make thread safety trivial (DONE)
+    - Adding translation entries (DONE)
+    - Ghidra script to output already organised stuff (DONE)
+    - Separate mod dev stuff from API dev (eg CMakeLists) (DONE)
+    - Collapse generated data types like field_0x1234 and _s_0 (DONE)
 - Clean up logging (DONE)
 - Log to file (DONE)
 - Prefix mod name to log (DONE)
 - Unscuff the super scuffed temporary solutions (DONE)
 - Precompute relevant symbol ~~addresses~~ resolutions (DONE)
-  - Functions (DONE)
-  - Labels (DONE)
+    - Functions (DONE)
+    - Labels (DONE)
 - Precompute data type definitions (DONE)
-  - Structs (DONE)
-  - Unions (DONE)
-  - Enums (DONE)
+    - Structs (DONE)
+    - Unions (DONE)
+    - Enums (DONE)
 - Make a DLL (DONE)
 - Hook functions (DONE)
-  - Simple hooks (DONE)
-  - Multiple hooks per address (DONE)
-  - Middleware (DONE)
+    - Simple hooks (DONE)
+    - Multiple hooks per address (DONE)
+    - Middleware (DONE)
 - Fix bugs:
-  - CMake find_package warning (DONE)
+    - CMake find_package warning (DONE)

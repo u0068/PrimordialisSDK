@@ -3,9 +3,10 @@
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitCreatures() {
-    Next<void>(); // Call original function
-    if (not P::IsThreadSafe()) // Make sure we are only on the main thread
+    P::Next<void>(); // Call original function
+    if (not P::IsThreadSafe()) { // Make sure we are only on the main thread
         return;
+    }
 
     P::creature_t creature{}; // The variable we use to store the creature we are working on
 
@@ -17,5 +18,5 @@ void OnInitCreatures() {
 }
 
 void P::InitialiseMod() {
-    Hook<"init_creature_list">(OnInitCreatures); // Hook our OnInitMats function to the game's init_materials_list
+    P::Hook<"init_creature_list">(OnInitCreatures); // Hook our OnInitMats function to the game's init_materials_list
 }

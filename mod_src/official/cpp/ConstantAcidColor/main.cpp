@@ -16,17 +16,17 @@ void acid_no_color_change(P::cell *cell) {
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats() {
-    Next<void>(); // Call original function
+    P::Next<void>(); // Call original function
     if (not P::IsThreadSafe()) // Make sure we are only on the main thread
         return;
 
     P::material_t *mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
     P::material_t material{}; // Initialise the material
 
-    material = mats[P::CellRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
+    material = mats[P::MatRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
     material.physics_update_fn = acid_no_color_change;
     // We simply overwrite cell functions like this instead of using the Hook utility
-    mats[P::CellRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
+    mats[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
 }
 
 void P::InitialiseMod() {

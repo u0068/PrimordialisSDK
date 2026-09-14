@@ -22,10 +22,12 @@ inline std::string SaveMat(P::material_t &mat) {
     output << mat.name << "\n";
     output << "{";
     for (unsigned char data: material_u{mat}.data) {
-        if (data < 100)
+        if (data < 100) {
             output << "0";
-        if (data < 10)
+        }
+        if (data < 10) {
             output << "0";
+        }
         output << std::to_string(data);
         output << ",";
     }
@@ -89,8 +91,9 @@ inline void InitMaterialsHook() {
         P::next_icon_index = 82;
         return;
     }
-    Next<void>();
-    if (!P::IsThreadSafe())
+    P::Next<void>();
+    if (!P::IsThreadSafe()) {
         return;
+    }
     has_initialised_mats = true;
 }

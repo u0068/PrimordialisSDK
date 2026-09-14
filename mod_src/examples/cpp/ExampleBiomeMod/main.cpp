@@ -2,7 +2,7 @@
 #include "generated/game_functions/world.h"
 
 void OnInitBiomeTypes() {
-    Next<void>();
+    P::Next<void>();
     if (!P::IsThreadSafe())
         return;
 
@@ -15,7 +15,7 @@ void OnInitBiomeTypes() {
 static bool insert_biome = false;
 
 P::biome_core *OnCreateBiomeCore(int id, int size) {
-    auto result = Next<P::biome_core *>(id, size);
+    auto result = P::Next<P::biome_core *>(id, size);
     // Boilerplate for executing the hook AFTER the specified biome is defined, so the last node is in a known location
     if (id == P::str_to_id("ICEE")) {
         insert_biome = true;
@@ -49,6 +49,6 @@ P::biome_core *OnCreateBiomeCore(int id, int size) {
 }
 
 void P::InitialiseMod() {
-    Hook<"init_biome_types">(OnInitBiomeTypes);
-    Hook<"create_biome_core">(OnCreateBiomeCore);
+    P::Hook<"init_biome_types">(OnInitBiomeTypes);
+    P::Hook<"create_biome_core">(OnCreateBiomeCore);
 }

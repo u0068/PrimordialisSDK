@@ -1,5 +1,5 @@
 #pragma once
-#include "nucleus_interface.h"
+#include "internal/nucleus_interface.h"
 #include "resolution_manager.h"
 #include "hook_manager.h"
 #include "module_manager.h"

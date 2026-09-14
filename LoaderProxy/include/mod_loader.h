@@ -36,8 +36,9 @@ struct Mod {
     fs::path init_path{};
 
     bool operator==(const Mod &other) const {
-        if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
+        if (weakly_canonical(path) == weakly_canonical(other.path)) { // path is the only thing that matters
             return true;
+        }
         return false;
     }
 

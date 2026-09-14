@@ -25,11 +25,13 @@ void DrawUI() {
     imgui_api.context = ImGui::GetCurrentContext();
     // P::Log() << "Context: " << imgui_api.context << '\n';
 
-    if (show_demo_window)
+    if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
+    }
 
-    for (auto callback: ui_callbacks)
+    for (auto callback: ui_callbacks) {
         callback();
+    }
 }
 
 void P::InitialiseMod() {

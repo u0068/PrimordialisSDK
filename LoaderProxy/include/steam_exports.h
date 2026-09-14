@@ -14,8 +14,9 @@ IMAGE_DOS_HEADER __ImageBase;
 static HMODULE real_steam = nullptr;
 
 static HMODULE GetRealSteam() {
-    if (real_steam)
+    if (real_steam) {
         return real_steam;
+    }
 
     char path[MAX_PATH];
 
@@ -27,8 +28,9 @@ static HMODULE GetRealSteam() {
 
     char *slash = strrchr(path, '\\');
 
-    if (slash)
+    if (slash) {
         *(slash + 1) = '\0';
+    }
 
     strcat_s(path, "steam_api64_real.dll");
 

@@ -27,11 +27,11 @@ inline void DamageDetector(P::cell *cell) {
 }
 
 inline void AddDamageDetector() {
-    auto material = P::materials_list[P::CellRef{"Health monitor cell"}.GetIndex()];
+    auto material = P::materials_list[P::MatRef{"Health monitor cell"}.GetIndex()];
     material.electric_update_fn = DamageDetector;
     // material.transfer_rate *= 0.5f;
     material.max_health = 5.0f;
     material.base_color = {0.4f, 0.01f, 0.0f, 1.0f}; // Dark reddish
-    SetCellNameAndDesc(material, "Damage detector cell", "Produces a voltage proportional to damage to it.");
+    P::SetCellNameAndDesc(material, "Damage detector cell", "Produces a voltage proportional to damage to it.");
     P::materials_list[P::n_materials++] = material;
 }

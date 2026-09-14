@@ -1,6 +1,5 @@
 #pragma once
 #include "plasmid_api.h"
-#include <bitset>
 
 // This cell is a bit more complicated than the others
 // Lets make it less complicated by using some helper functions
@@ -14,9 +13,11 @@ union toggle_states {
     struct {
         byte is_toggled;  // Is this side currently toggled?
         byte has_toggled; // Has this side already been toggled?
-        byte is_negative; // Is negatively charged? (We want to discharge -V but not affect +V)
+        byte is_negative; // Is negatively charged? (We want to discharge -V but not affect +V to make it more snappy)
     };
 };
+
+// Functions for manipulating the bits so you don't have to
 
 inline bool GetBit(const byte byte, const uint index) {
     return (byte >> index) & 1;
@@ -108,11 +109,11 @@ inline void TogglingCellElectric(P::cell *cell) {
 }
 
 inline void AddTogglingCell() {
-    auto material = P::materials_list[P::CellRef{"Electric isolator cell"}.GetIndex()];
+    auto material = P::materials_list[P::MatRef{"Electric isolator cell"}.GetIndex()];
     material.connection_update_fn = TogglingCellConnections;
     material.electric_update_fn = TogglingCellElectric;
     material.base_color = {0.5f, 0.4f, 0.2f, 1.0f};
-    SetCellNameAndDesc(material, "Toggling cell",
+    P::SetCellNameAndDesc(material, "Toggling cell",
                        "Toggles output between 0V and -1V when powered with 0.25V on the opposite side.");
     P::materials_list[P::n_materials++] = material;
 }

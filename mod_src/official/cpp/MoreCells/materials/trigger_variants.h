@@ -19,13 +19,13 @@ void InvertedTrigger(P::cell *cell) {
 inline void AddTriggerVariants() {
     P::material_t material{};
 
-    material = P::materials_list[P::CellRef{"Ability trigger cell 1"}.GetIndex()];
+    material = P::materials_list[P::MatRef{"Ability trigger cell 1"}.GetIndex()];
     material.electric_update_fn = NegativeTrigger;
     material.base_color = {0.25f, 1.0f, 1.0f, 1.0f}; // Cyan
     P::SetCellNameAndDesc(material, "Negative ability trigger cell", "Produces -1V when ability trigger is pressed.");
     P::materials_list[P::n_materials++] = material;
 
-    material = P::materials_list[P::CellRef{"Ability trigger cell 1"}.GetIndex()];
+    material = P::materials_list[P::MatRef{"Ability trigger cell 1"}.GetIndex()];
     material.electric_update_fn = InvertedTrigger;
     material.base_color = {1.0f, 0.25f, 1.0f, 1.0f}; // Blurple
     P::SetCellNameAndDesc(material, "Inverted ability trigger cell",

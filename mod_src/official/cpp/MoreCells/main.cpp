@@ -14,7 +14,7 @@
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats() {
-    Next<void>(); // Call original function
+    P::Next<void>(); // Call original function
     if (P::IsThreadSafe()) // Make sure we are only on the main thread
     {
         // Add cells using their respective functions
@@ -26,12 +26,12 @@ void OnInitMats() {
         AddPiezoCell();
         AddFatCell();
         AddPinCell();
-        //AddTriggerVariants();
+        //AddTriggerVariants(); // I don't like them, so I turned them off
         AddTogglingCell();
     }
     P::LaneSync(); // Make all other threads wait for us to finish.
 }
 
 void P::InitialiseMod() {
-    Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
+    P::Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
 }

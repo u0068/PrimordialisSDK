@@ -8,8 +8,9 @@ namespace fs = std::filesystem;
 std::string ReadFile(const fs::path &path) {
     std::ifstream file(path);
 
-    if (!file)
+    if (!file) {
         return {};
+    }
 
     std::stringstream buffer;
     buffer << file.rdbuf();
@@ -24,16 +25,17 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
         &argc
     );
 
-    if (!argv)
+    if (!argv) {
         return {};
+    }
 
     std::filesystem::path result;
 
     for (int i = 0; i < argc; ++i) {
         if (wcscmp(argv[i], L"--mod-folder") == 0) {
-            if (i + 1 < argc)
+            if (i + 1 < argc) {
                 result = argv[i + 1];
-
+            }
             break;
         }
     }
@@ -54,16 +56,18 @@ void ParseModInfo(Mod &mod) {
 
     std::vector<fs::path> dlls{};
     for (const auto &entry: fs::recursive_directory_iterator(modFolder)) {
-        if (!entry.is_regular_file())
+        if (!entry.is_regular_file()) {
             continue;
+        }
 
         auto filename = entry.path().filename().string();
 
         if (entry.path().extension() == ".dll") {
             dlls.push_back(entry.path());
         }
-        else if (filename == "init.lua")
+        else if (filename == "init.lua") {
             mod.init_path = entry.path();
+        }
     }
     if (dlls.size() > 1) {
         for (auto &dll_path: dlls) {
@@ -75,13 +79,15 @@ void ParseModInfo(Mod &mod) {
                 break;
             }
         }
-        if (mod.dll_path.empty())
+        if (mod.dll_path.empty()) {
             Log() << err << "Multiple .dll files detected! I don't know which one to load.\n"
                     "\tPlease specify a \"main_dll\" in info.json,\n"
                     "or make the dll that should be loaded have same filename as the mod folder!";
+        }
     }
-    else if (dlls.size() == 1)
+    else if (dlls.size() == 1) {
         mod.dll_path = dlls[0];
+    }
 }
 
 void ModManager::ParseMods() {
@@ -90,7 +96,7 @@ void ModManager::ParseMods() {
     std::vector<Mod> installed_mods{};
     for (const auto &entry: std::filesystem::directory_iterator(mod_path)) {
         Log() << "Found Mod: "
-                << entry.path().filename().stem().string();
+              << entry.path().filename().stem().string();
 
         Mod nmod;
         nmod.path = entry.path();
@@ -103,11 +109,14 @@ void ModManager::ParseMods() {
     }
 
     YAML::Node mods_yml = YAML::LoadFile((loader_files_path / "mods.yml").string());
-    for (std::size_t i = 0; i < mods_yml.size(); i++)
-        for (auto &mod: installed_mods)
+    for (std::size_t i = 0; i < mods_yml.size(); i++) {
+        for (auto &mod: installed_mods) {
             if (mod.name == mods_yml[i]["name"].as<std::string>()
-                and mods_yml[i]["enabled"].as<bool>())
+                and mods_yml[i]["enabled"].as<bool>()) {
                 enabled_mods.push_back(mod);
+            }
+        }
+    }
 }
 
 // std::string ModConfigToLua(json config)
@@ -160,24 +169,29 @@ void ModManager::PatchInitLua() {
     temp_init_file.open(temp_init_lua_path);
 
     std::string init_content, line;
-    while (std::getline(init_file, line))
+    while (std::getline(init_file, line)) {
         init_content += line + "\n";
+    }
 
     Log() << "Patching init.lua";
 
     init_file.close();
 
     size_t pos = init_content.find(preline);
-    if (pos == std::string::npos)
+    if (pos == std::string::npos) {
         init_content = preline + init_content;
-    else
+    }
+    else {
         Log() << "Mod loader content already found in init.lua, skipping preline append";
+    }
 
     pos = init_content.find(postline);
-    if (pos == std::string::npos)
+    if (pos == std::string::npos) {
         init_content = init_content + postline;
-    else
+    }
+    else {
         Log() << "Mod loader content already found in init.lua, skipping postline append";
+    }
 
     temp_init_file << init_content;
     temp_init_file.close();

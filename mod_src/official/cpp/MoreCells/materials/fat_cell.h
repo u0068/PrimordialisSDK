@@ -9,7 +9,7 @@ inline void FatCell(P::cell *cell) {
 }
 
 inline void AddFatCell() {
-    auto material = P::materials_list[P::CellRef{"Elastic cell"}.GetIndex()];
+    auto material = P::materials_list[P::MatRef{"Elastic cell"}.GetIndex()];
     material.base_cost = 3.0f;
     material.max_health = 50.0f;
     material.regen = 0.0001f;
@@ -21,7 +21,7 @@ inline void AddFatCell() {
     material.physics_update_fn = FatCell;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.0f, 0.9f, 0.2f, 1.0f}; // Yellow
-    SetCellNameAndDesc(material, "Fat cell",
+    P::SetCellNameAndDesc(material, "Fat cell",
                        "A soft, fatty cell with high biomass storage. Swells when storing biomass. Insulates heat.");
     P::materials_list[P::n_materials++] = material;
 }
