@@ -11,8 +11,8 @@ Does what it says in the title.
   - Shoots hot acid
   - Particles emit light
   - Reverse entropy compatibility
-- Teflon cell
-  - Does not connect to rigid cells
+- Semi-connected cell
+  - Only connects to rigid cells
 # Done:
 - Stiff cell (old hard cell)
 - Aero-gel cell

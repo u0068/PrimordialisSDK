@@ -31,7 +31,7 @@ void OnInitMats() {
         AddTogglingCell();
         AddSeekerVariants();
     }
-    P::LaneSync(); // Make all other threads wait for us to finish.
+    P::LaneSync(); // Make all other threads wait for us to finish. Not sure if I actually need this.
 }
 
 void P::InitialiseMod() {
