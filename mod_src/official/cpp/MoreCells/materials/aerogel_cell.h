@@ -8,7 +8,7 @@ inline void AddAeroGelCell() {
     material.base_cost = 2.0f;
     material.max_health = 0.1f;
     material.movement_force *= 0.5f;
-    material.growth_rate *= 0.5f;
+    material.growth_rate *= 0.2f;
     material.transfer_rate *= 0.05f;
     material.regen *= 0.5f;
     material.max_angular_force = 0.05f;

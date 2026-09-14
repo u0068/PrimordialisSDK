@@ -1,7 +1,7 @@
 #include "plasmid_api.h"
 
 // For organisation, all the cells were put into separate files
-#include "stiff_cell.h"
+#include "cartilage_cell.h"
 #include "aerogel_cell.h"
 #include "wall_detector.h"
 #include "damage_detector.h"
@@ -12,6 +12,7 @@
 #include "trigger_variants.h"
 #include "toggling_cell.h"
 #include "seeker_variants.h"
+#include "collagen_cell.h"
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats() {
@@ -19,8 +20,9 @@ void OnInitMats() {
     if (P::IsThreadSafe()) // Make sure we are only on the main thread
     {
         // Add cells using their respective functions
-        AddStiffCell();
+        AddCartilageCell();
         AddAeroGelCell();
+        AddCollagenCell();
         AddWallDetector();
         AddDamageDetector();
         AddAngVelMeter();

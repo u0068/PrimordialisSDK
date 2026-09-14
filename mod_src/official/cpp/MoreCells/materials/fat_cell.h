@@ -5,11 +5,12 @@ inline void FatCell(P::cell *cell) {
     float health_normalised = cell->health / P::materials_list[cell->material_index].max_health;
     // cell->mass = (0.1f + health_normalised) * P::materials_list[cell->material_index].density;
     cell->target_spacing = health_normalised * 2.0f;
-    cell->r = health_normalised * 2.0f;
+    cell->base_r = health_normalised * 2.0f;
 }
 
 inline void AddFatCell() {
     auto material = P::MatRef{"Elastic cell"}.GetCopy();
+    material.base_radius = 2.0f;
     material.base_cost = 3.0f;
     material.max_health = 50.0f;
     material.regen = 0.0001f;
