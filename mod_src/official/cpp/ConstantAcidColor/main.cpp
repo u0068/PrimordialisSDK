@@ -1,37 +1,34 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
 
-void acid_no_color_change(P::cell* cell)
-{
+void acid_no_color_change(P::cell *cell) {
     cell_acid(cell); // Call original acid function
 
     // Modify the acid to set its final color to its initial color with 0 alpha
     int n_acid_per_tick = 5; // The acid cell produces 5 particles per tick
-    for (int i=0; i<n_acid_per_tick; i++)
-    {
+    for (int i = 0; i < n_acid_per_tick; i++) {
         int n = P::w->n_acid_particles - n_acid_per_tick + i; // The index of the particle that was just produced
-        auto new_color = P::w->acid_particles[n/16].color_initial[n%16]; // Get the initial color
+        auto new_color = P::w->acid_particles[n / 16].color_initial[n % 16]; // Get the initial color
         new_color.w = 0.0f; // Set alpha to 0 (xyzw correspond to rgba channels)
-        P::w->acid_particles[n/16].color_final[n%16] = new_color; // Overwrite the final color with our new color
+        P::w->acid_particles[n / 16].color_final[n % 16] = new_color; // Overwrite the final color with our new color
     }
 }
 
 // This function will be hooked to the game's init_materials_list function
-void OnInitMats()
-{
+void OnInitMats() {
     Next<void>(); // Call original function
     if (not P::IsThreadSafe()) // Make sure we are only on the main thread
         return;
 
-    P::material_t* mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
+    P::material_t *mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
     P::material_t material{}; // Initialise the material
 
     material = mats[P::CellRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
-    material.physics_update_fn = acid_no_color_change; // We simply overwrite cell functions like this instead of using the Hook utility
+    material.physics_update_fn = acid_no_color_change;
+    // We simply overwrite cell functions like this instead of using the Hook utility
     mats[P::CellRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
 }
 
-void P::InitialiseMod()
-{
+void P::InitialiseMod() {
     Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
 }

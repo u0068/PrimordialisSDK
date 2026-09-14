@@ -5,15 +5,13 @@
 
 inline std::string err = "[ERROR]: ";
 
-static void InitConsole()
-{
-    if (!AllocConsole())
-    {
+static void InitConsole() {
+    if (!AllocConsole()) {
         if (GetLastError() != ERROR_ACCESS_DENIED)
             return;
     }
 
-    FILE* file;
+    FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
     freopen_s(&file, "CONOUT$", "w", stderr);
 
@@ -21,8 +19,7 @@ static void InitConsole()
     // std::cerr.clear();
 }
 
-inline std::ostream& GetDualLog()
-{
+inline std::ostream &GetDualLog() {
     InitConsole();
 
     static std::ofstream log_file("mod_log.txt");
@@ -37,8 +34,7 @@ inline std::ostream& GetDualLog()
     return dual_log;
 }
 
-inline LogStream LogSourced(const std::string& source)
-{
+inline LogStream LogSourced(const std::string &source) {
     return LogStream(
         GetDualLog(),
         "[" + source + "]\n  ",
@@ -46,7 +42,6 @@ inline LogStream LogSourced(const std::string& source)
     );
 }
 
-inline LogStream Log()
-{
+inline LogStream Log() {
     return LogSourced("NUCLEUS");
 }

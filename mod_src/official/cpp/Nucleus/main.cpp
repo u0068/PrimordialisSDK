@@ -2,111 +2,104 @@
 
 const std::string NUCLEUS_VERSION = "v0.1.4";
 
-struct ModInfo
-{
+struct ModInfo {
     char name[MAX_PATH];
 };
 
-struct ModListShared
-{
+struct ModListShared {
     uint32_t count;
     ModInfo mods[256];
 };
 
-using ModInit = void(*)(Nucleus*, const char*);
+using ModInit = void(*)(Nucleus *, const char *);
 
-void LoadMod(const char* path)
-{
+void LoadMod(const char *path) {
     HMODULE mod = LoadLibraryA(path);
 
-    if (!mod)
-    {
-        Log()<<"Failed to load mod "<<path<<"\n";
+    if (!mod) {
+        Log() << "Failed to load mod " << path << "\n";
         return;
     }
-    Log()<<"Loading mod "<<path<<"\n";
+    Log() << "Loading mod " << path << "\n";
 
     auto mod_init =
-        reinterpret_cast<ModInit>(
-            GetProcAddress(mod, "Initialise")
-        );
+            reinterpret_cast<ModInit>(
+                GetProcAddress(mod, "Initialise")
+            );
 
-    if (!mod_init)
-    {
-        Log()<<"mod_init not found for "<<path<<"\n";
+    if (!mod_init) {
+        Log() << "mod_init not found for " << path << "\n";
         return;
     }
 
     mod_init(&api, path);
 }
 
-DWORD WINAPI MainThread(LPVOID)
-{
+DWORD WINAPI MainThread(LPVOID) {
     AllocConsole();
 
-    FILE* file;
+    FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    Log()<<"Hello from Nucleus "<<NUCLEUS_VERSION<<"!\n";
+    Log() << "Hello from Nucleus " << NUCLEUS_VERSION << "!\n";
 
-     if (MH_Initialize() != MH_OK)
-     {
-         Log()<<"MinHook init failed\n";
-         return 0;
-     }
-     Log()<<"MinHook initialized\n";
+    if (MH_Initialize() != MH_OK) {
+        Log() << "MinHook init failed\n";
+        return 0;
+    }
+    Log() << "MinHook initialized\n";
 
     InitDbgHelp();
 
     HANDLE mapping =
-    OpenFileMappingA(
-        FILE_MAP_READ,
-        FALSE,
-        "Pilus_ModList");
+            OpenFileMappingA(
+                FILE_MAP_READ,
+                FALSE,
+                "Pilus_ModList");
 
-    auto* shared =
-    static_cast<ModListShared*>(
-        MapViewOfFile(
-            mapping,
-            FILE_MAP_READ,
-            0,
-            0,
-            sizeof(ModListShared)));
+    auto *shared =
+            static_cast<ModListShared *>(
+                MapViewOfFile(
+                    mapping,
+                    FILE_MAP_READ,
+                    0,
+                    0,
+                    sizeof(ModListShared)));
 
     HANDLE nucleusModsInitialisedEvent =
-    CreateEventA(
-        nullptr,
-        TRUE,
-        FALSE,
-        "Nucleus_ModsInitialised"
-        );
+            CreateEventA(
+                nullptr,
+                TRUE,
+                FALSE,
+                "Nucleus_ModsInitialised"
+            );
 
-    Log()<<"Mod count: "<<shared->count<<"\n";
+    Log() << "Mod count: " << shared->count << "\n";
 
     std::string mod_names;
-    for (uint32_t i = 0; i < shared->count; i++)
-    {
+    for (uint32_t i = 0; i < shared->count; i++) {
         ModInfo mod = shared->mods[i];
         mod_names += "\t";
         mod_names += mod.name;
         mod_names += "\n";
     }
 
-    PrimordialisLog("\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODDING API "+NUCLEUS_VERSION+" AND THE FOLLOWING MODS:\n"
-                    +mod_names+"\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n");
+    PrimordialisLog(
+        "\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODDING API " + NUCLEUS_VERSION +
+        " AND THE FOLLOWING MODS:\n"
+        + mod_names +
+        "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n");
 
-    for (uint32_t i = 0; i < shared->count; i++)
-    {
+    for (uint32_t i = 0; i < shared->count; i++) {
         ModInfo mod = shared->mods[i];
         LoadMod(mod.name);
     }
 
     SetEvent(nucleusModsInitialisedEvent);
 
-    Log()<<"All Mods Initialised!\n";
+    Log() << "All Mods Initialised!\n";
 
-    while (true)
-    {
+    while (true) {
         Sleep(1000);
     }
 }
@@ -114,10 +107,8 @@ DWORD WINAPI MainThread(LPVOID)
 BOOL APIENTRY DllMain(
     HMODULE module,
     DWORD reason,
-    LPVOID)
-{
-    if (reason == DLL_PROCESS_ATTACH)
-    {
+    LPVOID) {
+    if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(module);
 
         CreateThread(

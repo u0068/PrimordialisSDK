@@ -11,11 +11,9 @@
 int configured_mod = -1;
 bool config_open = true;
 
-static void InfoMarker(const char* desc, const char* sign="(?)")
-{
+static void InfoMarker(const char *desc, const char *sign = "(?)") {
     ImGui::TextDisabled(sign);
-    if (ImGui::BeginItemTooltip())
-    {
+    if (ImGui::BeginItemTooltip()) {
         ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
         ImGui::TextUnformatted(desc);
         ImGui::PopTextWrapPos();
@@ -23,20 +21,16 @@ static void InfoMarker(const char* desc, const char* sign="(?)")
     }
 }
 
-void DrawSettings(Mod& mod)
-{
+void DrawSettings(Mod &mod) {
     ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1);
-    for (auto& el : mod.config_defaults.items())
-    {
+    for (auto &el: mod.config_defaults.items()) {
         auto name = el.key().c_str();
-        nlohmann::ordered_json& setting = el.value();
+        nlohmann::ordered_json &setting = el.value();
         if (mod.config_values[name].empty() and not setting["default"].empty())
             mod.config_values[name] = setting["default"];
-        else if (setting["default"].empty() and mod.config_values[name].empty())
-        {
+        else if (setting["default"].empty() and mod.config_values[name].empty()) {
             ImGui::TextColored({1.0, 0.5, 0.5, 1.0}, name);
-            if (ImGui::IsItemHovered())
-            {
+            if (ImGui::IsItemHovered()) {
                 ImGui::BeginErrorTooltip();
                 ImGui::Text("No default or value has been set! I don't know you want me to do with this.");
                 ImGui::EndErrorTooltip();
@@ -49,57 +43,49 @@ void DrawSettings(Mod& mod)
         //     DrawSettings(setting["default"]);
         //     continue;
         // }
-        if (mod.config_values[name].type() == json::value_t::number_integer || mod.config_values[name].type() == json::value_t::number_unsigned)
-        {
+        if (mod.config_values[name].type() == json::value_t::number_integer || mod.config_values[name].type() ==
+            json::value_t::number_unsigned) {
             auto value = GetFromJson<int>(mod.config_values, name);
             auto min = GetFromJson<int>(setting, "min");
             auto max = GetFromJson<int>(setting, "max");
             auto speed = GetFromJson<float>(setting, "speed", 0.1f);
             auto slider = GetFromJson<bool>(setting, "slider");
-            if (slider)
-            {
+            if (slider) {
                 if (ImGui::SliderInt(name, &value, min, max))
                     mod.config_values[name] = value;
             }
-            else
-            {
+            else {
                 if (ImGui::DragInt(name, &value, speed, min, max))
                     mod.config_values[name] = value;
             }
         }
-        else if (mod.config_values[name].type() == json::value_t::number_float)
-        {
+        else if (mod.config_values[name].type() == json::value_t::number_float) {
             auto value = GetFromJson<float>(mod.config_values, name);
             auto min = GetFromJson<float>(setting, "min");
             auto max = GetFromJson<float>(setting, "max");
             auto speed = GetFromJson<float>(setting, "speed", 0.1f);
             auto slider = GetFromJson<bool>(setting, "slider");
-            if (slider)
-            {
+            if (slider) {
                 if (ImGui::SliderFloat(name, &value, min, max))
                     mod.config_values[name] = value;
             }
-            else
-            {
+            else {
                 if (ImGui::DragFloat(name, &value, speed, min, max))
                     mod.config_values[name] = value;
             }
         }
-        else if (mod.config_values[name].type() == json::value_t::boolean)
-        {
+        else if (mod.config_values[name].type() == json::value_t::boolean) {
             auto value = GetFromJson<bool>(mod.config_values, name);
             if (ImGui::Checkbox(name, &value))
                 mod.config_values[name] = value;
         }
-        else if (mod.config_values[name].type() == json::value_t::string)
-        {
-            auto value = (char*)GetStringFromJson(mod.config_values, name).c_str();
-            auto hint = (char*)GetStringFromJson(setting, "default").c_str();
+        else if (mod.config_values[name].type() == json::value_t::string) {
+            auto value = (char *) GetStringFromJson(mod.config_values, name).c_str();
+            auto hint = (char *) GetStringFromJson(setting, "default").c_str();
             if (ImGui::InputTextWithHint(name, hint, value, 128, ImGuiInputTextFlags_EnterReturnsTrue))
                 mod.config_values[name] = value;
         }
-        if (!setting["description"].empty())
-        {
+        if (!setting["description"].empty()) {
             ImGui::SameLine();
             InfoMarker(GetStringFromJson(setting, "description").c_str());
         }
@@ -107,11 +93,10 @@ void DrawSettings(Mod& mod)
     ImGui::PopStyleVar();
 }
 
-void DrawModConfig()
-{
+void DrawModConfig() {
     if (configured_mod < 0 or !config_open)
         return;
-    Mod& mod = ModManager::mods[configured_mod];
+    Mod &mod = ModManager::mods[configured_mod];
     ImGui::Begin((mod.name + " Config").c_str(), &config_open);
     ImGui::PushItemWidth(200);
 
@@ -124,8 +109,8 @@ bool auto_scroll = true;
 bool scroll_to_bottom = false;
 bool wrap_text = true;
 std::vector<std::string> Lines{};
-void DrawConsole()
-{
+
+void DrawConsole() {
     ImGui::Begin("Console");
     // ImGui::TextWrapped(console_log.str().c_str());
 
@@ -134,14 +119,13 @@ void DrawConsole()
         Lines.push_back(stream_line);
     console_buffer.clear();
 
-    if (ImGui::SmallButton("Clear"))    Lines.clear();
+    if (ImGui::SmallButton("Clear")) Lines.clear();
     ImGui::SameLine();
     bool copy_to_clipboard = ImGui::SmallButton("Copy");
     //static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
 
     // Options menu
-    if (ImGui::BeginPopup("Options"))
-    {
+    if (ImGui::BeginPopup("Options")) {
         ImGui::Checkbox("Wrap text", &wrap_text);
         ImGui::Checkbox("Auto-scroll", &auto_scroll);
         if (ImGui::SmallButton("Scroll to bottom")) scroll_to_bottom = true;
@@ -153,22 +137,26 @@ void DrawConsole()
 
     ImGui::Separator();
 
-    if (ImGui::BeginChild("ScrollingRegion", {0, 0}, ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar * !wrap_text))
-    {
-        if (ImGui::BeginPopupContextWindow())
-        {
+    if (ImGui::BeginChild("ScrollingRegion", {0, 0}, ImGuiChildFlags_NavFlattened,
+                          ImGuiWindowFlags_HorizontalScrollbar * !wrap_text)) {
+        if (ImGui::BeginPopupContextWindow()) {
             if (ImGui::Selectable("Clear")) Lines.clear();
             ImGui::EndPopup();
         }
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
         if (copy_to_clipboard)
             ImGui::LogToClipboard();
-        for (auto line : Lines)
-        {
+        for (auto line: Lines) {
             ImVec4 color;
             bool has_color = false;
-            if (strstr(line.c_str(), "[ERROR]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
-            else if (strncmp(line.c_str(), "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+            if (strstr(line.c_str(), "[ERROR]")) {
+                color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f);
+                has_color = true;
+            }
+            else if (strncmp(line.c_str(), "# ", 2) == 0) {
+                color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f);
+                has_color = true;
+            }
             if (has_color)
                 ImGui::PushStyleColor(ImGuiCol_Text, color);
             if (wrap_text)
@@ -195,18 +183,17 @@ void DrawConsole()
     ImGui::End();
 }
 
-void DrawActionBox()
-{
+void DrawActionBox() {
     ImGui::Begin("Action Box");
 
-    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.7f, 0.7f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.8f, 0.8f));
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.0f, 0.9f, 0.9f));
-    ImGuiStyle& style = ImGui::GetStyle();
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4) ImColor::HSV(0.0f, 0.7f, 0.7f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4) ImColor::HSV(0.0f, 0.8f, 0.8f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4) ImColor::HSV(0.0f, 0.9f, 0.9f));
+    ImGuiStyle &style = ImGui::GetStyle();
     if (ImGui::Button("Start Game", {
-        (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x)/2,
-        ImGui::GetContentRegionAvail().y}))
-    {
+                          (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x) / 2,
+                          ImGui::GetContentRegionAvail().y
+                      })) {
         SortDeps();
         ModManager::SaveLuaModlist();
         ModManager::PatchInitLua();
@@ -215,27 +202,24 @@ void DrawActionBox()
     ImGui::PopStyleColor(3);
 
     ImGui::SameLine();
-    if (ImGui::Button("Refresh Mods", ImGui::GetContentRegionAvail()))
-    {
+    if (ImGui::Button("Refresh Mods", ImGui::GetContentRegionAvail())) {
         ModManager::SaveLuaModlist();
         ModManager::RefreshMods();
     }
     ImGui::End();
 }
 
-void DrawModInfo(Mod& mod)
-{
+void DrawModInfo(Mod &mod) {
     // ImGui::Text("%s", mod.info.dump().c_str());
     ImGui::Text("Author: %s", GetStringFromJson(mod.get_manifest(), "author", "Unknown").c_str());
-    ImGui::TextWrapped("Description:\n\t%s", GetStringFromJson(mod.get_manifest(), "description", "No Description").c_str());
+    ImGui::TextWrapped("Description:\n\t%s",
+                       GetStringFromJson(mod.get_manifest(), "description", "No Description").c_str());
     ImGui::Text("Installed Version: %s", mod.get_installed_version().c_str());
-    if (not mod.get_deps().empty())
-    {
+    if (not mod.get_deps().empty()) {
         ImGui::Text("Dependencies:");
-        for (auto& dep : mod.get_deps().items())
-        {
-            const char* name = dep.key().c_str();
-            const auto& dep_config = dep.value();
+        for (auto &dep: mod.get_deps().items()) {
+            const char *name = dep.key().c_str();
+            const auto &dep_config = dep.value();
             std::string min_version = GetStringFromJson(
                 dep_config, "min_version", "Unknown");
             std::string max_version = GetStringFromJson(
@@ -246,21 +230,20 @@ void DrawModInfo(Mod& mod)
     ImGui::Text("Directory: %s", mod.path.filename().string().c_str());
     if (not mod.dll_path.empty())
         ImGui::Text("main dll path: %s",
-            mod.dll_path.lexically_relative(mod.path.parent_path()).string().c_str());
+                    mod.dll_path.lexically_relative(mod.path.parent_path()).string().c_str());
     if (not mod.init_path.empty())
         ImGui::Text("init.lua path: %s",
-            mod.init_path.lexically_relative(mod.path.parent_path()).string().c_str());
+                    mod.init_path.lexically_relative(mod.path.parent_path()).string().c_str());
 }
 
 bool hide_uninstalled = false;
-void DrawModList()
-{
+
+void DrawModList() {
     ImGui::Begin("Mods");
-    auto& mods = ModManager::mods;
+    auto &mods = ModManager::mods;
 
     static ImGuiTextFilter filter;
-    if (ImGui::IsWindowAppearing())
-    {
+    if (ImGui::IsWindowAppearing()) {
         ImGui::SetKeyboardFocusHere();
         filter.Clear();
     }
@@ -268,11 +251,10 @@ void DrawModList()
     filter.Draw("##Filter", -ImGui::CalcTextSize(" Options ").x);
 
     // Options menu
-    if (ImGui::BeginPopup("Options"))
-    {
+    if (ImGui::BeginPopup("Options")) {
         ImGui::Checkbox("Hide Uninstalled Mods", &hide_uninstalled);
         if (ImGui::Button("Forget Uninstalled Mods"))
-            std::erase_if(mods, [](auto& mod){return not mod.is_installed();});
+            std::erase_if(mods, [](auto &mod) { return not mod.is_installed(); });
         ImGui::EndPopup();
     }
     ImGui::SameLine();
@@ -284,8 +266,7 @@ void DrawModList()
         3,
         ImGuiTableFlags_RowBg |
         ImGuiTableFlags_BordersInnerV |
-        ImGuiTableFlags_SizingStretchProp))
-    {
+        ImGuiTableFlags_SizingStretchProp)) {
         ImGui::TableSetupColumn(
             "Enabled",
             ImGuiTableColumnFlags_WidthFixed,
@@ -299,14 +280,13 @@ void DrawModList()
             "##Config",
             ImGuiTableColumnFlags_WidthFixed,
             ImGui::CalcTextSize("(i) Mod  Config ").x
-            );
+        );
         int move_direction = 0;
         int dragged_mod_index = -1;
 
         int row_idx = 0;
-        for (int mod_idx = 0; mod_idx < mods.size(); ++mod_idx)
-        {
-            Mod& mod = mods[mod_idx];
+        for (int mod_idx = 0; mod_idx < mods.size(); ++mod_idx) {
+            Mod &mod = mods[mod_idx];
             if (not filter.PassFilter(mod.name.c_str())
                 or hide_uninstalled and not mod.is_installed())
                 continue;
@@ -317,16 +297,14 @@ void DrawModList()
                 ImGui::BeginDisabled();
             if (ImGui::Checkbox("##Enabled", &mod.user_enabled))
                 ModManager::SavePilusConfig();
-            if (not mod.is_installed())
-            {
+            if (not mod.is_installed()) {
                 mod.user_enabled = false;
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
                     ImGui::SetTooltip("This mod is not installed");
                 ImGui::EndDisabled();
             }
             ImGui::TableNextColumn();
-            if (not mod.user_enabled)
-            {
+            if (not mod.user_enabled) {
                 if (not mod.is_installed())
                     ImGui::PushStyleColor(ImGuiCol_Text, {0.8f, 0.3f, 0.3f, 1.0f});
                 else if (mod.dep_enabled)
@@ -338,13 +316,11 @@ void DrawModList()
             ImGui::Selectable(
                 mod.name.c_str(),
                 true
-                );
+            );
             if (not mod.user_enabled)
                 ImGui::PopStyleColor();
-            if (not mod.is_installed() and ImGui::BeginPopupContextItem())
-            {
-                if (ImGui::Button("Forget this mod"))
-                {
+            if (not mod.is_installed() and ImGui::BeginPopupContextItem()) {
+                if (ImGui::Button("Forget this mod")) {
                     std::erase(mods, mod);
                     ImGui::CloseCurrentPopup();
                 }
@@ -352,18 +328,16 @@ void DrawModList()
             }
 
             bool is_hovered = ImGui::TableGetHoveredRow() == row_idx;
-            if (ImGui::IsItemActive())
-            {
+            if (ImGui::IsItemActive()) {
                 if (dragged_mod_index == -1)
                     dragged_mod_index = mod_idx;
                 if (!is_hovered)
-                    move_direction = ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
+                    move_direction = ImGui::GetMouseDragDelta(0).y<0.f ? -1 : 1;
             }
             ImGui::TableNextColumn();
 
             ImGui::TextDisabled("(?)");
-            if (ImGui::BeginItemTooltip())
-            {
+            if (ImGui::BeginItemTooltip()) {
                 ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
                 DrawModInfo(mod);
                 ImGui::PopTextWrapPos();
@@ -382,13 +356,11 @@ void DrawModList()
             ImGui::SameLine();
             if (mod.config_defaults.empty())
                 ImGui::BeginDisabled();
-            if (ImGui::Button("Config"))
-            {
+            if (ImGui::Button("Config")) {
                 configured_mod = mod_idx;
                 config_open = true;
             }
-            if (mod.config_defaults.empty())
-            {
+            if (mod.config_defaults.empty()) {
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
                     ImGui::SetTooltip("This mod is not configurable");
                 ImGui::EndDisabled();
@@ -397,8 +369,7 @@ void DrawModList()
             row_idx++;
         }
         ImGui::EndTable();
-        if (move_direction != 0)
-        {
+        if (move_direction != 0) {
             if (MoveMod(dragged_mod_index, move_direction))
                 ImGui::ResetMouseDragDelta();
             ModManager::SavePilusConfig();
@@ -407,18 +378,15 @@ void DrawModList()
     ImGui::End();
 }
 
-void DrawVersionConfig(const char* name, json& version_json, fs::path& download_path)
-{
-    auto installed_version = GetStringFromJson(ModManager::pilus_config["installed_versions"], name, "Unknown Version").c_str();
-    if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview))
-    {
-        for (auto& el : version_json["versions"].items())
-        {
-            auto& version = el.key();
+void DrawVersionConfig(const char *name, json &version_json, fs::path &download_path) {
+    auto installed_version = GetStringFromJson(ModManager::pilus_config["installed_versions"], name, "Unknown Version").
+            c_str();
+    if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview)) {
+        for (auto &el: version_json["versions"].items()) {
+            auto &version = el.key();
             if (version.empty())
                 continue;
-            if (ImGui::Button(version.c_str()))
-            {
+            if (ImGui::Button(version.c_str())) {
                 DownloadUpdate(name, *ParseVersion(version), download_path);
             }
         }
@@ -426,15 +394,12 @@ void DrawVersionConfig(const char* name, json& version_json, fs::path& download_
     }
 }
 
-void DrawVersionManager()
-{
+void DrawVersionManager() {
     ImGui::Begin("Version Manager");
 
-    for (auto& mod : ModManager::mods)
-    {
+    for (auto &mod: ModManager::mods) {
         ImGui::PushID(mod.name.c_str());
-        if (ImGui::CollapsingHeader(mod.name.c_str()))
-        {
+        if (ImGui::CollapsingHeader(mod.name.c_str())) {
             DrawVersionConfig(mod.name.c_str(), mod.get_manifest(), mod.path);
             DrawModInfo(mod);
         }
@@ -444,8 +409,7 @@ void DrawVersionManager()
     ImGui::End();
 }
 
-void DrawUI()
-{
+void DrawUI() {
     DrawActionBox();
     DrawModList();
     DrawConsole();

@@ -1,8 +1,7 @@
 #pragma once
 #include "plasmid_api.h"
 
-inline void DamageDetector(P::cell* cell)
-{
+inline void DamageDetector(P::cell *cell) {
     // Using low pass filters to eliminate the noise from health transfer
 
     constexpr float health_alpha = 0.01f;
@@ -13,22 +12,21 @@ inline void DamageDetector(P::cell* cell)
     const float previous_filtered_damage = cell->value2;
 
     const float filtered_health =
-        previous_filtered_health * (1.0f - health_alpha) +
-        cell->health * health_alpha;
+            previous_filtered_health * (1.0f - health_alpha) +
+            cell->health * health_alpha;
 
     const float damage_rate = previous_filtered_health - filtered_health;
 
     const float filtered_damage =
-        previous_filtered_damage * (1.0f - damage_alpha) +
-        damage_rate * damage_alpha;
+            previous_filtered_damage * (1.0f - damage_alpha) +
+            damage_rate * damage_alpha;
 
     cell->value = filtered_health;
     cell->value2 = filtered_damage;
     PowerCell(cell, filtered_damage * multiplier);
 }
 
-inline void AddDamageDetector()
-{
+inline void AddDamageDetector() {
     auto material = P::materials_list[P::CellRef{"Health monitor cell"}.GetIndex()];
     material.electric_update_fn = DamageDetector;
     // material.transfer_rate *= 0.5f;

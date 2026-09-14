@@ -9,16 +9,14 @@ inline TeeBuf log_buffer(
 
 inline std::ostream console_log(&log_buffer);
 
-inline LogStream LogSourced(const std::string& source)
-{
+inline LogStream LogSourced(const std::string &source) {
     return LogStream(
         console_log,
         "[" + source + "]\n  "
     );
 }
 
-inline LogStream Log()
-{
+inline LogStream Log() {
     return LogSourced(
         "NUCLEUS"
     );

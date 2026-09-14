@@ -1,8 +1,7 @@
 #pragma once
 #include "plasmid_api.h"
 
-inline void AddAeroGelCell()
-{
+inline void AddAeroGelCell() {
     auto material = P::materials_list[P::CellRef{"Lightweight cell"}.GetIndex()];
     material.is_hard = true;
     material.density = 0.1f;

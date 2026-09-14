@@ -9,11 +9,11 @@ namespace fs = std::filesystem;
 
 struct Mod;
 
-namespace ModManager
-{
+namespace ModManager {
     inline std::vector<Mod> enabled_mods{};
 
     std::filesystem::path GetLoaderFilesFolder();
+
     inline fs::path game_path = fs::current_path();
     inline fs::path loader_files_path{GetLoaderFilesFolder()};
     inline fs::path luasome_path{loader_files_path / "luasome"};
@@ -21,40 +21,37 @@ namespace ModManager
     inline fs::path mod_path{loader_files_path / "mods"};
 
     void ParseMods();
+
     void InjectAll();
 
     void SaveLuaModlist();
+
     void PatchInitLua();
 }
 
-struct Mod
-{
+struct Mod {
     std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
     fs::path path{};
     fs::path dll_path{};
     fs::path init_path{};
 
-    bool operator== (const Mod& other) const
-    {
+    bool operator==(const Mod &other) const {
         if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
             return true;
         return false;
     }
 
-    [[nodiscard]] bool is_lua() const
-    {
+    [[nodiscard]] bool is_lua() const {
         return !init_path.empty();
     }
 
-    [[nodiscard]] bool is_cpp() const
-    {
+    [[nodiscard]] bool is_cpp() const {
         return !dll_path.empty();
     }
 
-    [[nodiscard]] bool is_installed() const
-    {
+    [[nodiscard]] bool is_installed() const {
         return exists(path);
     }
 };
 
-std::string ReadFile(const fs::path& path);
+std::string ReadFile(const fs::path &path);

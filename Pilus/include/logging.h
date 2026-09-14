@@ -5,17 +5,13 @@
 
 namespace fs = std::filesystem;
 
-class TeeBuf : public std::streambuf
-{
+class TeeBuf : public std::streambuf {
 public:
-    TeeBuf(std::streambuf* a, std::streambuf* b)
-        : a(a), b(b)
-    {
-    }
+    TeeBuf(std::streambuf *a, std::streambuf *b)
+        : a(a), b(b) {}
 
 protected:
-    int_type overflow(int_type c) override
-    {
+    int_type overflow(int_type c) override {
         if (c == traits_type::eof())
             return traits_type::not_eof(c);
 
@@ -30,17 +26,16 @@ protected:
         return c;
     }
 
-    int sync() override
-    {
+    int sync() override {
         return a->pubsync() == 0 &&
                b->pubsync() == 0
-            ? 0
-            : -1;
+                   ? 0
+                   : -1;
     }
 
 private:
-    std::streambuf* a;
-    std::streambuf* b;
+    std::streambuf *a;
+    std::streambuf *b;
 };
 
 inline std::stringstream console_buffer;

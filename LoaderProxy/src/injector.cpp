@@ -2,8 +2,7 @@
 #include <tlhelp32.h>
 #include <fstream>
 
-DWORD GetProcessByName(const char* lpProcessName)
-{
+DWORD GetProcessByName(const char *lpProcessName) {
     PROCESSENTRY32 ProcList{};
     ProcList.dwSize = sizeof(ProcList);
 
@@ -13,8 +12,7 @@ DWORD GetProcessByName(const char* lpProcessName)
 
     if (Process32First(hProcList, &ProcList))
         do
-            if (lstrcmpA(ProcList.szExeFile, lpProcessName) == 0)
-            {
+            if (lstrcmpA(ProcList.szExeFile, lpProcessName) == 0) {
                 CloseHandle(hProcList);
                 return ProcList.th32ProcessID;
             }
@@ -24,23 +22,21 @@ DWORD GetProcessByName(const char* lpProcessName)
     return -1;
 }
 
-bool IsDLL(const std::string& filePath)
-{
+bool IsDLL(const std::string &filePath) {
     std::ifstream f(filePath, std::ios::binary);
-    if (!f.is_open())
-    {
+    if (!f.is_open()) {
         Log() << err << "Mod could not be opened";
         return false;
     }
 
     IMAGE_DOS_HEADER dosHeader{};
-    f.read(reinterpret_cast<char*>(&dosHeader), sizeof(dosHeader));
+    f.read(reinterpret_cast<char *>(&dosHeader), sizeof(dosHeader));
     if (!f || dosHeader.e_magic != IMAGE_DOS_SIGNATURE)
         return false;
 
     f.seekg(dosHeader.e_lfanew, std::ios::beg);
     IMAGE_NT_HEADERS ntHeaders{};
-    f.read(reinterpret_cast<char*>(&ntHeaders), sizeof(ntHeaders));
+    f.read(reinterpret_cast<char *>(&ntHeaders), sizeof(ntHeaders));
     if (!f || ntHeaders.Signature != IMAGE_NT_SIGNATURE)
         return false;
 
@@ -48,12 +44,10 @@ bool IsDLL(const std::string& filePath)
     return (ntHeaders.FileHeader.Characteristics & IMAGE_FILE_DLL) != 0;
 }
 
-int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName)
-{
+int Inject(const char *lpDLLName, char *lpFullDLLPath, const char *lpProcessName) {
     const DWORD dwProcessID = GetProcessByName(lpProcessName);
 
-    if (dwProcessID == (DWORD)-1)
-    {
+    if (dwProcessID == (DWORD) -1) {
         Log() << err << "An error occurred when trying to find the target process. Is Primordialis open?";
         return -1;
     }
@@ -61,21 +55,18 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     Log() << "[DLL Injector]";
 
     const DWORD dwFullPathResult = GetFullPathNameA(lpDLLName, MAX_PATH, lpFullDLLPath, nullptr);
-    if (dwFullPathResult == 0)
-    {
+    if (dwFullPathResult == 0) {
         Log() << err << "Attempted to load a missing mod.";
         return -1;
     }
 
-    if (!IsDLL(lpFullDLLPath))
-    {
+    if (!IsDLL(lpFullDLLPath)) {
         Log() << err << "Attempted to load an invalid .DLL";
         return -1;
     }
 
     const HANDLE &hTargetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessID);
-    if (!hTargetProcess)
-    {
+    if (!hTargetProcess) {
         Log() << err << "An error occurred when trying to open the target process.";
         return -1;
     }
@@ -84,21 +75,19 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     Log() << "Process opened successfully.";
 
     const LPVOID &lpPathAddress = VirtualAllocEx(hTargetProcess, nullptr,
-        lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-    if (lpPathAddress == nullptr)
-    {
+                                                 lstrlenA(lpFullDLLPath) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+    if (lpPathAddress == nullptr) {
         Log() << err << "An error occurred when trying to allocate memory in the target process.";
         return -1;
     }
 
     Log() << "Memory allocate at 0x";
-    Log() << std::to_string((UINT)(uintptr_t)lpPathAddress);
+    Log() << std::to_string((UINT) (uintptr_t) lpPathAddress);
     Log() << "";
 
     const DWORD dwWriteResult = WriteProcessMemory(hTargetProcess, lpPathAddress, lpFullDLLPath,
-        lstrlenA(lpFullDLLPath) + 1, nullptr);
-    if (dwWriteResult == 0)
-    {
+                                                   lstrlenA(lpFullDLLPath) + 1, nullptr);
+    if (dwWriteResult == 0) {
         Log() << err << "An error occurred when trying to write the DLL path in the target process.";
         return -1;
     }
@@ -110,19 +99,18 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
         return -1;
 
     const FARPROC &lpFunctionAddress = GetProcAddress(hModule, "LoadLibraryA");
-    if (lpFunctionAddress == nullptr)
-    {
+    if (lpFunctionAddress == nullptr) {
         Log() << err << "An error occurred when trying to get \"LoadLibraryA\" address.";
         return -1;
     }
 
     Log() << "LoadLibraryA address at 0x"
-          << std::to_string((UINT)(uintptr_t)lpFunctionAddress);
+            << std::to_string((UINT) (uintptr_t) lpFunctionAddress);
 
     const HANDLE &hThreadCreationResult = CreateRemoteThread(hTargetProcess, nullptr, 0,
-        (LPTHREAD_START_ROUTINE)lpFunctionAddress, lpPathAddress, 0, nullptr);
-    if (!hThreadCreationResult)
-    {
+                                                             (LPTHREAD_START_ROUTINE) lpFunctionAddress, lpPathAddress,
+                                                             0, nullptr);
+    if (!hThreadCreationResult) {
         Log() << err << "An error occurred when trying to create the thread in the target process.";
         return -1;
     }
@@ -140,32 +128,28 @@ int Inject(const char* lpDLLName, char* lpFullDLLPath, const char* lpProcessName
     return 0;
 }
 
-void ModManager::InjectAll()
-{
+void ModManager::InjectAll() {
     constexpr const char *lpprocessname = "primordialis.exe";
     int failed = 0;
 
-    for (auto & mod : enabled_mods)
-    {
+    for (auto &mod: enabled_mods) {
         if (not mod.is_cpp())
             continue;
 
         std::string injectPath = mod.dll_path.string();
         char dllpath[MAX_PATH];
 
-        if (Inject(injectPath.c_str(), dllpath, lpprocessname) != 0)
-        {
+        if (Inject(injectPath.c_str(), dllpath, lpprocessname) != 0) {
             Log() << err << "[INJECTION FAILED] ("
-                  << mod.dll_path.filename().string()
-                  << ") Skipped";
+                    << mod.dll_path.filename().string()
+                    << ") Skipped";
 
             failed++;
             continue;
         }
         Log() << "[INJECTION SUCCESS] ("
-              << mod.dll_path.filename().string()
-              << ")";
-
+                << mod.dll_path.filename().string()
+                << ")";
     }
     if (failed)
         Log() << err << "Failed " + std::to_string(failed) + "/" + std::to_string(enabled_mods.size()) + " mods";

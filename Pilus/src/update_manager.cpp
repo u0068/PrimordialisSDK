@@ -8,9 +8,8 @@
 // TODO: Make cmake increment the version number automatically
 constexpr Version PILUS_VERSION{0, 6, 0};
 
-std::optional<Version> ParseVersion(const std::string &tag)
-{
-    Version version{0,0,0};
+std::optional<Version> ParseVersion(const std::string &tag) {
+    Version version{0, 0, 0};
 
     std::regex tag_regex(R"((\d+)(?:.(\d+))?(?:.(\d+))?)");
 
@@ -22,24 +21,21 @@ std::optional<Version> ParseVersion(const std::string &tag)
         return version;
     }
 
-    console_log << err << "Failed to Parse Version: "<< tag <<"\n";
+    console_log << err << "Failed to Parse Version: " << tag << "\n";
 
     return std::nullopt;
 }
 
 void ExtractZip(
-    const fs::path& zip,
-    const fs::path& destination)
-{
+    const fs::path &zip,
+    const fs::path &destination) {
     console_log << "Extracting " << zip << " to " << destination << "\n";
     miniz_cpp::zip_file file(zip.string());
-    for (const auto& name : file.namelist())
-    {
+    for (const auto &name: file.namelist()) {
         fs::path output = destination / name;
 
         // Directory entry
-        if (name.back() == '/')
-        {
+        if (name.back() == '/') {
             create_directories(output);
             continue;
         }
@@ -52,13 +48,11 @@ void ExtractZip(
 
 bool DownloadFromURL(
     const std::string &source_url,
-    const fs::path &dest_path)
-{
+    const fs::path &dest_path) {
     console_log << "Downloading " << source_url << "...\n";
 
     HRESULT hr = URLDownloadToFileA(nullptr, source_url.c_str(), dest_path.string().c_str(), 0, nullptr);
-    if (SUCCEEDED(hr))
-    {
+    if (SUCCEEDED(hr)) {
         console_log << "Downloaded to " << dest_path << "\n";
         return true;
     }
@@ -69,14 +63,12 @@ bool DownloadFromURL(
 // Merges the downloaded manifest and the local manifest
 bool GetVersionManifest(
     const std::string &source_url,
-    bool temporary=true)
-{
+    bool temporary = true) {
     fs::path path = ModManager::version_manifest_path.string();
     if (temporary)
         path += ".tmp";
-    if (not DownloadFromURL(source_url, path))
-    {
-        console_log << err << "Unable to download version manifest from "<<source_url<<"\n";
+    if (not DownloadFromURL(source_url, path)) {
+        console_log << err << "Unable to download version manifest from " << source_url << "\n";
         return false;
     }
 
@@ -85,16 +77,14 @@ bool GetVersionManifest(
     if (temporary)
         std::remove(path.string().c_str());
 
-    if (file.empty())
-    {
-        console_log << err << "Unable to read version manifest from "<<source_url<<".\n";
+    if (file.empty()) {
+        console_log << err << "Unable to read version manifest from " << source_url << ".\n";
         return false;
     }
 
     json parsed = safe_parse(file);
-    if (parsed.empty())
-    {
-        console_log << err << "Unable to parse version manifest json from "<<source_url<<".\n";
+    if (parsed.empty()) {
+        console_log << err << "Unable to parse version manifest json from " << source_url << ".\n";
         return false;
     }
 
@@ -102,20 +92,17 @@ bool GetVersionManifest(
     return true;
 }
 
-void SaveVersionManifest()
-{
+void SaveVersionManifest() {
     std::ofstream file(ModManager::version_manifest_path);
     file.clear();
     file << ModManager::version_manifest.dump(2);
     file.close();
 }
 
-Version GetLatestVersion(json& version_manifest)
-{
+Version GetLatestVersion(json &version_manifest) {
     Version latest_version{};
-    for (auto& el : version_manifest["versions"].items())
-    {
-        const auto& version = *ParseVersion(el.key());
+    for (auto &el: version_manifest["versions"].items()) {
+        const auto &version = *ParseVersion(el.key());
         if (version > latest_version)
             latest_version = version;
     }
@@ -123,14 +110,12 @@ Version GetLatestVersion(json& version_manifest)
 }
 
 std::string CheckForUpdates(
-    const char* name,
-    json& version_json,
-    const fs::path& check_path = "")
-{
+    const char *name,
+    json &version_json,
+    const fs::path &check_path = "") {
     console_log << "Checking for " << name << " updates...\n";
 
-    if (version_json.empty())
-    {
+    if (version_json.empty()) {
         console_log << err << "Version JSON for " << name << " not found, unable to update.\n";
         return "";
     }
@@ -140,34 +125,30 @@ std::string CheckForUpdates(
 
     if ((check_path != "" and not exists(check_path)) or installed_version_json.empty())
         console_log << name << " not installed!\n";
-    else
-    {
+    else {
         auto installed_version = GetStringFromJson(installed_version_json, "0.0.0");
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
         console_log << "Latest " << name << " version: " << latest_version.to_string() << "\n";
 
-        if (not (latest_version> *ParseVersion(installed_version)))
-        {
+        if (not(latest_version > *ParseVersion(installed_version))) {
             console_log << name << " is up to date.\n";
             return "";
         }
     }
 
     console_log
-        << "Update found for " << name << ", version: "
-        << latest_version.to_string()
-        << "\n";
+            << "Update found for " << name << ", version: "
+            << latest_version.to_string()
+            << "\n";
 
     return GetStringFromJson(version_json["versions"][latest_version.to_string()], "download_url");
 }
 
-void UpdateLocalVersionManifest()
-{
+void UpdateLocalVersionManifest() {
     ModManager::version_manifest.merge_patch(safe_parse(ReadFile(ModManager::version_manifest_path)));
     GetVersionManifest(ModManager::version_manifest_url, false);
-    for (auto& mod : ModManager::mods)
-    {
+    for (auto &mod: ModManager::mods) {
         std::string manifest_url = GetStringFromJson(mod.local_info, "version_manifest_url");
         if (manifest_url.empty())
             continue;
@@ -177,19 +158,17 @@ void UpdateLocalVersionManifest()
     SaveVersionManifest();
 }
 
-int CheckSteamBuild()
-{
-    const char* manifest_filename = "appmanifest_3011360.acf";
+int CheckSteamBuild() {
+    const char *manifest_filename = "appmanifest_3011360.acf";
 
     auto steam_manifest_path =
-        ModManager::game_path.parent_path().parent_path() / manifest_filename;
+            ModManager::game_path.parent_path().parent_path() / manifest_filename;
 
     console_log << "steam manifest path: " << steam_manifest_path << "\n";
 
     auto file = ReadFile(steam_manifest_path);
 
-    if (file.empty())
-    {
+    if (file.empty()) {
         console_log << err << "Failed to read manifest\n";
         return 0;
     }
@@ -198,8 +177,7 @@ int CheckSteamBuild()
 
     size_t pos = file.find(key);
 
-    if (pos == std::string::npos)
-    {
+    if (pos == std::string::npos) {
         console_log << err << "No buildid found\n";
         return 0;
     }
@@ -209,8 +187,7 @@ int CheckSteamBuild()
     while (pos < file.size() && std::isspace(file[pos]))
         pos++;
 
-    if (file[pos] != '"')
-    {
+    if (file[pos] != '"') {
         console_log << err << "Invalid buildid format\n";
         return 0;
     }
@@ -229,8 +206,7 @@ int CheckSteamBuild()
     return std::stoi(build);
 }
 
-bool UpdatePDB()
-{
+bool UpdatePDB() {
     int actual_build_id = CheckSteamBuild();
     if (actual_build_id == 0)
         return false;
@@ -243,16 +219,14 @@ bool UpdatePDB()
 
     if (!fs::exists("primordialis_avx.pdb") || !fs::exists("primordialis_sse3.pdb"))
         console_log << err << "PDBs not found\n";
-    else if (actual_build_id == installed_pdb_build_id)
-    {
+    else if (actual_build_id == installed_pdb_build_id) {
         console_log << "PDBs found with correct build ID " << installed_pdb_build_id << "\n";
         return false;
     }
 
     if (fs::exists("pdbs.zip"))
         ExtractZip("pdbs.zip", ModManager::game_path);
-    else
-    {
+    else {
         console_log << err << "pdbs.zip not found. If you are on Primordialis v0.1, switch to the beta branch!\n";
         return false;
     }
@@ -263,10 +237,8 @@ bool UpdatePDB()
     return true;
 }
 
-void CreateDirectories()
-{
-    if (!exists(ModManager::loader_files_path))
-    {
+void CreateDirectories() {
+    if (!exists(ModManager::loader_files_path)) {
         create_directory(ModManager::loader_files_path);
         console_log << "Created pilus_files directory\n";
     }
@@ -274,43 +246,37 @@ void CreateDirectories()
     if (exists(ModManager::config_path))
         ModManager::LoadPilusConfig();
 
-    if (!exists(ModManager::mod_path))
-    {
+    if (!exists(ModManager::mod_path)) {
         create_directory(ModManager::mod_path);
         console_log << "Created mod directory\n";
     }
 
-    if (!exists(ModManager::luasome_path))
-    {
+    if (!exists(ModManager::luasome_path)) {
         create_directory(ModManager::luasome_path);
         console_log << "Created luasome directory\n";
     }
 }
 
-void CheckAllForUpdates()
-{
+void CheckAllForUpdates() {
     ModManager::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION.to_string();
 
     CreateDirectories();
 
     UpdateLocalVersionManifest();
 
-    for (auto& el : ModManager::version_manifest.items())
+    for (auto &el: ModManager::version_manifest.items())
         CheckForUpdates(el.key().c_str(), el.value());
 }
 
-bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path)
-{
+bool DownloadUpdate(const char *name, const Version &version, const fs::path &dest_path) {
     std::string download_url_json = GetStringFromJson(
         ModManager::version_manifest[name][version.to_string()], "download_url");
-    if (download_url_json.empty())
-    {
+    if (download_url_json.empty()) {
         console_log << err << "No download url found for " << name << " " << version.to_string() << "\n";
         return false;
     }
-    if (download_url_json.ends_with(".zip"))
-    {
-        fs::path temp_zip_path{dest_path.string()+".tmp"};
+    if (download_url_json.ends_with(".zip")) {
+        fs::path temp_zip_path{dest_path.string() + ".tmp"};
         if (not DownloadFromURL(download_url_json, temp_zip_path))
             return false;
         ExtractZip(temp_zip_path, dest_path);
@@ -320,8 +286,7 @@ bool DownloadUpdate(const char* name, const Version& version, const fs::path& de
     return DownloadFromURL(download_url_json, dest_path);
 }
 
-bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
-{
+bool UpdatePilus(const Version &pilus_version, const Version &updater_version) {
     // ModManager::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION.to_string();
 
     fs::path pilus_path = absolute(fs::path("Pilus.exe"));
@@ -337,17 +302,16 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
 
     fs::path updater_path = pilus_path.parent_path() / "PilusUpdater.exe";
 
-    if (not DownloadUpdate("PilusUpdater", updater_version, updater_path))
-    {
+    if (not DownloadUpdate("PilusUpdater", updater_version, updater_path)) {
         DeleteFileW(update_path.c_str());
         return false;
     }
 
     std::wstring commandLine =
-        L"\"" + updater_path.wstring() + L"\" " +
-        std::to_wstring(pid) + L" \"" +
-        pilus_path.wstring() + L"\" \"" +
-        update_path.wstring() + L"\"";
+            L"\"" + updater_path.wstring() + L"\" " +
+            std::to_wstring(pid) + L" \"" +
+            pilus_path.wstring() + L"\" \"" +
+            update_path.wstring() + L"\"";
 
     STARTUPINFOW si{};
     si.cb = sizeof(si);
@@ -361,21 +325,20 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
     buffer.push_back(L'\0');
 
     if (!CreateProcessW(
-            nullptr,
-            buffer.data(),
-            nullptr,
-            nullptr,
-            FALSE,
-            0,
-            nullptr,
-            updater_path.parent_path().c_str(),
-            &si,
-            &pi))
-    {
+        nullptr,
+        buffer.data(),
+        nullptr,
+        nullptr,
+        FALSE,
+        0,
+        nullptr,
+        updater_path.parent_path().c_str(),
+        &si,
+        &pi)) {
         console_log
-            << err << "Failed to start updater: "
-            << GetLastError()
-            << "\n";
+                << err << "Failed to start updater: "
+                << GetLastError()
+                << "\n";
 
         DeleteFileW(updater_path.c_str());
 
@@ -395,17 +358,16 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version)
     // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
 }
 
-void UpdateModloader()
-{
+void UpdateModloader() {
     // Get the latest versions for now.
 
     UpdatePilus(GetLatestVersion(ModManager::version_manifest["Pilus"]),
-    GetLatestVersion(ModManager::version_manifest["PilusUpdater"])
-        );
+                GetLatestVersion(ModManager::version_manifest["PilusUpdater"])
+    );
 
     DownloadUpdate("Luasome",
-        GetLatestVersion(ModManager::version_manifest["Luasome"]),
-        ModManager::luasome_path);
+                   GetLatestVersion(ModManager::version_manifest["Luasome"]),
+                   ModManager::luasome_path);
 
     UpdatePDB();
 }

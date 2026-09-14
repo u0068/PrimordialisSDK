@@ -6,8 +6,7 @@
 
 namespace fs = std::filesystem;
 
-std::string ReadFile(const fs::path& path)
-{
+std::string ReadFile(const fs::path &path) {
     std::ifstream file(path);
 
     if (!file)
@@ -19,14 +18,12 @@ std::string ReadFile(const fs::path& path)
     return buffer.str();
 }
 
-void GetModConfigValuesFromDefaults(Mod& mod)
-{
-    for (auto& el : mod.config_defaults.items())
+void GetModConfigValuesFromDefaults(Mod &mod) {
+    for (auto &el: mod.config_defaults.items())
         mod.config_values[el.key()] = el.value()["default"];
 }
 
-void ParseModInfo(Mod& mod)
-{
+void ParseModInfo(Mod &mod) {
     if (mod.path.has_extension())
         return; // Mod is raw dll so has no info
 
@@ -34,58 +31,48 @@ void ParseModInfo(Mod& mod)
     mod.name = modFolder.filename().string();
 
     std::vector<fs::path> dlls{};
-    for (const auto& entry : fs::recursive_directory_iterator(modFolder))
-    {
+    for (const auto &entry: fs::recursive_directory_iterator(modFolder)) {
         if (!entry.is_regular_file())
             continue;
 
         auto filename = entry.path().filename().string();
 
-        if (filename == "info.json")
-        {
+        if (filename == "info.json") {
             mod.local_info = safe_parse(ReadFile(entry), nullptr, true, true);
             ModManager::pilus_config["installed_versions"][mod.name] = GetStringFromJson(mod.local_info, "version");
         }
-
         else if (filename == "config.json")
             mod.config_defaults = safe_parse(ReadFile(entry), nullptr, true, true);
 
-        else if (entry.path().extension() == ".dll")
-        {
+        else if (entry.path().extension() == ".dll") {
             dlls.push_back(entry.path());
         }
-
         else if (filename == "init.lua")
             mod.init_path = entry.path();
     }
-    if (dlls.size() > 1)
-    {
-        for (auto& dll_path : dlls)
-        {
+    if (dlls.size() > 1) {
+        for (auto &dll_path: dlls) {
             // console_log << modFolder.filename() << "\n";
             // console_log << dll_path.filename() << "\n";
             if (dll_path.filename() == "main.dll" or
-                dll_path.filename().replace_extension("") == modFolder.filename())
-            {
+                dll_path.filename().replace_extension("") == modFolder.filename()) {
                 mod.dll_path = dll_path;
                 break;
             }
         }
         if (mod.dll_path.empty())
             console_log << err << "Multiple .dll files detected! I don't know which one to load.\n"
-                                  "\tPlease specify a \"main_dll\" in info.json,\n"
-                                  "or make the dll that should be loaded have same filename as the mod folder!\n";
+                    "\tPlease specify a \"main_dll\" in info.json,\n"
+                    "or make the dll that should be loaded have same filename as the mod folder!\n";
     }
     else if (dlls.size() == 1)
         mod.dll_path = dlls[0];
 }
 
-void ModManager::RefreshMods()
-{
+void ModManager::RefreshMods() {
     console_log << "Refreshing Mods...\n";
     std::vector<Mod> installed_mods;
-    for (const auto& entry : std::filesystem::directory_iterator(mod_path))
-    {
+    for (const auto &entry: std::filesystem::directory_iterator(mod_path)) {
         console_log << "Found Mod: ";
         console_log << entry.path().filename().stem().string();
         console_log << "\n";
@@ -100,21 +87,18 @@ void ModManager::RefreshMods()
         installed_mods.push_back(nmod);
     }
 
-    for (auto & mod : mods)
-        for (auto &  installed_mod: installed_mods)
-            if (mod == installed_mod)
-            {
+    for (auto &mod: mods)
+        for (auto &installed_mod: installed_mods)
+            if (mod == installed_mod) {
                 installed_mod.user_enabled = mod.user_enabled;
                 installed_mod.config_values = mod.config_values;
                 mod = installed_mod;
                 break;
             }
-    for (const auto & installed_mod : installed_mods)
-    {
+    for (const auto &installed_mod: installed_mods) {
         bool add_this_mod = true;
-        for (const auto & mod : mods)
-            if (installed_mod == mod)
-            {
+        for (const auto &mod: mods)
+            if (installed_mod == mod) {
                 add_this_mod = false;
                 break;
             }
@@ -126,25 +110,21 @@ void ModManager::RefreshMods()
     SavePilusConfig();
 }
 
-void ModManager::LoadPilusConfig()
-{
+void ModManager::LoadPilusConfig() {
     auto file = ReadFile(config_path);
 
-    if (file.empty())
-    {
-        console_log << err<< "Failed to read config\n";
+    if (file.empty()) {
+        console_log << err << "Failed to read config\n";
         return;
     }
 
-    try
-    {
+    try {
         pilus_config = safe_parse(file);
 
         json mods_json = pilus_config["mods"];
         mods.clear();
 
-        for (auto& el : mods_json.items())
-        {
+        for (auto &el: mods_json.items()) {
             json mod_json = el.value();
             Mod mod{};
             mod.name = mod_json["name"].get<std::string>();
@@ -156,24 +136,21 @@ void ModManager::LoadPilusConfig()
             mods.push_back(mod);
         }
     }
-    catch (const json::exception& e)
-    {
+    catch (const json::exception &e) {
         console_log << err << e.what() << "\n"
-                  << "exception id: " << e.id << "\n";
+                << "exception id: " << e.id << "\n";
         pilus_config = {};
     }
 }
 
-void ModManager::SavePilusConfig()
-{
+void ModManager::SavePilusConfig() {
     std::ofstream file(config_path);
 
     if (!file) return;
 
     pilus_config["mods"] = json::array();
 
-    for (auto mod : mods)
-    {
+    for (auto mod: mods) {
         json mod_json;
         mod_json["name"] = mod.name;
         mod_json["path"] = mod.path;
@@ -190,18 +167,16 @@ void ModManager::SavePilusConfig()
     file.close();
 }
 
-std::string ModConfigToLua(json config)
-{
+std::string ModConfigToLua(json config) {
     std::stringstream lua;
     lua << "\t{\n";
-    for (auto& el : config.items())
+    for (auto &el: config.items())
         lua << "\t\t" << el.key() << " = " << el.value() << ",\n";
     lua << "\t},\n";
     return lua.str();
 }
 
-void ModManager::SaveLuaModlist()
-{
+void ModManager::SaveLuaModlist() {
     std::ofstream file(lua_mod_list_path);
 
     if (!file) return;
@@ -209,14 +184,12 @@ void ModManager::SaveLuaModlist()
     file.clear();
     file << "LUA_MODLOADER_MOD_LIST = {\n";
 
-    for (auto& mod : mods)
-    {
+    for (auto &mod: mods) {
         if (!mod.is_lua())
             continue;
         if (!mod.user_enabled)
             continue;
-        if (mod.config_defaults.empty())
-        {
+        if (mod.config_defaults.empty()) {
             file << "\t\"" << mod.name << "\",\n";
             continue;
         }
@@ -232,8 +205,7 @@ void ModManager::SaveLuaModlist()
     file.close();
 }
 
-void ModManager::PatchInitLua()
-{
+void ModManager::PatchInitLua() {
     fs::path init_lua_path = game_path / "data/scripts/init.lua";
     fs::path temp_init_lua_path = game_path / "data/scripts/init.temp";
     std::string preline = "dofile(\"pilus_files/luasome/pre.lua\")\n";

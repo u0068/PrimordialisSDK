@@ -13,8 +13,7 @@
 #include "toggling_cell.h"
 
 // This function will be hooked to the game's init_materials_list function
-void OnInitMats()
-{
+void OnInitMats() {
     Next<void>(); // Call original function
     if (P::IsThreadSafe()) // Make sure we are only on the main thread
     {
@@ -33,7 +32,6 @@ void OnInitMats()
     P::LaneSync(); // Make all other threads wait for us to finish.
 }
 
-void P::InitialiseMod()
-{
+void P::InitialiseMod() {
     Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
 }

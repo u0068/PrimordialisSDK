@@ -11,20 +11,17 @@
 
 using json = nlohmann::ordered_json;
 
-static std::string getName(IDiaSymbol* symbol)
-{
+static std::string getName(IDiaSymbol *symbol) {
     BSTR name = nullptr;
 
-    if (SUCCEEDED(symbol->get_undecoratedName(&name)) && name)
-    {
-        std::string result = (const char*)_bstr_t(name);
+    if (SUCCEEDED(symbol->get_undecoratedName(&name)) && name) {
+        std::string result = (const char *) _bstr_t(name);
         SysFreeString(name);
         return result;
     }
 
-    if (SUCCEEDED(symbol->get_name(&name)) && name)
-    {
-        std::string result = (const char*)_bstr_t(name);
+    if (SUCCEEDED(symbol->get_name(&name)) && name) {
+        std::string result = (const char *) _bstr_t(name);
         SysFreeString(name);
         return result;
     }
@@ -32,47 +29,42 @@ static std::string getName(IDiaSymbol* symbol)
     return "<unknown>";
 }
 
-static DWORD getRva(IDiaSymbol* symbol)
-{
+static DWORD getRva(IDiaSymbol *symbol) {
     DWORD rva = 0;
     symbol->get_relativeVirtualAddress(&rva);
     return rva;
 }
 
-static ULONGLONG getLength(IDiaSymbol* symbol)
-{
+static ULONGLONG getLength(IDiaSymbol *symbol) {
     ULONGLONG length = 0;
     symbol->get_length(&length);
     return length;
 }
 
 static bool getSourceLine(
-    IDiaSession* session,
+    IDiaSession *session,
     DWORD rva,
-    std::string& file,
-    DWORD& line)
-{
-    IDiaEnumLineNumbers* lines = nullptr;
+    std::string &file,
+    DWORD &line) {
+    IDiaEnumLineNumbers *lines = nullptr;
 
     if (FAILED(session->findLinesByRVA(rva, 1, &lines)))
         return false;
 
-    IDiaLineNumber* lineNumber = nullptr;
+    IDiaLineNumber *lineNumber = nullptr;
     ULONG count = 0;
 
-    if (lines->Next(1, &lineNumber, &count) != S_OK || count != 1)
-    {
+    if (lines->Next(1, &lineNumber, &count) != S_OK || count != 1) {
         lines->Release();
         return false;
     }
 
-    IDiaSourceFile* sourceFile = nullptr;
+    IDiaSourceFile *sourceFile = nullptr;
 
     lineNumber->get_lineNumber(&line);
     lineNumber->get_sourceFile(&sourceFile);
 
-    if (!sourceFile)
-    {
+    if (!sourceFile) {
         lineNumber->Release();
         lines->Release();
         return false;
@@ -81,9 +73,8 @@ static bool getSourceLine(
     BSTR name = nullptr;
     sourceFile->get_fileName(&name);
 
-    if (name)
-    {
-        file = (const char*)_bstr_t(name);
+    if (name) {
+        file = (const char *) _bstr_t(name);
         SysFreeString(name);
     }
 
@@ -95,30 +86,27 @@ static bool getSourceLine(
 }
 
 static void findInlineSites(
-    IDiaSession* session,
-    IDiaSymbol* parent,
-    json& output)
-{
-    IDiaEnumSymbols* symbols = nullptr;
+    IDiaSession *session,
+    IDiaSymbol *parent,
+    json &output) {
+    IDiaEnumSymbols *symbols = nullptr;
 
     if (FAILED(parent->findChildren(
-            SymTagInlineSite,
-            nullptr,
-            nsNone,
-            &symbols)))
+        SymTagInlineSite,
+        nullptr,
+        nsNone,
+        &symbols)))
         return;
 
-    IDiaSymbol* symbol = nullptr;
+    IDiaSymbol *symbol = nullptr;
     ULONG count = 0;
 
-    while (symbols->Next(1, &symbol, &count) == S_OK)
-    {
-        IDiaSymbol3* site3 = nullptr;
+    while (symbols->Next(1, &symbol, &count) == S_OK) {
+        IDiaSymbol3 *site3 = nullptr;
 
         if (SUCCEEDED(symbol->QueryInterface(
-                __uuidof(IDiaSymbol3),
-                reinterpret_cast<void**>(&site3))))
-        {
+            __uuidof(IDiaSymbol3),
+            reinterpret_cast<void**>(&site3)))) {
             DWORD inlineeId = 0;
             DWORD rva = 0;
 
@@ -129,7 +117,7 @@ static void findInlineSites(
             symbol->get_name(&name);
 
             json site;
-            site["name"] = name ? (const char*)_bstr_t(name) : "<unknown>";
+            site["name"] = name ? (const char *) _bstr_t(name) : "<unknown>";
             site["inlinee_id"] = inlineeId;
 
             if (name)
@@ -138,8 +126,7 @@ static void findInlineSites(
             std::string file;
             DWORD line = 0;
 
-            if (getSourceLine(session, rva, file, line))
-            {
+            if (getSourceLine(session, rva, file, line)) {
                 site["source_file"] = file;
                 site["source_line"] = line;
             }
@@ -155,58 +142,53 @@ static void findInlineSites(
     symbols->Release();
 }
 
-int wmain(int argc, wchar_t** argv)
-{
-    if (argc < 2)
-    {
+int wmain(int argc, wchar_t **argv) {
+    if (argc < 2) {
         std::wcerr << L"Usage: dia_inline_dump.exe <pdb> [output.json]\n";
         return 1;
     }
 
-    const char* outputPath =
-        argc >= 3 ? (const char*)_bstr_t(argv[2]) : "inline_site_info.json";
+    const char *outputPath =
+            argc >= 3 ? (const char *) _bstr_t(argv[2]) : "inline_site_info.json";
 
     if (FAILED(CoInitializeEx(nullptr, COINIT_MULTITHREADED)))
         return 1;
 
-    IDiaDataSource* source = nullptr;
+    IDiaDataSource *source = nullptr;
 
     HRESULT hr = CoCreateInstance(
         __uuidof(DiaSource),
         nullptr,
         CLSCTX_INPROC_SERVER,
         __uuidof(IDiaDataSource),
-        reinterpret_cast<void**>(&source));
+        reinterpret_cast<void **>(&source));
 
-    if (FAILED(hr))
-    {
+    if (FAILED(hr)) {
         CoUninitialize();
         return 1;
     }
 
     hr = source->loadDataFromPdb(argv[1]);
 
-    if (FAILED(hr))
-    {
+    if (FAILED(hr)) {
         std::wcerr << L"Failed to load PDB\n";
         source->Release();
         CoUninitialize();
         return 1;
     }
 
-    IDiaSession* session = nullptr;
+    IDiaSession *session = nullptr;
 
-    if (FAILED(source->openSession(&session)))
-    {
+    if (FAILED(source->openSession(&session))) {
         source->Release();
         CoUninitialize();
         return 1;
     }
 
-    IDiaSymbol* global = nullptr;
+    IDiaSymbol *global = nullptr;
     session->get_globalScope(&global);
 
-    IDiaEnumSymbols* functions = nullptr;
+    IDiaEnumSymbols *functions = nullptr;
 
     functions = nullptr;
 
@@ -219,19 +201,16 @@ int wmain(int argc, wchar_t** argv)
     json output;
     output["functions"] = json::array();
 
-    if (SUCCEEDED(hr))
-    {
-        IDiaSymbol* function = nullptr;
+    if (SUCCEEDED(hr)) {
+        IDiaSymbol *function = nullptr;
         ULONG count = 0;
 
-        while (functions->Next(1, &function, &count) == S_OK)
-        {
+        while (functions->Next(1, &function, &count) == S_OK) {
             json sites = json::array();
 
             findInlineSites(session, function, sites);
 
-            if (!sites.empty())
-            {
+            if (!sites.empty()) {
                 DWORD id = 0;
                 function->get_symIndexId(&id);
 
@@ -255,11 +234,11 @@ int wmain(int argc, wchar_t** argv)
     file << output.dump(2) << '\n';
 
     std::cout
-        << "Wrote "
-        << output["functions"].size()
-        << " functions to "
-        << outputPath
-        << '\n';
+            << "Wrote "
+            << output["functions"].size()
+            << " functions to "
+            << outputPath
+            << '\n';
 
     global->Release();
     session->Release();

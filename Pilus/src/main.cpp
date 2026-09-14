@@ -6,8 +6,7 @@
 #include "ui.h"
 #include "update_manager.h"
 
-int main()
-{
+int main() {
     console_log.clear();
 
     console_log << "Pilus Starting\n";
@@ -18,23 +17,21 @@ int main()
     // UpdateAll();
 
     glfwSetErrorCallback(glfwErrorCallback);
-    if (!glfwInit())
-    {
+    if (!glfwInit()) {
         console_log << "Failed to initialise GLFW\n";
         return -1;
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    GLFWwindow* window = glfwCreateWindow(
+    GLFWwindow *window = glfwCreateWindow(
         720,
         720,
         "Pilus Modloader",
         nullptr,
         nullptr
     );
-    if (!window)
-    {
+    if (!window) {
         console_log << "Failed to create GLFW window\n";
         glfwTerminate();
         return -1;
@@ -44,7 +41,7 @@ int main()
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     ImGui::StyleColorsDark();
@@ -53,8 +50,7 @@ int main()
 
     console_log << "Pilus Initialised!\n";
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

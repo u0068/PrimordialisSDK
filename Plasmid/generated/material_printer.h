@@ -4,8 +4,7 @@
 #include <string>
 #include <format>
 
-inline void print_material_properties()
-{
+inline void print_material_properties() {
     std::string filename = "output.txt";
     std::ofstream outFile(filename);
 
@@ -15,8 +14,7 @@ inline void print_material_properties()
         return;
     }
 
-    for (int i = 1; i < APIUtil::n_materials; i++)
-    {
+    for (int i = 1; i < APIUtil::n_materials; i++) {
         APIUtil::material_t material = APIUtil::materials_list[i];
         outFile << std::format("id: {}\n", APIUtil::CellRef{material.id}.GetString());
         outFile << std::format("name: {}\n", material.name);
@@ -35,19 +33,19 @@ inline void print_material_properties()
         outFile << std::format("max_health: {:.2g}\n", material.max_health);
         outFile << std::format("transfer_rate: {:.2g}\n", material.transfer_rate);
         outFile << std::format("regen: {:.2g}\n", material.regen);
-        outFile << std::format("attach_to_cells: {}\n", (bool)material.attach_to_cells);
-        outFile << std::format("attach_to_walls: {}\n", (bool)material.attach_to_walls);
-        outFile << std::format("poison_immune: {}\n", (bool)material.poison_immune);
-        outFile << std::format("no_electric_growth: {}\n", (bool)material.no_electric_growth);
-        outFile << std::format("penetrate_walls: {}\n", (bool)material.penetrate_walls);
-        outFile << std::format("self_touching: {}\n", (bool)material.self_touching);
-        outFile << std::format("is_cancer: {}\n", (bool)material.is_cancer);
-        outFile << std::format("is_directional: {}\n", (bool)material.is_directional);
-        outFile << std::format("show_adjacency: {}\n", (bool)material.show_adjacency);
-        outFile << std::format("show_direction: {}\n", (bool)material.show_direction);
-        outFile << std::format("is_hard: {}\n", (bool)material.is_hard);
-        outFile << std::format("play_note: {}\n", (bool)material.play_note);
-        outFile << std::format("no_recolor: {}\n", (bool)material.no_recolor);
+        outFile << std::format("attach_to_cells: {}\n", (bool) material.attach_to_cells);
+        outFile << std::format("attach_to_walls: {}\n", (bool) material.attach_to_walls);
+        outFile << std::format("poison_immune: {}\n", (bool) material.poison_immune);
+        outFile << std::format("no_electric_growth: {}\n", (bool) material.no_electric_growth);
+        outFile << std::format("penetrate_walls: {}\n", (bool) material.penetrate_walls);
+        outFile << std::format("self_touching: {}\n", (bool) material.self_touching);
+        outFile << std::format("is_cancer: {}\n", (bool) material.is_cancer);
+        outFile << std::format("is_directional: {}\n", (bool) material.is_directional);
+        outFile << std::format("show_adjacency: {}\n", (bool) material.show_adjacency);
+        outFile << std::format("show_direction: {}\n", (bool) material.show_direction);
+        outFile << std::format("is_hard: {}\n", (bool) material.is_hard);
+        outFile << std::format("play_note: {}\n", (bool) material.play_note);
+        outFile << std::format("no_recolor: {}\n", (bool) material.no_recolor);
         // outFile << std::format("flags: {:b}\n", material.flags);
         outFile << std::format("density: {:.2g}\n", material.density);
         outFile << std::format("sharpness: {:.2g}\n", material.sharpness);

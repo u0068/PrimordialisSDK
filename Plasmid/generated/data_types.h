@@ -3,8 +3,7 @@
 #include <windows.h>
 #include "typedefs.h"
 
-namespace P
-{
+namespace P {
     struct DName;
     struct DNameNode;
     struct HGLRC__;
@@ -85,65 +84,64 @@ namespace P
     struct user_input;
     struct workshop_body_plan;
 
-    struct real_2
-    {
-        union
-        {
-            struct
-            {
+    struct real_2 {
+        union {
+            struct {
                 float x;
                 float y;
             };
+
             float data[2];
         };
     };
-    struct real_3
-    {
-        union
-        {
-            struct
-            {
+
+    struct real_3 {
+        union {
+            struct {
                 float x;
                 float y;
                 float z;
             };
+
             real_2 xy;
-            struct
-            {
+
+            struct {
                 float __x0;
                 real_2 yz;
             };
+
             float data[3];
         };
     };
-    struct real_4
-    {
-        union
-        {
-            struct
-            {
+
+    struct real_4 {
+        union {
+            struct {
                 float x;
                 float y;
                 float z;
                 float w;
             };
+
             real_2 xy;
-            struct
-            {
+
+            struct {
                 float __x0;
                 real_2 yz;
             };
+
             real_3 xyz;
-            struct
-            {
+
+            struct {
                 float _x0;
                 real_3 yzw;
             };
+
             float data[4];
         };
     };
-    struct arc_render_info
-    {
+
+    struct arc_render_info {
         real_3 x;
         real_2 d0;
         real_2 d1;
@@ -151,17 +149,17 @@ namespace P
         float r;
         real_4 color;
     };
-    struct final_boss_state
-    {
-        union
-        {
-            struct
-            {
-                uchar active : 1;
-                uchar ready : 1;
+
+    struct final_boss_state {
+        union {
+            struct {
+                uchar active: 1;
+                uchar ready: 1;
             };
+
             uchar active_flags;
         };
+
         bool dead;
         real_2 x;
         float health;
@@ -183,8 +181,8 @@ namespace P
         float total_health;
         float total_max_health;
     };
-    struct pickup_node
-    {
+
+    struct pickup_node {
         int mutation_index;
         real_2 x_rel;
         float r;
@@ -192,44 +190,43 @@ namespace P
         float alpha;
         bool is_selected;
     };
-    struct int_2
-    {
-        union
-        {
-            struct
-            {
+
+    struct int_2 {
+        union {
+            struct {
                 int x;
                 int y;
             };
+
             int data[2];
         };
     };
-    struct int_3
-    {
-        union
-        {
-            struct
-            {
+
+    struct int_3 {
+        union {
+            struct {
                 int x;
                 int y;
                 int z;
             };
+
             int_2 xy;
-            struct
-            {
+
+            struct {
                 int __x0;
                 int_2 yz;
             };
+
             int data[3];
         };
     };
-    struct bounding_box_3
-    {
+
+    struct bounding_box_3 {
         int_3 l;
         int_3 u;
     };
-    struct floodfill_piece
-    {
+
+    struct floodfill_piece {
         int start_index;
         int n_cells;
         int n_hearts;
@@ -238,30 +235,30 @@ namespace P
         float cost;
         bounding_box_3 region;
     };
-    struct thread_init_data
-    {
+
+    struct thread_init_data {
         int thread_index;
-        lane_group_t* group;
+        lane_group_t *group;
     };
-    struct biome_weights
-    {
+
+    struct biome_weights {
         int_3 biomes;
         real_3 weights;
     };
-    struct stbtt__buf
-    {
-        uchar* data;
+
+    struct stbtt__buf {
+        uchar *data;
         int cursor;
         int size;
     };
-    struct hexagon_render_info
-    {
+
+    struct hexagon_render_info {
         real_3 x;
         real_2 r;
         real_4 color;
     };
-    struct explosion_render_info
-    {
+
+    struct explosion_render_info {
         real_3 x;
         float r;
         float time;
@@ -270,12 +267,12 @@ namespace P
         real_4 color1;
         real_4 color2;
     };
-    struct hex_uint
-    {
+
+    struct hex_uint {
         uint value;
     };
-    struct stbtt_packedchar
-    {
+
+    struct stbtt_packedchar {
         ushort x0;
         ushort y0;
         ushort x1;
@@ -286,73 +283,73 @@ namespace P
         float xoff2;
         float yoff2;
     };
-    struct creature_spawner
-    {
+
+    struct creature_spawner {
         int body_id;
         int creature_index;
         real_2 spawn_location;
         int xp;
     };
-    struct particle_pusher_t
-    {
+
+    struct particle_pusher_t {
         real_2 x;
         real_2 d;
         float strength;
         float inv_dsq;
     };
-    struct ring_render_info
-    {
+
+    struct ring_render_info {
         real_3 x;
         float ri;
         float ro;
         real_4 color;
     };
-    struct thrd_t
-    {
-        void* _Handle;
+
+    struct thrd_t {
+        void *_Handle;
         uint _Tid;
     };
-    struct portal_t
-    {
+
+    struct portal_t {
         real_2 x;
         real_2 x_dot;
     };
-    struct bounding_box_2
-    {
+
+    struct bounding_box_2 {
         int_2 l;
         int_2 u;
     };
-    struct body_plan
-    {
-        plan_cell* plan_cells;
+
+    struct body_plan {
+        plan_cell *plan_cells;
         int n_plan_cells;
         int max_plan_cells;
         int n_dragged_cells;
-        int* plan_id_map;
+        int *plan_id_map;
         bounding_box_2 region;
         int half_hex_rotation;
     };
-    struct undo_state
-    {
+
+    struct undo_state {
         body_plan plan;
         int_2 last_drawn_point;
         int mode;
     };
-    struct trace_node
-    {
-        trace_node* parent;
-        trace_node* previous;
-        trace_node* next;
-        trace_node* first_child;
-        trace_node* last_child;
+
+    struct trace_node {
+        trace_node *parent;
+        trace_node *previous;
+        trace_node *next;
+        trace_node *first_child;
+        trace_node *last_child;
         bool traversed_children;
         bool traversed;
-        const char* name;
+        const char *name;
         double start_time;
         double end_time;
     };
-    struct stbtt__csctx
-    {
+
+    struct stbtt__csctx {
         int bounds;
         int started;
         float first_x;
@@ -363,11 +360,11 @@ namespace P
         int max_x;
         int min_y;
         int max_y;
-        stbtt_vertex* pvertices;
+        stbtt_vertex *pvertices;
         int num_vertices;
     };
-    struct gamepad_t
-    {
+
+    struct gamepad_t {
         uint gamepads_connected;
         short buttons;
         float left_trigger;
@@ -375,13 +372,13 @@ namespace P
         real_2 left_stick;
         real_2 right_stick;
     };
-    struct lane_context_t
-    {
+
+    struct lane_context_t {
         int lane_index;
-        lane_group_t* group;
+        lane_group_t *group;
     };
-    struct lightning_t
-    {
+
+    struct lightning_t {
         int a;
         int b;
         real_2 dir;
@@ -390,35 +387,36 @@ namespace P
         float shock;
         int lifetime;
         real_2 points[16];
-        union
-        {
-            struct
-            {
-                uint n_points : 16;
-                uint type : 1;
+
+        union {
+            struct {
+                uint n_points: 16;
+                uint type: 1;
             };
+
             uint n_points_and_type;
         };
+
         real_4 color;
     };
-    struct wall_t
-    {
+
+    struct wall_t {
         float dist;
         real_2 gradient;
         real_2 flow;
         float air_dist;
     };
-    struct color_swatch_render_info
-    {
+
+    struct color_swatch_render_info {
         real_3 x;
         float r;
         real_4 color;
         float scale;
         uint pinned;
     };
-    struct stbtt__active_edge
-    {
-        stbtt__active_edge* next;
+
+    struct stbtt__active_edge {
+        stbtt__active_edge *next;
         float fx;
         float fdx;
         float fdy;
@@ -426,32 +424,32 @@ namespace P
         float sy;
         float ey;
     };
-    struct box_real_2
-    {
+
+    struct box_real_2 {
         real_2 l;
         real_2 u;
     };
-    union id_t
-    {
-        struct
-        {
+
+    union id_t {
+        struct {
             ulonglong lo;
             ulonglong hi;
         };
+
         char string[16];
     };
-    struct mutation_type
-    {
+
+    struct mutation_type {
         id_t id;
         float weight;
         float cum_weight;
         real_2 uv;
         int extra_data_offset;
         int n_imbues;
-        uint no_stacking : 1;
+        uint no_stacking: 1;
     };
-    struct mutation_pickup
-    {
+
+    struct mutation_pickup {
         pickup_node nodes[16];
         int n_nodes;
         int imbues[4];
@@ -463,8 +461,8 @@ namespace P
         int pending_imbues;
         bool did_spawn;
     };
-    struct text_params
-    {
+
+    struct text_params {
         float scale;
         real_2 orientation;
         float shadow;
@@ -475,24 +473,24 @@ namespace P
         float wrap_width;
         float wrap_indent;
     };
-    struct file_info
-    {
-        uint is_directory : 1;
+
+    struct file_info {
+        uint is_directory: 1;
     };
-    struct trace_t
-    {
-        trace_node* trace_nodes;
+
+    struct trace_t {
+        trace_node *trace_nodes;
         int n_trace_nodes;
         int type;
         int frame_number;
     };
-    struct profiler_frame
-    {
+
+    struct profiler_frame {
         trace_t traces[3];
         int n_traces;
     };
-    struct stbtt_aligned_quad
-    {
+
+    struct stbtt_aligned_quad {
         float x0;
         float y0;
         float s0;
@@ -502,32 +500,32 @@ namespace P
         float s1;
         float t1;
     };
-    struct singing_channel
-    {
+
+    struct singing_channel {
         float volume;
         float target_volume;
         float phase;
-        union
-        {
+
+        union {
             float next_target_volume;
             long next_target_volume_data;
         };
     };
-    struct laser_render_info
-    {
+
+    struct laser_render_info {
         real_3 x;
         real_2 d;
         float r;
         real_4 color;
     };
-    struct lightning_render_info
-    {
+
+    struct lightning_render_info {
         real_3 x;
         real_2 r;
         real_4 color;
     };
-    struct slider_t
-    {
+
+    struct slider_t {
         float t;
         float width;
         float radius;
@@ -536,8 +534,8 @@ namespace P
         bool was_hovered;
         bool active;
     };
-    struct exp_data
-    {
+
+    struct exp_data {
         double invln2N;
         double shift;
         double negln2hiN;
@@ -547,12 +545,13 @@ namespace P
         double exp2_poly[5];
         __uint64 tab[512];
     };
-    struct print_buffer_t
-    {
-        const char* base;
-        const char* end;
-        const char* buffer;
+
+    struct print_buffer_t {
+        const char *base;
+        const char *end;
+        const char *buffer;
     };
+
     // struct lfClass2
     // {
     //     ushort leaf;
@@ -563,22 +562,21 @@ namespace P
     //     ushort count;
     //     uchar data;
     // };
-    struct texture_t
-    {
+    struct texture_t {
         uint handle;
         int_2 size;
     };
-    struct print_format
-    {
+
+    struct print_format {
         int argument;
     };
-    struct printer
-    {
+
+    struct printer {
         int count;
         print_format format;
     };
-    struct stbtt_vertex
-    {
+
+    struct stbtt_vertex {
         short x;
         short y;
         short cx;
@@ -588,19 +586,19 @@ namespace P
         uchar type;
         uchar padding;
     };
-    struct magnetic_field_t
-    {
-        cell* c;
+
+    struct magnetic_field_t {
+        cell *c;
         real_3 moment;
     };
-    struct translation_map_kash_t
-    {
-        const char* key;
+
+    struct translation_map_kash_t {
+        const char *key;
         uint hash;
     };
-    struct textbox
-    {
-        const char* text;
+
+    struct textbox {
+        const char *text;
         int max_text;
         int n_text;
         int cursor;
@@ -608,14 +606,14 @@ namespace P
         int selection_end;
         int active;
     };
-    struct mutation_item_list
-    {
-        mutation_item* items;
+
+    struct mutation_item_list {
+        mutation_item *items;
         int n_items;
         int max_items;
     };
-    struct explosion_t
-    {
+
+    struct explosion_t {
         real_2 x;
         float r;
         int duration;
@@ -623,30 +621,31 @@ namespace P
         float knockback;
         float heat;
         float stasis;
-        union
-        {
+
+        union {
             real_3 hsv;
             real_3 rgb;
         };
+
         uint ignore_body;
-        uint recolor : 1;
+        uint recolor: 1;
     };
-    struct static_button
-    {
+
+    struct static_button {
         float r;
         float r_dot;
         float state;
         float tooltip_alpha;
         bool was_hovered;
     };
-    struct expandable_buffer
-    {
-        uchar* memory;
+
+    struct expandable_buffer {
+        uchar *memory;
         ulonglong reserved_size;
         ulonglong committed_size;
     };
-    struct tooltip_t
-    {
+
+    struct tooltip_t {
         real_2 box_size;
         real_2 pos;
         float alpha;
@@ -654,12 +653,12 @@ namespace P
         int last_hovered_type;
         int last_hovered_imbue;
         real_2 last_hovered_mutation_pos;
-        uint is_combo : 1;
+        uint is_combo: 1;
         uint consumable_instructions;
     };
-    struct edit_menu
-    {
-        real_2* selection_points;
+
+    struct edit_menu {
+        real_2 *selection_points;
         int n_selection_points;
         float time;
         int_2 last_drawn_point;
@@ -671,11 +670,12 @@ namespace P
         float mode_trans;
         int tool;
         int selected_cell_item;
-        union
-        {
-            cell_item* cell_items;
+
+        union {
+            cell_item *cell_items;
             expandable_buffer cell_items_memory;
         };
+
         int max_cell_items;
         int n_cell_items;
         int cell_item_counts[2048];
@@ -688,43 +688,47 @@ namespace P
         bool want_show_unlock_window;
         slider_t size_slider;
         body_plan plan;
-        plan_cell* dragged_cells;
-        uchar* dragged_open_sides;
+        plan_cell *dragged_cells;
+        uchar *dragged_open_sides;
         int n_dragged_cells;
         int max_dragged_cells;
-        plan_cell* clipboard_cells;
+        plan_cell *clipboard_cells;
         int n_clipboard_cells;
         int max_clipboard_cells;
-        undo_state* undo_stack;
+        undo_state *undo_stack;
         int n_undo_states;
         int undo_stack_pointer;
         int max_undo_states;
-        union
-        {
-            stashed_body_plan* stashed;
+
+        union {
+            stashed_body_plan *stashed;
             expandable_buffer stashed_memory;
         };
+
         int n_stashed;
         int max_stashed;
-        union
-        {
-            saved_body_plan* saved;
+
+        union {
+            saved_body_plan *saved;
             expandable_buffer saved_memory;
         };
+
         int n_saved;
         int max_saved;
-        union
-        {
-            workshop_body_plan* workshop;
+
+        union {
+            workshop_body_plan *workshop;
             expandable_buffer workshop_memory;
         };
+
         int n_workshop;
         int max_workshop;
-        union
-        {
-            static_button* panel_buttons;
+
+        union {
+            static_button *panel_buttons;
             expandable_buffer panel_buttons_memory;
         };
+
         int max_panel_buttons;
         textbox rename_box;
         real_2 rename_box_alignment;
@@ -738,8 +742,8 @@ namespace P
         static_button search_cancel_button;
         float max_cost;
         float max_genome_size;
-        draggable_button* color_buttons;
-        real_4* colors;
+        draggable_button *color_buttons;
+        real_4 *colors;
         int n_colors;
         int dragged_button;
         real_2 drag_start;
@@ -752,52 +756,52 @@ namespace P
         static_button left_button;
         static_button right_button;
         static_button close_button;
-        uchar* dists;
+        uchar *dists;
         bounding_box_2 visible_region;
         int n_warnings[3];
         int warning_index[3];
         real_2 warning_box_size[3];
-        const char* stash_dir;
+        const char *stash_dir;
         tooltip_t tooltip;
     };
-    struct circle_render_info
-    {
+
+    struct circle_render_info {
         real_3 x;
         float r;
         real_4 color;
     };
-    struct saver_t
-    {
+
+    struct saver_t {
         uint pending_save;
         uint pending_map_edits;
         char temp_player_filename[256];
         char temp_world_filename[256];
         char final_player_filename[256];
         char final_world_filename[256];
-        uchar* serialized_player;
+        uchar *serialized_player;
         ulonglong max_serialized_player_size;
         ulonglong serialized_player_size;
         ulonglong player_written_size;
-        uchar* serialized_world;
+        uchar *serialized_world;
         ulonglong max_serialized_world_size;
         ulonglong serialized_world_size;
         ulonglong world_written_size;
-        void* world_file;
-        void* player_file;
-        void* world_filemapping;
-        void* player_filemapping;
-        uchar* world_mapview;
-        uchar* player_mapview;
+        void *world_file;
+        void *player_file;
+        void *world_filemapping;
+        void *player_filemapping;
+        uchar *world_mapview;
+        uchar *player_mapview;
         char temp_map_edits_filename[256];
         char final_map_edits_filename[256];
-        uchar* serialized_map_edits;
+        uchar *serialized_map_edits;
         ulonglong max_serialized_map_edits_size;
         ulonglong serialized_map_edits_size;
         ulonglong map_edits_written_size;
-        void* map_edits_file;
-        void* map_edits_filemapping;
-        uchar* map_edits_mapview;
-        const char* save_dir;
+        void *map_edits_file;
+        void *map_edits_filemapping;
+        uchar *map_edits_mapview;
+        const char *save_dir;
         char settings_filename[1024];
         char run_history_filename[1024];
         char recording_dir[1024];
@@ -809,122 +813,122 @@ namespace P
         char appdata_path[1024];
         char userdata_path[1024];
     };
-    struct uint8_2
-    {
-        union
-        {
-            struct
-            {
+
+    struct uint8_2 {
+        union {
+            struct {
                 uchar x;
                 uchar y;
             };
+
             uchar data[2];
         };
     };
-    struct translation_list
-    {
-        const char ** text;
-        const char* formatted;
+
+    struct translation_list {
+        const char **text;
+        const char *formatted;
         ulonglong max_formatted;
     };
-    struct uint8_3
-    {
-        union
-        {
-            struct
-            {
+
+    struct uint8_3 {
+        union {
+            struct {
                 uchar x;
                 uchar y;
                 uchar z;
             };
+
             uint8_2 xy;
-            struct
-            {
+
+            struct {
                 uchar __x0;
                 uint8_2 yz;
             };
+
             uchar data[3];
         };
     };
-    struct uint8_4
-    {
-        union
-        {
-            struct
-            {
+
+    struct uint8_4 {
+        union {
+            struct {
                 uchar x;
                 uchar y;
                 uchar z;
                 uchar w;
             };
+
             uint8_2 xy;
-            struct
-            {
+
+            struct {
                 uchar __x0;
                 uint8_2 yz;
             };
+
             uint8_3 xyz;
-            struct
-            {
+
+            struct {
                 uchar _x0;
                 uint8_3 yzw;
             };
+
             uchar data[4];
         };
     };
-    struct mutation_item
-    {
+
+    struct mutation_item {
         int mutation_index;
         int imbues[4];
         real_2 pos;
         float r;
         float r_dot;
     };
-    struct creature_t
-    {
+
+    struct creature_t {
         uint id;
         uint ___id_null_termination;
-        const char* filename;
+        const char *filename;
         mutation_item mutations[32];
         int n_mutations;
         float cost_discount;
         float abstract_speed;
-        uint show_damage_numbers : 1;
-        uint snap : 1;
-        uint pickupable : 1;
-        uint die_on_activation : 1;
-        uint hidden : 1;
+        uint show_damage_numbers: 1;
+        uint snap: 1;
+        uint pickupable: 1;
+        uint die_on_activation: 1;
+        uint hidden: 1;
         body_plan plan;
-        void* ai_func;
-        void* spawn_func;
-        void* death_func;
-        void* generation_func;
+        void *ai_func;
+        void *spawn_func;
+        void *death_func;
+        void *generation_func;
         char lua_func[128];
         char lua_spawn_func[128];
         char lua_death_func[128];
     };
-    struct slider_params
-    {
+
+    struct slider_params {
         float full_width;
         real_2 pos;
         bool active;
     };
-    struct translation_map
-    {
-        char ** keys;
-        translation_list* values;
+
+    struct translation_map {
+        char **keys;
+        translation_list *values;
         uint max_entries;
     };
-    struct unnamed_type_colors
-    {
+
+    struct unnamed_type_colors {
         real_3 color0;
         real_3 color1;
         real_3 color2;
         real_3 color3;
         real_3 color4;
     };
-    struct color_bar_render_info
-    {
+
+    struct color_bar_render_info {
         float min;
         float low;
         float mid;
@@ -933,18 +937,18 @@ namespace P
         unnamed_type_colors colors;
         uint do_square;
     };
-    struct id_t_index
-    {
+
+    struct id_t_index {
         id_t id;
         int index;
     };
-    struct rle_pair
-    {
+
+    struct rle_pair {
         float value;
         int count;
     };
-    struct healthbar_t
-    {
+
+    struct healthbar_t {
         float health;
         float cost;
         float min_cost;
@@ -956,21 +960,21 @@ namespace P
         float damage_timer;
         float can_rebirth;
     };
-    struct strand
-    {
-        const char* str;
+
+    struct strand {
+        const char *str;
         int len;
     };
-    struct spawn_creature_params
-    {
+
+    struct spawn_creature_params {
         int body_id;
         real_2 orientation;
-        uint spawn_cells : 1;
-        uint plant : 1;
-        uint dont_load_plan : 1;
+        uint spawn_cells: 1;
+        uint plant: 1;
+        uint dont_load_plan: 1;
     };
-    struct biome_entrance
-    {
+
+    struct biome_entrance {
         int core_a;
         int core_b;
         int n_entrances;
@@ -978,78 +982,78 @@ namespace P
         int boss_xp;
         spawn_creature_params boss_params;
         int achievement_index;
-        uint not_boss : 1;
-        uint direct : 1;
-        uint optional : 1;
-        uint room_exit : 1;
+        uint not_boss: 1;
+        uint direct: 1;
+        uint optional: 1;
+        uint room_exit: 1;
     };
-    struct work_task
-    {
-        void* func;
-        void* data;
+
+    struct work_task {
+        void *func;
+        void *data;
     };
-    struct uint_2
-    {
-        union
-        {
-            struct
-            {
+
+    struct uint_2 {
+        union {
+            struct {
                 uint x;
                 uint y;
             };
+
             uint data[2];
         };
     };
-    struct uint_3
-    {
-        union
-        {
-            struct
-            {
+
+    struct uint_3 {
+        union {
+            struct {
                 uint x;
                 uint y;
                 uint z;
             };
+
             uint_2 xy;
-            struct
-            {
+
+            struct {
                 uint __x0;
                 uint_2 yz;
             };
+
             uint data[3];
         };
     };
-    struct uint_4
-    {
-        union
-        {
-            struct
-            {
+
+    struct uint_4 {
+        union {
+            struct {
                 uint x;
                 uint y;
                 uint z;
                 uint w;
             };
+
             uint_2 xy;
-            struct
-            {
+
+            struct {
                 uint __x0;
                 uint_2 yz;
             };
+
             uint_3 xyz;
-            struct
-            {
+
+            struct {
                 uint _x0;
                 uint_3 yzw;
             };
+
             uint data[4];
         };
     };
-    struct cell_extra
-    {
+
+    struct cell_extra {
         int_2 body_coord;
         real_4 color;
-        contact* contacts;
+        contact *contacts;
         real_2 attached_world_pos;
         real_2 old_x;
         real_2 old_x_dot;
@@ -1058,373 +1062,376 @@ namespace P
         real_2 global_body_force;
         wall_t wall;
         real_2 wall_x;
-        cell * neighbors[6];
-        cell* next_in_body;
-        cell* next_in_bone;
+        cell *neighbors[6];
+        cell *next_in_body;
+        cell *next_in_bone;
     };
-    struct cell
-    {
-        union
-        {
+
+    struct cell {
+        union {
             int id;
             int id_packed[16];
         };
-        union
-        {
+
+        union {
             int body_id;
             int body_id_packed[16];
         };
-        union
-        {
+
+        union {
             int bone_id;
             int bone_id_packed[16];
         };
-        union
-        {
+
+        union {
             int material_index;
             int material_index_packed[16];
         };
-        union
-        {
+
+        union {
             float voltage;
             float voltage_packed[16];
         };
-        union
-        {
+
+        union {
             float voltage_dot;
             float voltage_dot_packed[16];
         };
-        union
-        {
+
+        union {
             float peak_voltage;
             float peak_voltage_packed[16];
         };
+
         float directional_voltage[96];
         float directional_eq_voltage[96];
         float directional_conductance[96];
-        union
-        {
+
+        union {
             float shock;
             float shock_packed[16];
         };
-        union
-        {
+
+        union {
             float temperature;
             float temperature_packed[16];
         };
-        union
-        {
+
+        union {
             float frozen_multiplier;
             float frozen_multiplier_packed[16];
         };
-        union
-        {
+
+        union {
             float maturity;
             float maturity_packed[16];
         };
-        union
-        {
+
+        union {
             float health;
             float health_packed[16];
         };
-        union
-        {
+
+        union {
             float damage;
             float damage_packed[16];
         };
-        union
-        {
+
+        union {
             float bloodless_damage;
             float bloodless_damage_packed[16];
         };
-        union
-        {
+
+        union {
             float screenshakeless_damage;
             float screenshakeless_damage_packed[16];
         };
-        union
-        {
+
+        union {
             float burn_damage;
             float burn_damage_packed[16];
         };
-        union
-        {
+
+        union {
             float ice_damage;
             float ice_damage_packed[16];
         };
-        union
-        {
+
+        union {
             float healing;
             float healing_packed[16];
         };
-        union
-        {
+
+        union {
             float dealt;
             float dealt_packed[16];
         };
-        union
-        {
+
+        union {
             float explosive_damage_multiplier;
             float explosive_damage_multiplier_packed[16];
         };
-        union
-        {
+
+        union {
             float heat_damage_multiplier;
             float heat_damage_multiplier_packed[16];
         };
-        union
-        {
+
+        union {
             float poison;
             float poison_packed[16];
         };
-        union
-        {
+
+        union {
             float mutagen;
             float mutagen_packed[16];
         };
-        union
-        {
+
+        union {
             int mutagen_material_index;
             int mutagen_material_index_packed[16];
         };
-        union
-        {
+
+        union {
             float leeching;
             float leeching_packed[16];
         };
-        union
-        {
+
+        union {
             float value;
             float value_packed[16];
         };
-        union
-        {
+
+        union {
             float value2;
             float value2_packed[16];
         };
-        union
-        {
+
+        union {
             int n_colors;
             int n_colors_packed[16];
         };
-        union
-        {
+
+        union {
             float mass;
             float mass_packed[16];
         };
-        union
-        {
+
+        union {
             float x;
             float x_packed[16];
         };
-        union
-        {
+
+        union {
             float y;
             float y_packed[16];
         };
-        union
-        {
+
+        union {
             float x_dot;
             float x_dot_packed[16];
         };
-        union
-        {
+
+        union {
             float y_dot;
             float y_dot_packed[16];
         };
-        union
-        {
+
+        union {
             float rot_x;
             float rot_x_packed[16];
         };
-        union
-        {
+
+        union {
             float rot_y;
             float rot_y_packed[16];
         };
-        union
-        {
+
+        union {
             float curl_x;
             float curl_x_packed[16];
         };
-        union
-        {
+
+        union {
             float curl_y;
             float curl_y_packed[16];
         };
-        union
-        {
+
+        union {
             float r;
             float r_packed[16];
         };
-        union
-        {
+
+        union {
             float base_r;
             float base_r_packed[16];
         };
-        union
-        {
+
+        union {
             float range_multiplier;
             float range_multiplier_packed[16];
         };
+
         float spacing[96];
-        union
-        {
+
+        union {
             float target_spacing;
             float target_spacing_packed[16];
         };
-        union
-        {
+
+        union {
             uint flags;
             uint flags_packed[16];
-            struct
-            {
-                uint open_sides : 6;
-                uint touched : 1;
-                uint health_gated : 1;
-                uint kill : 1;
-                uint floodfill_needed : 1;
-                uint linking : 1;
-                uint link_attracting : 1;
-                uint self_touching : 1;
-                uint poison_immune : 1;
-                uint nontrivial_bone : 1;
-                uint temp_rigid : 1;
-                uint cell_collision : 1;
-                uint no_explosive_regen_delay : 1;
-                uint has_brain_fn : 1;
-                uint recolored : 1;
-                uint sync_health : 1;
+
+            struct {
+                uint open_sides: 6;
+                uint touched: 1;
+                uint health_gated: 1;
+                uint kill: 1;
+                uint floodfill_needed: 1;
+                uint linking: 1;
+                uint link_attracting: 1;
+                uint self_touching: 1;
+                uint poison_immune: 1;
+                uint nontrivial_bone: 1;
+                uint temp_rigid: 1;
+                uint cell_collision: 1;
+                uint no_explosive_regen_delay: 1;
+                uint has_brain_fn: 1;
+                uint recolored: 1;
+                uint sync_health: 1;
             };
         };
-        union
-        {
+
+        union {
             float light_radius;
             float light_radius_packed[16];
         };
-        union
-        {
+
+        union {
             int n_contacts;
             int n_contacts_packed[16];
         };
-        union
-        {
+
+        union {
             float stickyness;
             float stickyness_packed[16];
         };
-        union
-        {
+
+        union {
             float stickyness_timer;
             float stickyness_timer_packed[16];
         };
-        union
-        {
+
+        union {
             float wall_force;
             float wall_force_packed[16];
         };
-        union
-        {
+
+        union {
             int attached;
             int attached_packed[16];
         };
-        union
-        {
+
+        union {
             int linked;
             int linked_packed[16];
         };
-        union
-        {
+
+        union {
             float phasing;
             float phasing_packed[16];
         };
-        union
-        {
+
+        union {
             float drag_reduction;
             float drag_reduction_packed[16];
         };
-        union
-        {
+
+        union {
             float detected_light;
             float detected_light_packed[16];
         };
-        union
-        {
+
+        union {
             float map_light;
             float map_light_packed[16];
         };
-        union
-        {
+
+        union {
             float voltage_multiplier;
             float voltage_multiplier_packed[16];
         };
-        union
-        {
+
+        union {
             float rigidity;
             float rigidity_packed[16];
         };
-        union
-        {
+
+        union {
             float stasis;
             float stasis_packed[16];
         };
-        union
-        {
+
+        union {
             uint floodfilled;
             uint floodfilled_packed[16];
         };
-        union
-        {
+
+        union {
             float old_voltage;
             float old_voltage_packed[16];
         };
-        union
-        {
+
+        union {
             float old_temperature;
             float old_temperature_packed[16];
         };
-        union
-        {
+
+        union {
             float old_health;
             float old_health_packed[16];
         };
-        union
-        {
+
+        union {
             float equilibrium_voltage;
             float equilibrium_voltage_packed[16];
         };
-        union
-        {
+
+        union {
             float total_conductance;
             float total_conductance_packed[16];
         };
-        union
-        {
+
+        union {
             float equilibrium_temperature;
             float equilibrium_temperature_packed[16];
         };
-        union
-        {
+
+        union {
             float total_heat_conductance;
             float total_heat_conductance_packed[16];
         };
-        union
-        {
+
+        union {
             float wall_temperature;
             float wall_temperature_packed[16];
         };
+
         cell_extra extra_fields[16];
     };
-    struct map_floodfill_piece
-    {
+
+    struct map_floodfill_piece {
         int id;
         int n_hexes;
         bounding_box_2 bounds;
     };
-    struct button_out
-    {
+
+    struct button_out {
         bool clicked;
         bool hovered;
     };
+
     // struct pow_log_data
     // {
     //     double ln2hi;
@@ -1432,10 +1439,9 @@ namespace P
     //     double poly[7];
     //     unnamed_0094 tab[128];
     // };
-    struct material_t
-    {
+    struct material_t {
         uint id;
-        const char* name;
+        const char *name;
         int next_variant;
         uint tags;
         uint tier;
@@ -1449,29 +1455,30 @@ namespace P
         float transfer_rate;
         float regen;
         float regen_delay_multiplier;
-        union
-        {
-            struct
-            {
-                uint attach_to_cells : 1;
-                uint attach_to_walls : 1;
-                uint poison_immune : 1;
-                uint no_electric_growth : 1;
-                uint penetrate_walls : 1;
-                uint self_touching : 1;
-                uint is_cancer : 1;
-                uint is_directional : 1;
-                uint show_adjacency : 1;
-                uint show_direction : 1;
-                uint show_neighbor_direction : 1;
-                uint is_hard : 1;
-                uint play_note : 1;
-                uint no_recolor : 1;
-                uint sync_health : 1;
-                uint is_stem : 1;
+
+        union {
+            struct {
+                uint attach_to_cells: 1;
+                uint attach_to_walls: 1;
+                uint poison_immune: 1;
+                uint no_electric_growth: 1;
+                uint penetrate_walls: 1;
+                uint self_touching: 1;
+                uint is_cancer: 1;
+                uint is_directional: 1;
+                uint show_adjacency: 1;
+                uint show_direction: 1;
+                uint show_neighbor_direction: 1;
+                uint is_hard: 1;
+                uint play_note: 1;
+                uint no_recolor: 1;
+                uint sync_health: 1;
+                uint is_stem: 1;
             };
+
             uint flags;
         };
+
         float density;
         float sharpness;
         float leeching;
@@ -1504,15 +1511,15 @@ namespace P
         real_2 uv;
         int combine_material_index1;
         int combine_material_index2;
-        void* physics_update_fn;
-        void* force_update_fn;
-        void* electric_update_fn;
-        void* connection_update_fn;
-        void* brain_fn;
-        void* destroyed_fn;
+        void *physics_update_fn;
+        void *force_update_fn;
+        void *electric_update_fn;
+        void *connection_update_fn;
+        void *brain_fn;
+        void *destroyed_fn;
     };
-    struct exp2f_data
-    {
+
+    struct exp2f_data {
         __uint64 tab[32];
         double shift_scaled;
         double poly[3];
@@ -1520,26 +1527,26 @@ namespace P
         double invln2_scaled;
         double poly_scaled[3];
     };
-    struct stbtt__hheap
-    {
-        stbtt__hheap_chunk* head;
-        void* first_free;
+
+    struct stbtt__hheap {
+        stbtt__hheap_chunk *head;
+        void *first_free;
         int num_remaining_in_head_chunk;
     };
-    struct sound_t
-    {
-        short* data;
+
+    struct sound_t {
+        short *data;
         int n_channels;
         int n_samples;
     };
-    struct stbtt_kerningentry
-    {
+
+    struct stbtt_kerningentry {
         int glyph1;
         int glyph2;
         int advance;
     };
-    struct boss_part_t
-    {
+
+    struct boss_part_t {
         int type;
         int creature_index;
         int body_id;
@@ -1552,17 +1559,18 @@ namespace P
         real_2 x_dot;
         real_2 orientation;
     };
-    struct room_t
-    {
-        uint cleared : 1;
+
+    struct room_t {
+        uint cleared: 1;
         int first_spawner;
         int n_spawners;
     };
-    struct translation_info
-    {
+
+    struct translation_info {
         int mutagen_material_index;
         int combine_material_index;
     };
+
     // struct lfClass
     // {
     //     ushort leaf;
@@ -1573,77 +1581,79 @@ namespace P
     //     ulong vshape;
     //     uchar data;
     // };
-    struct bone_id_table
-    {
-        union
-        {
-            id_index* index_table;
+    struct bone_id_table {
+        union {
+            id_index *index_table;
             expandable_buffer index_table_memory;
         };
+
         int n_max_elements;
         int next_id;
-        union
-        {
-            bone* elements;
+
+        union {
+            bone *elements;
             expandable_buffer elements_memory;
         };
+
         int n_elements;
     };
-    struct circular_buffer_t
-    {
-        uchar* buffer;
+
+    struct circular_buffer_t {
+        uchar *buffer;
         ulonglong size;
     };
-    struct brown_sound
-    {
+
+    struct brown_sound {
         float value;
         float filtered_value;
         float volume;
         float target_volume;
-        union
-        {
+
+        union {
             float next_target_volume;
             long next_target_volume_data;
         };
+
         float lowpass;
         float target_lowpass;
-        union
-        {
+
+        union {
             float next_lowpass;
             long next_lowpass_data;
         };
+
         float lerp_rate;
     };
-    struct audio_context
-    {
+
+    struct audio_context {
         bool initialized;
-        IMMDevice* device;
-        IAudioClient* audio_client;
-        IAudioRenderClient* render_client;
-        tWAVEFORMATEX* wfx;
+        IMMDevice *device;
+        IAudioClient *audio_client;
+        IAudioRenderClient *render_client;
+        tWAVEFORMATEX *wfx;
         uint buffer_frame_count;
         uint n_frames_available;
         uint n_frames_padding;
         uint internal_sample_rate;
         int output_samples_per_internal_sample;
-        float* game_sfx_buffer;
+        float *game_sfx_buffer;
         int game_sfx_pos;
         int game_sfx_size;
-        float* music_buffer;
+        float *music_buffer;
         int music_pos;
         int music_size;
         float game_sfx_volume;
         float target_game_sfx_volume;
         float music_volume;
         float target_music_volume;
-        queued_sound* queued_sounds;
+        queued_sound *queued_sounds;
         int max_queued_sounds;
         ulong next_queued_sound;
         ulong last_queued_sound;
-        queued_sound* playing_sounds;
+        queued_sound *playing_sounds;
         int n_playing_sounds;
         int max_playing_sounds;
-        looping_sound* looping_sounds;
+        looping_sound *looping_sounds;
         int n_looping_sounds;
         int max_looping_sounds;
         brown_sound brown_noise;
@@ -1651,118 +1661,119 @@ namespace P
         int current_song;
         float music_transition_speed;
         float target_music_transition_speed;
-        union
-        {
+
+        union {
             float next_target_music_transition_speed;
             long next_target_music_transition_speed_data;
         };
     };
-    struct map_t
-    {
+
+    struct map_t {
         uint seed;
         bounding_box_2 map_range;
-        biome_core* cores;
+        biome_core *cores;
         int n_cores;
-        float* wall_values;
-        float* visual_wall_values;
-        real_2* flow;
-        real_3* color;
-        int* biomes;
-        int* biome_cores;
-        float* light;
-        float* bumpyness;
-        float* temperature;
-        int* room_ids;
-        uchar* track_dists;
-        uint* flags;
-        uint* blocked_spawns;
-        uchar* edits;
-        uchar* save_hexes;
+        float *wall_values;
+        float *visual_wall_values;
+        real_2 *flow;
+        real_3 *color;
+        int *biomes;
+        int *biome_cores;
+        float *light;
+        float *bumpyness;
+        float *temperature;
+        int *room_ids;
+        uchar *track_dists;
+        uint *flags;
+        uint *blocked_spawns;
+        uchar *edits;
+        uchar *save_hexes;
         int_2 save_origin;
         int map_edits_number;
         int saved_map_edits_number;
-        room_t* rooms;
+        room_t *rooms;
         int n_rooms;
-        creature_spawner* spawners;
+        creature_spawner *spawners;
         int max_spawners;
         int n_spawners;
-        doorway* doors;
+        doorway *doors;
         int n_doors;
-        static_cell* static_cells;
+        static_cell *static_cells;
         int n_static_cells;
-        tunnel_tile* tunnel_tiles;
+        tunnel_tile *tunnel_tiles;
         int n_tunnel_tiles;
-        line_render_info* safe_zone_lines;
+        line_render_info *safe_zone_lines;
         int n_safe_zone_lines;
-        float* explored;
+        float *explored;
         int map_type;
         bool no_creatures;
-        biome_node* biome_nodes;
+        biome_node *biome_nodes;
         int n_biome_nodes;
-        biome_edge* biome_edges;
+        biome_edge *biome_edges;
         int n_biome_edges;
-        biome_entrance* biome_entrances;
+        biome_entrance *biome_entrances;
         int n_biome_entrances;
     };
-    struct line_render_info
-    {
+
+    struct line_render_info {
         real_3 x;
         real_2 d;
         float r;
         real_4 color;
     };
-    struct raycast_result
-    {
+
+    struct raycast_result {
         wall_t wall;
         float length;
     };
-    struct stbtt_pack_range
-    {
+
+    struct stbtt_pack_range {
         float font_size;
         int first_unicode_codepoint_in_range;
-        int* array_of_unicode_codepoints;
+        int *array_of_unicode_codepoints;
         int num_chars;
-        stbtt_packedchar* chardata_for_range;
+        stbtt_packedchar *chardata_for_range;
         uchar h_oversample;
         uchar v_oversample;
     };
-    struct saved_body_plan
-    {
-        uint is_folder : 1;
-        uint expanded : 1;
-        uint level : 30;
+
+    struct saved_body_plan {
+        uint is_folder: 1;
+        uint expanded: 1;
+        uint level: 30;
         char name[512];
         real_2 pos;
         float expand_t;
     };
-    struct looping_sound
-    {
+
+    struct looping_sound {
         int type;
         sound_t sound;
         float volume;
         float target_volume;
-        union
-        {
+
+        union {
             float next_target_volume;
             long next_target_volume_data;
         };
+
         float lerp_rate;
         double pos;
         int loop_overlap;
-        int* start_points;
+        int *start_points;
         int n_start_points;
         bool ready;
     };
-    struct stbtt__edge
-    {
+
+    struct stbtt__edge {
         float x0;
         float y0;
         float x1;
         float y1;
         int invert;
     };
-    struct doorway
-    {
+
+    struct doorway {
         int rooms[3];
         int n_rooms;
         int_2 pos;
@@ -1770,10 +1781,10 @@ namespace P
         int n_cells;
         float value;
         int adjacent_doors[6];
-        uint changed : 2;
+        uint changed: 2;
     };
-    struct game_sounds_t
-    {
+
+    struct game_sounds_t {
         sound_t squish;
         sound_t explosion;
         sound_t collision;
@@ -1798,40 +1809,40 @@ namespace P
         sound_t vacuum;
         sound_t spike;
         sound_t error;
-        looping_sound* shocked_loop;
-        looping_sound* laser_loop;
-        looping_sound* portal_loop;
-        looping_sound* music_loop;
+        looping_sound *shocked_loop;
+        looping_sound *laser_loop;
+        looping_sound *portal_loop;
+        looping_sound *music_loop;
     };
-    struct mtx_t
-    {
+
+    struct mtx_t {
         ulonglong _Type;
-        void* _Ptr;
-        void* _Cv;
+        void *_Ptr;
+        void *_Cv;
         uint _Owner;
         uint _Cnt;
     };
+
     // struct cParams_t
     // {
     //     lz4hc_strat_e strat;
     //     int nbSearches;
     //     uint targetLength;
     // };
-    struct tunnel_tile
-    {
+    struct tunnel_tile {
         int_2 pos;
         int index;
         float value;
     };
-    struct workshop_body_plan
-    {
+
+    struct workshop_body_plan {
         ulonglong workshop_id;
         char name[512];
         char path[512];
         real_2 pos;
     };
-    struct run_stats
-    {
+
+    struct run_stats {
         double start_time;
         double end_time;
         uint frames;
@@ -1843,40 +1854,42 @@ namespace P
         int creature_deaths;
         uint death_biome;
     };
-    struct body_id_table
-    {
-        union
-        {
-            id_index* index_table;
+
+    struct body_id_table {
+        union {
+            id_index *index_table;
             expandable_buffer index_table_memory;
         };
+
         int n_max_elements;
         int next_id;
-        union
-        {
-            body* elements;
+
+        union {
+            body *elements;
             expandable_buffer elements_memory;
         };
+
         int n_elements;
     };
-    struct decompressed_map_data
-    {
+
+    struct decompressed_map_data {
         int version_number;
         bounding_box_2 region;
-        uchar* data;
+        uchar *data;
         int size;
     };
-    struct tss_t
-    {
+
+    struct tss_t {
         uint _Idx;
     };
-    struct genode
-    {
+
+    struct genode {
         int type;
         int_2 p;
         real_2 dir;
         float length;
     };
+
     // struct tm
     // {
     //     int tm_sec;
@@ -1889,10 +1902,9 @@ namespace P
     //     int tm_yday;
     //     int tm_isdst;
     // };
-    struct stbtt_fontinfo
-    {
-        void* userdata;
-        uchar* data;
+    struct stbtt_fontinfo {
+        void *userdata;
+        uchar *data;
         int fontstart;
         int numGlyphs;
         int loca;
@@ -1912,16 +1924,16 @@ namespace P
         stbtt__buf fontdicts;
         stbtt__buf fdselect;
     };
-    struct font_info
-    {
+
+    struct font_info {
         uint texture;
         stbtt_fontinfo info;
         float size;
-        stbtt_packedchar* char_data;
+        stbtt_packedchar *char_data;
     };
-    struct text_info
-    {
-        const char* text;
+
+    struct text_info {
+        const char *text;
         real_2 x;
         real_4 color;
         real_2 alignment;
@@ -1930,47 +1942,47 @@ namespace P
         real_4 background_color;
         float background_radius;
     };
-    struct pDNameNode
-    {
+
+    struct pDNameNode {
         longlong _padding_;
-        DName* me;
+        DName *me;
     };
-    struct digger_t
-    {
+
+    struct digger_t {
         real_2 x;
         float r;
         int duration;
     };
-    struct fenv_t
-    {
+
+    struct fenv_t {
         ulong _Fe_ctl;
         ulong _Fe_stat;
     };
-    struct light_render_info
-    {
+
+    struct light_render_info {
         real_3 x;
         float r;
         real_4 color;
     };
-    struct mat_and_color
-    {
+
+    struct mat_and_color {
         int material_index;
         real_4 color;
     };
-    struct bitmap_t
-    {
-        uint8_4* data;
+
+    struct bitmap_t {
+        uint8_4 *data;
         int_2 size;
         uint texture;
     };
-    struct rectangle_space
-    {
+
+    struct rectangle_space {
         int_2 max_size;
-        bounding_box_2* free_regions;
+        bounding_box_2 *free_regions;
         int n_free_regions;
     };
-    struct inspector_menu
-    {
+
+    struct inspector_menu {
         int body_id;
         int_2 selected_cell_coord;
         int selected_variable;
@@ -1978,9 +1990,9 @@ namespace P
         float max;
         float low;
         float high;
-        uint show_cell_icons : 1;
-        uint dragging : 1;
-        uint graph_open : 1;
+        uint show_cell_icons: 1;
+        uint dragging: 1;
+        uint graph_open: 1;
         float graph_values[1200];
         int n_graph_values;
         int next_graph_value;
@@ -1992,20 +2004,20 @@ namespace P
         real_2 drag_start;
         tooltip_t tooltip;
     };
-    struct charNode
-    {
+
+    struct charNode {
         longlong _padding_;
         char me;
     };
-    struct stbtt__bitmap
-    {
+
+    struct stbtt__bitmap {
         int w;
         int h;
         int stride;
-        uchar* pixels;
+        uchar *pixels;
     };
-    struct cell_pickup
-    {
+
+    struct cell_pickup {
         int material_index;
         real_2 x;
         real_2 x_dot;
@@ -2013,27 +2025,27 @@ namespace P
         float r_dot;
         float alpha;
         float text_alpha;
-        union
-        {
-            struct
-            {
-                uint selected : 1;
-                uint is_combo : 1;
+
+        union {
+            struct {
+                uint selected: 1;
+                uint is_combo: 1;
             };
+
             uint flags;
         };
     };
-    struct text_element
-    {
+
+    struct text_element {
         uchar type;
-        union
-        {
-            const char* c;
+
+        union {
+            const char *c;
             uchar modifiers;
         };
     };
-    struct user_input
-    {
+
+    struct user_input {
         real_2 mouse;
         real_2 dmouse;
         real_2 cursor_x;
@@ -2047,7 +2059,7 @@ namespace P
         bool escape_blocked;
         bool hover_blocked;
         bool buttons_blocked;
-        void* active_ui_element;
+        void *active_ui_element;
         int hovered_ui_element;
         int old_hovered_ui_element;
         int cursor_type;
@@ -2057,19 +2069,19 @@ namespace P
         gamepad_t gamepad;
         short gamepad_prev_buttons;
     };
-    struct pairNode
-    {
+
+    struct pairNode {
         longlong _padding_;
-        DNameNode* left;
-        DNameNode* right;
+        DNameNode *left;
+        DNameNode *right;
         int myLen;
     };
-    struct recording_buffer
-    {
+
+    struct recording_buffer {
         uint frame_buffer;
-        uint* textures;
+        uint *textures;
         int n_textures;
-        uint8_4* data;
+        uint8_4 *data;
         int_2 resolution;
         int buffer_length;
         int current_frame;
@@ -2077,12 +2089,12 @@ namespace P
         bool initialized;
         float centiseconds;
     };
-    struct once_flag
-    {
-        void* _Opaque;
+
+    struct once_flag {
+        void *_Opaque;
     };
-    struct particle_t
-    {
+
+    struct particle_t {
         int type;
         real_2 x;
         real_2 x_dot;
@@ -2099,72 +2111,73 @@ namespace P
         float emission_radius;
         bool affects_gameplay;
     };
-    struct stbtt__hheap_chunk
-    {
-        stbtt__hheap_chunk* next;
+
+    struct stbtt__hheap_chunk {
+        stbtt__hheap_chunk *next;
     };
-    struct radiant_render_info
-    {
+
+    struct radiant_render_info {
         real_3 x;
         float r;
         float distortion;
         real_4 color;
     };
-    struct srwlock_guard
-    {
-        _RTL_SRWLOCK* lck;
+
+    struct srwlock_guard {
+        _RTL_SRWLOCK *lck;
     };
-    struct sandbox_menu
-    {
+
+    struct sandbox_menu {
         int tool;
         static_button tool_buttons[11];
         float selected_team;
         static_button team_buttons[5];
-        float* mutation_r;
-        float* mutation_r_dot;
+        float *mutation_r;
+        float *mutation_r_dot;
         slider_t explosion_slider;
         float explosion_radius;
         slider_t teraform_slider;
         float teraform_radius;
         int teraform_biome_index;
-        union
-        {
-            struct
-            {
-                uint teraform_coarse : 1;
-                uint teraform_flow : 1;
-                uint teraform_biome : 1;
-                uint teraform_grid : 1;
-                uint teraform_biome_hide : 1;
-                uint map_export_mode : 1;
+
+        union {
+            struct {
+                uint teraform_coarse: 1;
+                uint teraform_flow: 1;
+                uint teraform_biome: 1;
+                uint teraform_grid: 1;
+                uint teraform_biome_hide: 1;
+                uint map_export_mode: 1;
             };
+
             uint teraform_flags;
         };
+
         static_button teraform_buttons[4];
-        float* cell_r;
-        float* cell_r_dot;
-        float* biome_r;
-        float* biome_r_dot;
+        float *cell_r;
+        float *cell_r_dot;
+        float *biome_r;
+        float *biome_r_dot;
         real_2 block_zone;
         real_2 block_center;
         int selected_creature;
         int dragged_body;
         tooltip_t tooltip;
     };
-    struct stack_allocation
-    {
-        void* data;
+
+    struct stack_allocation {
+        void *data;
     };
-    struct memory_manager
-    {
+
+    struct memory_manager {
         expandable_buffer stack;
         ulonglong stack_used;
         ulonglong checkpoint;
         stack_allocation stallocs[4096];
         int n_stallocs;
     };
-    struct keybinds_t
-    {
+
+    struct keybinds_t {
         int forward;
         int backward;
         int left;
@@ -2182,16 +2195,17 @@ namespace P
         int inspect;
         int brush_bigger;
         int brush_smaller;
-        union
-        {
-            struct
-            {
+
+        union {
+            struct {
                 int tool_select;
                 int tool_draw;
                 int tool_fill;
             };
+
             int tools[3];
         };
+
         int toggle_symmetry;
         int toggle_icons;
         int editor_up;
@@ -2202,16 +2216,17 @@ namespace P
         int editor_zoom_out;
         int console;
     };
-    struct settings_t
-    {
+
+    struct settings_t {
         uint settings_version;
         float effects_volume;
         float music_volume;
-        union
-        {
+
+        union {
             keybinds_t keybinds;
             int buttons[29];
         };
+
         uint toggle_seek;
         uint toggle_ability;
         uint show_fps;
@@ -2250,39 +2265,38 @@ namespace P
         uint enable_console;
         uint win_unlocks;
     };
-    struct real_3x3
-    {
-        union
-        {
+
+    struct real_3x3 {
+        union {
             real_3 columns[3];
             float data[9];
         };
     };
-    struct map_template
-    {
+
+    struct map_template {
         bounding_box_2 region;
-        uchar* data;
-        int_2* points;
+        uchar *data;
+        int_2 *points;
         int n_points;
-        float* wall_values;
-        real_2* flow;
-        int* biome_ids;
+        float *wall_values;
+        real_2 *flow;
+        int *biome_ids;
     };
-    struct biome_node
-    {
+
+    struct biome_node {
         int core_index;
         real_2 x;
         float r;
-        uint fill : 1;
-        uint snap : 1;
+        uint fill: 1;
+        uint snap: 1;
         map_template templ;
-        biome_edge* first_edge;
-        void* pre_generation_fn;
-        void* post_generation_fn;
-        void* template_generation_fn;
+        biome_edge *first_edge;
+        void *pre_generation_fn;
+        void *post_generation_fn;
+        void *template_generation_fn;
     };
-    struct stbtt_bakedchar
-    {
+
+    struct stbtt_bakedchar {
         ushort x0;
         ushort y0;
         ushort x1;
@@ -2291,8 +2305,8 @@ namespace P
         float yoff;
         float xadvance;
     };
-    struct biome_core
-    {
+
+    struct biome_core {
         int biome_index;
         int guardian_id;
         int track_length;
@@ -2307,17 +2321,17 @@ namespace P
         int modifiers[16];
         int n_modifiers;
         int n_default_modifiers;
-        uint no_creatures : 1;
+        uint no_creatures: 1;
     };
-    struct lane_group_t
-    {
+
+    struct lane_group_t {
         int group_index;
-        void* shared;
+        void *shared;
         int n_lanes;
         _RTL_BARRIER barrier;
     };
-    struct draggable_button
-    {
+
+    struct draggable_button {
         real_2 x;
         real_2 x_dot;
         real_2 x_brown;
@@ -2332,32 +2346,32 @@ namespace P
         bool was_hovered;
         bool pinned;
     };
-    struct stbtt__point
-    {
+
+    struct stbtt__point {
         float x;
         float y;
     };
-    struct id_index
-    {
+
+    struct id_index {
         int id;
         int index;
     };
-    struct cell_pool
-    {
+
+    struct cell_pool {
         int material_indices[2048];
         float material_cum_chances[2048];
         int n_materials;
     };
-    struct biome_type
-    {
+
+    struct biome_type {
         uint id;
         real_3 color;
         float light;
         float bumpyness;
         float temperature;
-        uint tracked : 1;
-        uint explored : 1;
-        uint no_modifiers : 1;
+        uint tracked: 1;
+        uint explored: 1;
+        uint no_modifiers: 1;
         uint custom_cell_spawning;
         uint flags;
         int ambient_music_id;
@@ -2386,79 +2400,79 @@ namespace P
         int modifiers[16];
         int n_modifiers;
     };
-    struct plan_cell
-    {
+
+    struct plan_cell {
         int material_index;
         real_4 color;
         int_2 body_coord;
         int respawn_timer;
-        union
-        {
-            struct
-            {
+
+        union {
+            struct {
                 uchar selected_symmetry_index;
                 uchar pending_selected;
             };
+
             uint selected;
         };
+
         uint floodfilled;
         float r;
         float r_dot;
-        uint temporary : 1;
+        uint temporary: 1;
     };
-    struct context_t
-    {
-        union
-        {
-            struct
-            {
+
+    struct context_t {
+        union {
+            struct {
                 int lane_index;
-                lane_group_t* group;
+                lane_group_t *group;
             };
+
             lane_context_t current_lane_context;
         };
+
         lane_context_t lane_stack[4];
         int n_lane_stack;
         int barrier_number;
         int thread_id;
-        memory_manager* manager;
+        memory_manager *manager;
         uint seed;
         uint visual_seed;
-        lua_State* L;
+        lua_State *L;
         print_buffer_t log_buffer;
         print_buffer_t game_buffer;
-        trace_t* current_trace;
-        trace_t* latest_trace;
-        trace_node* current_trace_node;
-        profiler_frame* profiler_frames;
+        trace_t *current_trace;
+        trace_t *latest_trace;
+        trace_node *current_trace_node;
+        profiler_frame *profiler_frames;
         int current_profiler_frame;
-        circle_render_info* circles;
+        circle_render_info *circles;
         int n_circles;
     };
-    struct stashed_body_plan
-    {
+
+    struct stashed_body_plan {
         body_plan plan;
-        const char* name[512];
+        const char *name[512];
         real_2 pos;
     };
-    struct sound_params
-    {
+
+    struct sound_params {
         float volume;
         float delay;
         float pitch_shift;
         float lowpass_dist;
         int type;
     };
-    struct real_4x4
-    {
-        union
-        {
+
+    struct real_4x4 {
+        union {
             real_4 columns[4];
             float data[16];
         };
     };
-    struct render_context
-    {
+
+    struct render_context {
         float fov;
         real_3 camera_pos;
         real_3 old_camera_pos;
@@ -2473,10 +2487,9 @@ namespace P
         uint post_process_frame_buffer;
         uint background_frame_buffer;
         uint thumbnail_frame_buffer;
-        union
-        {
-            struct
-            {
+
+        union {
+            struct {
                 uint color_texture;
                 uint post_color_texture;
                 uint post_effects_texture;
@@ -2486,8 +2499,10 @@ namespace P
                 uint lighting_texture;
                 uint edit_distance_texture;
             };
+
             uint textures[9];
         };
+
         int current_background_texture;
         uint thumbnail_texture;
         uint wall_texture;
@@ -2502,23 +2517,24 @@ namespace P
         uint map_temperature_texture;
         uint map_explored_texture;
         int_2 resolution;
-        union
-        {
-            struct
-            {
+
+        union {
+            struct {
                 font_info small_font;
                 font_info default_font;
                 font_info medium_font;
                 font_info big_font;
             };
+
             font_info font_infos[4];
         };
+
         float time;
     };
-    struct window_t
-    {
-        HWND__* hwnd;
-        HGLRC__* hglrc;
+
+    struct window_t {
+        HWND__ *hwnd;
+        HGLRC__ *hglrc;
         real_2 size;
         user_input input;
         user_input frame_input;
@@ -2531,102 +2547,101 @@ namespace P
         bool clip_cursor;
         bool focused;
     };
-    struct multithread_loop_info
-    {
-        user_input* input;
+
+    struct multithread_loop_info {
+        user_input *input;
         int start;
         int end;
         int iteration;
     };
-    struct int_2x2
-    {
-        union
-        {
+
+    struct int_2x2 {
+        union {
             int_2 columns[2];
             int data[4];
         };
     };
-    struct cell_item
-    {
+
+    struct cell_item {
         int type;
-        union
-        {
+
+        union {
             int material_index;
             int body_id;
         };
+
         draggable_button button;
-        uint filtered : 1;
-        uint activated : 1;
+        uint filtered: 1;
+        uint activated: 1;
     };
-    struct workshop_published_item
-    {
+
+    struct workshop_published_item {
         ulonglong id;
         char name[129];
     };
-    struct biome_edge
-    {
-        biome_node* node;
-        biome_edge* next;
+
+    struct biome_edge {
+        biome_node *node;
+        biome_edge *next;
         real_2 dir;
         float spacing;
         float randomness;
         float stiffness;
         float bias;
-        uint virtual_edge : 1;
+        uint virtual_edge: 1;
     };
-    struct serialized_data
-    {
-        uchar* data;
+
+    struct serialized_data {
+        uchar *data;
         int size;
     };
-    struct queued_sound
-    {
-        sound_t* sound;
+
+    struct queued_sound {
+        sound_t *sound;
         sound_params params;
         float filtered[2];
         int n_played_samples;
         bool kill;
     };
-    struct light_reciever_t
-    {
+
+    struct light_reciever_t {
         real_2 x;
         real_3 hsv;
         float radius_sq;
     };
-    struct biome_modifier
-    {
-        const char* id;
-        void* generation_fn;
-        void* creature_fn;
+
+    struct biome_modifier {
+        const char *id;
+        void *generation_fn;
+        void *creature_fn;
         float chance;
     };
-    struct srwlock_shared_guard
-    {
-        _RTL_SRWLOCK* lck;
+
+    struct srwlock_shared_guard {
+        _RTL_SRWLOCK *lck;
     };
-    struct real_2x2
-    {
-        union
-        {
+
+    struct real_2x2 {
+        union {
             real_2 columns[2];
             float data[4];
         };
     };
-    struct tool_render_info
-    {
+
+    struct tool_render_info {
         real_3 x;
         float r;
         real_4 color;
         uint id;
         float state;
     };
-    struct lightning_emitter
-    {
+
+    struct lightning_emitter {
         real_2 x;
         real_2 dir;
     };
-    struct laser_t
-    {
+
+    struct laser_t {
         int cell_id;
         real_2 x;
         real_2 dir;
@@ -2634,10 +2649,10 @@ namespace P
         float width;
         float length;
     };
-    struct stbtt_pack_context
-    {
-        void* user_allocator_context;
-        void* pack_info;
+
+    struct stbtt_pack_context {
+        void *user_allocator_context;
+        void *pack_info;
         int width;
         int height;
         int stride_in_bytes;
@@ -2645,18 +2660,18 @@ namespace P
         int skip_missing;
         uint h_oversample;
         uint v_oversample;
-        uchar* pixels;
-        void* nodes;
+        uchar *pixels;
+        void *nodes;
     };
-    struct brain_t
-    {
+
+    struct brain_t {
         real_2 movement;
         float rotation;
         real_2 grab_target;
         float grab_weight;
         float grab_dir;
         bool abilities[3];
-        void* fun;
+        void *fun;
         real_2 old_movement;
         float old_rotation;
         real_2 old_grab_target;
@@ -2669,26 +2684,25 @@ namespace P
         real_2 target_point;
         double values[32];
     };
-    struct particle_type_t
-    {
+
+    struct particle_type_t {
         bool streak;
         bool draw_on_top;
     };
-    struct lua_State
-    {
-    };
-    struct body
-    {
+
+    struct lua_State {};
+
+    struct body {
         int id;
         int creature_index;
         body_plan plan;
-        int* cell_map;
-        cell* first_cell;
-        cell* last_cell;
+        int *cell_map;
+        cell *first_cell;
+        cell *last_cell;
         int parent_id;
         int holder_id;
         float team;
-        boss_part_t* boss_part;
+        boss_part_t *boss_part;
         float cost_limit;
         float max_health;
         float total_cost;
@@ -2702,22 +2716,22 @@ namespace P
         float cost_discount;
         float bonus_health_multiplier;
         float abstract_acceleration;
-        uint loaded : 1;
-        uint floodfill_needed : 1;
-        uint rooted : 1;
-        uint touched : 1;
-        uint is_boss : 1;
-        uint show_damage_numbers : 1;
-        uint snap : 1;
-        uint pickupable : 1;
-        uint activated : 1;
-        uint is_safe : 1;
-        uint kill : 1;
-        uint kill_slowly : 2;
-        uint unload : 1;
-        uint plan_modified : 1;
-        uint cell_collision : 1;
-        uint no_regen_delay : 1;
+        uint loaded: 1;
+        uint floodfill_needed: 1;
+        uint rooted: 1;
+        uint touched: 1;
+        uint is_boss: 1;
+        uint show_damage_numbers: 1;
+        uint snap: 1;
+        uint pickupable: 1;
+        uint activated: 1;
+        uint is_safe: 1;
+        uint kill: 1;
+        uint kill_slowly: 2;
+        uint unload: 1;
+        uint plan_modified: 1;
+        uint cell_collision: 1;
+        uint no_regen_delay: 1;
         uint regen_boost;
         float avg_phasing;
         real_2 spawn_x;
@@ -2750,37 +2764,38 @@ namespace P
         float text_alpha;
         float damage_number;
         float damage_number_timer;
-        union
-        {
-            struct
-            {
-                uint portal_index : 8;
-                uint in_portal : 1;
+
+        union {
+            struct {
+                uint portal_index: 8;
+                uint in_portal: 1;
             };
+
             uint portal_info;
         };
+
         float portal_timer;
         brain_t brain;
         wall_t nearest_wall;
-        union
-        {
+
+        union {
             mutation_item_list mutation_items;
-            struct
-            {
-                mutation_item* mutations;
+
+            struct {
+                mutation_item *mutations;
                 int n_mutations;
                 int max_mutations;
             };
         };
     };
-    struct pcharNode
-    {
+
+    struct pcharNode {
         longlong _padding_;
-        const char* me;
+        const char *me;
         int myLen;
     };
-    struct acid_particle_16
-    {
+
+    struct acid_particle_16 {
         float x[16];
         float y[16];
         float x_dot[16];
@@ -2791,29 +2806,29 @@ namespace P
         real_4 color_initial[16];
         real_4 color_final[16];
     };
-    struct command_result_t
-    {
-        const char* command;
-        const char* result;
-        const char* error;
+
+    struct command_result_t {
+        const char *command;
+        const char *result;
+        const char *error;
     };
-    struct player_command_t
-    {
+
+    struct player_command_t {
         real_2 movement;
         real_2 grab_target;
         float grab_weight;
         float grab_dir;
         bool abilities[1];
     };
-    struct tss_ptd
-    {
-        tss_ptd* next;
-        tss_ptd* prev;
-        void * data[1024];
+
+    struct tss_ptd {
+        tss_ptd *next;
+        tss_ptd *prev;
+        void *data[1024];
         bool tss_dtor_used;
     };
-    struct bone
-    {
+
+    struct bone {
         int id;
         float mass;
         float inertia;
@@ -2824,92 +2839,92 @@ namespace P
         float omega;
         int n_cells;
         real_2 plan_center;
-        cell* first_cell;
-        cell* last_cell;
+        cell *first_cell;
+        cell *last_cell;
         uint merge_id;
-        uint floodfill_needed : 1;
+        uint floodfill_needed: 1;
     };
-    struct big_lightning_vertex
-    {
+
+    struct big_lightning_vertex {
         real_2 x;
         real_4 color;
     };
-    struct init_world_params
-    {
+
+    struct init_world_params {
         bool keep_seed;
         int map_type;
         bool no_creatures;
         bool loading;
     };
-    struct static_cell
-    {
+
+    struct static_cell {
         real_2 x;
         uint alive;
         real_3 color;
         int neighbors[6];
         uint open_sides;
     };
+
     // struct type_info
     // {
     //     longlong _padding_;
     //     __std_type_info_data _Data;
     // };
-    union float_conv
-    {
+    union float_conv {
         float f;
         int i;
     };
-    struct contact
-    {
-        cell* o;
+
+    struct contact {
+        cell *o;
         real_2 normal;
         float spacing;
         float depth;
         int c_sharpness;
         int o_sharpness;
     };
-    struct bone_contact
-    {
-        cell* c;
-        cell* o;
+
+    struct bone_contact {
+        cell *c;
+        cell *o;
         real_2 normal;
         float spacing;
         float depth;
         int c_sharpness;
         int o_sharpness;
     };
-    struct icon_render_info
-    {
+
+    struct icon_render_info {
         real_3 x;
         float r;
         real_4 color;
         real_2 uv;
     };
-    struct world
-    {
+
+    struct world {
         int menu;
-        uint confirm_newgame : 1;
-        uint confirm_quit : 1;
-        uint dead : 1;
-        uint won : 1;
-        uint show_body_preview : 1;
-        uint show_trace : 1;
-        uint frozen : 1;
-        uint map_mode : 1;
-        uint use_battle_music : 1;
-        uint scroll_blocked : 1;
-        uint lava_walls : 1;
-        uint use_gamepad : 1;
-        uint gamepad_cursor_mode : 1;
-        uint left_cursor_mode : 1;
-        uint hide_cursor : 1;
-        uint ability_toggled0 : 1;
-        uint ability_toggled1 : 1;
-        uint ability_toggled2 : 1;
-        uint seek_toggled : 2;
-        uint portals_enabled : 2;
-        uint block_mouse : 1;
-        uint free_last_mutations : 1;
+        uint confirm_newgame: 1;
+        uint confirm_quit: 1;
+        uint dead: 1;
+        uint won: 1;
+        uint show_body_preview: 1;
+        uint show_trace: 1;
+        uint frozen: 1;
+        uint map_mode: 1;
+        uint use_battle_music: 1;
+        uint scroll_blocked: 1;
+        uint lava_walls: 1;
+        uint use_gamepad: 1;
+        uint gamepad_cursor_mode: 1;
+        uint left_cursor_mode: 1;
+        uint hide_cursor: 1;
+        uint ability_toggled0: 1;
+        uint ability_toggled1: 1;
+        uint ability_toggled2: 1;
+        uint seek_toggled: 2;
+        uint portals_enabled: 2;
+        uint block_mouse: 1;
+        uint free_last_mutations: 1;
         int game_mode;
         int debug_view_mode;
         int exploding_corpses;
@@ -2930,7 +2945,7 @@ namespace P
         int selected_body;
         float last_team;
         mutation_item_list last_mutations;
-        biome_core* current_race_core;
+        biome_core *current_race_core;
         uint completed_race_checkpoints;
         int race_start_frame;
         int last_race_time;
@@ -2951,163 +2966,182 @@ namespace P
         portal_t portals[2];
         body_id_table bodies;
         bone_id_table bones;
-        union
-        {
-            uchar* body_auxiliary_data;
+
+        union {
+            uchar *body_auxiliary_data;
             expandable_buffer body_auxiliary_data_memory;
         };
+
         int body_auxiliary_size;
-        union
-        {
-            id_index* cell_index_table;
+
+        union {
+            id_index *cell_index_table;
             expandable_buffer cell_index_table_memory;
         };
-        union
-        {
-            cell* cells;
+
+        union {
+            cell *cells;
             expandable_buffer cells_memory;
         };
+
         int n_cells;
         int max_cells;
         int next_cell_id;
-        boss_gate* boss_gates;
+        boss_gate *boss_gates;
         int n_boss_gates;
-        lightning_emitter* lightning_emitters;
+        lightning_emitter *lightning_emitters;
         int n_lightning_emitters;
         int max_lightning_emitters;
         int selected;
         int hovered;
         map_t map;
-        int* hash_data;
-        int* hashed_cells;
+        int *hash_data;
+        int *hashed_cells;
         int max_hashed_cells;
-        real_3* hashed_pos;
-        int* grid_data;
-        int* grid_bodies;
-        real_2* grid_pos;
-        boss_part_t* boss_parts;
+        real_3 *hashed_pos;
+        int *grid_data;
+        int *grid_bodies;
+        real_2 *grid_pos;
+        boss_part_t *boss_parts;
         int n_boss_parts;
-        union
-        {
-            lightning_t* lightnings;
+
+        union {
+            lightning_t *lightnings;
             expandable_buffer lightnings_memory;
         };
+
         int n_lightnings;
         int max_lightnings;
-        union
-        {
-            laser_t* lasers;
+
+        union {
+            laser_t *lasers;
             expandable_buffer lasers_memory;
         };
+
         int n_lasers;
         int max_lasers;
-        union
-        {
-            explosion_t* explosions;
+
+        union {
+            explosion_t *explosions;
             expandable_buffer explosions_memory;
         };
+
         int n_explosions;
         int max_explosions;
-        union
-        {
-            explosion_render_info* explosion_visuals;
+
+        union {
+            explosion_render_info *explosion_visuals;
             expandable_buffer explosion_visuals_memory;
         };
+
         int n_explosion_visuals;
         int max_explosion_visuals;
-        union
-        {
-            digger_t* diggers;
+
+        union {
+            digger_t *diggers;
             expandable_buffer diggers_memory;
         };
+
         int n_diggers;
         int max_diggers;
-        union
-        {
-            radiant_render_info* radiant_visuals;
+
+        union {
+            radiant_render_info *radiant_visuals;
             expandable_buffer radiant_visuals_memory;
         };
+
         int n_radiant_visuals;
         int max_radiant_visuals;
-        union
-        {
-            circle_render_info* stasis_visuals;
+
+        union {
+            circle_render_info *stasis_visuals;
             expandable_buffer stasis_visuals_memory;
         };
+
         int n_stasis_visuals;
         int max_stasis_visuals;
-        union
-        {
-            color_swatch_render_info* paint_visuals;
+
+        union {
+            color_swatch_render_info *paint_visuals;
             expandable_buffer paint_visuals_memory;
         };
+
         int n_paint_visuals;
         int max_paint_visuals;
-        union
-        {
-            particle_pusher_t* particle_pushers;
+
+        union {
+            particle_pusher_t *particle_pushers;
             expandable_buffer particle_pushers_memory;
         };
+
         int n_particle_pushers;
         int max_particle_pushers;
-        union
-        {
-            link_attractor_t* link_attractors;
+
+        union {
+            link_attractor_t *link_attractors;
             expandable_buffer link_attractors_memory;
         };
+
         int n_link_attractors;
         int max_link_attractors;
-        union
-        {
-            magnetic_field_t* magnetic_fields;
+
+        union {
+            magnetic_field_t *magnetic_fields;
             expandable_buffer magnetic_fields_memory;
         };
+
         int n_magnetic_fields;
         int max_magnetic_fields;
-        light_reciever_t* light_recievers;
-        cell ** light_reciever_cells;
-        int* light_reciever_values;
+        light_reciever_t *light_recievers;
+        cell **light_reciever_cells;
+        int *light_reciever_values;
         int n_light_recievers;
-        union
-        {
-            mutation_pickup* mutation_pickups;
+
+        union {
+            mutation_pickup *mutation_pickups;
             expandable_buffer mutation_pickups_memory;
         };
+
         int n_mutation_pickups;
         int max_mutation_pickups;
-        union
-        {
-            cell_pickup* cell_pickups;
+
+        union {
+            cell_pickup *cell_pickups;
             expandable_buffer cell_pickups_memory;
         };
+
         int n_cell_pickups;
         int max_cell_pickups;
-        union
-        {
-            particle_t* particles;
+
+        union {
+            particle_t *particles;
             expandable_buffer particles_memory;
         };
+
         int n_particles;
         int max_particles;
-        union
-        {
-            acid_particle_16* acid_particles;
+
+        union {
+            acid_particle_16 *acid_particles;
             expandable_buffer acid_particles_memory;
         };
+
         int n_acid_particles;
         int max_acid_particle_groups;
-        union
-        {
-            biome_type* biome_types;
+
+        union {
+            biome_type *biome_types;
             expandable_buffer biome_types_memory;
         };
+
         int max_biome_types;
         int n_biome_types;
-        union
-        {
-            biome_modifier* biome_modifiers;
+
+        union {
+            biome_modifier *biome_modifiers;
             expandable_buffer biome_modifiers_memory;
         };
+
         int max_biome_modifiers;
         int n_biome_modifiers;
         tooltip_t tooltip;
@@ -3121,19 +3155,19 @@ namespace P
         int frame_number;
         double last_frame_time;
         int tutorial_stage;
-        const char* current_tutorial;
+        const char *current_tutorial;
         int map_prompt_timer;
         real_2 end_text_x;
         float fade_in;
         float wall_vision;
         float start_trans;
-        uint loading_screen : 1;
-        uint done_loading : 1;
-        uint starting_game : 1;
-        uint starting_new_run : 1;
-        uint starting_sandbox : 1;
-        uint has_save : 1;
-        uint has_sandbox : 1;
+        uint loading_screen: 1;
+        uint done_loading: 1;
+        uint starting_game: 1;
+        uint starting_new_run: 1;
+        uint starting_sandbox: 1;
+        uint has_save: 1;
+        uint has_sandbox: 1;
         uint starting_mode;
         uint start_animation_done;
         init_world_params sandbox_start_params;
@@ -3147,7 +3181,7 @@ namespace P
         float singing_volume[96];
         final_boss_state final_boss;
         run_stats run;
-        char * message_queue[16];
+        char *message_queue[16];
         int n_message_queue;
         float message_timer;
         print_buffer_t game_print_buffer;
@@ -3155,14 +3189,14 @@ namespace P
         uint queued_seed;
         bool use_fixed_seed;
         bool is_seeded;
-        lua_State* console_L;
+        lua_State *console_L;
         textbox console_box;
-        command_result_t* console_history;
+        command_result_t *console_history;
         int max_console_history;
         int n_console_history;
         int selected_command;
         bool show_console;
-        const char* stash_dir;
+        const char *stash_dir;
         translation_map translations;
         int n_languages;
         int language_index;
@@ -3171,24 +3205,25 @@ namespace P
         int n_workshop_published;
         int total_workshop_published;
         int workshop_published_page;
-        render_context* rc;
+        render_context *rc;
         player_command_t player_commands[360];
         int player_command_start;
         int n_player_commands;
         int input_delay;
     };
-    struct rectangle_render_info
-    {
+
+    struct rectangle_render_info {
         real_3 x;
         real_2 r;
         real_4 color;
     };
-    struct link_attractor_t
-    {
+
+    struct link_attractor_t {
         real_2 x;
         float strength;
         int bone_id;
     };
+
     // struct lfTaggedUnion
     // {
     //     ushort leaf;
@@ -3197,10 +3232,10 @@ namespace P
     //     ulong caselist;
     //     uchar data;
     // };
-    struct cnd_t
-    {
-        void* _Ptr;
+    struct cnd_t {
+        void *_Ptr;
     };
+
     // struct lconv
     // {
     //     const char* decimal_point;
@@ -3236,16 +3271,15 @@ namespace P
     //     ushort mbulinfo[6];
     //     uchar[8] rgrange[4];
     // };
-    struct boss_gate
-    {
+    struct boss_gate {
         int_2 pos;
         int boss_id;
         int first_cell;
         int n_cells;
         int achievement_index;
     };
-    struct cell_render_info
-    {
+
+    struct cell_render_info {
         real_3 x;
         real_2 body_x;
         real_2 r;
@@ -3257,86 +3291,75 @@ namespace P
         real_2 uv;
         uint open_sides;
     };
-    struct components_type
-    {
-        __uint64 _mantissa : 52;
-        __uint64 _exponent : 11;
-        __uint64 _sign : 1;
+
+    struct components_type {
+        __uint64 _mantissa: 52;
+        __uint64 _exponent: 11;
+        __uint64 _sign: 1;
     };
+
     // struct components_type
     // {
     //     uint _mantissa : 23;
     //     uint _exponent : 8;
     //     uint _sign : 1;
     // };
-    struct exception
-    {
+    struct exception {
         longlong _padding_;
         __std_exception_data _Data;
     };
-    struct in_place_t
-    {
+
+    struct in_place_t {};
+
+    struct bad_typeid {};
+
+    struct exception_ptr {
+        void *_Data1;
+        void *_Data2;
     };
-    struct bad_typeid
-    {
-    };
-    struct exception_ptr
-    {
-        void* _Data1;
-        void* _Data2;
-    };
-    struct bad_variant_access
-    {
-    };
-    struct nothrow_t
-    {
-    };
-    struct nested_exception
-    {
+
+    struct bad_variant_access {};
+
+    struct nothrow_t {};
+
+    struct nested_exception {
         longlong _padding_;
         exception_ptr _Exc;
     };
-    struct bad_cast
-    {
-    };
-    struct strong_ordering
-    {
+
+    struct bad_cast {};
+
+    struct strong_ordering {
         char _Value;
     };
-    struct bad_optional_access
-    {
-    };
-    struct bad_exception
-    {
-    };
-    struct nullopt_t
-    {
-    };
-    struct partial_ordering
-    {
+
+    struct bad_optional_access {};
+
+    struct bad_exception {};
+
+    struct nullopt_t {};
+
+    struct partial_ordering {
         char _Value;
     };
-    struct bad_alloc
-    {
-    };
-    struct weak_ordering
-    {
+
+    struct bad_alloc {};
+
+    struct weak_ordering {
         char _Value;
     };
-    struct bad_array_new_length
-    {
-    };
-    struct dangling
-    {
-    };
-    struct process_end_policy_properties
-    {
-    };
-    struct errentry
-    {
+
+    struct bad_array_new_length {};
+
+    struct dangling {};
+
+    struct process_end_policy_properties {};
+
+    struct errentry {
         ulong oscode;
         int errnocode;
     };
+
     // struct tss_global_data_t
     // {
     //     _RTL_SRWLOCK lock;
@@ -3345,36 +3368,34 @@ namespace P
     //     tss_ptd* ptd_list;
     //     uint last_idx;
     // };
-    struct scoped_fp_state_reset
-    {
+    struct scoped_fp_state_reset {
         fenv_t _environment;
         bool _requires_reset;
     };
-    struct scoped_get_last_error_reset
-    {
+
+    struct scoped_get_last_error_reset {
         ulong _old_last_error;
     };
-    struct write_result
-    {
+
+    struct write_result {
         ulong error_code;
         ulong char_count;
         ulong lf_count;
     };
-    struct fp_control_word_guard
-    {
+
+    struct fp_control_word_guard {
         uint _original_control_word;
         uint _mask;
     };
-    struct filwbuf_context
-    {
+
+    struct filwbuf_context {
         bool _is_split_character;
         uchar _leftover_low_order_byte;
     };
-    struct environment_strings_traits
-    {
-    };
-    struct file_options
-    {
+
+    struct environment_strings_traits {};
+
+    struct file_options {
         char crt_flags;
         ulong access;
         ulong create;
@@ -3382,37 +3403,33 @@ namespace P
         ulong attributes;
         ulong flags;
     };
-    struct windowing_model_policy_properties
-    {
+
+    struct windowing_model_policy_properties {};
+
+    struct beginthread_thunk_data {
+        void *real_entry;
+        void *data;
     };
-    struct beginthread_thunk_data
-    {
-        void* real_entry;
-        void* data;
-    };
-    struct guard
-    {
-    };
-    struct cachedint
-    {
+
+    struct guard {};
+
+    struct cachedint {
         int _value;
         bool _valid;
     };
+
     // struct guard
     // {
     //     cachedint* _parent;
     //     cachedint _copy;
     //     bool _enabled;
     // };
-    struct begin_thread_init_policy_properties
-    {
-    };
-    struct scoped_global_state_reset
-    {
-    };
-    struct developer_information_policy_properties
-    {
-    };
+    struct begin_thread_init_policy_properties {};
+
+    struct scoped_global_state_reset {};
+
+    struct developer_information_policy_properties {};
+
     // struct formatting_buffer
     // {
     //     char _member_buffer[1024];
@@ -3424,25 +3441,24 @@ namespace P
     //     state next_state;
     //     character_type current_class;
     // };
-    struct big_integer
-    {
+    struct big_integer {
         uint _used;
         uint _data[115];
     };
-    struct floating_point_value
-    {
-        void* _value;
+
+    struct floating_point_value {
+        void *_value;
         bool _is_double;
     };
-    struct floating_point_string
-    {
+
+    struct floating_point_string {
         int _exponent;
         uint _mantissa_count;
         uchar _mantissa[768];
         bool _is_negative;
     };
-    struct unpack_index
-    {
+
+    struct unpack_index {
         ushort _offset;
         uchar _zeroes;
         uchar _size;

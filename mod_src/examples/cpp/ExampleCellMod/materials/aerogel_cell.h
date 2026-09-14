@@ -2,8 +2,7 @@
 #include "plasmid_api.h"
 
 // We will call this function in OnInitMats in main.cpp
-inline void AddAeroGelCell()
-{
+inline void AddAeroGelCell() {
     // This is an Aero-gel cell, which is very light, brittle and insulating like aero-gel in real life
     auto material = P::materials_list[P::CellRef{"Lightweight cell"}.GetIndex()]; // Use Lightweight cell as base
     material.is_hard = true;

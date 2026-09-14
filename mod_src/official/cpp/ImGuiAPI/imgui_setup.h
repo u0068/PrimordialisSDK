@@ -12,8 +12,7 @@ inline WNDPROC original_wndproc;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam)
-{
+inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam) {
     BYTE keyboard_state[256];
 
     if (!GetKeyboardState(keyboard_state))
@@ -33,8 +32,7 @@ inline void AddKeyCharacter(WPARAM wParam, LPARAM lParam)
         GetKeyboardLayout(0)
     );
 
-    if (count > 0)
-    {
+    if (count > 0) {
         for (int i = 0; i < count; ++i)
             ImGui::GetIO().AddInputCharacter(chars[i]);
     }
@@ -44,8 +42,7 @@ inline LRESULT CALLBACK imgui_wndproc(
     HWND hwnd,
     UINT msg,
     WPARAM wParam,
-    LPARAM lParam)
-{
+    LPARAM lParam) {
     ImGui_ImplWin32_WndProcHandler(
         hwnd,
         msg,
@@ -53,10 +50,8 @@ inline LRESULT CALLBACK imgui_wndproc(
         lParam
     );
 
-    if (msg == WM_KEYDOWN)
-    {
-        switch (wParam)
-        {
+    if (msg == WM_KEYDOWN) {
+        switch (wParam) {
             case VK_SHIFT:
             case VK_CONTROL:
             case VK_MENU:
@@ -72,7 +67,7 @@ inline LRESULT CALLBACK imgui_wndproc(
 
             default:
                 AddKeyCharacter(wParam, lParam);
-            break;
+                break;
         }
     }
 
@@ -85,8 +80,7 @@ inline LRESULT CALLBACK imgui_wndproc(
     );
 }
 
-inline void BlockInputs(P::window_t* window)
-{
+inline void BlockInputs(P::window_t *window) {
     Next<void>(window);
     if (!P::IsThreadSafe())
         return;
@@ -117,9 +111,8 @@ inline void BlockInputs(P::window_t* window)
     window->frame_input.mouse_hwheel = 0;
 }
 
-inline void DrawImgui()
-{
-    ImGuiIO& io = ImGui::GetIO();
+inline void DrawImgui() {
+    ImGuiIO &io = ImGui::GetIO();
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
@@ -135,19 +128,19 @@ inline void DrawImgui()
     );;
 
     P::real_2 scale_factor{
-        (float)viewport[2]/(float)P::main_wnd->size.x,
-        (float)viewport[3]/(float)P::main_wnd->size.y};
+        (float) viewport[2] / (float) P::main_wnd->size.x,
+        (float) viewport[3] / (float) P::main_wnd->size.y
+    };
     POINT mouse_pos;
-    if (GetCursorPos(&mouse_pos))
-    {
+    if (GetCursorPos(&mouse_pos)) {
         ScreenToClient(
-            (HWND)P::main_wnd->hwnd,
+            (HWND) P::main_wnd->hwnd,
             &mouse_pos
         );
 
         io.AddMousePosEvent(
-            static_cast<float>(mouse_pos.x)*scale_factor.x,
-            static_cast<float>(mouse_pos.y)*scale_factor.y
+            static_cast<float>(mouse_pos.x) * scale_factor.x,
+            static_cast<float>(mouse_pos.y) * scale_factor.y
         );
     }
 
@@ -161,37 +154,33 @@ inline void DrawImgui()
 }
 
 inline void ImguiHookSoftwareCursor(
-    P::render_context *param_1,P::real_3 *param_2,float param_3,P::real_4 *param_4,int param_5)
-{
+    P::render_context *param_1, P::real_3 *param_2, float param_3, P::real_4 *param_4, int param_5) {
     if (P::IsThreadSafe())
         DrawImgui();
     Next<void>(param_1, param_2, param_3, param_4, param_5);
 }
 
 inline void ImguiHookHardwareCursor(
-    P::render_context* param_1, P::render_context* param_2, P::user_input* param_3,
-    P::recording_buffer* param_4, float param_5, P::window_t* param_6)
-{
+    P::render_context *param_1, P::render_context *param_2, P::user_input *param_3,
+    P::recording_buffer *param_4, float param_5, P::window_t *param_6) {
     Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
-    if (P::IsThreadSafe() and P::settings->hardware_cursor)
-    {
+    if (P::IsThreadSafe() and P::settings->hardware_cursor) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
         DrawImgui();
     }
 }
 
 inline bool imgui_initialized = false;
-inline void WindowInitHook(P::window_t* window)
-{
+
+inline void WindowInitHook(P::window_t *window) {
     Next<void>(window);
 
     if (!P::IsThreadSafe())
         return;
 
-    if (imgui_initialized)
-    {
+    if (imgui_initialized) {
         // TODO: automatic re-initialisation without restarting
-        P::Log()<<"Restart the game to re-initialise ImGui!";
+        P::Log() << "Restart the game to re-initialise ImGui!";
         return;
     }
 
@@ -200,21 +189,21 @@ inline void WindowInitHook(P::window_t* window)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;    // Enable Gamepad Controls
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;       // Enable Docking
+    ImGuiIO &io = ImGui::GetIO();
+    (void) io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
     // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;     // Enable Multi-Viewport / Platform Windows
     io.MouseDrawCursor = false;
 
     ImGui::StyleColorsDark();
 
     // Color correction to offset the game's post-processing
-    for (int i = 0; i < ImGuiCol_COUNT; i++)
-    {
+    for (int i = 0; i < ImGuiCol_COUNT; i++) {
         auto col = ImGui::GetStyleColorVec4(i);
         float exponent = 1.75; // Idk what it actually is but this seems good enough
-        col = {pow(col.x, exponent), pow(col.y, exponent), pow(col.z, exponent),pow(col.w, exponent)};
+        col = {pow(col.x, exponent), pow(col.y, exponent), pow(col.z, exponent), pow(col.w, exponent)};
         ImGui::PushStyleColor(i, col);
     }
 
@@ -224,7 +213,7 @@ inline void WindowInitHook(P::window_t* window)
 
     original_wndproc = reinterpret_cast<WNDPROC>(
         SetWindowLongPtr(
-            (HWND)window->hwnd,
+            (HWND) window->hwnd,
             GWLP_WNDPROC,
             reinterpret_cast<LONG_PTR>(imgui_wndproc)
         )
@@ -235,11 +224,10 @@ inline void WindowInitHook(P::window_t* window)
     P::Log() << "ImGui Context: " << ImGui::GetCurrentContext();
 }
 
-inline void do_imgui_hooks()
-{
+inline void do_imgui_hooks() {
     Hook<"init_gl_context">(WindowInitHook);
     Hook<"draw_cursor">(ImguiHookSoftwareCursor);
     Hook<"render_game">(ImguiHookHardwareCursor);
     Hook<"update_mouse_pos">(BlockInputs);
-    P::Log()<<"Done ImGui Hooks!";
+    P::Log() << "Done ImGui Hooks!";
 }

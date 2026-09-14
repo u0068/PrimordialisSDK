@@ -5,8 +5,7 @@
 
 namespace fs = std::filesystem;
 
-std::string ReadFile(const fs::path& path)
-{
+std::string ReadFile(const fs::path &path) {
     std::ifstream file(path);
 
     if (!file)
@@ -18,10 +17,9 @@ std::string ReadFile(const fs::path& path)
     return buffer.str();
 }
 
-std::filesystem::path ModManager::GetLoaderFilesFolder()
-{
+std::filesystem::path ModManager::GetLoaderFilesFolder() {
     int argc = 0;
-    LPWSTR* argv = CommandLineToArgvW(
+    LPWSTR *argv = CommandLineToArgvW(
         GetCommandLineW(),
         &argc
     );
@@ -31,10 +29,8 @@ std::filesystem::path ModManager::GetLoaderFilesFolder()
 
     std::filesystem::path result;
 
-    for (int i = 0; i < argc; ++i)
-    {
-        if (wcscmp(argv[i], L"--mod-folder") == 0)
-        {
+    for (int i = 0; i < argc; ++i) {
+        if (wcscmp(argv[i], L"--mod-folder") == 0) {
             if (i + 1 < argc)
                 result = argv[i + 1];
 
@@ -49,8 +45,7 @@ std::filesystem::path ModManager::GetLoaderFilesFolder()
     return result;
 }
 
-void ParseModInfo(Mod& mod)
-{
+void ParseModInfo(Mod &mod) {
     if (mod.path.has_extension())
         return; // Mod is raw dll so has no info
 
@@ -58,52 +53,44 @@ void ParseModInfo(Mod& mod)
     mod.name = modFolder.filename().string();
 
     std::vector<fs::path> dlls{};
-    for (const auto& entry : fs::recursive_directory_iterator(modFolder))
-    {
+    for (const auto &entry: fs::recursive_directory_iterator(modFolder)) {
         if (!entry.is_regular_file())
             continue;
 
         auto filename = entry.path().filename().string();
 
-        if (entry.path().extension() == ".dll")
-        {
+        if (entry.path().extension() == ".dll") {
             dlls.push_back(entry.path());
         }
-
         else if (filename == "init.lua")
             mod.init_path = entry.path();
     }
-    if (dlls.size() > 1)
-    {
-        for (auto& dll_path : dlls)
-        {
+    if (dlls.size() > 1) {
+        for (auto &dll_path: dlls) {
             // Log() << modFolder.filename() << "\n";
             // Log() << dll_path.filename() << "\n";
             if (dll_path.filename() == "main.dll" or
-                dll_path.filename().replace_extension("") == modFolder.filename())
-            {
+                dll_path.filename().replace_extension("") == modFolder.filename()) {
                 mod.dll_path = dll_path;
                 break;
             }
         }
         if (mod.dll_path.empty())
             Log() << err << "Multiple .dll files detected! I don't know which one to load.\n"
-                                  "\tPlease specify a \"main_dll\" in info.json,\n"
-                                  "or make the dll that should be loaded have same filename as the mod folder!";
+                    "\tPlease specify a \"main_dll\" in info.json,\n"
+                    "or make the dll that should be loaded have same filename as the mod folder!";
     }
     else if (dlls.size() == 1)
         mod.dll_path = dlls[0];
 }
 
-void ModManager::ParseMods()
-{
+void ModManager::ParseMods() {
     Log() << "Parsing Mods...";
 
     std::vector<Mod> installed_mods{};
-    for (const auto& entry : std::filesystem::directory_iterator(mod_path))
-    {
+    for (const auto &entry: std::filesystem::directory_iterator(mod_path)) {
         Log() << "Found Mod: "
-              << entry.path().filename().stem().string();
+                << entry.path().filename().stem().string();
 
         Mod nmod;
         nmod.path = entry.path();
@@ -115,11 +102,11 @@ void ModManager::ParseMods()
         installed_mods.push_back(nmod);
     }
 
-    YAML::Node mods_yml = YAML::LoadFile((loader_files_path/"mods.yml").string());
-    for (std::size_t i=0;i<mods_yml.size();i++)
-        for (auto& mod : installed_mods)
+    YAML::Node mods_yml = YAML::LoadFile((loader_files_path / "mods.yml").string());
+    for (std::size_t i = 0; i < mods_yml.size(); i++)
+        for (auto &mod: installed_mods)
             if (mod.name == mods_yml[i]["name"].as<std::string>()
-            and mods_yml[i]["enabled"].as<bool>())
+                and mods_yml[i]["enabled"].as<bool>())
                 enabled_mods.push_back(mod);
 }
 
@@ -133,8 +120,7 @@ void ModManager::ParseMods()
 //     return lua.str();
 // }
 
-void ModManager::SaveLuaModlist()
-{
+void ModManager::SaveLuaModlist() {
     std::ofstream file(lua_mod_list_path);
 
     if (!file) return;
@@ -142,15 +128,14 @@ void ModManager::SaveLuaModlist()
     file.clear();
     file << "LUA_MODLOADER_MOD_LIST = {\n";
 
-    for (auto& mod : enabled_mods)
-    {
+    for (auto &mod: enabled_mods) {
         // if (!mod.is_lua())
         //     continue;
         // if (!mod.user_enabled)
         //     continue;
         // if (mod.config_defaults.empty())
         // {
-            file << "\t\"" << mod.name << "\",\n";
+        file << "\t\"" << mod.name << "\",\n";
         //     continue;
         // }
         //
@@ -163,8 +148,7 @@ void ModManager::SaveLuaModlist()
     file.close();
 }
 
-void ModManager::PatchInitLua()
-{
+void ModManager::PatchInitLua() {
     fs::path init_lua_path = game_path / "data/scripts/init.lua";
     fs::path temp_init_lua_path = game_path / "data/scripts/init.temp";
     std::string preline = "dofile(\"pilus_files/luasome/pre.lua\")\n";

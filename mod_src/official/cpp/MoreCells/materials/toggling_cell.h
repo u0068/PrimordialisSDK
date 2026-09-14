@@ -8,40 +8,37 @@
 // We obviously need an is_toggled to represent whether the side is toggled
 // Not so obviously, we also need a has_toggled so that we only toggle the side once per activation
 // Here is a union that expresses that:
-union toggle_states
-{
+union toggle_states {
     uint flags;
-    struct
-    {
+
+    struct {
         byte is_toggled;  // Is this side currently toggled?
         byte has_toggled; // Has this side already been toggled?
         byte is_negative; // Is negatively charged? (We want to discharge -V but not affect +V)
     };
 };
 
-inline bool GetBit(const byte byte, const uint index)
-{
+inline bool GetBit(const byte byte, const uint index) {
     return (byte >> index) & 1;
 }
-inline void SetBit(byte& byte, const uint index, const bool value)
-{
+
+inline void SetBit(byte &byte, const uint index, const bool value) {
     if (value)
         byte |= 1 << index;
     else
         byte &= ~(1 << index);
 }
-inline void ToggleBit(byte& byte, const uint index)
-{
+
+inline void ToggleBit(byte &byte, const uint index) {
     byte ^= 1 << index;
 }
 
-inline void TogglingCellConnections(P::cell* cell)
-{
+inline void TogglingCellConnections(P::cell *cell) {
     auto neighbors = GetExtraFields(cell)->neighbors;
-    auto states = toggle_states((uint)cell->value);
+    auto states = toggle_states((uint) cell->value);
     float own_dir_conductivity = P::materials_list[cell->material_index].directional_conductivity;
     for (int side = 0; side < 6; side++) {
-        if (auto* neighbor = neighbors[side]) {
+        if (auto *neighbor = neighbors[side]) {
             int index = side * 16; // cell properties are interweaved in 16 cell intervals for optimisation
             int opposite_side = (side + 3) % 6;
             int opposite_side_index = opposite_side * 16;
@@ -67,7 +64,8 @@ inline void TogglingCellConnections(P::cell* cell)
                 SetBit(states.is_negative, side, false);
             }
             if (neighbor_conductivity > 0.0f) {
-                float conductance = (own_dir_conductivity * neighbor_conductivity) / (own_dir_conductivity + neighbor_conductivity);
+                float conductance = (own_dir_conductivity * neighbor_conductivity) / (
+                                        own_dir_conductivity + neighbor_conductivity);
                 if (neighbor_dir_conductivity <= 0.0f) {
                     // Equalise voltages between neighboring cells
                     neighbor->equilibrium_voltage += conductance * cell->directional_voltage[index];
@@ -78,16 +76,14 @@ inline void TogglingCellConnections(P::cell* cell)
             }
         }
     }
-    cell->value = (float)states.flags;
+    cell->value = (float) states.flags;
 }
 
 // This is actually identical to the isolator's electric_update_fn, so we could have just reused that,
 // But I wrote this anyway to use as an example.
-inline void TogglingCellElectric(P::cell* cell)
-{
-    auto states = toggle_states((uint)cell->value);
-    for (int side = 0; side < 6; side++)
-    {
+inline void TogglingCellElectric(P::cell *cell) {
+    auto states = toggle_states((uint) cell->value);
+    for (int side = 0; side < 6; side++) {
         int index = side * 16;
         if (GetBit(states.is_toggled, side)) {
             cell->directional_voltage[index] = -cell->voltage_multiplier;
@@ -111,12 +107,12 @@ inline void TogglingCellElectric(P::cell* cell)
     }
 }
 
-inline void AddTogglingCell()
-{
+inline void AddTogglingCell() {
     auto material = P::materials_list[P::CellRef{"Electric isolator cell"}.GetIndex()];
     material.connection_update_fn = TogglingCellConnections;
     material.electric_update_fn = TogglingCellElectric;
     material.base_color = {0.4f, 0.4f, 0.2f, 1.0f};
-    SetCellNameAndDesc(material, "Toggling cell", "Toggles output between 0V and -1V when powered with 0.5V on the opposite side.");
+    SetCellNameAndDesc(material, "Toggling cell",
+                       "Toggles output between 0V and -1V when powered with 0.25V on the opposite side.");
     P::materials_list[P::n_materials++] = material;
 }

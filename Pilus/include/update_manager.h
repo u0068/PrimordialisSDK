@@ -4,14 +4,12 @@
 
 using json = nlohmann::json;
 
-struct Version
-{
+struct Version {
     int major{};
     int minor{};
     int patch{};
 
-    bool operator>(const Version& other) const
-    {
+    bool operator>(const Version &other) const {
         if (major != other.major)
             return major > other.major;
 
@@ -21,15 +19,13 @@ struct Version
         return patch > other.patch;
     }
 
-    bool operator==(const Version& other) const
-    {
+    bool operator==(const Version &other) const {
         return major == other.major &&
                minor == other.minor &&
                patch == other.patch;
     }
 
-    const std::string to_string() const
-    {
+    const std::string to_string() const {
         std::stringstream ss;
         ss << major << "." << minor << "." << patch;
         return ss.str();
@@ -40,4 +36,4 @@ std::optional<Version> ParseVersion(const std::string &tag);
 
 void UpdateLocalVersionManifest();
 
-bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path);
+bool DownloadUpdate(const char *name, const Version &version, const fs::path &dest_path);

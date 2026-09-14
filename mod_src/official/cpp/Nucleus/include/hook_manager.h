@@ -2,8 +2,7 @@
 #include "logging.h"
 #include <MinHook.h>
 
-inline bool HookWrapper(void* target, void* hook, void** trampoline)
-{
+inline bool HookWrapper(void *target, void *hook, void **trampoline) {
     // Log("Attempting Hooking address %p\n", target);
 
     auto status = MH_CreateHook(
@@ -11,17 +10,15 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline)
         hook,
         trampoline);
 
-    if (status != MH_OK)
-    {
-        Log()<<"MH_CreateHook failed: "<<status<<"\n";
+    if (status != MH_OK) {
+        Log() << "MH_CreateHook failed: " << status << "\n";
         return false;
     }
 
     status = MH_EnableHook(target);
 
-    if (status != MH_OK)
-    {
-        Log()<<"MH_EnableHook failed: "<<status<<"\n";
+    if (status != MH_OK) {
+        Log() << "MH_EnableHook failed: " << status << "\n";
         return false;
     }
 
@@ -30,12 +27,11 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline)
     return true;
 }
 
-inline void* CreateHook(const char* name, void* hook){
+inline void *CreateHook(const char *name, void *hook) {
+    void *target = ResolveSymbol(name);
+    void *trampoline = nullptr;
 
-    void* target = ResolveSymbol(name);
-    void* trampoline = nullptr;
-
-    Log()<<"Creating hook for "<<name<<" at "<<target<<" to "<<hook<<"\n";
+    Log() << "Creating hook for " << name << " at " << target << " to " << hook << "\n";
 
     HookWrapper(
         target,
@@ -46,14 +42,12 @@ inline void* CreateHook(const char* name, void* hook){
     return trampoline;
 }
 
-inline thread_local void* current_context;
+inline thread_local void *current_context;
 
-inline void* GetCurrentContext()
-{
+inline void *GetCurrentContext() {
     return current_context;
 }
 
-inline void SetCurrentContext(void* context)
-{
+inline void SetCurrentContext(void *context) {
     current_context = context;
 }
