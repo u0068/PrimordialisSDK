@@ -9,7 +9,7 @@
 inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
     P::real_2 force{};
 
-    int body_id = cell->body_id;
+    const int body_id = cell->body_id;
     P::body *body = P::get_living_body(body_id);
     float grab_weight = body->brain.grab_weight;
     if (grab_weight > 0.0f or cell->shock > 0.5f) {
@@ -18,14 +18,14 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
             randomness = cell->shock * randomness;
         }
         randomness = std::ranges::clamp(randomness, 0.0f, 1.0f);
-        P::real_2 random_jitter = P::rand_normal_2((uint*)TlsGetValue(P::tls_index) + 0x68);
+        const P::real_2 random_jitter = P::rand_normal_2((uint*)TlsGetValue(P::tls_index) + 0x68);
         if (grab_weight <= 0.0f) { // Shocked, jitter randomly
             force.x = cell->x + randomness * 1000.0f * random_jitter.x;
             force.y = cell->y + randomness * 1000.0f * random_jitter.y;
         }
         else {
             // Force towards target from the cell
-            P::real_2 target = body->brain.grab_target;
+            const P::real_2 target = body->brain.grab_target;
             force.x = target.x - cell->x;
             force.y = target.y - cell->y;
             // Interpolate with randomness
@@ -35,7 +35,7 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
         // Normalise the force if it's too big
         float force_mag_sq = force.x * force.x + force.y * force.y;
         if (force_mag_sq > 16.0f) {
-            float force_inv_mag = 1.0f / sqrt(force_mag_sq);
+            const float force_inv_mag = 1.0f / sqrt(force_mag_sq);
             force.x *= force_inv_mag * 16.0f;
             force.y *= force_inv_mag * 16.0f;
         }
@@ -53,11 +53,11 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
     }
 }
 
-void HiderCell(P::cell *cell) {
+inline void HiderCell(P::cell *cell) {
     SeekWithForce(cell, -1.0f);
 }
 
-void ElectricSeekerCell(P::cell *cell) {
+inline void ElectricSeekerCell(P::cell *cell) {
     SeekWithForce(cell, cell->voltage);
 }
 
@@ -65,6 +65,7 @@ inline void AddSeekerVariants() {
     P::material_t material{};
 
     material = P::MatRef{"Seeker cell"}.GetCopy();
+    material.next_variant = P::MatRef{"Seeker cell"}.GetIndex(); // Cycle to original seeker cell
     material.force_update_fn = HiderCell;
     material.base_color = {0.0f, 1.0f, 0.2f, 1.0f}; // Green
     P::SetCellNameAndDesc(material, "Hider cell",
@@ -72,10 +73,11 @@ inline void AddSeekerVariants() {
     P::materials_list[P::n_materials++] = material;
 
     material = P::MatRef{"Seeker cell"}.GetCopy();
+    material.next_variant = P::MatRef{"Hider cell"}.GetIndex(); // Cycle to hider cell
     material.force_update_fn = ElectricSeekerCell;
     material.base_color = {1.0f, 0.0f, 0.2f, 1.0f}; // Blue
     // We also want to make this conductive, so lets copy conductive cell's electrical properties
-    P::material_t conductive = P::MatRef {"Conductive cell"}.GetCopy();
+    const P::material_t conductive = P::MatRef {"Conductive cell"}.GetCopy();
     material.conductivity = conductive.conductivity;
     material.leak_conductivity = conductive.leak_conductivity;
     material.capacitance = conductive.capacitance;
@@ -83,4 +85,7 @@ inline void AddSeekerVariants() {
     P::SetCellNameAndDesc(material, "Electric seeker cell",
                           "Seeks with force proportional to voltage.");
     P::materials_list[P::n_materials++] = material;
+
+    // Make seeker cycle to electric seeker
+    P::MatRef{"Seeker cell"}.GetPointer()->next_variant = P::MatRef{"Electric seeker cell"}.GetIndex();
 }

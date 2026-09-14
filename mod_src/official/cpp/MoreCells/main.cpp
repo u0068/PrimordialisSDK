@@ -27,7 +27,7 @@ void OnInitMats() {
         AddPiezoCell();
         AddFatCell();
         AddPinCell();
-        //AddTriggerVariants(); // I don't like them, so I turned them off
+        AddTriggerVariants();
         AddTogglingCell();
         AddSeekerVariants();
     }
