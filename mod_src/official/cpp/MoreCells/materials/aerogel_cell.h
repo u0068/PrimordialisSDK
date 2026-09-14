@@ -2,7 +2,7 @@
 #include "plasmid_api.h"
 
 inline void AddAeroGelCell() {
-    auto material = P::materials_list[P::MatRef{"Lightweight cell"}.GetIndex()];
+    auto material = P::MatRef{"Lightweight cell"}.GetCopy();
     material.is_hard = true;
     material.density = 0.1f;
     material.base_cost = 2.0f;

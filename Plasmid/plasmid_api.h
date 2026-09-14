@@ -9,6 +9,7 @@
 #include "include/math.h"
 #include "include/cells.h"
 #include "include/ui.h"
+#include "include/mutations.h"
 
 #include "generated/game_functions/essential.h"
 #include "generated/resolve_data.h"

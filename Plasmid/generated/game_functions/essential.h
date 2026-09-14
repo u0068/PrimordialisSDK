@@ -38,6 +38,14 @@ namespace P {
             param_1, param_2, param_3);
     }
 
+    inline uchar *body_auxiliary_data_from_id(int param_1) {
+        return Resolve<uchar*(*)(int)>("body_auxiliary_data_from_id")(param_1);
+    }
+
+    inline uchar *body_auxiliary_data_from_body(body *param_1) {
+        return Resolve<uchar*(*)(body *)>("body_auxiliary_data_from_body")(param_1);
+    }
+
     inline uint str_to_id(const char *param_1) { return Resolve<uint(*)(const char *)>("str_to_id")(param_1); }
     inline int log_printf(const char *param_1) { return Resolve<int(*)(const char *)>("log_printf")(param_1); }
     inline int get_material_index(uint param_1) { return Resolve<int(*)(uint)>("get_material_index")(param_1); }

@@ -27,7 +27,7 @@ inline void DamageDetector(P::cell *cell) {
 }
 
 inline void AddDamageDetector() {
-    auto material = P::materials_list[P::MatRef{"Health monitor cell"}.GetIndex()];
+    auto material = P::MatRef{"Health monitor cell"}.GetCopy();
     material.electric_update_fn = DamageDetector;
     // material.transfer_rate *= 0.5f;
     material.max_health = 5.0f;

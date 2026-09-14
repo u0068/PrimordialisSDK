@@ -22,18 +22,18 @@ void OnInitMats() {
         return;
     }
 
-    P::material_t *mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
     P::material_t material{}; // The variable we use to store the material we are working on
 
     // First, lets make the Acid Cell spew acid that doesn't change color
-    material = mats[P::MatRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
+    material = P::MatRef{"Acid cell"}.GetCopy(); // Copy the acid cell material
     material.physics_update_fn = acid_no_color_change;
     // We simply overwrite cell functions like this instead of using the Hook utility
-    mats[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
+    P::materials_list[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
+    // You could also edit existing cells by writing to the original's fields
 
     // Next, lets make our own cell!
     // We want to have a cell that is quite stiff but not entirely rigid.
-    material = mats[P::MatRef{"Hard cell"}.GetIndex()]; // Copy the Hard cell material to use as the base
+    material = P::MatRef{"Hard cell"}.GetCopy(); // Copy the Hard cell material to use as the base
     // There are lots of different material properties we can tweak
     // Use the official Cell Tools mod to tweak material properties in-game
     // Any properties that we don't set will use the properties of the base material that we copied from
@@ -42,7 +42,7 @@ void OnInitMats() {
     // Going outside that range will work to make super vibrant or negative colors, but may cause rendering weirdness
     material.base_color = {0.8f, 0.8f, 1.0f, 1.0f}; // Slightly bluish to distinguish it from Hard cell
     SetCellNameAndDesc(material, "Stiff Cell", "A stiff cell resistant to spikes and explosions");
-    mats[P::n_materials++] = material; // Add our material to the end of the materials list
+    P::materials_list[P::n_materials++] = material; // Add our material to the end of the materials list
 
     // If your mod adds a lot of materials, using the same file for all of them will quickly turn into a mess
     // To organise your materials, put your material definitions in their own files

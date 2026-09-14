@@ -22,10 +22,10 @@ inline void PiezoCell(P::cell *cell) {
 }
 
 inline void AddPiezoCell() {
-    auto material = P::materials_list[P::MatRef{"Proximity detecting cell"}.GetIndex()];
+    auto material = P::MatRef{"Proximity detector cell"}.GetCopy();
     material.electric_update_fn = PiezoCell;
     material.radial_compliance *= 8.0f;
-    material.uv = P::materials_list[P::MatRef{"Power switch cell"}.GetIndex()].uv;
+    material.uv = P::MatRef{"Feeler cell"}.GetCopy().uv; // Steal feelers texture, just to show how it's done.
     material.base_color = {0.3f, 0.0f, 1.0f, 0.8f};
     P::SetCellNameAndDesc(material, "Piezoelectric cell",
                        "Produces a voltage proportional to how much the cell is squeezed.");

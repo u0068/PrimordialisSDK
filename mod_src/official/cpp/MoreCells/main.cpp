@@ -11,6 +11,7 @@
 #include "pin_cell.h"
 #include "trigger_variants.h"
 #include "toggling_cell.h"
+#include "seeker_variants.h"
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats() {
@@ -28,6 +29,7 @@ void OnInitMats() {
         AddPinCell();
         //AddTriggerVariants(); // I don't like them, so I turned them off
         AddTogglingCell();
+        AddSeekerVariants();
     }
     P::LaneSync(); // Make all other threads wait for us to finish.
 }

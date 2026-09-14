@@ -9,7 +9,7 @@ inline void FatCell(P::cell *cell) {
 }
 
 inline void AddFatCell() {
-    auto material = P::materials_list[P::MatRef{"Elastic cell"}.GetIndex()];
+    auto material = P::MatRef{"Elastic cell"}.GetCopy();
     material.base_cost = 3.0f;
     material.max_health = 50.0f;
     material.regen = 0.0001f;

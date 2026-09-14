@@ -14,7 +14,7 @@ inline void PinCell(P::cell *cell) {
 }
 
 inline void AddPinCell() {
-    auto material = P::materials_list[P::MatRef{"Heavy cell"}.GetIndex()];
+    auto material = P::MatRef{"Heavy cell"}.GetCopy();
     material.density = 1e30f; // Very big number, but not big enough to worry about overflow.
     material.is_hard = false; // Pn cell does not play nice with rigid physics
     material.physics_update_fn = PinCell;

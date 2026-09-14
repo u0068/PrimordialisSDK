@@ -125,6 +125,19 @@ namespace P {
             return pointer;
         }
 
+        material_t GetCopy() const {
+            if (pointer == nullptr) {
+                if (index == -1) {
+                    index = GetIndex();
+                }
+                if (index == -1) {
+                    return {};
+                }
+                pointer = &materials_list[index];
+            }
+            return *pointer;
+        }
+
         operator int() const {
             return GetIndex();
         }
@@ -139,6 +152,10 @@ namespace P {
 
         operator material_t *() const {
             return GetPointer();
+        }
+
+        operator material_t () const {
+            return GetCopy();
         }
     };
 

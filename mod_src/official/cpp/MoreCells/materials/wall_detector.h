@@ -11,9 +11,8 @@ inline void WallDetector(P::cell *cell) {
 }
 
 inline void AddWallDetector() {
-    auto material = P::materials_list[P::MatRef{"Proximity detecting cell"}.GetIndex()];
+    auto material = P::MatRef{"Proximity detector cell"}.GetCopy();
     material.electric_update_fn = WallDetector;
-    material.uv = P::materials_list[P::MatRef{"Power switch cell"}.GetIndex()].uv;
     material.base_color = {0.5f, 0.4f, 0.6f, 1.0f}; // Bluish gray
     P::SetCellNameAndDesc(material, "Wall detector cell",
                        "Produces a voltage inversely proportional to its distance from a wall.");

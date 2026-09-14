@@ -116,14 +116,6 @@ namespace P {
         return Resolve<void(*)(body_plan *, bounding_box_2 *)>("resize_body_region")(param_1, param_2);
     }
 
-    inline uchar *body_auxiliary_data_from_id(int param_1) {
-        return Resolve<uchar*(*)(int)>("body_auxiliary_data_from_id")(param_1);
-    }
-
-    inline uchar *body_auxiliary_data_from_body(body *param_1) {
-        return Resolve<uchar*(*)(body *)>("body_auxiliary_data_from_body")(param_1);
-    }
-
     inline serialized_data *serialize_body_plan(serialized_data *__return_storage_ptr__, body_plan *param_1,
                                                 uchar **param_2, __uint64 param_3, __uint64 *param_4, int *param_5) {
         return Resolve<serialized_data*(
