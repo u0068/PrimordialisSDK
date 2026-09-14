@@ -111,7 +111,7 @@ inline void AddTogglingCell() {
     auto material = P::materials_list[P::CellRef{"Electric isolator cell"}.GetIndex()];
     material.connection_update_fn = TogglingCellConnections;
     material.electric_update_fn = TogglingCellElectric;
-    material.base_color = {0.4f, 0.4f, 0.2f, 1.0f};
+    material.base_color = {0.5f, 0.4f, 0.2f, 1.0f};
     SetCellNameAndDesc(material, "Toggling cell",
                        "Toggles output between 0V and -1V when powered with 0.25V on the opposite side.");
     P::materials_list[P::n_materials++] = material;
