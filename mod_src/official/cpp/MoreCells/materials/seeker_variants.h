@@ -18,7 +18,7 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
             randomness = cell->shock * randomness;
         }
         randomness = std::ranges::clamp(randomness, 0.0f, 1.0f);
-        P::real_2 random_jitter = P::rand_normal_2((uint*)TlsGetValue(P::tls_index));
+        P::real_2 random_jitter = P::rand_normal_2((uint*)TlsGetValue(P::tls_index) + 0x68);
         if (grab_weight <= 0.0f) { // Shocked, jitter randomly
             force.x = cell->x + randomness * 1000.0f * random_jitter.x;
             force.y = cell->y + randomness * 1000.0f * random_jitter.y;
@@ -26,25 +26,25 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
         else {
             // Force towards target from the cell
             P::real_2 target = body->brain.grab_target;
-            force.x  = target.x - cell->x;
-            force.y  = target.y - cell->y;
+            force.x = target.x - cell->x;
+            force.y = target.y - cell->y;
             // Interpolate with randomness
-            force.x  = std::lerp(force.x, random_jitter.x * 1000.0f, randomness);
-            force.y  = std::lerp(force.y, random_jitter.y * 1000.0f, randomness);
+            force.x = std::lerp(force.x, random_jitter.x * 1000.0f, randomness);
+            force.y = std::lerp(force.y, random_jitter.y * 1000.0f, randomness);
         }
         // Normalise the force if it's too big
         float force_mag_sq = force.x * force.x + force.y * force.y;
         if (force_mag_sq > 16.0f) {
             float force_inv_mag = 1.0f / sqrt(force_mag_sq);
-            force.x = force.x * force_inv_mag;
-            force.y = force.y * force_inv_mag;
+            force.x *= force_inv_mag * 16.0f;
+            force.y *= force_inv_mag * 16.0f;
         }
         float force_multiplier = force_coefficient * 0.04f;
         force_multiplier *= cell->frozen_multiplier * body->brain.grab_dir;
-        force.x = force.x * force_multiplier;
-        force.y = force.y * force_multiplier;
-        cell->x_dot = cell->x_dot + force.x;
-        cell->y_dot = cell->y_dot + force.y;
+        force.x *= force_multiplier;
+        force.y *= force_multiplier;
+        cell->x_dot += force.x;
+        cell->y_dot += force.y;
         // Cell functions run 4 times per tick per cell so they need to be optimised
         // Here im optimising by using a reference (&) instead of making a copy and then overwriting.
         P::real_2& body_force = P::GetExtraFields(cell)->global_body_force;
@@ -53,11 +53,11 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
     }
 }
 
-inline void HiderCell(P::cell *cell) {
+void HiderCell(P::cell *cell) {
     SeekWithForce(cell, -1.0f);
 }
 
-inline void ElectricSeekerCell(P::cell *cell) {
+void ElectricSeekerCell(P::cell *cell) {
     SeekWithForce(cell, cell->voltage);
 }
 
