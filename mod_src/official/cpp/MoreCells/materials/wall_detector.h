@@ -11,7 +11,7 @@ inline void WallDetector(P::cell *cell) {
 }
 
 inline void AddWallDetector() {
-    auto material = P::MatRef{"Proximity detector cell"}.GetCopy();
+    auto material = P::MatRef{"Proximity detecting cell"}.GetCopy();
     material.electric_update_fn = WallDetector;
     material.base_color = {0.5f, 0.4f, 0.6f, 1.0f}; // Bluish gray
     P::SetCellNameAndDesc(material, "Wall detector cell",

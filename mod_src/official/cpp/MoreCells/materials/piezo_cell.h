@@ -22,7 +22,7 @@ inline void PiezoCell(P::cell *cell) {
 }
 
 inline void AddPiezoCell() {
-    auto material = P::MatRef{"Proximity detector cell"}.GetCopy();
+    auto material = P::MatRef{"Proximity detecting cell"}.GetCopy();
     material.electric_update_fn = PiezoCell;
     material.radial_compliance *= 8.0f;
     material.uv = P::MatRef{"Feeler cell"}.GetCopy().uv; // Steal feelers texture, just to show how it's done.
