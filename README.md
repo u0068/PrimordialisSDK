@@ -44,7 +44,9 @@ To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.n
 Load the Primordialis PDB before decompiling, by following the steps given in the
 Ghidra Docs (or just search it up).\
 Primordialis is compiled with clang version 22.1.8\
-We decompile the sse3 build rather than the avx build, because it tends to be more readable.\
+We decompile the SSE3 exe rather than the AVX exe, because it tends to be more readable.\
+If a function fails to decompile, try using a different build, such as the AVX exe,
+or a different version of the game.\
 Some decompiled functions are already in `PrimordialisSDK/Decompiled`.\
 Share your decompiled functions by putting them in there and pushing to the repo.\
 **Warning: Interpreting decompiled code is not for the faint of heart!**\
