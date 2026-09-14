@@ -10,6 +10,7 @@
 #include "fat_cell.h"
 #include "pin_cell.h"
 #include "trigger_variants.h"
+#include "toggling_cell.h"
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats()
@@ -27,7 +28,9 @@ void OnInitMats()
         AddFatCell();
         AddPinCell();
         //AddTriggerVariants();
+        AddTogglingCell();
     }
+    P::LaneSync(); // Make all other threads wait for us to finish.
 }
 
 void P::InitialiseMod()
