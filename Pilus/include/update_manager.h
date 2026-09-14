@@ -36,4 +36,8 @@ std::optional<Version> ParseVersion(const std::string &tag);
 
 void UpdateLocalVersionManifest();
 
+void CheckAllForUpdates();
+
+void CreateDirectories();
+
 bool DownloadUpdate(const char *name, const Version &version, const fs::path &dest_path);

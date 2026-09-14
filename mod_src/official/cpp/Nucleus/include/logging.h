@@ -2,7 +2,7 @@
 
 inline std::ofstream log_file("plasmid_log.txt");
 
-inline TeeBuf log_buffer(
+inline DualBuf log_buffer(
     std::cout.rdbuf(),
     log_file.rdbuf()
 );

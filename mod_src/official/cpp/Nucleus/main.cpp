@@ -11,7 +11,7 @@ struct ModListShared {
     ModInfo mods[256];
 };
 
-using ModInit = void(*)(Nucleus *, const char *);
+using ModInit = void(*)(Nucleus *, const char *, const char *);
 
 void LoadMod(const char *path) {
     HMODULE mod = LoadLibraryA(path);
@@ -32,7 +32,7 @@ void LoadMod(const char *path) {
         return;
     }
 
-    mod_init(&api, path);
+    mod_init(&api, path, path);
 }
 
 DWORD WINAPI MainThread(LPVOID) {

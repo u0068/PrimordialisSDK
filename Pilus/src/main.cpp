@@ -11,10 +11,11 @@ int main() {
 
     console_log << "Pilus Starting\n";
 
+    CreateDirectories();
     ModManager::LoadPilusConfig();
     ModManager::RefreshMods();
-    UpdateLocalVersionManifest();
-    // UpdateAll();
+    // UpdateLocalVersionManifest();
+    // CheckAllForUpdates();
 
     glfwSetErrorCallback(glfwErrorCallback);
     if (!glfwInit()) {
