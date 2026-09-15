@@ -4,3 +4,5 @@
   enabled: true
 - name: MoreCells
   enabled: true
+- name: MaterialPrinter
+  enabled: false
