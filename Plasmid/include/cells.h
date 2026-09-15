@@ -5,6 +5,18 @@
 
 #include "generated/game_functions/essential.h"
 #include "generated/resolve_data.h"
+enum MATERIAL_TAGS {
+    TAG_WEAPON      = 1 << 0, // Weapons that spawn at the start
+    TAG_UTILITY     = 1 << 1, // Specialised, non-weapon cells
+    TAG_MOVEMENT    = 1 << 2, // Cells used for moving the creature
+    TAG_DEFENCE     = 1 << 3, // This seems to be intended for cells that heal the player
+    TAG_STRUCTURE   = 1 << 4, // Cells that
+    TAG_ELECTRICAL  = 1 << 5, // Cells used in electrical circuits
+    TAG_NEURON      = 1 << 6, // Neuron cells
+    TAG_START       = 1 << 7, // Cells you start with
+    TAG_NONLETHAL   = 1 << 8, // Non-lethal weapons that spawn at the start. I think it's to make sure that you get at least one lethal weapon
+    TAG_NOSTART     = 1 << 9, // Weapons that do not spawn at the start
+};
 
 namespace P {
     // A reference to a material
