@@ -6,15 +6,40 @@ void OnInitBiomeTypes() {
     if (!P::IsThreadSafe())
         return;
 
-    auto new_biome_type = P::new_biome_type();
-    new_biome_type->id = P::str_to_id("TEST");
-    new_biome_type->color = {1, 1, 1};
-    new_biome_type->light = 1.f;
+    // Here we define the biome type, which controls *HOW* it generates
+    auto* new_biome_type = P::new_biome_type();
+    new_biome_type->id = P::str_to_id("TEST"); // TODO: Generate unique biome ids
+    new_biome_type->color = {1.0, 1.0, 0.5}; // Background color, float RGB
+    new_biome_type->light = 1.0f; // Ambient light brightness
+    // new_biome_type->flags = 1; // Safe zone
+    new_biome_type->bumpyness = 5.0f; // Fine wall bumpiness
+    new_biome_type->ambient_music_id = 3;
+    new_biome_type->battle_music_id = 2;
+    new_biome_type->tracked = 1;
+
+    // Terrain generation
+    // Play around with the Property Editor mode to see what these do!
+    new_biome_type->noise_amount = 0.15f; // Random dithering
+    new_biome_type->fbm_amount = 0.10f; // Fractal noise amount
+    new_biome_type->fbm_base_frequency = 0.1f; // 1 / noise scale
+    new_biome_type->fbm_octives = 4.0f; // Number of fractal layers
+    new_biome_type->fbm_gain = 0.5f; // Influence multiplier for each subsequent fmb octave
+    new_biome_type->neighbor_fbm = 0.0f; // How much should terrain cells consider their neighbors
+    new_biome_type->neighbor_amount = 0.0f; // Bias towards filled terrain cells also having filled neighbors
+    new_biome_type->base_amount = 0.02f; // Base emptiness amount
+
+    // Cell spawning
+    new_biome_type->cell_chance = 0.5f;
+    new_biome_type->cell_max_neighbors = 1;
+    //new_biome_type->pool; // TODO: Figure out how cell pools work
 }
 
+// This controls when we insert the biome
 static bool insert_biome = false;
 
 P::biome_core *OnCreateBiomeCore(int id, int size) {
+    // Here we define *WHERE* the biome generates
+
     auto result = P::Next<P::biome_core *>(id, size);
     // Boilerplate for executing the hook AFTER the specified biome is defined, so the last node is in a known location
     if (id == P::str_to_id("ICEE")) {

@@ -20,18 +20,28 @@ void OnInitMats() {
     if (P::IsThreadSafe()) // Make sure we are only on the main thread
     {
         // Add cells using their respective functions
+        // Simple
         AddCartilageCell();
         AddAeroGelCell();
         AddCollagenCell();
+
+        // Functional
+        AddFatCell();
+        AddPinCell();
+
+        // Voltage Generating
         AddWallDetector();
         AddDamageDetector();
         AddAngVelMeter();
         AddPiezoCell();
-        AddFatCell();
-        AddPinCell();
         AddTriggerVariants();
-        AddTogglingCell();
+
+        // Voltage Reading
         AddSeekerVariants();
+
+        // Directionally conductive
+        AddTogglingCell();
+
     }
     P::LaneSync(); // Make all other threads wait for us to finish. Not sure if I actually need this.
 }
