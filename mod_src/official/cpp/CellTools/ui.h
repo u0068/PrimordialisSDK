@@ -58,6 +58,7 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat) {
             ImGui::DragFloat("max_health", &mat.max_health, speed);
             ImGui::DragFloat("transfer_rate", &mat.transfer_rate, speed);
             ImGui::DragFloat("regen", &mat.regen, speed);
+            ImGui::DragFloat("regen_delay_multiplier", &mat.regen_delay_multiplier, speed);
 
             ImGui::TreePop();
         }
