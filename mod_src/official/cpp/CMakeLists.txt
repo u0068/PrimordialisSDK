@@ -1,21 +1,11 @@
-# Auto-detect mods
-file(GLOB MODS CONFIGURE_DEPENDS
-        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-        *)
 
 set(MOD_TARGETS)
+add_mod_targets_from_this_dir(MOD_TARGETS)
 
-foreach(MOD ${MODS})
-    message("Found mod: ${MOD}")
-    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${MOD})
-        add_subdirectory(${MOD})
-        get_filename_component(MOD_NAME ${MOD} NAME)
-        list(APPEND MOD_TARGETS ${MOD_NAME})
-    endif()
-endforeach()
+set(BuildAllTargetName BuildAllOfficialMods)
 
-add_custom_target(BuildAllMods)
+add_custom_target(${BuildAllTargetName})
 
 if(MOD_TARGETS)
-    add_dependencies(BuildAllMods ${MOD_TARGETS})
+    add_dependencies(${BuildAllTargetName} ${MOD_TARGETS})
 endif()

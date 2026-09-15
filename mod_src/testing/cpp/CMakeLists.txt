@@ -2,7 +2,7 @@
 set(MOD_TARGETS)
 add_mod_targets_from_this_dir(MOD_TARGETS)
 
-set(BuildAllTargetName BuildExampleMods)
+set(BuildAllTargetName BuildAllTestingMods)
 
 add_custom_target(${BuildAllTargetName})
 

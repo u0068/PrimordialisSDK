@@ -55,5 +55,21 @@ function(add_plasmid_mod NAME)
     endforeach()
 endfunction()
 
+function(add_mod_targets_from_this_dir MOD_TARGETS)
+    file(GLOB MODS CONFIGURE_DEPENDS
+            RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+            *)
+
+    foreach(MOD ${MODS})
+        message("Found mod: ${MOD}")
+        if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${MOD})
+            add_subdirectory(${MOD})
+            get_filename_component(MOD_NAME ${MOD} NAME)
+            list(APPEND MOD_TARGETS ${MOD_NAME})
+        endif()
+    endforeach()
+endfunction()
+
+#add_subdirectory(examples/cpp)
 add_subdirectory(official/cpp)
-add_subdirectory(examples/cpp)
+add_subdirectory(testing/cpp)
