@@ -1,8 +1,8 @@
 - name: ImGuiAPI
   enabled: true
-- name: CellTools
+- name: PropertyEditor
   enabled: true
 - name: MoreCells
-  enabled: true
-- name: MaterialPrinter
+  enabled: false
+- name: ExampleBiomeMod
   enabled: false

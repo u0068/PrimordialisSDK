@@ -1,14 +1,12 @@
 #pragma once
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
-#include "imgui_interface.h"
-#include "mats.h"
+#include "include/mats.h"
 
 inline int copy_from = 1;
 inline bool show_combos = false;
 inline bool show_vanilla = true;
 inline bool show_cell_editor = true;
-inline bool show_demo_window = false;
 
 inline void DrawMaterialEditor(int idx, P::material_t &mat) {
     ImGui::PushID(idx);
@@ -20,23 +18,23 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat) {
         if (ImGui::InputText("##name", (char *) mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue))
             mat.id = P::HashCellId(mat.name);
         ImGui::PopItemFlag();
-        if (ImGui::Button("Copy to Clipboard")) {
-            // TO-DO: Make this human-readable and only store the changes
-            ImGui::LogToClipboard();
-            ImGui::LogText(SaveMat(mat).c_str());
-            ImGui::LogFinish();
-        }
-        if (ImGui::Button("Load from Clipboard")) {
-            std::string clipboard = ImGui::GetClipboardText();
-            size_t pos = clipboard.find('\n');
-            if (pos != std::string::npos) {
-                std::string name = clipboard.substr(0, pos);
-                std::string data_string = clipboard.substr(pos + 1, 280 * 4);
-                P::Log() << name;
-                P::Log() << data_string;
-                mat = LoadMat(data_string, name);
-            }
-        }
+        // if (ImGui::Button("Copy to Clipboard")) {
+        //     // TO-DO: Make this human-readable and only store the changes
+        //     ImGui::LogToClipboard();
+        //     ImGui::LogText(SaveMat(mat).c_str());
+        //     ImGui::LogFinish();
+        // }
+        // if (ImGui::Button("Load from Clipboard")) {
+        //     std::string clipboard = ImGui::GetClipboardText();
+        //     size_t pos = clipboard.find('\n');
+        //     if (pos != std::string::npos) {
+        //         std::string name = clipboard.substr(0, pos);
+        //         std::string data_string = clipboard.substr(pos + 1, 280 * 4);
+        //         P::Log() << name;
+        //         P::Log() << data_string;
+        //         mat = LoadMat(data_string, name);
+        //     }
+        // }
         if (ImGui::Button("Give")) {
             P::cell_item cell_item = {0, idx};
             P::create_cell_item(&cell_item);
@@ -103,11 +101,10 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat) {
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("Visual")) {
-            ImGui::ColorEdit4("base_color", mat.base_color.data,
-                              ImGuiColorEditFlags_Float | ImGuiColorEditFlags_PickerHueWheel);
+            ImGui::ColorEdit4("base_color", mat.base_color.data);
             ImGui::DragFloat("light_radius", &mat.light_radius, speed);
             ImGui::DragFloat("light_intensity", &mat.light_intensity, speed);
-            ImGui::ColorEdit3("emission", mat.emission.data, ImGuiColorEditFlags_Float);
+            ImGui::ColorEdit3("emission", mat.emission.data);
             ImGui::SliderInt("texture_type", &mat.texture_type, 0, 4);
             P::int_2 uv = {(int) (mat.uv.x * 32 + 0.5f), (int) (mat.uv.y * 32 + 0.5f)};
             ImGui::DragInt2("uv", uv.data, 0.1);
@@ -179,14 +176,14 @@ inline void DrawMaterialsEditor() {
     ImGui::SameLine();
     ImGui::Checkbox("Show Vanilla", &show_vanilla);
     ImGui::SameLine();
-    ImGui::Checkbox("Reset on Reload", &reset_on_reload);
+    ImGui::Checkbox("Reset on Reload", &reset_mats_on_reload);
     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
     filter.Draw("##Filter");
-    if (ImGui::Button("Save Materials"))
-        SaveAllMats();
-    ImGui::SameLine();
-    if (ImGui::Button("Load Materials"))
-        LoadAllMats();
+    // if (ImGui::Button("Save Materials"))
+    //     SaveAllMats();
+    // ImGui::SameLine();
+    // if (ImGui::Button("Load Materials"))
+    //     LoadAllMats();
     for (int i = 0; i < P::n_materials; i++) {
         P::material_t &mat = P::materials_list[i];
         if (not filter.PassFilter(mat.name)) continue;
@@ -196,14 +193,4 @@ inline void DrawMaterialsEditor() {
     }
 
     ImGui::End();
-}
-
-inline ImGuiAPI *imgui_api;
-
-inline void DrawUI() {
-    ImGui::SetCurrentContext(imgui_api->context);
-    // if (show_demo_window)
-    //     ImGui::ShowDemoWindow(&show_demo_window);
-
-    DrawMaterialsEditor();
 }
