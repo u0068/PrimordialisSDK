@@ -70,6 +70,5 @@ function(add_mod_targets_from_this_dir MOD_TARGETS)
     endforeach()
 endfunction()
 
-#add_subdirectory(examples/cpp)
+add_subdirectory(examples/cpp)
 add_subdirectory(official/cpp)
-add_subdirectory(testing/cpp)
