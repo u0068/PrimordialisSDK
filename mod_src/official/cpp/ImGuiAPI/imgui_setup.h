@@ -5,7 +5,6 @@
 #include <imgui_impl_win32.h>
 #include "imgui_interface.h"
 
-// Use https://pthom.github.io/imgui_explorer/ for reference
 void DrawUI();
 
 inline WNDPROC original_wndproc;
@@ -202,6 +201,8 @@ inline void WindowInitHook(P::window_t *window) {
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
     // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;     // Enable Multi-Viewport / Platform Windows
     io.MouseDrawCursor = false;
+
+    io.ConfigColorEditFlags = ImGuiExtraColorEditFlags_PrimordialisStyle | ImGuiColorEditFlags_DisplayRGB;
 
     ImGui::StyleColorsDark();
 
