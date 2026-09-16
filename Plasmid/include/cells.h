@@ -22,6 +22,9 @@ namespace P {
     // A reference to a material
     // Allows you to refer to a material using its pointer, index, name, numeric id, string id interchangeably
     struct MatRef {
+    private:
+        // I'm making these private and enforcing getters so you can't accidentally use a thing that hasn't been set yet
+        // Might change this later to find all the stuff on initialisation rather than doing lazy resolution, idk
         mutable int index{-1};
         mutable const char *name{nullptr};
         mutable material_t *pointer{nullptr};
@@ -31,7 +34,9 @@ namespace P {
             mutable char string[5];
         };
 
-        MatRef() = default;
+    public:
+        // No default constructor to force you to initialise
+        // MatRef() = default;
 
         MatRef(int idx)
             : index(idx) {}
@@ -58,13 +63,14 @@ namespace P {
                 return index;
             }
 
-            if (numeric == 0 and name == nullptr and pointer == nullptr) {
-                Internal::PlasmidLog() << "CellRef not initialised";
+            if (not IsInitialised()) {
+                Internal::PlasmidLog() << "MatRef not initialised";
                 return -1;
             }
 
             if (numeric) {
-                return get_material_index(numeric);
+                index = get_material_index(numeric);
+                return index;
             }
 
             Internal::PlasmidLog() << "Searching for cell type '" << name << "'";
@@ -96,7 +102,7 @@ namespace P {
             return numeric;
         }
 
-        const char *GetString() const {
+        const char* GetString() const {
             if (numeric == 0) {
                 if (index == -1) {
                     index = GetIndex();
@@ -110,7 +116,7 @@ namespace P {
             return string;
         }
 
-        const char *GetName() const {
+        const char* GetName() const {
             if (name == nullptr) {
                 if (index == -1) {
                     index = GetIndex();
@@ -124,7 +130,7 @@ namespace P {
             return name;
         }
 
-        material_t *GetPointer() const {
+        material_t* GetPointer() const {
             if (pointer == nullptr) {
                 if (index == -1) {
                     index = GetIndex();
@@ -171,8 +177,9 @@ namespace P {
         }
     };
 
-    // TODO: fix member functions and use cell.extra
+    // Gets the cell instance's extra fields (use this instead of cell->extra_fields)
     inline cell_extra *GetExtraFields(cell *current_cell) {
+        // TODO: fix member functions and use cell.extra
         union {
             cell *ptr;
             __uint64 ptr_i;
