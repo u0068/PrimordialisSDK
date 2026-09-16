@@ -10,25 +10,25 @@ using ModInit = void(*)(Nucleus *, const char *, const char *);
 
 void P::InitialiseMod() {}
 
-void LoadMod(const char *path, const char *name) {
-    HMODULE mod = LoadLibraryA(name);
+void LoadMod(Mod& mod) {
+    HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
 
-    if (!mod) {
-        Log() << "Failed to load mod " << name;
+    if (!mod_handle) {
+        Log() << "Failed to load mod " << mod.name;
         return;
     }
-    Log() << "Loading mod " << name;
+    Log() << "Loading mod " << mod.name;
 
     auto mod_init = reinterpret_cast<ModInit>(
-                GetProcAddress(mod, "Initialise")
+                GetProcAddress(mod_handle, "Initialise")
             );
 
     if (!mod_init) {
-        Log() << "mod_init not found for " << name;
+        Log() << "mod_init not found for " << mod.name;
         return;
     }
 
-    mod_init(&api, path, name);
+    mod_init(&api, mod.path.string().c_str(), mod.name.c_str());
 }
 
 void LoadMods() {
@@ -43,7 +43,7 @@ void LoadMods() {
                     "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n");
 
     for (auto &mod: ModManager::enabled_mods) {
-        LoadMod(mod.path.string().c_str(), mod.name.c_str());
+        LoadMod(mod);
     }
 
     Log() << "All Mods Initialised!";
@@ -64,7 +64,6 @@ uint64_t ThreadMainHook(void *context) {
         }
         ModManager::ParseMods();
         Log() << "Mod Count:" << ModManager::enabled_mods.size();
-        ModManager::InjectAll();
         nucleus = &api;
         LoadMods();
     }

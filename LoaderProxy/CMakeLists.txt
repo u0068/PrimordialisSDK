@@ -4,7 +4,6 @@ project(LoaderProxy LANGUAGES CXX)
 
 add_library(LoaderProxy SHARED
         src/main.cpp
-        src/injector.cpp
         src/mod_manager.cpp
 )
 

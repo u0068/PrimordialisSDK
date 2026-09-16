@@ -22,8 +22,6 @@ namespace ModManager {
 
     void ParseMods();
 
-    void InjectAll();
-
     void SaveLuaModlist();
 
     void PatchInitLua();
