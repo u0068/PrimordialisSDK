@@ -34,4 +34,8 @@ add_custom_command(
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/steam_api64.dll
         "C:/Program Files (x86)/Steam/steamapps/common/Primordialis"
         COMMENT "Copying LoaderProxy to Primordialis"
+        COMMAND ${CMAKE_COMMAND} -E copy
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/steam_api64.dll
+        "${CMAKE_SOURCE_DIR}/r2_profile_test"
+        COMMENT "Copying LoaderProxy to Primordialis"
 )
