@@ -6,3 +6,5 @@
   enabled: false
 - name: ExampleBiomeMod
   enabled: false
+- name: DataLogger
+  enabled: true

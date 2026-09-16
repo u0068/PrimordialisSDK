@@ -4,7 +4,22 @@
 #include <string>
 #include <format>
 
-inline void print_material_properties() {
+inline const char* tag_names[10] = {"WEAPON", "UTILITY", "MOVEMENT", "DEFENCE",
+    "STRUCTURE", "ELECTRICAL", "NEURON", "START", "NONLETHAL", "NOSTART"};
+
+inline std::string PrintTags(uint tags) {
+    std::stringstream stream{};
+    for (auto i=0; i<10; i++) {
+        if ((tags >> i) & 1) {
+            stream << "        ";
+            stream << tag_names[i];
+            stream << "\n";
+        }
+    }
+    return stream.str();
+}
+
+inline void PrintMaterialProperties() {
     std::string filename = "material_properties.txt";
     std::ofstream outFile(filename);
 
@@ -20,7 +35,8 @@ inline void print_material_properties() {
         outFile << "General:\n";
         outFile << std::format("    id: {}\n", P::MatRef{material.id}.GetString());
         outFile << std::format("    next_variant: {}\n", material.next_variant);
-        outFile << std::format("    tags: {:0>10b}\n", material.tags);
+        outFile << "    tags:\n";
+        outFile << PrintTags(material.tags);
         outFile << std::format("    tier: {}\n", material.tier);
         outFile << std::format("    drop_weight: {:.2g}\n", material.drop_weight);
         outFile << std::format("    spawn_with: {}\n", material.spawn_with[0]);

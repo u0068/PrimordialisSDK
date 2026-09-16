@@ -1,0 +1,6344 @@
+---- Basic cell ----
+General:
+    id: BODY
+    next_variant: 0
+    tags:
+        STRUCTURE
+        START
+    tier: 0
+    drop_weight: 1
+    spawn_with: 0
+Biomass:
+    base_cost: 1
+    genome_size: 0
+    growth_rate: 1
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.3, 0.3, 0.3
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((0, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Speedy cell ----
+General:
+    id: SWIM
+    next_variant: 0
+    tags:
+        MOVEMENT
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.5
+    spawn_with: 0
+Biomass:
+    base_cost: 3
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.048
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.5, 0.7, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((1, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Seeker cell ----
+General:
+    id: SEEK
+    next_variant: 0
+    tags:
+        UTILITY
+        START
+    tier: 0
+    drop_weight: 1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.04
+    tangent_drag: 0.004
+    movement_force: 0
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.8, 0.2, 0.9
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((2, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 00007FF79496F530
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Hard cell ----
+General:
+    id: HARD
+    next_variant: 0
+    tags:
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.5
+    spawn_with: 0
+Biomass:
+    base_cost: 3
+    genome_size: 4
+    growth_rate: 0.25
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: true
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 4
+Physics:
+    density: 1.5
+    max_radial_force: 24
+    max_angular_force: 24
+    radial_compliance: 0
+    angular_compliance: 0
+    plasticity: 0.01
+    friction: 10
+    restitution: 0.9
+    drag: 0.8
+    tangent_drag: 0.16
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.9, 0.9, 0.9
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 3
+    uv: ((3, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Slippery cell ----
+General:
+    id: SLIP
+    next_variant: 0
+    tags:
+        MOVEMENT
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 1
+    growth_rate: 0.8
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0.5
+Physics:
+    density: 1
+    max_radial_force: 2
+    max_angular_force: 4
+    radial_compliance: 8
+    angular_compliance: 16
+    plasticity: 0.02
+    friction: 0
+    restitution: 0
+    drag: 0.004
+    tangent_drag: 0
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.3, 0.4, 0.8
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 0
+    uv: ((4, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Lightweight cell ----
+General:
+    id: LIGT
+    next_variant: 0
+    tags:
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.3
+    spawn_with: 0
+Biomass:
+    base_cost: 1
+    genome_size: 1
+    growth_rate: 0.8
+    max_health: 0.25
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0
+Physics:
+    density: 0.25
+    max_radial_force: 2
+    max_angular_force: 4
+    radial_compliance: 2
+    angular_compliance: 16
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 50
+    inv_heat_capacity: 0.02
+Visual:
+    base_color: 0.9, 0.85, 0.6
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 0
+    uv: ((5, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Heavy cell ----
+General:
+    id: MASS
+    next_variant: 0
+    tags:
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 8
+    genome_size: 5
+    growth_rate: 0.25
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: true
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 8
+Physics:
+    density: 1.2e+02
+    max_radial_force: 6.4e+02
+    max_angular_force: 6.4e+02
+    radial_compliance: 0
+    angular_compliance: 0
+    plasticity: 0.01
+    friction: 10
+    restitution: 0.9
+    drag: 0.0067
+    tangent_drag: 0.0013
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.05, 0.05, 0.05
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 3
+    uv: ((6, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Ossifying cell ----
+General:
+    id: BONE
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.2
+    spawn_with: 0
+Biomass:
+    base_cost: 3
+    genome_size: 4
+    growth_rate: 0.25
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: true
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 8
+    max_angular_force: 8
+    radial_compliance: 1.5
+    angular_compliance: 1.5
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.9
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.5, 0.5, 0.5
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((7, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 00007FF794979DB0
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Flex cell ----
+General:
+    id: FLEX
+    next_variant: 0
+    tags:
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.3
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 1
+    growth_rate: 2
+    max_health: 1
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 0.5
+    max_radial_force: 16
+    max_angular_force: 4
+    radial_compliance: 0
+    angular_compliance: 64
+    plasticity: 0
+    friction: 1
+    restitution: 0
+    drag: 0.004
+    tangent_drag: 0
+    movement_force: 0
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.06
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.8, 0.3, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((8, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Elastic cell ----
+General:
+    id: ELST
+    next_variant: 0
+    tags:
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.3
+    spawn_with: 0
+Biomass:
+    base_cost: 1
+    genome_size: 1
+    growth_rate: 0.8
+    max_health: 1
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0
+Physics:
+    density: 0.5
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 16
+    angular_compliance: 16
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.06
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.84, 0.52, 0.25
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 0
+    uv: ((9, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Vascular cell ----
+General:
+    id: VEIN
+    next_variant: 0
+    tags:
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.2
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 4e+03
+    max_health: 10
+    transfer_rate: 5e+02
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0
+Physics:
+    density: 0.5
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.16, 0, 0.055
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 0
+    uv: ((10, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Synchronized cell ----
+General:
+    id: SYNC
+    next_variant: 0
+    tags:
+        UTILITY
+        DEFENCE
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 8
+    genome_size: 8
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: true
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0
+Physics:
+    density: 0.5
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 0.02, 0.02
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 0
+    uv: ((11, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Ability trigger cell 1 ----
+General:
+    id: TRG0
+    next_variant: 14
+    tags:
+        ELECTRICAL
+        START
+    tier: 0
+    drop_weight: 1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 1, 0.2, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((12, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF79496F7C0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Ability trigger cell 2 ----
+General:
+    id: TRG1
+    next_variant: 15
+    tags:
+        ELECTRICAL
+        START
+    tier: 0
+    drop_weight: 0
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 1, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((13, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF79496F840
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Ability trigger cell 3 ----
+General:
+    id: TRG2
+    next_variant: 13
+    tags:
+        ELECTRICAL
+        START
+    tier: 0
+    drop_weight: 0
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 0.2, 1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((14, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF79496F8C0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Seek trigger cell ----
+General:
+    id: ETRG
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 0
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 1, 0.2, 0.6
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((15, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF79496F940
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Muscle cell ----
+General:
+    id: MUSL
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 6
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 2
+    max_radial_force: 64
+    max_angular_force: 64
+    radial_compliance: 0.25
+    angular_compliance: 4
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 10
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.9, 0.4, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((16, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 00007FF79496FA30
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Inflating cell ----
+General:
+    id: INFL
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 6
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 64
+    max_angular_force: 64
+    radial_compliance: 1
+    angular_compliance: 4
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 10
+    leak_conductivity: 0.05
+    capacitance: 2
+    inv_capacitance: 0.5
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.73, 0.76, 0.17
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((17, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 00007FF79496FB60
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Heart cell ----
+General:
+    id: HART
+    next_variant: 0
+    tags:
+        DEFENCE
+        START
+    tier: 0
+    drop_weight: 0.01
+    spawn_with: 0
+Biomass:
+    base_cost: 25
+    genome_size: 0
+    growth_rate: 0.05
+    max_health: 1e+02
+    transfer_rate: 0.05
+    regen: 0.4
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.9, 0.1, 0.1
+    light_radius: 5
+    light_intensity: 1
+    emission: 0.9, 0.1, 0.1
+    texture_type: 2
+    uv: ((18, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Glowing cell ----
+General:
+    id: GLOW
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.02
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 10
+    leak_conductivity: 0.05
+    capacitance: 10
+    inv_capacitance: 0.1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.9, 0.9, 0.9
+    light_radius: 1.5e+02
+    light_intensity: 1
+    emission: 0.9, 0.9, 0.9
+    texture_type: 0
+    uv: ((19, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF79496FC90
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Musical cell ----
+General:
+    id: SING
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 22
+Biomass:
+    base_cost: 2
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: true
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 10
+    leak_conductivity: 0.05
+    capacitance: 10
+    inv_capacitance: 0.1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.18, 0.35, 0.076
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 0
+    uv: ((20, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF79496FCE0
+    destroyed_fn: 0000000000000000
+
+
+---- Listening cell ----
+General:
+    id: EARR
+    next_variant: 0
+    tags:
+        UTILITY
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.64, 1, 0.37
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((21, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794975BA0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Light detector cell ----
+General:
+    id: EYEE
+    next_variant: 0
+    tags:
+        UTILITY
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 2
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.47, 0.47, 0.47
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((22, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794976320
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF7949760F0
+    destroyed_fn: 0000000000000000
+
+
+---- Conductive cell ----
+General:
+    id: WIRE
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 10
+    inv_capacitance: 0.1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 30
+    leak_heat_conductivity: 0.7
+    heat_capacity: 5e+02
+    inv_heat_capacity: 0.002
+Visual:
+    base_color: 0.7, 0.7, 0.8
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((23, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Capacitive cell ----
+General:
+    id: CAPC
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 4
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.001
+    capacitance: 1e+04
+    inv_capacitance: 0.0001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 3
+    leak_heat_conductivity: 0.7
+    heat_capacity: 5e+02
+    inv_heat_capacity: 0.002
+Visual:
+    base_color: 0.33, 0.12, 0.003
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((24, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Inductive cell ----
+General:
+    id: INDC
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 4
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 3
+    leak_heat_conductivity: 0.7
+    heat_capacity: 5e+02
+    inv_heat_capacity: 0.002
+Visual:
+    base_color: 0.003, 0.12, 0.33
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((25, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF79497A730
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Heat sink cell ----
+General:
+    id: SINK
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 60
+    leak_heat_conductivity: 0.7
+    heat_capacity: 5e+03
+    inv_heat_capacity: 0.0002
+Visual:
+    base_color: 0.7, 0.7, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((26, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Shocking cell ----
+General:
+    id: AAMP
+    next_variant: 0
+    tags:
+        WEAPON
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 7
+    genome_size: 12
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.01
+    capacitance: 2e+03
+    inv_capacitance: 0.0005
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 0.4, 1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((27, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF79496FD30
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Lightning cell ----
+General:
+    id: ZAP!
+    next_variant: 0
+    tags:
+        WEAPON
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 7
+    genome_size: 12
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.01
+    capacitance: 2e+03
+    inv_capacitance: 0.0005
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.62, 0.33, 1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((28, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794970250
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Laser cell ----
+General:
+    id: LASR
+    next_variant: 0
+    tags:
+        WEAPON
+    tier: 1
+    drop_weight: 0.08
+    spawn_with: 0
+Biomass:
+    base_cost: 7
+    genome_size: 12
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.01
+    capacitance: 4e+03
+    inv_capacitance: 0.00025
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 5e+02
+    inv_heat_capacity: 0.002
+Visual:
+    base_color: 0.26, 1, 0.16
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((29, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF7949707B0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Spiky cell ----
+General:
+    id: SPIK
+    next_variant: 0
+    tags:
+        WEAPON
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 12
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: true
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0.1
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 2
+    max_radial_force: 64
+    max_angular_force: 64
+    radial_compliance: 0.1
+    angular_compliance: 0.1
+    plasticity: 0.02
+    friction: 10
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.0024
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.6, 0.6, 0.6
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 4
+    uv: ((30, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Impact cell ----
+General:
+    id: HAMR
+    next_variant: 0
+    tags:
+        WEAPON
+        NOSTART
+    tier: 0
+    drop_weight: 0.12
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 12
+    growth_rate: 0.08
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 2
+    max_radial_force: 16
+    max_angular_force: 16
+    radial_compliance: 0.3
+    angular_compliance: 0.3
+    plasticity: 0.02
+    friction: 2
+    restitution: 1
+    drag: 0.1
+    tangent_drag: 0.01
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.55, 1, 0.8
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 3
+    uv: ((31, 0) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794971CB0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Explosive cell ----
+General:
+    id: BOMB
+    next_variant: 0
+    tags:
+        WEAPON
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 9
+    growth_rate: 0.1
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 1, 0.3, 0
+    light_radius: 3
+    light_intensity: 1
+    emission: 0.8, 0.4, 0.1
+    texture_type: 1
+    uv: ((0, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794970D10
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 00007FF794970E00
+
+
+---- Vacuum cell ----
+General:
+    id: SUCK
+    next_variant: 0
+    tags:
+        UTILITY
+        MOVEMENT
+    tier: 0
+    drop_weight: 0.04
+    spawn_with: 0
+Biomass:
+    base_cost: 11
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.4, 1, 0.9
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((1, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794970ED0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Radiant cell ----
+General:
+    id: RADD
+    next_variant: 0
+    tags:
+        WEAPON
+        UTILITY
+    tier: 1
+    drop_weight: 0.08
+    spawn_with: 0
+Biomass:
+    base_cost: 12
+    genome_size: 8
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+03
+    inv_heat_capacity: 0.001
+Visual:
+    base_color: 0.94, 0.74, 0.069
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((2, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794971560
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Stasis cell ----
+General:
+    id: STAY
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0.01
+    spawn_with: 0
+Biomass:
+    base_cost: 20
+    genome_size: 12
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.6, 0.91, 1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((3, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF7949718F0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Feeler cell ----
+General:
+    id: FEEL
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 0
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: true
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 20
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.8, 0.2, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((4, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794971E20
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Proximity detecting cell ----
+General:
+    id: PROX
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 0
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 20
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.91, 0.084, 0.032
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((5, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF7949722F0
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF794971FE0
+    destroyed_fn: 0000000000000000
+
+
+---- Grounded cell ----
+General:
+    id: GRND
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.2
+    spawn_with: 0
+Biomass:
+    base_cost: 3
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 1e+04
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 3
+    leak_heat_conductivity: 0.7
+    heat_capacity: 5e+02
+    inv_heat_capacity: 0.002
+Visual:
+    base_color: 0.5, 0.7, 0.7
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((6, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Power switch cell ----
+General:
+    id: ONNN
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 5e+02
+    inv_capacitance: 0.002
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.4, 0.3, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((7, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794973010
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Charging cell ----
+General:
+    id: CHRG
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 1e+02
+    capacitance: 5e+02
+    inv_capacitance: 0.002
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.053, 1, 0.99
+    light_radius: 0
+    light_intensity: 20
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((8, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794973150
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Always on cell ----
+General:
+    id: BATT
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 5e+02
+    inv_capacitance: 0.002
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.039, 0.28, 0.74
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((9, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794972330
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Always negative cell ----
+General:
+    id: NBAT
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 2
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 5e+02
+    inv_capacitance: 0.002
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.99, 0.57, 0.069
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((10, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794972360
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Detach detector cell ----
+General:
+    id: MDET
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 8
+    genome_size: 6
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 5e+02
+    inv_capacitance: 0.002
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.7, 0.3, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((11, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF7949723A0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Sticky cell ----
+General:
+    id: STIK
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: true
+    attach_to_walls: true
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.08
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 1
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 0.6, 0.3
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((12, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794972410
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Linking cell ----
+General:
+    id: LINK
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 6
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 0.029, 1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((13, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF7949725F0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Self-colliding cell ----
+General:
+    id: SELF
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: true
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.22, 0.49, 0.13
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((14, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Growth gating cell ----
+General:
+    id: GATE
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 4
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.8, 0.5, 0.5
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((15, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794972FF0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Breakaway cell ----
+General:
+    id: BREK
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 0
+    drop_weight: 0.5
+    spawn_with: 0
+Biomass:
+    base_cost: 1
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: true
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 0.1
+    inv_capacitance: 10
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.8, 0.6, 0.5
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((16, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 00007FF794974F20
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Stem cell ----
+General:
+    id: STEM
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 5
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: true
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 10
+    inv_capacitance: 0.1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.45, 0.04, 0.09
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((17, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794975210
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Propagating cell ----
+General:
+    id: GROW
+    next_variant: 0
+    tags:
+        UTILITY
+        STRUCTURE
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 5
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 10
+    inv_capacitance: 0.1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.45, 0.94, 0.09
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((18, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794975630
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Painting cell ----
+General:
+    id: COLR
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 5
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: true
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 10
+    inv_capacitance: 0.1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 1, 0, 0.7
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((19, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794971AB0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Health monitor cell ----
+General:
+    id: HDET
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.9, 0.2, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((20, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794975AB0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Speedometer cell ----
+General:
+    id: SPED
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.7, 0.9, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((21, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794975B10
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Thermoelectric cell ----
+General:
+    id: THRM
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 30
+    capacitance: 1e+03
+    inv_capacitance: 0.001
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 30
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.3, 0.06, 0.05
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((22, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF79497A6F0
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Jet cell ----
+General:
+    id: JETT
+    next_variant: 0
+    tags:
+        MOVEMENT
+    tier: 0
+    drop_weight: 0.6
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 0.25
+    inv_capacitance: 4
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.8, 0.8, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((23, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794976770
+    force_update_fn: 00007FF794976370
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Acid cell ----
+General:
+    id: ACID
+    next_variant: 0
+    tags:
+        WEAPON
+    tier: 0
+    drop_weight: 0.08
+    spawn_with: 0
+Biomass:
+    base_cost: 12
+    genome_size: 12
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0, 0.6, 0
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((24, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794977140
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Ink cell ----
+General:
+    id: INKY
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.01, 0.01, 0.05
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((25, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794977710
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Projecting cell ----
+General:
+    id: PROJ
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: true
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.01, 0.05, 0.2
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((26, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794979F10
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Spinning cell ----
+General:
+    id: SPIN
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 0.25
+    inv_capacitance: 4
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.4, 0.9, 0.6
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((27, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 00007FF794978100
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Leeching cell ----
+General:
+    id: LECH
+    next_variant: 0
+    tags:
+        DEFENCE
+    tier: 0
+    drop_weight: 0.2
+    spawn_with: 0
+Biomass:
+    base_cost: 6
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0.05
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 4
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.17, 0.004, 0.004
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 4
+    uv: ((28, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Health infusing cell ----
+General:
+    id: INJC
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 5
+    transfer_rate: 0.5
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: -0.4
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 4
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.4, 0, 0.1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 4
+    uv: ((29, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Experience stealing cell ----
+General:
+    id: XPST
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0.01
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 4
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.37, 0.4, 0.6
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 4
+    uv: ((30, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794972B50
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Venomous cell ----
+General:
+    id: VENM
+    next_variant: 0
+    tags:
+        WEAPON
+        NONLETHAL
+    tier: 0
+    drop_weight: 0.2
+    spawn_with: 0
+Biomass:
+    base_cost: 3
+    genome_size: 5
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 2
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.04
+    tangent_drag: 0.004
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0, 0.05, 0
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((31, 1) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794972C80
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Poisonous cell ----
+General:
+    id: POIS
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 2
+    genome_size: 1
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: true
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.3, 0.6, 0
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((0, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794972DB0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 00007FF794972EA0
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Angry neuron ----
+General:
+    id: ANGY
+    next_variant: 0
+    tags:
+        UTILITY
+        NEURON
+    tier: 0
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 6
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.7, 0.15, 0
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((1, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF794978120
+    destroyed_fn: 0000000000000000
+
+
+---- Follower neuron ----
+General:
+    id: FALO
+    next_variant: 0
+    tags:
+        UTILITY
+        NEURON
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 3
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0, 0.15, 0.7
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((2, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF794978960
+    destroyed_fn: 0000000000000000
+
+
+---- Wandering neuron ----
+General:
+    id: WAND
+    next_variant: 0
+    tags:
+        UTILITY
+        NEURON
+    tier: 0
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.18, 0.57, 0.66
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((3, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF794978B80
+    destroyed_fn: 0000000000000000
+
+
+---- Obedient neuron ----
+General:
+    id: MNIN
+    next_variant: 0
+    tags:
+        UTILITY
+        NEURON
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.7, 0.6, 0
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((4, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF794978E90
+    destroyed_fn: 0000000000000000
+
+
+---- Fearful neuron ----
+General:
+    id: FEAR
+    next_variant: 0
+    tags:
+        UTILITY
+        NEURON
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.047, 0.31, 0.066
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((5, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF7949791E0
+    destroyed_fn: 0000000000000000
+
+
+---- Hesitant neuron ----
+General:
+    id: WAIT
+    next_variant: 0
+    tags:
+        UTILITY
+        NEURON
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 10
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.44, 0.21, 0.56
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((6, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF7949796F0
+    destroyed_fn: 0000000000000000
+
+
+---- Mind control cell ----
+General:
+    id: MIND
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.02
+    spawn_with: 0
+Biomass:
+    base_cost: 12
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 0.5
+    angular_compliance: 32
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.035, 0, 0.21
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((7, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 00007FF794979950
+    destroyed_fn: 0000000000000000
+
+
+---- Phasing cell ----
+General:
+    id: PHAS
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0.01
+    spawn_with: 0
+Biomass:
+    base_cost: 3
+    genome_size: 8
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: true
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 0
+Physics:
+    density: 0.7
+    max_radial_force: 3
+    max_angular_force: 4
+    radial_compliance: 2
+    angular_compliance: 16
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 30
+    leak_heat_conductivity: 0.7
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.6, 0.7, 1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((8, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 00007FF794979BE0
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Heat pumping cell ----
+General:
+    id: HEAT
+    next_variant: 0
+    tags:
+        WEAPON
+        UTILITY
+    tier: 0
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 8
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 0.083
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 2
+Physics:
+    density: 1
+    max_radial_force: 3
+    max_angular_force: 4
+    radial_compliance: 2
+    angular_compliance: 16
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+03
+    inv_heat_capacity: 0.001
+Visual:
+    base_color: 0.88, 0.49, 0.31
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((9, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF79497A570
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Electromagnetic cell ----
+General:
+    id: EMAG
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 0
+    drop_weight: 0.1
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 6
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: true
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: true
+    show_neighbor_direction: false
+    is_hard: true
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.2, 0.05, 0.1
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((10, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF794972770
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Anchor cell ----
+General:
+    id: WALL
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 8
+    genome_size: 6
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 2
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1e+02
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.006, 0.016, 0.05
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((11, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 00007FF79497AA00
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Negating cell ----
+General:
+    id: NEGA
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 4e+02
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.9, 0.05, 0.05
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((12, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794973440
+    connection_update_fn: 00007FF794973270
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Electric isolator cell ----
+General:
+    id: OPTO
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 1e+02
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.1, 0.65, 0.38
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((13, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794973CD0
+    connection_update_fn: 00007FF7949736C0
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Transistor cell ----
+General:
+    id: TRNS
+    next_variant: 0
+    tags:
+        ELECTRICAL
+    tier: 1
+    drop_weight: 0.05
+    spawn_with: 0
+Biomass:
+    base_cost: 5
+    genome_size: 4
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 4e+02
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.083, 0.1, 0.47
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((14, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 0000000000000000
+    electric_update_fn: 00007FF794974950
+    connection_update_fn: 00007FF794974220
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Root cell ----
+General:
+    id: ROOT
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0.01
+    spawn_with: 0
+Biomass:
+    base_cost: 20
+    genome_size: 8
+    growth_rate: 0.4
+    max_health: 5
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: true
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 3
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.21, 0.084, 0.029
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((15, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 0000000000000000
+    force_update_fn: 00007FF79497A7A0
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Waypoint Cell ----
+General:
+    id: PORT
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0
+    spawn_with: 0
+Biomass:
+    base_cost: 20
+    genome_size: 0
+    growth_rate: 0.4
+    max_health: 1
+    transfer_rate: 0.05
+    regen: 0.004
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: false
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.012
+Electricity:
+    conductivity: 1
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0.51, 0.42, 0.4
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((16, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF79497AB30
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
+---- Cancer Cell ----
+General:
+    id: CRAB
+    next_variant: 0
+    tags:
+        UTILITY
+    tier: 2
+    drop_weight: 0
+    spawn_with: 0
+Biomass:
+    base_cost: 20
+    genome_size: 0
+    growth_rate: 0.8
+    max_health: 1e+02
+    transfer_rate: 0.05
+    regen: 0.4
+    regen_delay_multiplier: 1
+Flags:
+    attach_to_cells: false
+    attach_to_walls: false
+    poison_immune: false
+    no_electric_growth: false
+    penetrate_walls: false
+    self_touching: false
+    is_cancer: true
+    is_directional: false
+    show_adjacency: false
+    show_direction: false
+    show_neighbor_direction: false
+    is_hard: false
+    play_note: false
+    no_recolor: false
+    sync_health: false
+    is_stem: false
+Contact:
+    sharpness: 0
+    leeching: 0
+    hardness: 1
+Physics:
+    density: 1
+    max_radial_force: 4
+    max_angular_force: 4
+    radial_compliance: 1
+    angular_compliance: 1
+    plasticity: 0.02
+    friction: 2
+    restitution: 0.5
+    drag: 0.4
+    tangent_drag: 0.04
+    movement_force: 0.0096
+Electricity:
+    conductivity: 0
+    leak_conductivity: 0.05
+    capacitance: 1
+    inv_capacitance: 1
+    directional_conductivity: 0
+Heat:
+    heat_conductivity: 0.3
+    leak_heat_conductivity: 0.07
+    heat_capacity: 1e+02
+    inv_heat_capacity: 0.01
+Visual:
+    base_color: 0, 0, 0
+    light_radius: 0
+    light_intensity: 1
+    emission: 0, 0, 0
+    texture_type: 1
+    uv: ((17, 2) + 0.5) / 32
+Functions:
+    physics_update_fn: 00007FF79497ABC0
+    force_update_fn: 0000000000000000
+    electric_update_fn: 0000000000000000
+    connection_update_fn: 0000000000000000
+    brain_fn: 0000000000000000
+    destroyed_fn: 0000000000000000
+
+
