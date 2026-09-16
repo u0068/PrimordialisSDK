@@ -38,7 +38,7 @@ or use the following git commands to get only Plasmid and mod source code:
 git clone --filter=blob:none --sparse --recurse-submodules https://github.com/u0068/PrimordialisSDK
 cd PrimordialisSDK
 git sparse-checkout set Plasmid
-git sparse-checkout set mods
+git sparse-checkout set mod_src
 ```
 To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).\
 Load the Primordialis PDB before decompiling, by following the steps given in the
