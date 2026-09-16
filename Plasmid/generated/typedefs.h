@@ -31,3 +31,5 @@ typedef void *pointer;
 
 typedef unsigned long long ulong64;
 typedef unsigned long long __uint64;
+
+typedef float real;
