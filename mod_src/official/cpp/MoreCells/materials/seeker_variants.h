@@ -66,7 +66,7 @@ inline void AddSeekerVariants() {
 
     material = P::MatRef{"Seeker cell"}.GetCopy();
     material.next_variant = P::MatRef{"Seeker cell"}.GetIndex(); // Cycle to original seeker cell
-    material.force_update_fn = (void*)HiderCell;
+    material.force_update_fn = HiderCell;
     material.base_color = {0.0f, 1.0f, 0.2f, 1.0f}; // Green
     P::SetCellNameAndDesc(material, "Hider cell",
                           "Hides when seek is pressed and vice versa.");
@@ -74,7 +74,7 @@ inline void AddSeekerVariants() {
 
     material = P::MatRef{"Seeker cell"}.GetCopy();
     material.next_variant = P::MatRef{"Hider cell"}.GetIndex(); // Cycle to hider cell
-    material.force_update_fn = (void*)ElectricSeekerCell;
+    material.force_update_fn = ElectricSeekerCell;
     material.base_color = {1.0f, 0.0f, 0.2f, 1.0f}; // Blue
     // We also want to make this conductive, so lets copy conductive cell's electrical properties
     const P::material_t conductive = P::MatRef {"Conductive cell"}.GetCopy();

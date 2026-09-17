@@ -1516,12 +1516,12 @@ namespace P {
         real_2 uv;
         int combine_material_index1;
         int combine_material_index2;
-        void *physics_update_fn;
-        void *force_update_fn;
-        void *electric_update_fn;
-        void *connection_update_fn;
-        void *brain_fn;
-        void *destroyed_fn;
+        void(*physics_update_fn)(cell*);
+        void(*force_update_fn)(cell*);
+        void(*electric_update_fn)(cell*);
+        void(*connection_update_fn)(cell*);
+        void(*brain_fn)(cell*);
+        void(*destroyed_fn)(cell*);
     };
 
     struct exp2f_data {

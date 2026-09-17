@@ -3,8 +3,10 @@
 - name: PropertyEditor
   enabled: true
 - name: MoreCells
-  enabled: true
+  enabled: false
 - name: ExampleBiomeMod
   enabled: false
+- name: ExampleCellMod
+  enabled: true
 - name: DataLogger
   enabled: false

@@ -19,7 +19,7 @@ inline void AddFatCell() {
     material.density = 2.0f;
     material.movement_force = 0.0f;
     material.heat_capacity = 1000.0f;
-    material.physics_update_fn = (void*)FatCell;
+    material.physics_update_fn = FatCell;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.0f, 0.9f, 0.2f, 1.0f}; // Yellow
     P::SetCellNameAndDesc(material, "Fat cell",

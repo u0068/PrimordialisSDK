@@ -5,6 +5,7 @@
 #include "mod_loader.h"
 #include "nucleus_api.h"
 #include "plasmid_api.h"
+#include "include/primordialis_log.h"
 
 using ModInit = void(*)(Nucleus *, const char *, const char *);
 
@@ -29,6 +30,8 @@ void LoadMod(Mod& mod) {
     }
 
     mod_init(&api, mod.path.string().c_str(), mod.name.c_str());
+
+    P::GamePrint("Loaded %s", mod.name);
 }
 
 void LoadMods() {
@@ -39,8 +42,8 @@ void LoadMods() {
         mod_names += "\n";
     }
 
-    PrimordialisLog("\nTHIS SESSION HAS BEEN MODIFIED USING THE PILUS MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
-                    "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n");
+    P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE PILUS MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
+                    "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n\n");
 
     for (auto &mod: ModManager::enabled_mods) {
         LoadMod(mod);

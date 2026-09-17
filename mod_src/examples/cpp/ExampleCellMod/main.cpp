@@ -3,7 +3,7 @@
 #include "aerogel_cell.h" // Include cells from other files
 
 void acid_no_color_change(P::cell *cell) {
-    cell_acid(cell); // Call original acid function
+    P::cell_acid(cell); // Call original acid function
 
     // Modify the acid to set its final color to its initial color with 0 alpha
     int n_acid_per_tick = 5; // The acid cell produces 5 particles per tick
@@ -16,8 +16,13 @@ void acid_no_color_change(P::cell *cell) {
 }
 
 // This function will be hooked to the game's init_materials_list function
+// A hook is our version of a function, which replaces the game's version
 void OnInitMats() {
-    P::Next<void>(); // Call original function
+    // First, we want to initialise all the game materials, so we call the original function using P::Next
+    P::Next<void>(); // The thing inside the <> must match the function's return type
+    // DO NOT call the original function like this: P::init_materials_list()
+    // Because the call to the original is replaced with the call to our function,
+    // so it will get stuck in an infinite loop of calling itself.
     if (not P::IsThreadSafe()) { // Make sure we are only on the main thread
         return;
     }
@@ -26,10 +31,13 @@ void OnInitMats() {
 
     // First, lets make the Acid Cell spew acid that doesn't change color
     material = P::MatRef{"Acid cell"}.GetCopy(); // Copy the acid cell material
-    material.physics_update_fn = (void*)acid_no_color_change;
-    // We simply overwrite cell functions like this instead of using the Hook utility
+    // Make it use our function.
+    material.physics_update_fn = acid_no_color_change;
+    // Using P::Hook on cell functions could also work, but it's better to use the method shown here.
+
     P::materials_list[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
-    // You could also edit existing cells by writing to the original's fields
+    // You could also edit existing cells by writing directly to the original's fields,
+    // rather than replacing them with an edited copy of themselves.
 
     // Next, lets make our own cell!
     // We want to have a cell that is quite stiff but not entirely rigid.
