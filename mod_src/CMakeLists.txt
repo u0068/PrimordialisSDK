@@ -72,3 +72,4 @@ endfunction()
 
 add_subdirectory(examples/cpp)
 add_subdirectory(official/cpp)
+add_subdirectory(my_mods/cpp)

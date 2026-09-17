@@ -93,6 +93,11 @@ void ParseModInfo(Mod &mod) {
 void ModManager::ParseMods() {
     Log() << "Parsing Mods...";
 
+    if (mod_path.empty()) {
+        Log() << "No mods found in " << mod_path;
+        return;
+    }
+
     std::vector<Mod> installed_mods{};
     for (const auto &entry: std::filesystem::directory_iterator(mod_path)) {
         Log() << "Found Mod: "

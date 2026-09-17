@@ -3,6 +3,11 @@
 #include <windows.h>
 #include "typedefs.h"
 
+// IMPORTANT!!!
+// Ghidra did not preserve const information
+// I made it turn all char* into const char* but in some cases it might actually be something else like char * const
+// If you get any errors regarding constness, especially of char*, correct the type in this file and let me know!
+
 namespace P {
     struct DName;
     struct DNameNode;
@@ -547,9 +552,9 @@ namespace P {
     };
 
     struct print_buffer_t {
-        const char *base;
-        const char *end;
-        const char *buffer;
+        char *base;
+        char *end;
+        char * const buffer;
     };
 
     // struct lfClass2

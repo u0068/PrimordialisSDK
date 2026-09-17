@@ -1,18 +1,25 @@
 #pragma once
-// #include "generated/game_functions/essential.h"
+#include "generated/game_functions/essential.h"
 #include "generated/resolve_data.h"
 
 namespace P {
+
+    inline context_t* GetContext() {
+        return (context_t*)TlsGetValue(tls_index);
+    }
+
     inline bool IsThreadSafe() {
-        auto tls_value = TlsGetValue(tls_index);
-        if (tls_value == nullptr) {
+        auto context = GetContext();
+        if (context == nullptr) {
             return false;
         }
-        return *static_cast<int *>(tls_value) == 0;
+        return context->lane_index == 0;
     }
 
     inline void LaneSync() {
-        auto tls_value = TlsGetValue(tls_index);
-        EnterSynchronizationBarrier(LPSYNCHRONIZATION_BARRIER(*(longlong *) ((longlong) tls_value + 8) + 0x18), 0);
+        auto context = GetContext();
+        // I think this works idk
+        EnterSynchronizationBarrier(
+            reinterpret_cast<LPSYNCHRONIZATION_BARRIER &>(context->group->barrier), 0);
     }
 }

@@ -6,6 +6,10 @@
 namespace P {
     inline ulong thread_main(void *param_1) { return Resolve<ulong(*)(void *)>("thread_main")(param_1); }
 
+    inline context_t *create_or_get_context(int param_1) {
+        return Resolve<context_t*(*)(int)>("create_or_get_context")(param_1);
+    }
+
     inline uint add_entry(translation_map *param_1, const char *param_2, translation_list *param_3) {
         return Resolve<uint(*)(translation_map *, const char *, translation_list *)>("add_entry")(
             param_1, param_2, param_3);

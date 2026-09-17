@@ -14,10 +14,6 @@ namespace P {
         return Resolve<void(*)(user_input *, int)>("handle_text_button_release")(param_1, param_2);
     }
 
-    inline context_t *create_or_get_context(int param_1) {
-        return Resolve<context_t*(*)(int)>("create_or_get_context")(param_1);
-    }
-
     inline real_3 *get_text_center(real_3 *__return_storage_ptr__, char *param_1, font_info *param_2) {
         return Resolve<real_3*(*)(real_3 *, char *, font_info *)>("get_text_center")(
             __return_storage_ptr__, param_1, param_2);
