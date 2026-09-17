@@ -3309,10 +3309,10 @@ namespace P {
     //     uint _exponent : 8;
     //     uint _sign : 1;
     // };
-    struct exception {
-        longlong _padding_;
-        __std_exception_data _Data;
-    };
+    // struct exception {
+    //     longlong _padding_;
+    //     __std_exception_data _Data;
+    // };
 
     struct in_place_t {};
 

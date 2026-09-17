@@ -1,5 +1,6 @@
 #pragma once
 #include "nucleus_interface.h"
+#include <mutex>
 
 namespace P {
     template<typename T>
