@@ -18,8 +18,6 @@ namespace P {
 
     inline void LaneSync() {
         auto context = GetContext();
-        // I think this works idk
-        EnterSynchronizationBarrier(
-            reinterpret_cast<LPSYNCHRONIZATION_BARRIER &>(context->group->barrier), 0);
+        EnterSynchronizationBarrier(&context->group->barrier, 0);
     }
 }
