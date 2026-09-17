@@ -63,14 +63,15 @@ namespace P {
                 return index;
             }
 
-            if (not IsInitialised()) {
-                Internal::PlasmidLog() << "MatRef not initialised";
-                return -1;
-            }
-
             if (numeric) {
                 index = get_material_index(numeric);
                 return index;
+            }
+
+            if (not IsInitialised() and name == nullptr) {
+                Internal::PlasmidLog() << "MatRef not initialised!\n"
+                                          "  Are you referring to a cell that doesn't exist yet?";
+                return -1;
             }
 
             Internal::PlasmidLog() << "Searching for cell type '" << name << "'";

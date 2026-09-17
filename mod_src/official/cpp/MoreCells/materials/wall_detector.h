@@ -7,7 +7,7 @@ inline void WallDetector(P::cell *cell) {
     constexpr float falloff = 0.005f;
     P::wall_t walls = GetExtraFields(cell)->wall;
     P::wall_map(&walls, &P::w->map, P::real_2{cell->x, cell->y}, false);
-    PowerCell(cell, max_voltage / (std::max(0.0f, falloff * walls.dist) + 1.0f));
+    PowerCell(cell, max_voltage / (max(0.0f, falloff * walls.dist) + 1.0f));
 }
 
 inline void AddWallDetector() {
