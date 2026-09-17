@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
-set(CMAKE_CXX_STANDARD 20)
 
 add_library(Plasmid INTERFACE)
+
+target_compile_features(Plasmid INTERFACE cxx_std_20)
 
 target_include_directories(Plasmid
         INTERFACE
