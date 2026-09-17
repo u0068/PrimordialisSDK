@@ -4,6 +4,10 @@ add_library(Plasmid INTERFACE)
 
 target_compile_features(Plasmid INTERFACE cxx_std_20)
 
+target_compile_definitions(Plasmid INTERFACE
+        NOMINMAX
+)
+
 target_include_directories(Plasmid
         INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}
