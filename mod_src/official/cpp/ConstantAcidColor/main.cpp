@@ -24,7 +24,7 @@ void OnInitMats() {
     P::material_t material{}; // Initialise the material
 
     material = mats[P::MatRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
-    material.physics_update_fn = acid_no_color_change;
+    material.physics_update_fn = (void*)acid_no_color_change;
     // We simply overwrite cell functions like this instead of using the Hook utility
     mats[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
 }

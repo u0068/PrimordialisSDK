@@ -26,7 +26,7 @@ void OnInitMats() {
 
     // First, lets make the Acid Cell spew acid that doesn't change color
     material = P::MatRef{"Acid cell"}.GetCopy(); // Copy the acid cell material
-    material.physics_update_fn = acid_no_color_change;
+    material.physics_update_fn = (void*)acid_no_color_change;
     // We simply overwrite cell functions like this instead of using the Hook utility
     P::materials_list[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
     // You could also edit existing cells by writing to the original's fields

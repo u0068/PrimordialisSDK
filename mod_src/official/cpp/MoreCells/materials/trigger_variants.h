@@ -46,7 +46,7 @@ inline void AddTriggerVariants() {
     material = P::MatRef{"Ability trigger cell 1"}.GetCopy();
     // We don't do material.next_variant here
     // because we can't reference a material that doesn't exist yet, so we will do it afterward
-    material.electric_update_fn = NegativeTrigger1;
+    material.electric_update_fn = (void*)NegativeTrigger1;
     material.base_color = {1.00f, 0.25f, 1.0f, 1.0f}; // Pink
     P::SetCellNameAndDesc(material, "Negative trigger cell 1",
         "Produces -1V when ability trigger is pressed.");
@@ -54,7 +54,7 @@ inline void AddTriggerVariants() {
 
     material = P::MatRef{"Ability trigger cell 1"}.GetCopy();
     material.next_variant = P::MatRef{"Negative trigger cell 1"}.GetIndex();
-    material.electric_update_fn = NegativeTrigger2;
+    material.electric_update_fn = (void*)NegativeTrigger2;
     material.base_color = {0.25f, 1.0f, 1.0f, 1.0f}; // Cyan
     P::SetCellNameAndDesc(material, "Negative trigger cell 2",
         "Produces -1V when ability trigger is pressed.");
@@ -62,7 +62,7 @@ inline void AddTriggerVariants() {
 
     material = P::MatRef{"Ability trigger cell 1"}.GetCopy();
     material.next_variant = P::MatRef{"Negative trigger cell 2"}.GetIndex();
-    material.electric_update_fn = NegativeTrigger3;
+    material.electric_update_fn = (void*)NegativeTrigger3;
     material.base_color = {1.0f, 1.0f, 0.25f, 1.0f}; // Yellow
     P::SetCellNameAndDesc(material, "Negative trigger cell 3",
         "Produces -1V when ability trigger is pressed.");
@@ -74,7 +74,7 @@ inline void AddTriggerVariants() {
 
 
     material = P::MatRef{"Ability trigger cell 1"}.GetCopy();
-    material.electric_update_fn = InvertedTrigger1;
+    material.electric_update_fn = (void*)InvertedTrigger1;
     material.base_color = {0.3f, 0.0f, 0.0f, 1.0f}; // Dark red
     P::SetCellNameAndDesc(material, "Inverted trigger cell 1",
                           "Produces 1V when ability trigger not is pressed.");
@@ -82,7 +82,7 @@ inline void AddTriggerVariants() {
 
     material = P::MatRef{"Ability trigger cell 1"}.GetCopy();
     material.next_variant = P::MatRef{"Inverted trigger cell 1"}.GetIndex();
-    material.electric_update_fn = InvertedTrigger2;
+    material.electric_update_fn = (void*)InvertedTrigger2;
     material.base_color = {0.0f, 0.3f, 0.0f, 1.0f}; // Dark green
     P::SetCellNameAndDesc(material, "Inverted trigger cell 2",
                           "Produces 1V when ability trigger not is pressed.");
@@ -90,7 +90,7 @@ inline void AddTriggerVariants() {
 
     material = P::MatRef{"Ability trigger cell 1"}.GetCopy();
     material.next_variant = P::MatRef{"Inverted trigger cell 2"}.GetIndex();
-    material.electric_update_fn = InvertedTrigger3;
+    material.electric_update_fn = (void*)InvertedTrigger3;
     material.base_color = {0.0f, 0.0f, 0.3f, 1.0f}; // Dark blue
     P::SetCellNameAndDesc(material, "Inverted trigger cell 3",
                           "Produces 1V when ability trigger not is pressed.");

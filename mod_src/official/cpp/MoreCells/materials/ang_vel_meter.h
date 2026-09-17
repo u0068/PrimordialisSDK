@@ -15,7 +15,7 @@ inline void AngVelMeter(P::cell *cell) {
 
 inline void AddAngVelMeter() {
     auto material = P::MatRef{"Speedometer cell"}.GetCopy();
-    material.electric_update_fn = AngVelMeter;
+    material.electric_update_fn = (void*)AngVelMeter;
     material.base_color = {0.4f, 0.5f, 1.0f, 1.0f}; // Blue
     P::SetCellNameAndDesc(material, "Angular velocity meter cell",
                        "Produces a voltage proportional to the rate of rotation of the cell.");

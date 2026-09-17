@@ -7,12 +7,12 @@ inline void WallDetector(P::cell *cell) {
     constexpr float falloff = 0.005f;
     P::wall_t walls = GetExtraFields(cell)->wall;
     P::wall_map(&walls, &P::w->map, P::real_2{cell->x, cell->y}, false);
-    PowerCell(cell, max_voltage / (max(0, falloff * walls.dist) + 1.0f));
+    PowerCell(cell, max_voltage / (std::max(0.0f, falloff * walls.dist) + 1.0f));
 }
 
 inline void AddWallDetector() {
     auto material = P::MatRef{"Proximity detecting cell"}.GetCopy();
-    material.electric_update_fn = WallDetector;
+    material.electric_update_fn = (void*)WallDetector;
     material.base_color = {0.5f, 0.4f, 0.6f, 1.0f}; // Bluish gray
     P::SetCellNameAndDesc(material, "Wall detector cell",
                        "Produces a voltage inversely proportional to its distance from a wall.");

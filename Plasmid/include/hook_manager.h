@@ -1,7 +1,7 @@
 #pragma once
+#include "internal/nucleus_interface.h"
 #include <vector>
 #include <algorithm>
-#include "internal/nucleus_interface.h"
 // #include "plasmid_log.h"
 
 namespace P {
@@ -87,7 +87,17 @@ namespace P {
 
         template<FixedString name, typename Ret, typename... Args>
         HookChain<Ret, Args...> *Dispatcher<name, Ret, Args...>::chain = nullptr;
+    }
 
+    template<typename Ret, typename... Args>
+    Ret Next(Args... args) {
+        auto ctx =
+                static_cast<Internal::HookContext<Ret, Args...> *>(nucleus->GetCurrentContext());
+
+        return ctx->InvokeNext(args...);
+    }
+
+    namespace Internal {
         template<FixedString name, typename... Args>
         struct Dispatcher<name, void, Args...> {
             static HookChain<void, Args...> *chain;
@@ -126,14 +136,6 @@ namespace P {
         }
     }
 
-    template<typename Ret, typename... Args>
-    Ret Next(Args... args) {
-        auto ctx =
-                static_cast<Internal::HookContext<Ret, Args...> *>(nucleus->GetCurrentContext());
-
-        return ctx->InvokeNext(args...);
-    }
-
     template<Internal::FixedString name, typename Ret, typename... Args>
     void Hook(
         Ret (*function)(Args...)
@@ -152,7 +154,7 @@ namespace P {
                     reinterpret_cast<Ret(*)(Args...)>
                     (nucleus->CreateHook(
                         (const char *) name.data,
-                        static_cast<void *>(&Disp::Dispatch)
+                        (void*)(&Disp::Dispatch)
                     ));
         }
     }

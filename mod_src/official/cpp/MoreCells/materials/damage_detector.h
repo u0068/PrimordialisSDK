@@ -28,7 +28,7 @@ inline void DamageDetector(P::cell *cell) {
 
 inline void AddDamageDetector() {
     auto material = P::MatRef{"Health monitor cell"}.GetCopy();
-    material.electric_update_fn = DamageDetector;
+    material.electric_update_fn = (void*)DamageDetector;
     // material.transfer_rate *= 0.5f;
     material.max_health = 5.0f;
     material.base_color = {0.4f, 0.01f, 0.0f, 1.0f}; // Dark reddish
