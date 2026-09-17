@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 #include "internal/nucleus_interface.h"
 // #include "plasmid_log.h"
 
