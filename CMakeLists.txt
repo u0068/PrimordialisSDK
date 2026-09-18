@@ -5,19 +5,24 @@ project(PrimordialisSDK)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-add_subdirectory(third_party)
+function(add_subdirectory_if_exists dir)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${dir}/CMakeLists.txt")
+        add_subdirectory(${dir})
+    endif()
+endfunction()
 
-add_subdirectory(Plasmid)
+add_subdirectory_if_exists(third_party)
 
-add_subdirectory(mod_src)
+add_subdirectory_if_exists(Plasmid)
+
+add_subdirectory_if_exists(mod_src)
 
 # If you just want to make mods, you probably wont need the stuff below
-# Remove any add_subdirectory that you are not using
 
-add_subdirectory(Pilus)
+add_subdirectory_if_exists(Pilus)
 
-add_subdirectory(lua/Luazyme)
+add_subdirectory_if_exists(lua/Luazyme)
 
-add_subdirectory(reverse_engineering/Tools/cpp)
+add_subdirectory_if_exists(reverse_engineering/Tools/cpp)
 
-add_subdirectory(LoaderProxy)
+add_subdirectory_if_exists(LoaderProxy)

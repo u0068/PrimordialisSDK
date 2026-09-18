@@ -1,6 +1,9 @@
 # Add mod and copy to mods folder
 
+# This is the directory where the built cpp mods go
 set(MODS_DIR "${CMAKE_SOURCE_DIR}/r2_profile_test/mods")
+# If you are using Pilus modloader, you will probably want to make them go in your Primordialis directory instead, such as
+# set(MODS_DIR "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods")
 
 function(add_plasmid_mod NAME)
     cmake_parse_arguments(
