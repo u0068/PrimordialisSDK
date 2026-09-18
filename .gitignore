@@ -5,3 +5,4 @@
 /cmake-build*
 /r2_profile_test
 /.venv
+/mod_src/official/cpp/Test/
