@@ -12,8 +12,9 @@
 #include "include/mutations.h"
 
 #include "generated/game_functions/essential.h"
-#include "generated/resolve_data.h"
+#include "generated/globals.h"
 
+// The namespace for all the plasmid stuff
 namespace P {
     inline fs::path mod_path;
 

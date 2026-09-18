@@ -3,11 +3,11 @@
 #include "aerogel_cell.h" // Include cells from other files
 
 void acid_no_color_change(P::cell *cell) {
-    P::cell_acid(cell); // Call original acid function
+    P::cell_acid(cell); // Call original acid function, which will make the cell spray acid when powered
 
     // Modify the acid to set its final color to its initial color with 0 alpha
     int n_acid_per_tick = 5; // The acid cell produces 5 particles per tick
-    for (int i = 0; i < n_acid_per_tick; i++) {
+    for (int i = 0; i < n_acid_per_tick; i++) { // So we look through the most 5 recent acid particles
         int n = P::w->n_acid_particles - n_acid_per_tick + i; // The index of the particle that was just produced
         auto new_color = P::w->acid_particles[n / 16].color_initial[n % 16]; // Get the initial color
         new_color.w = 0.0f; // Set opacity to 0 (xyzw correspond to rgba channels)

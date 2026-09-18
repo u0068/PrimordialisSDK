@@ -1,6 +1,6 @@
 #pragma once
 #include "generated/game_functions/essential.h"
-#include "generated/resolve_data.h"
+#include "generated/globals.h"
 
 namespace P {
 

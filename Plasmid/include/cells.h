@@ -4,7 +4,7 @@
 #include "ui.h"
 
 #include "generated/game_functions/essential.h"
-#include "generated/resolve_data.h"
+#include "generated/globals.h"
 enum MATERIAL_TAGS {
     TAG_WEAPON      = 1 << 0, // Weapons that spawn at the start
     TAG_UTILITY     = 1 << 1, // Specialised, non-weapon cells
