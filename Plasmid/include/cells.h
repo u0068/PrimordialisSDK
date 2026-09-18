@@ -69,16 +69,18 @@ namespace P {
             }
 
             if (not IsInitialised() and name == nullptr) {
-                Internal::PlasmidLog() << "MatRef not initialised!\n"
-                                          "Make sure that you are not trying to reference a material that hasn't been created yet.";
-                return -1;
+                Internal::PlasmidLog(ERROR_COL) << "MatRef not initialised!\n"
+                                          "Make sure that you are not trying to reference a material that hasn't been created yet.\n"
+                                          "Falling back to Basic cell.";
+                P::FocusConsoleAndPause();
+                return 1;
             }
 
-            Internal::PlasmidLog() << "Searching for material '" << name << "'";
+            Internal::PlasmidLog(MUTED_COL) << "Searching for material '" << name << "'";
             for (int i = 1; i < n_materials; i++) {
                 if (strcmp(materials_list[i].name, name) == 0) {
                     numeric = materials_list[i].id;
-                    Internal::PlasmidLog() << "Found material '" << name << "' with id " << numeric << " at index " <<
+                    Internal::PlasmidLog(MUTED_COL) << "Found material '" << name << "' with id " << numeric << " at index " <<
                             i;
                     if (numeric == 0)
                         numeric = HashCellId(name);
@@ -86,11 +88,13 @@ namespace P {
                     return i;
                 }
             }
-            Internal::PlasmidLog() << "Failed to find material '" << name << "'\n"
+            Internal::PlasmidLog(ERROR_COL) << "Failed to find material '" << name << "'\n"
                                       "Make sure that the name is spelled correctly "
                                       "and the material has been created before referencing it.\n"
-                                      "You could also use the cell id such as \"HART\" instead of the name.";
-            return -1;
+                                      "You could also use the cell id such as \"HART\" instead of the name.\n"
+                                      "Falling back to Basic cell.";
+            P::FocusConsoleAndPause();
+            return 1;
         }
 
         uint GetNumeric() const {

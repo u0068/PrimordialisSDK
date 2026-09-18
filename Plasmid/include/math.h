@@ -26,7 +26,7 @@ namespace P {
             hash_byte(c);
         }
 
-        Internal::PlasmidLog() << "Generated id: " << hash << " for cell: " << cell;
+        Internal::PlasmidLog(MUTED_COL) << "Generated id: " << hash << " for cell: " << cell;
 
         return hash;
     }

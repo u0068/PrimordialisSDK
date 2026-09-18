@@ -10,7 +10,7 @@ namespace P {
         if (module) {
             return static_cast<T *>(module);
         }
-        Log() << "Error: Module " << name << " not found!"
+        Log(ERROR_COL) << "Error: Module " << name << " not found!"
                 "\nMake sure that the name is spelled correctly,"
                 "and the mod that defines the module is before all mods that use it.";
         return nullptr;

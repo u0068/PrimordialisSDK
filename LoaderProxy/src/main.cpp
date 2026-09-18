@@ -15,23 +15,23 @@ void LoadMod(Mod& mod) {
     HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
 
     if (!mod_handle) {
-        Log() << "Failed to load mod " << mod.name;
+        Log(ERROR_COL) << "Failed to load mod " << mod.name;
         return;
     }
-    Log() << "Loading mod " << mod.name;
+    Log(MUTED_COL) << "Loading mod " << mod.name;
 
     auto mod_init = reinterpret_cast<ModInit>(
                 GetProcAddress(mod_handle, "Initialise")
             );
 
     if (!mod_init) {
-        Log() << "mod_init not found for " << mod.name;
+        Log(ERROR_COL) << "mod_init not found for " << mod.name;
         return;
     }
 
     mod_init(&api, mod.path.string().c_str(), mod.name.c_str());
 
-    P::GamePrint("Loaded %s", mod.name);
+    // P::GamePrint("Loaded %s", mod.name);
 }
 
 void LoadMods() {
@@ -49,7 +49,7 @@ void LoadMods() {
         LoadMod(mod);
     }
 
-    Log() << "All Mods Initialised!";
+    Log(SUCCESS_COL) << "All Mods Initialised!";
 }
 
 void *trampoline;
@@ -57,16 +57,16 @@ void *trampoline;
 uint64_t ThreadMainHook(void *context) {
     auto original = reinterpret_cast<uint64_t(*)(void *)>(trampoline);
     if (*(int *) context == 0) {
-        Log() << "Starting mod loader";
+        Log(MUTED_COL) << "Starting mod loader";
 
         // Log() << "RVA = " << ResolveSymbol("get_material_index") << "";
 
         if (ModManager::loader_files_path.empty()) {
-            Log() << "Loader file path not given!\nNo mods will be loaded.";
+            Log(ERROR_COL) << "Loader file path not given!\nNo mods will be loaded.";
             return original(context);
         }
         ModManager::ParseMods();
-        Log() << "Mod Count:" << ModManager::enabled_mods.size();
+        Log(MUTED_COL) << "Mod Count:" << ModManager::enabled_mods.size();
         nucleus = &api;
         LoadMods();
     }
@@ -75,13 +75,13 @@ uint64_t ThreadMainHook(void *context) {
 }
 
 void Bootstrap() {
-    Log() << "Hello world!";
+    Log(MUTED_COL) << "Bootstrapping Nucleus...";
 
     if (MH_Initialize() != MH_OK) {
-        Log() << "MinHook init failed";
+        Log(ERROR_COL) << "MinHook init failed";
         return;
     }
-    Log() << "MinHook initialized";
+    Log(MUTED_COL) << "MinHook initialized";
 
     InitDbgHelp();
 

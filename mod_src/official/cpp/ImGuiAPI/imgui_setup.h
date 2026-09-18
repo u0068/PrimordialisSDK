@@ -185,7 +185,7 @@ inline void WindowInitHook(P::window_t *window) {
 
     if (imgui_initialized) {
         // TODO: automatic re-initialisation without restarting
-        P::Log() << "Restart the game to re-initialise ImGui!";
+        P::Log(WARNING_COL) << "Restart the game to re-initialise ImGui!";
         return;
     }
 
@@ -227,8 +227,8 @@ inline void WindowInitHook(P::window_t *window) {
     );
 
     imgui_initialized = true;
-    P::Log() << "ImGui Initialised";
-    P::Log() << "ImGui Context: " << ImGui::GetCurrentContext();
+    P::Log(MUTED_COL) << "ImGui Initialised";
+    P::Log(MUTED_COL) << "ImGui Context: " << ImGui::GetCurrentContext();
 }
 
 inline void do_imgui_hooks() {

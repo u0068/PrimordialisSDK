@@ -20,7 +20,7 @@ struct Nucleus {
 
     void (*SetCurrentContext)(void *context);
 
-    LogStream (*LogSourced)(const std::string &source);
+    LogStream (*LogSourced)(const std::string &source, const COLOR color);
 
     void (*RegisterModule)(std::string name, void *module);
 

@@ -11,14 +11,14 @@ inline bool HookWrapper(void *target, void *hook, void **trampoline) {
         trampoline);
 
     if (status != MH_OK) {
-        Log() << "MH_CreateHook failed: " << status;
+        Log(ERROR_COL) << "MH_CreateHook failed: " << status;
         return false;
     }
 
     status = MH_EnableHook(target);
 
     if (status != MH_OK) {
-        Log() << "MH_EnableHook failed: " << status;
+        Log(ERROR_COL) << "MH_EnableHook failed: " << status;
         return false;
     }
 
@@ -31,7 +31,7 @@ inline void *CreateHook(const char *name, void *hook) {
     void *target = ResolveSymbol(name);
     void *trampoline = nullptr;
 
-    Log() << "Creating hook for " << name << " at " << target << " to " << hook;
+    Log(MUTED_COL) << "Creating hook for " << name << " at " << target << " to " << hook;
 
     HookWrapper(
         target,

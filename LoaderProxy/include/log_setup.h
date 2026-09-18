@@ -35,14 +35,15 @@ inline std::ostream &GetDualLog() {
     return dual_log;
 }
 
-inline LogStream LogSourced(const std::string &source) {
-    return LogStream(
+inline LogStream LogSourced(const std::string &source, const COLOR color = NORMAL_COL) {
+    return {
         GetDualLog(),
         "[" + source + "]\n  ",
-        "\n"
-    );
+        "\n",
+        color
+    };
 }
 
-inline LogStream Log() {
-    return LogSourced("NUCLEUS");
+inline LogStream Log(const COLOR color = NORMAL_COL) {
+    return LogSourced("NUCLEUS", color);
 }

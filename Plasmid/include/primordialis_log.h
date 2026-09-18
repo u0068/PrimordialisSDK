@@ -8,6 +8,7 @@ namespace P {
         return log_printf(text.c_str());
     }
 
+    // I cant get this to actually work for some reason. I think ghidra is lying to me about something.
     // Prints to the in-game display
     // template<typename... Args>
     // int GamePrint(std::string format, Args... args) {

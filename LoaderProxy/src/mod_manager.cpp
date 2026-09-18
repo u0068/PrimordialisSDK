@@ -42,7 +42,7 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
 
     LocalFree(argv);
 
-    Log() << "Loader Files Folder at: " << result;
+    Log(MUTED_COL) << "Loader Files Folder at: " << result;
 
     return result;
 }
@@ -80,7 +80,7 @@ void ParseModInfo(Mod &mod) {
             }
         }
         if (mod.dll_path.empty()) {
-            Log() << err << "Multiple .dll files detected! I don't know which one to load.\n"
+            Log(ERROR_COL) << err << "Multiple .dll files detected! I don't know which one to load.\n"
                     "\tPlease specify a \"main_dll\" in info.json,\n"
                     "or make the dll that should be loaded have same filename as the mod folder!";
         }
@@ -91,16 +91,16 @@ void ParseModInfo(Mod &mod) {
 }
 
 void ModManager::ParseMods() {
-    Log() << "Parsing Mods...";
+    Log(MUTED_COL) << "Parsing Mods...";
 
     if (mod_path.empty()) {
-        Log() << "No mods found in " << mod_path;
+        Log(ERROR_COL) << "No mods found in " << mod_path;
         return;
     }
 
     std::vector<Mod> installed_mods{};
     for (const auto &entry: std::filesystem::directory_iterator(mod_path)) {
-        Log() << "Found Mod: "
+        Log(MUTED_COL) << "Found Mod: "
               << entry.path().filename().stem().string();
 
         Mod nmod;
@@ -178,7 +178,7 @@ void ModManager::PatchInitLua() {
         init_content += line + "\n";
     }
 
-    Log() << "Patching init.lua";
+    Log(MUTED_COL) << "Patching init.lua";
 
     init_file.close();
 
@@ -187,7 +187,7 @@ void ModManager::PatchInitLua() {
         init_content = preline + init_content;
     }
     else {
-        Log() << "Mod loader content already found in init.lua, skipping preline append";
+        Log(MUTED_COL) << "Mod loader content already found in init.lua, skipping preline append";
     }
 
     pos = init_content.find(postline);
@@ -195,7 +195,7 @@ void ModManager::PatchInitLua() {
         init_content = init_content + postline;
     }
     else {
-        Log() << "Mod loader content already found in init.lua, skipping postline append";
+        Log(MUTED_COL) << "Mod loader content already found in init.lua, skipping postline append";
     }
 
     temp_init_file << init_content;
