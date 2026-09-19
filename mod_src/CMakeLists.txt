@@ -58,7 +58,9 @@ function(add_plasmid_mod NAME)
     endforeach()
 endfunction()
 
-function(add_mod_targets_from_this_dir MOD_TARGETS)
+function(add_mod_targets_from_this_dir BuildAllTargetName)
+    set(MOD_TARGETS)
+
     file(GLOB MODS CONFIGURE_DEPENDS
             RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
             *)
@@ -71,6 +73,12 @@ function(add_mod_targets_from_this_dir MOD_TARGETS)
             list(APPEND MOD_TARGETS ${MOD_NAME})
         endif()
     endforeach()
+
+    add_custom_target(${BuildAllTargetName})
+
+    if(MOD_TARGETS)
+        add_dependencies(${BuildAllTargetName} ${MOD_TARGETS})
+    endif()
 endfunction()
 
 add_subdirectory(examples/cpp)

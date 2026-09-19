@@ -42,7 +42,7 @@ inline void DrawBiomeTypeEditor(int idx, P::biome_type &type) {
             ImGui::SameLine(); ImGuiExtra::InfoMarker("Fractal noise amount");
             ImGui::DragFloat("fbm_base_frequency", &type.fbm_base_frequency, speed);
             ImGui::SameLine(); ImGuiExtra::InfoMarker("1 / noise scale");
-            ImGui::DragFloat("fbm_octaves", &type.fbm_octives, speed);
+            ImGui::DragFloat("fbm_octaves", &type.fbm_octaves, speed);
             ImGui::SameLine(); ImGuiExtra::InfoMarker("Number of fractal layers, each half the scale of the previous one");
             ImGui::DragFloat("fbm_gain", &type.fbm_gain, speed);
             ImGui::SameLine(); ImGuiExtra::InfoMarker("Influence multiplier for each subsequent fmb octave");

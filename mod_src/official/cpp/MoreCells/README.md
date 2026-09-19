@@ -29,12 +29,16 @@ Does what it says in the title.
 - Wall detector
 - Ang vel meter
 - Piezo cell
+  - Make voltage proportional to stretch
 - Fat cell
+  - Big, soft, stores a lot of biomass
 - Pin cell
+  - Practically Immovable
 - Toggle cell
+  - Better than power switch
 - Ability trigger variants
-  - Negative ability trigger
-  - Inverted ability trigger
+  - Inverted triggers
+  - Negative triggers
 - Seeker variants
   - Hider
-  - Electrical seeker
+  - Powered seeker
