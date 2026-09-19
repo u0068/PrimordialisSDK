@@ -5,7 +5,7 @@
 namespace P {
 
     inline context_t* GetContext() {
-        return (context_t*)TlsGetValue(tls_index);
+        return (context_t*)FlsGetValue(fls_index);
     }
 
     inline bool IsThreadSafe() {
@@ -17,7 +17,6 @@ namespace P {
     }
 
     inline void LaneSync() {
-        auto context = GetContext();
-        EnterSynchronizationBarrier(&context->group->barrier, 0);
+        SwitchToFiber(TlsGetValue(tls_index));
     }
 }

@@ -69,6 +69,21 @@ void ParseModInfo(Mod &mod) {
         mod.dll_path = dlls[0];
 }
 
+void ModManager::MakeModsYML() {
+    std::ofstream file("mods.yml");
+    file.clear();
+
+    for (Mod& mod : ModManager::mods) {
+        if (mod.is_enabled() and mod.name != "Nucleus") {
+            file << "- name: " << mod.name << "\n";
+            file << "  enabled: true\n";
+            console_log << mod.name << "\n";
+        }
+    }
+
+    file.close();
+}
+
 void ModManager::RefreshMods() {
     console_log << "Refreshing Mods...\n";
     std::vector<Mod> installed_mods;

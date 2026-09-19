@@ -82,7 +82,7 @@ inline LRESULT CALLBACK imgui_wndproc(
 }
 
 inline void BlockInputs(P::window_t *window) {
-    Next<void>(window);
+    P::Next<void>(window);
     if (!P::IsThreadSafe()) {
         return;
     }

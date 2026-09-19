@@ -26,6 +26,7 @@ inline std::ostream &GetDualLog() {
     static std::ofstream log_file("mod_log.txt");
 
     static DualBuf log_buffer(
+        // nullptr, nullptr
         std::cout.rdbuf(),
         log_file.rdbuf()
     );

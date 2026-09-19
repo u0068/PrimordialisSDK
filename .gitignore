@@ -3,6 +3,6 @@
 /reverse_engineering/Tools/.idea
 /out/build/x64-Debug
 /cmake-build*
-/r2_profile_test
+/r2_profile_test/
 /.venv
 /mod_src/official/cpp/Test/

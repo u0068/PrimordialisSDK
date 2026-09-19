@@ -29,7 +29,7 @@ namespace ModManager {
 
     void RefreshMods();
 
-    void InjectAll();
+    void StartGame();
 
     void SaveLuaModlist();
 
@@ -38,6 +38,8 @@ namespace ModManager {
     void SavePilusConfig();
 
     void LoadPilusConfig();
+
+    void MakeModsYML();
 }
 
 struct Mod {

@@ -16,6 +16,7 @@ namespace ModManager {
 
     inline fs::path game_path = fs::current_path();
     inline fs::path loader_files_path{GetLoaderFilesFolder()};
+    // inline fs::path loader_files_path{game_path};
     inline fs::path luasome_path{loader_files_path / "luasome"};
     inline fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
     inline fs::path mod_path{loader_files_path / "mods"};

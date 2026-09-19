@@ -1,11 +1,12 @@
 #include <Windows.h>
 #include <filesystem>
 #include <string>
-#include "steam_exports.h"
 #include "mod_loader.h"
 #include "nucleus_api.h"
 #include "plasmid_api.h"
 #include "include/primordialis_log.h"
+
+constexpr std::string NUCLEUS_VERSION = "0.2.0";
 
 using ModInit = void(*)(Nucleus *, const char *, const char *);
 
@@ -42,8 +43,10 @@ void LoadMods() {
         mod_names += "\n";
     }
 
-    P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE PILUS MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
-                    "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, NOT THE DEVELOPERS OF PRIMORDIALIS!\n\n");
+    P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS v" + NUCLEUS_VERSION +
+                    "MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
+                    "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK,"
+                    " NOT to THE DEVELOPERS OF PRIMORDIALIS!\n\n");
 
     for (auto &mod: ModManager::enabled_mods) {
         LoadMod(mod);
@@ -56,10 +59,8 @@ void *trampoline;
 
 uint64_t ThreadMainHook(void *context) {
     auto original = reinterpret_cast<uint64_t(*)(void *)>(trampoline);
-    if (*(int *) context == 0) {
+    if ((int) context == 0) {
         Log(MUTED_COL) << "Starting mod loader";
-
-        // Log() << "RVA = " << ResolveSymbol("get_material_index") << "";
 
         if (ModManager::loader_files_path.empty()) {
             Log(ERROR_COL) << "Loader file path not given!\nNo mods will be loaded.";
@@ -92,8 +93,10 @@ BOOL APIENTRY DllMain(
     HMODULE module,
     DWORD reason,
     LPVOID) {
+
     if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(module);
+
         Bootstrap();
     }
 

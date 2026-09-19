@@ -11,10 +11,14 @@ int main() {
 
     console_log << "Pilus Starting\n";
 
+
     CreateDirectories();
     ModManager::LoadPilusConfig();
+    UpdateLocalVersionManifest();
+    // console_log << ModManager::version_manifest.dump(1);
+    UpdateModloader();
+
     ModManager::RefreshMods();
-    // UpdateLocalVersionManifest();
     // CheckAllForUpdates();
 
     glfwSetErrorCallback(glfwErrorCallback);
@@ -28,7 +32,7 @@ int main() {
     GLFWwindow *window = glfwCreateWindow(
         720,
         720,
-        "Pilus Modloader",
+        "Pilus Modloader (Will soon be obsolete!)",
         nullptr,
         nullptr
     );

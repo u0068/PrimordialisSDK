@@ -25,4 +25,4 @@ add_subdirectory_if_exists(lua/Luazyme)
 
 add_subdirectory_if_exists(reverse_engineering/Tools/cpp)
 
-add_subdirectory_if_exists(LoaderProxy)
+add_subdirectory_if_exists(Nucleus)

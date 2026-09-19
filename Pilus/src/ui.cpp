@@ -195,9 +195,10 @@ void DrawActionBox() {
                           ImGui::GetContentRegionAvail().y
                       })) {
         SortDeps();
+        ModManager::MakeModsYML();
         ModManager::SaveLuaModlist();
         ModManager::PatchInitLua();
-        ModManager::InjectAll();
+        ModManager::StartGame();
     }
     ImGui::PopStyleColor(3);
 
@@ -205,6 +206,7 @@ void DrawActionBox() {
     if (ImGui::Button("Refresh Mods", ImGui::GetContentRegionAvail())) {
         ModManager::SaveLuaModlist();
         ModManager::RefreshMods();
+        ModManager::MakeModsYML();
     }
     ImGui::End();
 }
@@ -387,7 +389,7 @@ void DrawVersionConfig(const char *name, json &version_json, fs::path &download_
             if (version.empty())
                 continue;
             if (ImGui::Button(version.c_str())) {
-                DownloadUpdate(name, *ParseVersion(version), download_path);
+                DownloadUpdate(name, ParseVersion(version), download_path);
             }
         }
         ImGui::EndCombo();

@@ -32,11 +32,11 @@ struct Version {
     }
 };
 
-std::optional<Version> ParseVersion(const std::string &tag);
+Version ParseVersion(const std::string &tag);
 
 void UpdateLocalVersionManifest();
 
-void CheckAllForUpdates();
+void UpdateModloader();
 
 void CreateDirectories();
 
