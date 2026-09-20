@@ -1,5 +1,5 @@
 #pragma once
-#include "log_setup.h"
+#include "include/plasmid_log.h"
 #include <windows.h>
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp.lib")
@@ -15,10 +15,10 @@ inline void InitDbgHelp() {
             GetCurrentProcess(),
             nullptr,
             TRUE)) {
-            NLog(COL_ERROR) << "SymInitialize failed: " << GetLastError();
+            P::Log(COL_ERROR) << "SymInitialize failed: " << GetLastError();
         }
 
-        NLog(COL_MUTED) << "DbgHelp initialized";
+        P::Log(COL_MUTED) << "DbgHelp initialized";
     });
 }
 
@@ -34,13 +34,13 @@ inline void* ResolveSymbol(const char* name) {
     symbol->MaxNameLen = MAX_SYM_NAME;
 
     if (!SymFromName(GetCurrentProcess(), name, symbol)) {
-        NLog(COL_ERROR) << "Failed to resolve symbol '" << name << "': " << GetLastError();
+        P::Log(COL_ERROR) << "Failed to resolve symbol '" << name << "': " << GetLastError();
         std::abort();
         return nullptr;
     }
     addr = reinterpret_cast<void *>(symbol->Address);
     if (addr == nullptr) {
-        NLog(COL_ERROR) << "Failed to resolve symbol '" << name << "': " << GetLastError();
+        P::Log(COL_ERROR) << "Failed to resolve symbol '" << name << "': " << GetLastError();
         std::abort();
     }
     return addr;

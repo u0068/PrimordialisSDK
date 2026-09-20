@@ -16,17 +16,17 @@ void LoadMod(Mod& mod) {
     HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
 
     if (!mod_handle) {
-        NLog(COL_ERROR) << "Failed to load mod " << mod.name;
+        P::Log(COL_ERROR) << "Failed to load mod " << mod.name;
         return;
     }
-    NLog(COL_MUTED) << "Loading mod " << mod.name;
+    P::Log(COL_MUTED) << "Loading mod " << mod.name;
 
     auto mod_init = reinterpret_cast<ModInit>(
         GetProcAddress(mod_handle, "Initialise")
     );
 
     if (!mod_init) {
-        NLog(COL_ERROR) << "mod_init not found for " << mod.name;
+        P::Log(COL_ERROR) << "mod_init not found for " << mod.name;
         return;
     }
 
@@ -52,7 +52,7 @@ void LoadMods() {
         LoadMod(mod);
     }
 
-    NLog(COL_SUCCESS) << "All Mods Initialised!";
+    P::Log(COL_SUCCESS) << "All Mods Initialised!";
 }
 
 void* trampoline;
@@ -60,15 +60,16 @@ void* trampoline;
 uint64_t ThreadMainHook(void* context) {
     auto original = reinterpret_cast<uint64_t(*)(void*)>(trampoline);
     if (context == nullptr) {
-        NLog(COL_MUTED) << "Starting mod loader";
+        P::Log(COL_MUTED) << "Starting mod loader";
+
+        P::Log(COL_MUTED) << "Loader Files Folder at: " << ModManager::loader_files_path;
 
         if (ModManager::loader_files_path.empty()) {
-            NLog(COL_ERROR) << "Loader file path not given!\nNo mods will be loaded.";
+            P::Log(COL_ERROR) << "Loader file path not given!\nFalling back to Primordialis root.";
             return original(context);
         }
         ModManager::ParseMods();
-        NLog(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
-        nucleus = &api;
+        P::Log(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
         LoadMods();
     }
 
@@ -76,13 +77,16 @@ uint64_t ThreadMainHook(void* context) {
 }
 
 void Bootstrap() {
-    NLog(COL_MUTED) << "Bootstrapping Nucleus...";
+    nucleus = &api;
+    P::mod_name = "Nucleus";
+
+    P::Log(COL_MUTED) << "Bootstrapping Nucleus...";
 
     if (MH_Initialize() != MH_OK) {
-        NLog(COL_ERROR) << "MinHook init failed";
+        P::Log(COL_ERROR) << "MinHook init failed";
         return;
     }
-    NLog(COL_MUTED) << "MinHook initialized";
+    P::Log(COL_MUTED) << "MinHook initialized";
 
     InitDbgHelp();
 

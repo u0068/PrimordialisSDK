@@ -11,14 +11,14 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline) {
         trampoline);
 
     if (status != MH_OK) {
-        NLog(COL_ERROR) << "MH_CreateHook failed: " << status;
+        P::Log(COL_ERROR) << "MH_CreateHook failed: " << status;
         return false;
     }
 
     status = MH_EnableHook(target);
 
     if (status != MH_OK) {
-        NLog(COL_ERROR) << "MH_EnableHook failed: " << status;
+        P::Log(COL_ERROR) << "MH_EnableHook failed: " << status;
         return false;
     }
 
@@ -31,7 +31,7 @@ inline void* CreateHook(const char* name, void* hook) {
     void* target = ResolveSymbol(name);
     void* trampoline = nullptr;
 
-    NLog(COL_MUTED) << "Creating hook for " << name << " at " << target << " to " << hook;
+    P::Log(COL_MUTED) << "Creating hook for " << name << " at " << target << " to " << hook;
 
     HookWrapper(
         target,

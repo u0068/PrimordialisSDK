@@ -45,16 +45,6 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
 
     LocalFree(argv);
 
-    nucleus = &api;
-    P::mod_name = "Nucleus";
-
-    if (mod_folder_path.empty()) {
-        NLog(COL_WARNING) << "--mod-folder path not given! Falling back to Primordialis root.";
-        mod_folder_path = ".";
-    }
-
-    NLog(COL_MUTED) << "Loader Files Folder at: " << mod_folder_path;
-
     return mod_folder_path;
 }
 
@@ -91,7 +81,7 @@ void ParseModInfo(Mod& mod) {
             }
         }
         if (mod.dll_path.empty()) {
-            NLog(COL_ERROR) << err << "Multiple .dll files detected! I don't know which one to load.\n"
+            P::Log(COL_ERROR) << err << "Multiple .dll files detected! I don't know which one to load.\n"
                     "\tPlease specify a \"main_dll\" in info.json,\n"
                     "or make the dll that should be loaded have same filename as the mod folder!";
         }
@@ -102,16 +92,16 @@ void ParseModInfo(Mod& mod) {
 }
 
 void ModManager::ParseMods() {
-    NLog(COL_MUTED) << "Parsing Mods...";
+    P::Log(COL_MUTED) << "Parsing Mods...";
 
     if (mod_path.empty()) {
-        NLog(COL_ERROR) << "No mods found in " << mod_path;
+        P::Log(COL_ERROR) << "No mods found in " << mod_path;
         return;
     }
 
     std::vector<Mod> installed_mods{};
     for (const auto& entry: std::filesystem::directory_iterator(mod_path)) {
-        NLog(COL_MUTED) << "Found Mod: "
+        P::Log(COL_MUTED) << "Found Mod: "
                 << entry.path().filename().stem().string();
 
         Mod nmod;

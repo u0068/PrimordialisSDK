@@ -13,7 +13,7 @@ void LuaInitHook(lua_State *L) {
     if (error) {
         auto error_string = lua_tostring(L, -1);
         P::PrimordialisLog(std::format("lua warning: {}\n", error_string));
-        NLog(COL_WARNING) << "lua warning: " << error_string;
+        P::Log(COL_WARNING) << "lua warning: " << error_string;
     }
 }
 
