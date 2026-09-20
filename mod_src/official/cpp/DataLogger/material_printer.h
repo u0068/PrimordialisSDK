@@ -32,6 +32,7 @@ inline void PrintMaterialProperties() {
         return;
     }
 
+    std::vector<const char*> names_per_tag[tag_count];
     const auto &basic = P::materials_list[1];
 
     for (int i = 1; i < P::n_materials; i++) {
@@ -163,6 +164,21 @@ inline void PrintMaterialProperties() {
         if (material.destroyed_fn)
             outFile << "    destroyed_fn: " << material.destroyed_fn << "\n";
         outFile << "\n\n";
+
+        for (int j = 0; j < tag_count; j++) {
+            if ((material.tags >> j) & 1) {
+                names_per_tag[j].push_back(material.name);
+            }
+        }
+    }
+
+    outFile << "Mats per tag:\n";
+
+    for (int i = 0; i < tag_count; i++) {
+        outFile << "\nTag: " << tag_names[i] << "\n";
+        for (const auto name : names_per_tag[i]) {
+            outFile << "    " << name << "\n";
+        }
     }
 
     outFile.close();
