@@ -43,9 +43,4 @@ namespace P {
         BringConsoleToFront();
         system("pause");
     }
-
-    inline void CriticalError(std::string message) {
-        Log(COL_CRITICAL) << message;
-        FocusConsoleAndPause();
-    }
 }
