@@ -5,6 +5,7 @@ project(Nucleus LANGUAGES CXX)
 add_library(Nucleus SHARED
         src/main.cpp
         src/mod_manager.cpp
+#        src/lua.cpp
 )
 
 target_include_directories(Nucleus PRIVATE
@@ -20,6 +21,7 @@ target_link_libraries(Nucleus PRIVATE
         minhook
         yaml-cpp::yaml-cpp
         miniz
+#        lua
 #        nlohmann_json
 )
 

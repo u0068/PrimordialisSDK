@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <filesystem>
 #include "log_setup.h"
-// #include "json_helpers.h"
 
 namespace fs = std::filesystem;
 
@@ -25,7 +24,7 @@ namespace ModManager {
 
     void SaveLuaModlist();
 
-    void PatchInitLua();
+    void DoLuaInitHook();
 }
 
 struct Mod {

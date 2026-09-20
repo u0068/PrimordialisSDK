@@ -45,6 +45,7 @@ inline LogStream LogSourced(const std::string& source, const COLOR color = COL_N
     };
 }
 
-inline LogStream Log(const COLOR color = COL_NORMAL) {
+// Log to be used in Nucleus. Don't use P::Log because it will break in some places.
+inline LogStream NLog(const COLOR color = COL_NORMAL) {
     return LogSourced("NUCLEUS", color);
 }

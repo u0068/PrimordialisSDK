@@ -16,17 +16,17 @@ void LoadMod(Mod& mod) {
     HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
 
     if (!mod_handle) {
-        Log(COL_ERROR) << "Failed to load mod " << mod.name;
+        NLog(COL_ERROR) << "Failed to load mod " << mod.name;
         return;
     }
-    Log(COL_MUTED) << "Loading mod " << mod.name;
+    NLog(COL_MUTED) << "Loading mod " << mod.name;
 
     auto mod_init = reinterpret_cast<ModInit>(
         GetProcAddress(mod_handle, "Initialise")
     );
 
     if (!mod_init) {
-        Log(COL_ERROR) << "mod_init not found for " << mod.name;
+        NLog(COL_ERROR) << "mod_init not found for " << mod.name;
         return;
     }
 
@@ -52,22 +52,22 @@ void LoadMods() {
         LoadMod(mod);
     }
 
-    Log(COL_SUCCESS) << "All Mods Initialised!";
+    NLog(COL_SUCCESS) << "All Mods Initialised!";
 }
 
 void* trampoline;
 
 uint64_t ThreadMainHook(void* context) {
     auto original = reinterpret_cast<uint64_t(*)(void*)>(trampoline);
-    if ((int) context == 0) {
-        Log(COL_MUTED) << "Starting mod loader";
+    if (context == nullptr) {
+        NLog(COL_MUTED) << "Starting mod loader";
 
         if (ModManager::loader_files_path.empty()) {
-            Log(COL_ERROR) << "Loader file path not given!\nNo mods will be loaded.";
+            NLog(COL_ERROR) << "Loader file path not given!\nNo mods will be loaded.";
             return original(context);
         }
         ModManager::ParseMods();
-        Log(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
+        NLog(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
         nucleus = &api;
         LoadMods();
     }
@@ -76,13 +76,13 @@ uint64_t ThreadMainHook(void* context) {
 }
 
 void Bootstrap() {
-    Log(COL_MUTED) << "Bootstrapping Nucleus...";
+    NLog(COL_MUTED) << "Bootstrapping Nucleus...";
 
     if (MH_Initialize() != MH_OK) {
-        Log(COL_ERROR) << "MinHook init failed";
+        NLog(COL_ERROR) << "MinHook init failed";
         return;
     }
-    Log(COL_MUTED) << "MinHook initialized";
+    NLog(COL_MUTED) << "MinHook initialized";
 
     InitDbgHelp();
 
