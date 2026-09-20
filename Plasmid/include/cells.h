@@ -10,7 +10,7 @@ enum MATERIAL_TAGS {
     TAG_UTILITY     = 1 << 1, // Specialised, non-weapon cells
     TAG_MOVEMENT    = 1 << 2, // Cells used for moving the creature
     TAG_DEFENCE     = 1 << 3, // This seems to be intended for cells that heal the player
-    TAG_STRUCTURE   = 1 << 4, // Cells that
+    TAG_STRUCTURE   = 1 << 4, // Cells that are primarily used for their structural properties
     TAG_ELECTRICAL  = 1 << 5, // Cells used in electrical circuits
     TAG_NEURON      = 1 << 6, // Neuron cells
     TAG_START       = 1 << 7, // Cells you start with

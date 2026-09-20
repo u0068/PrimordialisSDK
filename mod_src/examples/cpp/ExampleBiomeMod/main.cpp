@@ -41,7 +41,7 @@ P::biome_core *OnCreateBiomeCore(int id, int size) {
     // Here we define *WHERE* the biome generates
 
     auto result = P::Next<P::biome_core *>(id, size);
-    // Boilerplate for executing the hook AFTER the specified biome is defined, so the last node is in a known location
+    // Execute the hook AFTER the specified biome is defined, so the last node is in a known location
     if (id == P::str_to_id("ICEE")) {
         insert_biome = true;
         return result;
