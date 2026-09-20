@@ -1,23 +1,48 @@
-#include "lua.h"
-#include "lauxlib.h"
-#include "log_setup.h"
+#pragma once
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 #include "mod_loader.h"
-#include "include/primordialis_log.h"
+#include <include/primordialis_log.h>
 
-void LuaInitHook(lua_State *L) {
-    luaL_loadfile(L, (ModManager::luasome_path/"pre.lua").string().c_str());
-    luaL_loadfile(L, "data/scripts/init.lua");
-    luaL_loadfile(L, (ModManager::luasome_path/"post.lua").string().c_str());
-    int error = 0;
-    error = lua_pcall(L, 0, 0, 0);
-    if (error) {
-        auto error_string = lua_tostring(L, -1);
-        P::PrimordialisLog(std::format("lua warning: {}\n", error_string));
-        P::Log(COL_WARNING) << "lua warning: " << error_string;
-    }
+inline void LuaInitHook(lua_State *L) {
+    auto run_file = [L](const std::filesystem::path& path) {
+        int error = luaL_loadfile(L, path.string().c_str());
+
+        if (error != 0) {
+            const char *message = lua_tostring(L, -1);
+
+            P::PrimordialisLog(
+                std::format("lua warning: {}\n", message)
+            );
+
+            P::Log(COL_WARNING) << "lua warning: " << message;
+
+            lua_pop(L, 1);
+            return;
+        }
+
+        error = lua_pcall(L, 0, 0, 0);
+
+        if (error != 0) {
+            const char *message = lua_tostring(L, -1);
+
+            P::PrimordialisLog(
+                std::format("lua warning: {}\n", message)
+            );
+
+            P::Log(COL_WARNING) << "lua warning: " << message;
+
+            lua_pop(L, 1);
+        }
+    };
+
+    run_file(ModManager::luasome_path / "pre.lua");
+    run_file("data/scripts/init.lua");
+    run_file(ModManager::luasome_path / "post.lua");
 }
 
-void ModManager::DoLuaInitHook() {
+inline void DoLuaInitHook() {
     P::Hook<"run_lua_init_script">(LuaInitHook);
 }
 

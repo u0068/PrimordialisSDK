@@ -21,7 +21,7 @@ target_link_libraries(Nucleus PRIVATE
         minhook
         yaml-cpp::yaml-cpp
         miniz
-#        lua
+        lua51
 #        nlohmann_json
 )
 

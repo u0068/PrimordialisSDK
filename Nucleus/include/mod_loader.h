@@ -22,9 +22,7 @@ namespace ModManager {
 
     void ParseMods();
 
-    void SaveLuaModlist();
-
-    void DoLuaInitHook();
+    // void SaveLuaModlist();
 }
 
 struct Mod {
