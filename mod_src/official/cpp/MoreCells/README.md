@@ -3,7 +3,6 @@ Does what it says in the title.
 
 # TO-DO:
 - Config
-- Raycasting cell
 - Spotlight cell
 - Seeking neurons
 - Rudder/Fin cell
@@ -20,7 +19,6 @@ Does what it says in the title.
   - Particles emit light
   - Reverse entropy compatibility
 - Semi-connected cell
-  - Only connects to rigid cells
 # Done:
 - Cartilage cell (old hard cell)
 - Aero-gel cell

@@ -9,7 +9,7 @@ void OnInitMats() {
     P::Next<void>(); // Call original function
     if (P::IsThreadSafe()) // Make sure we are only on the main thread
     {
-        // PrintMaterialProperties();
+        PrintMaterialProperties();
         // print_material_tags();
         // P::GamePrint("TEST TEST\n");
     }
