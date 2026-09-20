@@ -22,7 +22,7 @@ void OnInitBiomeTypes() {
     new_biome_type->noise_amount = 0.15f; // Random dithering
     new_biome_type->fbm_amount = 0.10f; // Fractal noise amount
     new_biome_type->fbm_base_frequency = 0.1f; // 1 / noise scale
-    new_biome_type->fbm_octives = 4.0f; // Number of fractal layers
+    new_biome_type->fbm_octaves = 4.0f; // Number of fractal layers
     new_biome_type->fbm_gain = 0.5f; // Influence multiplier for each subsequent fmb octave
     new_biome_type->neighbor_fbm = 0.0f; // How much should terrain cells consider their neighbors
     new_biome_type->neighbor_amount = 0.0f; // Bias towards filled terrain cells also having filled neighbors
