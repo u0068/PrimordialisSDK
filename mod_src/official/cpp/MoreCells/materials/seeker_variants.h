@@ -66,6 +66,7 @@ inline void AddSeekerVariants() {
 
     material = P::MatRef{"Seeker cell"}.GetCopy();
     material.next_variant = P::MatRef{"Seeker cell"}.GetIndex(); // Cycle to original seeker cell
+    material.drop_weight *= 0.1f; // Low drop rate because you can get them from cycling seekers
     material.force_update_fn = HiderCell;
     material.base_color = {0.0f, 1.0f, 0.2f, 1.0f}; // Green
     P::SetCellNameAndDesc(material, "Hider cell",
@@ -74,6 +75,7 @@ inline void AddSeekerVariants() {
 
     material = P::MatRef{"Seeker cell"}.GetCopy();
     material.next_variant = P::MatRef{"Hider cell"}.GetIndex(); // Cycle to hider cell
+    material.drop_weight *= 0.1f; // Low drop rate because you can get them from cycling seekers
     material.force_update_fn = ElectricSeekerCell;
     material.base_color = {1.0f, 0.0f, 0.2f, 1.0f}; // Blue
     // We also want to make this conductive, so lets copy conductive cell's electrical properties

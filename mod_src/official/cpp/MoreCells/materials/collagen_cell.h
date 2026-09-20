@@ -3,8 +3,11 @@
 
 inline void AddCollagenCell() {
     auto material = P::MatRef{"Basic cell"}.GetCopy();
+    material.tags = TAG_STRUCTURE;
     material.next_variant = P::MatRef{"Lightweight cell"}.GetIndex();
-    material.base_cost = 2.0f;
+    material.drop_weight = 0.03f;
+    material.base_cost = 1.0f;
+    material.genome_size = 1.0f;
     material.regen_delay_multiplier = 0.0f;
     material.max_health = 2.0f;
     material.hardness = 2.0f;
