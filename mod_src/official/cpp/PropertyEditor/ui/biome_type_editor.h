@@ -4,7 +4,7 @@
 #include "generated/game_functions/world.h"
 #include "imgui_extra.h"
 
-inline void DrawBiomeTypeEditor(int idx, P::biome_type &type) {
+inline void DrawBiomeTypeEditor(int idx, P::biome_type& type) {
     ImGui::PushID(idx);
     bool open = ImGui::CollapsingHeader("##header");
     ImGui::SameLine();
@@ -12,7 +12,7 @@ inline void DrawBiomeTypeEditor(int idx, P::biome_type &type) {
     if (ImGui::BeginPopupContextItem(biome_id{type.id}.string)) {
         ImGui::PushItemFlag(ImGuiItemFlags_LiveEditOnInputText, false);
         if (ImGui::InputText("##name", biome_id{type.id}.string, 5, ImGuiInputTextFlags_EnterReturnsTrue))
-        ImGui::EndPopup();
+            ImGui::EndPopup();
     }
     if (open) {
         ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1); // Tighten spacing
@@ -21,15 +21,20 @@ inline void DrawBiomeTypeEditor(int idx, P::biome_type &type) {
 
         if (ImGui::TreeNode("General")) {
             ImGui::DragFloat("light", &type.light, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Ambient light brightness");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Ambient light brightness");
             ImGui::ColorEdit3("color", type.color.data);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Background color");
-            ImGui::Checkbox("safe", (bool*)&type.flags);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("This is currently the only biome flag");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Background color");
+            ImGui::Checkbox("safe", (bool *) &type.flags);
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("This is currently the only biome flag");
             ImGui::DragFloat("bumpyness", &type.bumpyness, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Fine wall bumpiness");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Fine wall bumpiness");
             ImGui::DragFloat("temperature", &type.temperature, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Temperature of the walls");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Temperature of the walls");
             ImGui::DragInt("ambient_music_id", &type.ambient_music_id, speed);
             ImGui::DragInt("battle_music_id", &type.battle_music_id, speed);
 
@@ -37,30 +42,40 @@ inline void DrawBiomeTypeEditor(int idx, P::biome_type &type) {
         }
         if (ImGui::TreeNode("Terrain Generation")) {
             ImGui::DragFloat("noise_amount", &type.noise_amount, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Random dithering");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Random dithering");
             ImGui::DragFloat("fbm_amount", &type.fbm_amount, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Fractal noise amount");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Fractal noise amount");
             ImGui::DragFloat("fbm_base_frequency", &type.fbm_base_frequency, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("1 / noise scale");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("1 / noise scale");
             ImGui::DragFloat("fbm_octaves", &type.fbm_octaves, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Number of fractal layers, each half the scale of the previous one");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Number of fractal layers, each half the scale of the previous one");
             ImGui::DragFloat("fbm_gain", &type.fbm_gain, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Influence multiplier for each subsequent fmb octave");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Influence multiplier for each subsequent fmb octave");
             ImGui::DragFloat("neighbor_fbm", &type.neighbor_fbm, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("How much should terrain cells consider their neighbors");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("How much should terrain cells consider their neighbors");
             ImGui::DragFloat("neighbor_amount", &type.neighbor_amount, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Bias towards filled terrain cells also having filled neighbors");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Bias towards filled terrain cells also having filled neighbors");
             ImGui::DragFloat("base_amount", &type.base_amount, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Base emptiness amount");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Base emptiness amount");
             ImGui::DragFloat("min_value", &type.min_value, speed);
 
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("Cell spawning")) {
             ImGui::DragFloat("cell_chance", &type.cell_chance, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Chance to spawn a cell pickup");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Chance to spawn a cell pickup");
             ImGui::DragInt("cell_max_neighbors", &type.cell_max_neighbors, speed);
-            ImGui::SameLine(); ImGuiExtra::InfoMarker("Max cells pickups in a clump");
+            ImGui::SameLine();
+            ImGuiExtra::InfoMarker("Max cells pickups in a clump");
             // TODO: Cell pools
 
             ImGui::TreePop();
@@ -118,7 +133,7 @@ inline void DrawBiomeTypesEditor() {
     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
     filter.Draw("##Filter");
     for (int i = 0; i < P::w->n_biome_types; i++) {
-        P::biome_type &type = P::w->biome_types[i];
+        P::biome_type& type = P::w->biome_types[i];
         if (not filter.PassFilter(biome_id{type.id}.string)) continue;
         DrawBiomeTypeEditor(i, type);
     }

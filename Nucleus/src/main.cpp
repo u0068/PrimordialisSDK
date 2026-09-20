@@ -8,7 +8,7 @@
 
 constexpr std::string NUCLEUS_VERSION = "0.2.0";
 
-using ModInit = void(*)(Nucleus *, const char *, const char *);
+using ModInit = void(*)(Nucleus*, const char*, const char*);
 
 void P::InitialiseMod() {}
 
@@ -16,17 +16,17 @@ void LoadMod(Mod& mod) {
     HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
 
     if (!mod_handle) {
-        Log(ERROR_COL) << "Failed to load mod " << mod.name;
+        Log(COL_ERROR) << "Failed to load mod " << mod.name;
         return;
     }
-    Log(MUTED_COL) << "Loading mod " << mod.name;
+    Log(COL_MUTED) << "Loading mod " << mod.name;
 
     auto mod_init = reinterpret_cast<ModInit>(
-                GetProcAddress(mod_handle, "Initialise")
-            );
+        GetProcAddress(mod_handle, "Initialise")
+    );
 
     if (!mod_init) {
-        Log(ERROR_COL) << "mod_init not found for " << mod.name;
+        Log(COL_ERROR) << "mod_init not found for " << mod.name;
         return;
     }
 
@@ -37,37 +37,37 @@ void LoadMod(Mod& mod) {
 
 void LoadMods() {
     std::string mod_names;
-    for (auto &mod: ModManager::enabled_mods) {
+    for (auto& mod: ModManager::enabled_mods) {
         mod_names += "\t";
         mod_names += mod.name;
         mod_names += "\n";
     }
 
     P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS v" + NUCLEUS_VERSION +
-                    "MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
-                    "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK,"
-                    " NOT to THE DEVELOPERS OF PRIMORDIALIS!\n\n");
+                       "MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
+                       "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK,"
+                       " NOT to THE DEVELOPERS OF PRIMORDIALIS!\n\n");
 
-    for (auto &mod: ModManager::enabled_mods) {
+    for (auto& mod: ModManager::enabled_mods) {
         LoadMod(mod);
     }
 
-    Log(SUCCESS_COL) << "All Mods Initialised!";
+    Log(COL_SUCCESS) << "All Mods Initialised!";
 }
 
-void *trampoline;
+void* trampoline;
 
-uint64_t ThreadMainHook(void *context) {
-    auto original = reinterpret_cast<uint64_t(*)(void *)>(trampoline);
+uint64_t ThreadMainHook(void* context) {
+    auto original = reinterpret_cast<uint64_t(*)(void*)>(trampoline);
     if ((int) context == 0) {
-        Log(MUTED_COL) << "Starting mod loader";
+        Log(COL_MUTED) << "Starting mod loader";
 
         if (ModManager::loader_files_path.empty()) {
-            Log(ERROR_COL) << "Loader file path not given!\nNo mods will be loaded.";
+            Log(COL_ERROR) << "Loader file path not given!\nNo mods will be loaded.";
             return original(context);
         }
         ModManager::ParseMods();
-        Log(MUTED_COL) << "Mod Count:" << ModManager::enabled_mods.size();
+        Log(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
         nucleus = &api;
         LoadMods();
     }
@@ -76,13 +76,13 @@ uint64_t ThreadMainHook(void *context) {
 }
 
 void Bootstrap() {
-    Log(MUTED_COL) << "Bootstrapping Nucleus...";
+    Log(COL_MUTED) << "Bootstrapping Nucleus...";
 
     if (MH_Initialize() != MH_OK) {
-        Log(ERROR_COL) << "MinHook init failed";
+        Log(COL_ERROR) << "MinHook init failed";
         return;
     }
-    Log(MUTED_COL) << "MinHook initialized";
+    Log(COL_MUTED) << "MinHook initialized";
 
     InitDbgHelp();
 
@@ -93,7 +93,6 @@ BOOL APIENTRY DllMain(
     HMODULE module,
     DWORD reason,
     LPVOID) {
-
     if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(module);
 

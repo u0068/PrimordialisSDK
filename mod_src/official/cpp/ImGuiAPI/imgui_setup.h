@@ -81,7 +81,7 @@ inline LRESULT CALLBACK imgui_wndproc(
     );
 }
 
-inline void BlockInputs(P::window_t *window) {
+inline void BlockInputs(P::window_t* window) {
     P::Next<void>(window);
     if (!P::IsThreadSafe()) {
         return;
@@ -115,7 +115,7 @@ inline void BlockInputs(P::window_t *window) {
 }
 
 inline void DrawImgui() {
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
@@ -157,7 +157,7 @@ inline void DrawImgui() {
 }
 
 inline void ImguiHookSoftwareCursor(
-    P::render_context *param_1, P::real_3 *param_2, float param_3, P::real_4 *param_4, int param_5) {
+    P::render_context* param_1, P::real_3* param_2, float param_3, P::real_4* param_4, int param_5) {
     if (P::IsThreadSafe()) {
         DrawImgui();
     }
@@ -165,8 +165,8 @@ inline void ImguiHookSoftwareCursor(
 }
 
 inline void ImguiHookHardwareCursor(
-    P::render_context *param_1, P::render_context *param_2, P::user_input *param_3,
-    P::recording_buffer *param_4, float param_5, P::window_t *param_6) {
+    P::render_context* param_1, P::render_context* param_2, P::user_input* param_3,
+    P::recording_buffer* param_4, float param_5, P::window_t* param_6) {
     P::Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
     if (P::IsThreadSafe() and P::settings->hardware_cursor) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
@@ -176,7 +176,7 @@ inline void ImguiHookHardwareCursor(
 
 inline bool imgui_initialized = false;
 
-inline void WindowInitHook(P::window_t *window) {
+inline void WindowInitHook(P::window_t* window) {
     P::Next<void>(window);
 
     if (!P::IsThreadSafe()) {
@@ -185,7 +185,7 @@ inline void WindowInitHook(P::window_t *window) {
 
     if (imgui_initialized) {
         // TODO: automatic re-initialisation without restarting
-        P::Log(WARNING_COL) << "Restart the game to re-initialise ImGui!";
+        P::Log(COL_WARNING) << "Restart the game to re-initialise ImGui!";
         return;
     }
 
@@ -194,7 +194,7 @@ inline void WindowInitHook(P::window_t *window) {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
     (void) io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable Gamepad Controls
@@ -227,8 +227,8 @@ inline void WindowInitHook(P::window_t *window) {
     );
 
     imgui_initialized = true;
-    P::Log(MUTED_COL) << "ImGui Initialised";
-    P::Log(MUTED_COL) << "ImGui Context: " << ImGui::GetCurrentContext();
+    P::Log(COL_MUTED) << "ImGui Initialised";
+    P::Log(COL_MUTED) << "ImGui Context: " << ImGui::GetCurrentContext();
 }
 
 inline void do_imgui_hooks() {

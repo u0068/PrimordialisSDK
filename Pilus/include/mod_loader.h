@@ -56,7 +56,7 @@ struct Mod {
     json local_info{};
     bool dep_enabled = false;
 
-    bool operator==(const Mod &other) const {
+    bool operator==(const Mod& other) const {
         if (weakly_canonical(path) == weakly_canonical(other.path)) // path is the only thing that matters
             return true;
         return false;
@@ -84,11 +84,11 @@ struct Mod {
         return "Unknown";
     }
 
-    [[nodiscard]] json &get_manifest() const {
+    [[nodiscard]] json& get_manifest() const {
         return ModManager::version_manifest[name];
     }
 
-    [[nodiscard]] json &get_deps() const {
+    [[nodiscard]] json& get_deps() const {
         return get_manifest()["versions"][get_installed_version()]["dependencies"];
     }
 };
@@ -103,4 +103,4 @@ struct ModListShared {
     ModInfo mods[MAX_MODS];
 };
 
-std::string ReadFile(const fs::path &path);
+std::string ReadFile(const fs::path& path);

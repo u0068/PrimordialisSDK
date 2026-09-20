@@ -8,7 +8,7 @@ inline bool show_combos = false;
 inline bool show_vanilla = true;
 inline bool show_cell_editor = true;
 
-inline void DrawMaterialEditor(int idx, P::material_t &mat) {
+inline void DrawMaterialEditor(int idx, P::material_t& mat) {
     ImGui::PushID(idx);
     bool open = ImGui::CollapsingHeader("##header");
     ImGui::SameLine();
@@ -16,7 +16,7 @@ inline void DrawMaterialEditor(int idx, P::material_t &mat) {
     if (ImGui::BeginPopupContextItem(mat.name)) {
         ImGui::PushItemFlag(ImGuiItemFlags_LiveEditOnInputText, false);
         if (ImGui::InputText("##name", (char *) mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue))
-            mat.id = P::HashCellId(mat.name);
+            mat.id = P::HashId(mat.name);
         ImGui::PopItemFlag();
         // if (ImGui::Button("Copy to Clipboard")) {
         //     // TO-DO: Make this human-readable and only store the changes
@@ -185,7 +185,7 @@ inline void DrawMaterialsEditor() {
     // if (ImGui::Button("Load Materials"))
     //     LoadAllMats();
     for (int i = 0; i < P::n_materials; i++) {
-        P::material_t &mat = P::materials_list[i];
+        P::material_t& mat = P::materials_list[i];
         if (not filter.PassFilter(mat.name)) continue;
         if (((std::string) mat.name).starts_with("Combo") && !show_combos) continue;
         if (i < 83 && !show_vanilla) continue;

@@ -1,7 +1,7 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
 
-void acid_no_color_change(P::cell *cell) {
+void acid_no_color_change(P::cell* cell) {
     cell_acid(cell); // Call original acid function
 
     // Modify the acid to set its final color to its initial color with 0 alpha
@@ -20,11 +20,11 @@ void OnInitMats() {
     if (not P::IsThreadSafe()) // Make sure we are only on the main thread
         return;
 
-    P::material_t *mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
+    P::material_t* mats = P::materials_list; // Use "mats" as shorthand for "P::materials_list"
     P::material_t material{}; // Initialise the material
 
     material = mats[P::MatRef{"Acid cell"}.GetIndex()]; // Copy the acid cell material
-    material.physics_update_fn =acid_no_color_change;
+    material.physics_update_fn = acid_no_color_change;
     // We simply overwrite cell functions like this instead of using the Hook utility
     mats[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
 }

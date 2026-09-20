@@ -8,8 +8,10 @@
 #include "include/threads.h"
 #include "include/math.h"
 #include "include/cells.h"
+#include "include/creatures.h"
 #include "include/ui.h"
 #include "include/mutations.h"
+// #include "include/general.h"
 
 #include "generated/game_functions/essential.h"
 #include "generated/globals.h"
@@ -32,7 +34,7 @@ inline void Initialise(Nucleus *api, const char *mod_path, const char *mod_name)
     P::mod_path = mod_path;
     P::mod_name = mod_name;
     P::translation_values.reserve(2048);
-    P::Internal::PlasmidLog(MUTED_COL) << "Initialised Plasmid!";
+    P::Internal::PlasmidLog(COL_MUTED) << "Initialised Plasmid!";
     P::InitialiseMod();
-    P::Log(MUTED_COL) << "Initialised Mod!";
+    P::Log(COL_MUTED) << "Initialised Mod!";
 }

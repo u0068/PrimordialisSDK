@@ -5,7 +5,7 @@
 #include <format>
 
 constexpr int tag_count{11};
-inline const char *tag_names[tag_count] = {
+inline const char* tag_names[tag_count] = {
     "WEAPON", "UTILITY", "MOVEMENT", "DEFENCE",
     "STRUCTURE", "ELECTRICAL", "NEURON", "START", "NONLETHAL", "NOSTART", "UNKNOWN"
 };
@@ -32,8 +32,8 @@ inline void PrintMaterialProperties() {
         return;
     }
 
-    std::vector<const char*> names_per_tag[tag_count];
-    const auto &basic = P::materials_list[1];
+    std::vector<const char *> names_per_tag[tag_count];
+    const auto& basic = P::materials_list[1];
 
     for (int i = 1; i < P::n_materials; i++) {
         P::material_t material = P::materials_list[i];
@@ -176,7 +176,7 @@ inline void PrintMaterialProperties() {
 
     for (int i = 0; i < tag_count; i++) {
         outFile << "\nTag: " << tag_names[i] << "\n";
-        for (const auto name : names_per_tag[i]) {
+        for (const auto name: names_per_tag[i]) {
             outFile << "    " << name << "\n";
         }
     }

@@ -11,7 +11,7 @@
 
 using json = nlohmann::ordered_json;
 
-static std::string getName(IDiaSymbol *symbol) {
+static std::string getName(IDiaSymbol* symbol) {
     BSTR name = nullptr;
 
     if (SUCCEEDED(symbol->get_undecoratedName(&name)) && name) {
@@ -29,29 +29,29 @@ static std::string getName(IDiaSymbol *symbol) {
     return "<unknown>";
 }
 
-static DWORD getRva(IDiaSymbol *symbol) {
+static DWORD getRva(IDiaSymbol* symbol) {
     DWORD rva = 0;
     symbol->get_relativeVirtualAddress(&rva);
     return rva;
 }
 
-static ULONGLONG getLength(IDiaSymbol *symbol) {
+static ULONGLONG getLength(IDiaSymbol* symbol) {
     ULONGLONG length = 0;
     symbol->get_length(&length);
     return length;
 }
 
 static bool getSourceLine(
-    IDiaSession *session,
+    IDiaSession* session,
     DWORD rva,
-    std::string &file,
-    DWORD &line) {
-    IDiaEnumLineNumbers *lines = nullptr;
+    std::string& file,
+    DWORD& line) {
+    IDiaEnumLineNumbers* lines = nullptr;
 
     if (FAILED(session->findLinesByRVA(rva, 1, &lines)))
         return false;
 
-    IDiaLineNumber *lineNumber = nullptr;
+    IDiaLineNumber* lineNumber = nullptr;
     ULONG count = 0;
 
     if (lines->Next(1, &lineNumber, &count) != S_OK || count != 1) {
@@ -59,7 +59,7 @@ static bool getSourceLine(
         return false;
     }
 
-    IDiaSourceFile *sourceFile = nullptr;
+    IDiaSourceFile* sourceFile = nullptr;
 
     lineNumber->get_lineNumber(&line);
     lineNumber->get_sourceFile(&sourceFile);
@@ -86,10 +86,10 @@ static bool getSourceLine(
 }
 
 static void findInlineSites(
-    IDiaSession *session,
-    IDiaSymbol *parent,
-    json &output) {
-    IDiaEnumSymbols *symbols = nullptr;
+    IDiaSession* session,
+    IDiaSymbol* parent,
+    json& output) {
+    IDiaEnumSymbols* symbols = nullptr;
 
     if (FAILED(parent->findChildren(
         SymTagInlineSite,
@@ -98,11 +98,11 @@ static void findInlineSites(
         &symbols)))
         return;
 
-    IDiaSymbol *symbol = nullptr;
+    IDiaSymbol* symbol = nullptr;
     ULONG count = 0;
 
     while (symbols->Next(1, &symbol, &count) == S_OK) {
-        IDiaSymbol3 *site3 = nullptr;
+        IDiaSymbol3* site3 = nullptr;
 
         if (SUCCEEDED(symbol->QueryInterface(
             __uuidof(IDiaSymbol3),
@@ -142,19 +142,19 @@ static void findInlineSites(
     symbols->Release();
 }
 
-int wmain(int argc, wchar_t **argv) {
+int wmain(int argc, wchar_t** argv) {
     if (argc < 2) {
         std::wcerr << L"Usage: dia_inline_dump.exe <pdb> [output.json]\n";
         return 1;
     }
 
-    const char *outputPath =
+    const char* outputPath =
             argc >= 3 ? (const char *) _bstr_t(argv[2]) : "inline_site_info.json";
 
     if (FAILED(CoInitializeEx(nullptr, COINIT_MULTITHREADED)))
         return 1;
 
-    IDiaDataSource *source = nullptr;
+    IDiaDataSource* source = nullptr;
 
     HRESULT hr = CoCreateInstance(
         __uuidof(DiaSource),
@@ -177,7 +177,7 @@ int wmain(int argc, wchar_t **argv) {
         return 1;
     }
 
-    IDiaSession *session = nullptr;
+    IDiaSession* session = nullptr;
 
     if (FAILED(source->openSession(&session))) {
         source->Release();
@@ -185,10 +185,10 @@ int wmain(int argc, wchar_t **argv) {
         return 1;
     }
 
-    IDiaSymbol *global = nullptr;
+    IDiaSymbol* global = nullptr;
     session->get_globalScope(&global);
 
-    IDiaEnumSymbols *functions = nullptr;
+    IDiaEnumSymbols* functions = nullptr;
 
     functions = nullptr;
 
@@ -202,7 +202,7 @@ int wmain(int argc, wchar_t **argv) {
     output["functions"] = json::array();
 
     if (SUCCEEDED(hr)) {
-        IDiaSymbol *function = nullptr;
+        IDiaSymbol* function = nullptr;
         ULONG count = 0;
 
         while (functions->Next(1, &function, &count) == S_OK) {

@@ -9,7 +9,7 @@ struct Version {
     int minor{};
     int patch{};
 
-    bool operator>(const Version &other) const {
+    bool operator>(const Version& other) const {
         if (major != other.major)
             return major > other.major;
 
@@ -19,7 +19,7 @@ struct Version {
         return patch > other.patch;
     }
 
-    bool operator==(const Version &other) const {
+    bool operator==(const Version& other) const {
         return major == other.major &&
                minor == other.minor &&
                patch == other.patch;
@@ -32,7 +32,7 @@ struct Version {
     }
 };
 
-Version ParseVersion(const std::string &tag);
+Version ParseVersion(const std::string& tag);
 
 void UpdateLocalVersionManifest();
 
@@ -40,4 +40,4 @@ void UpdateModloader();
 
 void CreateDirectories();
 
-bool DownloadUpdate(const char *name, const Version &version, const fs::path &dest_path);
+bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path);

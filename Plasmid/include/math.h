@@ -6,8 +6,8 @@
 
 namespace P {
     // TODO: Make this human readable with something like base64
-    inline uint32_t HashCellId(
-        const char *cell
+    inline uint32_t HashId(
+        const char* name
     ) {
         uint32_t hash = 2166136261;
 
@@ -22,16 +22,16 @@ namespace P {
 
         hash_byte(':');
 
-        for (char c: (std::string_view) cell) {
+        for (char c: (std::string_view) name) {
             hash_byte(c);
         }
 
-        Internal::PlasmidLog(MUTED_COL) << "Generated id: " << hash << " for cell: " << cell;
+        Internal::PlasmidLog(COL_MUTED) << "Generated id: " << hash << " for: " << name;
 
         return hash;
     }
 
-    inline float AnguleDifference(float a, float b) {
+    inline float AngleDifference(float a, float b) {
         auto angle_diff = (float) fmod(abs(a - b), 2.0f * std::numbers::pi);
         if (angle_diff > std::numbers::pi) {
             angle_diff = 2.0f * (float) std::numbers::pi - angle_diff;

@@ -10,7 +10,7 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
     P::real_2 force{};
 
     const int body_id = cell->body_id;
-    P::body *body = P::get_living_body(body_id);
+    P::body* body = P::get_living_body(body_id);
     float grab_weight = body->brain.grab_weight;
     if (grab_weight > 0.0f or cell->shock > 0.5f) {
         float randomness = 1.0f;
@@ -18,7 +18,7 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
             randomness = cell->shock * randomness;
         }
         randomness = std::ranges::clamp(randomness, 0.0f, 1.0f);
-        const P::real_2 random_jitter = P::rand_normal_2((uint*)TlsGetValue(P::tls_index) + 0x68);
+        const P::real_2 random_jitter = P::rand_normal_2((uint *) TlsGetValue(P::tls_index) + 0x68);
         if (grab_weight <= 0.0f) { // Shocked, jitter randomly
             force.x = cell->x + randomness * 1000.0f * random_jitter.x;
             force.y = cell->y + randomness * 1000.0f * random_jitter.y;
@@ -53,11 +53,11 @@ inline void SeekWithForce(P::cell* cell, const float force_coefficient) {
     }
 }
 
-inline void HiderCell(P::cell *cell) {
+inline void HiderCell(P::cell* cell) {
     SeekWithForce(cell, -1.0f);
 }
 
-inline void ElectricSeekerCell(P::cell *cell) {
+inline void ElectricSeekerCell(P::cell* cell) {
     SeekWithForce(cell, cell->voltage);
 }
 
@@ -79,7 +79,7 @@ inline void AddSeekerVariants() {
     material.force_update_fn = ElectricSeekerCell;
     material.base_color = {1.0f, 0.0f, 0.2f, 1.0f}; // Blue
     // We also want to make this conductive, so lets copy conductive cell's electrical properties
-    const P::material_t conductive = P::MatRef {"Conductive cell"}.GetCopy();
+    const P::material_t conductive = P::MatRef{"Conductive cell"}.GetCopy();
     material.conductivity = conductive.conductivity;
     material.leak_conductivity = conductive.leak_conductivity;
     material.capacitance = conductive.capacitance;

@@ -5,8 +5,7 @@
 
 constexpr float max_mass = 1e4f;
 
-inline void PinCell(P::cell *cell) {
-
+inline void PinCell(P::cell* cell) {
     // TODO: Make it work when paused
     if (P::w->sm.dragged_body == cell->body_id) {
         cell->stasis = 0.0f;
@@ -24,7 +23,7 @@ inline void PinCell(P::cell *cell) {
         extra_fields->old_x_dot = {0.0f, 0.0f};
     }
     else {
-        cell->stasis = 0.01f/cell->voltage;
+        cell->stasis = 0.01f / cell->voltage;
         // cell->mass = 1.0f/(2.0f*cell->voltage + 1.0f/max_mass);
         // cell->custom_mass = true;
     }
@@ -36,7 +35,7 @@ inline void AddPinCell() {
     material.growth_rate = 0.01f;
     material.density = max_mass;
     material.force_update_fn = PinCell;
-    const P::material_t conductive = P::MatRef {"Conductive cell"}.GetCopy();
+    const P::material_t conductive = P::MatRef{"Conductive cell"}.GetCopy();
     material.conductivity = conductive.conductivity;
     material.leak_conductivity = conductive.leak_conductivity;
     material.capacitance = conductive.capacitance;

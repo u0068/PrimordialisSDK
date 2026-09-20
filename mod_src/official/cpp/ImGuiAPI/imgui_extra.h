@@ -5,13 +5,13 @@
 
 enum ImGuiExtraColorEditFlags_ {
     ImGuiExtraColorEditFlags_PrimordialisStyle =
-        ImGuiColorEditFlags_Float | ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_AlphaBar,
+    ImGuiColorEditFlags_Float | ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_AlphaBar,
     ImGuiExtraColorEditFlags_AllInputs =
-        ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_InputHSV
+    ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_InputHSV
 };
 
 namespace ImGuiExtra {
-    static void InfoMarker(const char *desc, const char *sign = "(?)") {
+    static void InfoMarker(const char* desc, const char* sign = "(?)") {
         ImGui::TextDisabled(sign);
         if (ImGui::BeginItemTooltip()) {
             ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);

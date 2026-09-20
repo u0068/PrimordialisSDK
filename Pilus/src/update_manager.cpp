@@ -8,7 +8,7 @@
 // TODO: Make cmake increment the version number automatically
 constexpr Version PILUS_VERSION{0, 6, 0};
 
-Version ParseVersion(const std::string &tag) {
+Version ParseVersion(const std::string& tag) {
     Version version{0, 0, 0};
 
     std::regex tag_regex(R"((\d+)(?:.(\d+))?(?:.(\d+))?)");
@@ -23,15 +23,15 @@ Version ParseVersion(const std::string &tag) {
 
     console_log << err << "Failed to Parse Version: " << tag << "\n";
 
-    return {0,0,0};
+    return {0, 0, 0};
 }
 
 void ExtractZip(
-    const fs::path &zip,
-    const fs::path &destination) {
+    const fs::path& zip,
+    const fs::path& destination) {
     console_log << "Extracting " << zip << " to " << destination << "\n";
     miniz_cpp::zip_file file(zip.string());
-    for (const auto &name: file.namelist()) {
+    for (const auto& name: file.namelist()) {
         fs::path output = destination / name;
 
         // Directory entry
@@ -47,8 +47,8 @@ void ExtractZip(
 }
 
 bool DownloadFromURL(
-    const std::string &source_url,
-    const fs::path &dest_path) {
+    const std::string& source_url,
+    const fs::path& dest_path) {
     console_log << "Downloading " << source_url << "...\n";
 
     HRESULT hr = URLDownloadToFileA(nullptr, source_url.c_str(), dest_path.string().c_str(), 0, nullptr);
@@ -62,7 +62,7 @@ bool DownloadFromURL(
 
 // Merges the downloaded manifest and the local manifest
 bool GetVersionManifest(
-    const std::string &source_url,
+    const std::string& source_url,
     bool temporary = true) {
     fs::path path = ModManager::version_manifest_path.string();
     if (temporary)
@@ -99,10 +99,10 @@ void SaveVersionManifest() {
     file.close();
 }
 
-Version GetLatestVersion(json &version_manifest) {
+Version GetLatestVersion(json& version_manifest) {
     Version latest_version{};
-    for (auto &el: version_manifest["versions"].items()) {
-        const auto &version = ParseVersion(el.key());
+    for (auto& el: version_manifest["versions"].items()) {
+        const auto& version = ParseVersion(el.key());
         if (version > latest_version)
             latest_version = version;
     }
@@ -110,9 +110,9 @@ Version GetLatestVersion(json &version_manifest) {
 }
 
 std::string CheckForUpdates(
-    const char *name,
-    json &version_json,
-    const fs::path &check_path = "") {
+    const char* name,
+    json& version_json,
+    const fs::path& check_path = "") {
     console_log << "Checking for " << name << " updates...\n";
 
     if (version_json.empty()) {
@@ -148,7 +148,7 @@ std::string CheckForUpdates(
 void UpdateLocalVersionManifest() {
     ModManager::version_manifest.merge_patch(safe_parse(ReadFile(ModManager::version_manifest_path)));
     GetVersionManifest(ModManager::version_manifest_url, false);
-    for (auto &mod: ModManager::mods) {
+    for (auto& mod: ModManager::mods) {
         std::string manifest_url = GetStringFromJson(mod.local_info, "version_manifest_url");
         if (manifest_url.empty())
             continue;
@@ -159,7 +159,7 @@ void UpdateLocalVersionManifest() {
 }
 
 int CheckSteamBuild() {
-    const char *manifest_filename = "appmanifest_3011360.acf";
+    const char* manifest_filename = "appmanifest_3011360.acf";
 
     auto steam_manifest_path =
             ModManager::game_path.parent_path().parent_path() / manifest_filename;
@@ -268,7 +268,7 @@ void CreateDirectories() {
 //         // CheckForUpdates(el.key().c_str(), el.value());
 // }
 
-bool DownloadUpdate(const char *name, const Version &version, const fs::path &dest_path) {
+bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path) {
     std::string download_url_json = GetStringFromJson(
         ModManager::version_manifest[name]["versions"][version.to_string()], "download_url");
     if (download_url_json.empty()) {
@@ -286,7 +286,7 @@ bool DownloadUpdate(const char *name, const Version &version, const fs::path &de
     return DownloadFromURL(download_url_json, dest_path);
 }
 
-bool UpdatePilus(const Version &pilus_version, const Version &updater_version) {
+bool UpdatePilus(const Version& pilus_version, const Version& updater_version) {
     // ModManager::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION.to_string();
 
     fs::path pilus_path = absolute(fs::path("Pilus.exe"));
@@ -373,7 +373,7 @@ void UpdateModloader() {
 
     DownloadUpdate("Nucleus",
                    GetLatestVersion(ModManager::version_manifest["Nucleus"]),
-                   ModManager::mod_path/"Nucleus.dll");
+                   ModManager::mod_path / "Nucleus.dll");
 
     UpdatePDB();
 }

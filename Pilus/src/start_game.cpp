@@ -4,11 +4,11 @@
 #include <fstream>
 #include "mod_loader.h"
 
-DWORD GetProcessByName(const char *lpProcessName) {
+DWORD GetProcessByName(const char* lpProcessName) {
     PROCESSENTRY32 ProcList{};
     ProcList.dwSize = sizeof(ProcList);
 
-    const HANDLE &hProcList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    const HANDLE& hProcList = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hProcList == INVALID_HANDLE_VALUE)
         return -1;
 
@@ -24,7 +24,7 @@ DWORD GetProcessByName(const char *lpProcessName) {
     return -1;
 }
 
-bool IsProcessRunning(const char *processName) {
+bool IsProcessRunning(const char* processName) {
     PROCESSENTRY32 entry;
     entry.dwSize = sizeof(PROCESSENTRY32);
 
@@ -46,7 +46,7 @@ bool IsProcessRunning(const char *processName) {
 }
 
 void ModManager::StartGame() {
-    constexpr const char *lpprocessname = "primordialis.exe";
+    constexpr const char* lpprocessname = "primordialis.exe";
 
     // we assume modloader is running inside primordialis working directory
 

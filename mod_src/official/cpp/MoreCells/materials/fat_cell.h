@@ -3,7 +3,7 @@
 
 constexpr float density = 10.0f;
 
-inline void FatCell(P::cell *cell) {
+inline void FatCell(P::cell* cell) {
     float health_normalised = cell->health / P::materials_list[cell->material_index].max_health;
     // cell->mass = (0.1f + health_normalised) * P::materials_list[cell->material_index].density;
     cell->target_spacing = health_normalised * 2.0f;
@@ -30,6 +30,6 @@ inline void AddFatCell() {
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.0f, 0.9f, 0.2f, 1.0f}; // Yellow
     P::SetCellNameAndDesc(material, "Fat cell",
-                       "A soft, fatty cell with high biomass storage. Swells when storing biomass. Insulates heat.");
+                          "A soft, fatty cell with high biomass storage. Swells when storing biomass. Insulates heat.");
     P::materials_list[P::n_materials++] = material;
 }

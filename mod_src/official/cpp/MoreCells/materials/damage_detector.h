@@ -1,7 +1,7 @@
 #pragma once
 #include "plasmid_api.h"
 
-inline void DamageDetector(P::cell *cell) {
+inline void DamageDetector(P::cell* cell) {
     // Using low pass filters to eliminate the noise from health transfer
 
     constexpr float health_alpha = 0.01f;

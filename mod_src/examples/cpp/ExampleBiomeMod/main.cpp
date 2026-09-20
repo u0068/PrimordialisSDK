@@ -37,7 +37,7 @@ void OnInitBiomeTypes() {
 // This controls when we insert the biome
 static bool insert_biome = false;
 
-P::biome_core *OnCreateBiomeCore(int id, int size) {
+P::biome_core* OnCreateBiomeCore(int id, int size) {
     // Here we define *WHERE* the biome generates
 
     auto result = P::Next<P::biome_core *>(id, size);

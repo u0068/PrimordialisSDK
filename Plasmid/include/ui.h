@@ -4,12 +4,12 @@
 namespace P {
     static std::vector<const char *> translation_values;
 
-    inline void AddTranslation(const char *_key, const char *_value) {
-        char *key = new char[strlen(_key) + 1]{};
+    inline void AddTranslation(const char* _key, const char* _value) {
+        char* key = new char[strlen(_key) + 1]{};
         memcpy_s(key, strlen(_key) + 1, _key, strlen(_key));
 
         translation_values.push_back(_value);
-        const char **value = &translation_values.back();
+        const char** value = &translation_values.back();
 
         translation_list t_list{};
         t_list.text = value;

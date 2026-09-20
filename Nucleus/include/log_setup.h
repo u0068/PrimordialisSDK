@@ -12,7 +12,7 @@ static void InitConsole() {
         }
     }
 
-    FILE *file;
+    FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
     freopen_s(&file, "CONOUT$", "w", stderr);
 
@@ -20,7 +20,7 @@ static void InitConsole() {
     // std::cerr.clear();
 }
 
-inline std::ostream &GetDualLog() {
+inline std::ostream& GetDualLog() {
     InitConsole();
 
     static std::ofstream log_file("mod_log.txt");
@@ -36,7 +36,7 @@ inline std::ostream &GetDualLog() {
     return dual_log;
 }
 
-inline LogStream LogSourced(const std::string &source, const COLOR color = NORMAL_COL) {
+inline LogStream LogSourced(const std::string& source, const COLOR color = COL_NORMAL) {
     return {
         GetDualLog(),
         "[" + source + "]\n  ",
@@ -45,6 +45,6 @@ inline LogStream LogSourced(const std::string &source, const COLOR color = NORMA
     };
 }
 
-inline LogStream Log(const COLOR color = NORMAL_COL) {
+inline LogStream Log(const COLOR color = COL_NORMAL) {
     return LogSourced("NUCLEUS", color);
 }

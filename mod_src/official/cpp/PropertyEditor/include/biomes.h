@@ -22,7 +22,7 @@ inline void InitBiomeTypesHook() {
     has_initialised_biomes = true;
 }
 
-inline void DrawWallsHook(P::render_context* rc,P::map_t* map,float fade_in) {
+inline void DrawWallsHook(P::render_context* rc, P::map_t* map, float fade_in) {
     if (remove_view_limit) {
         P::w->vision_radius = 1e6f;
         // fade_in = 1.0f;

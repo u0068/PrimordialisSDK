@@ -7,7 +7,7 @@ namespace P {
     inline std::string mod_name{"Unnamed Mod"};
 
     namespace Internal {
-        inline LogStream PlasmidLog(const COLOR color = NORMAL_COL) {
+        inline LogStream PlasmidLog(const COLOR color = COL_NORMAL) {
             return nucleus->LogSourced(
                 "PLASMID (" + mod_name + ")",
                 color
@@ -15,7 +15,7 @@ namespace P {
         }
     }
 
-    inline LogStream Log(const COLOR color = NORMAL_COL) {
+    inline LogStream Log(const COLOR color = COL_NORMAL) {
         return nucleus->LogSourced(
             mod_name,
             color
@@ -33,7 +33,7 @@ namespace P {
         // Attempt to bring to foreground
         if (!SetForegroundWindow(hConsole)) {
             // Fallback: Flash the taskbar button to alert the user
-            FLASHWINFO fw = { sizeof(fw), hConsole, FLASHW_ALL | FLASHW_TIMERNOFG, 3, 0 };
+            FLASHWINFO fw = {sizeof(fw), hConsole, FLASHW_ALL | FLASHW_TIMERNOFG, 3, 0};
             FlashWindowEx(&fw);
         }
     }
@@ -42,5 +42,10 @@ namespace P {
     inline void FocusConsoleAndPause() {
         BringConsoleToFront();
         system("pause");
+    }
+
+    inline void CriticalError(std::string message) {
+        Log(COL_CRITICAL) << message;
+        FocusConsoleAndPause();
     }
 }

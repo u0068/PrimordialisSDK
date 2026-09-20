@@ -10,11 +10,11 @@ namespace fs = std::filesystem;
 
 class DualBuf : public std::streambuf {
 public:
-    DualBuf(std::streambuf *a, std::streambuf *b)
+    DualBuf(std::streambuf* a, std::streambuf* b)
         : a(a), b(b) {}
 
 protected:
-    std::streamsize xsputn(const char *s, const std::streamsize count) override {
+    std::streamsize xsputn(const char* s, const std::streamsize count) override {
         const auto a_written = a->sputn(s, count);
         const auto b_written = b->sputn(s, count);
 
@@ -46,11 +46,11 @@ protected:
     }
 
 private:
-    std::streambuf *a;
-    std::streambuf *b;
+    std::streambuf* a;
+    std::streambuf* b;
 };
 
-// Windows console color pallete colors
+// Windows console color palette colors
 enum COLOR {
     FOREGROUND = 0x01, // Redundant. Usage: (FOREGROUND * RED)
     BACKGROUND = 0x10, // Usage: (BACKGROUND * RED)
@@ -67,21 +67,21 @@ enum COLOR {
     MAGENTA = BLUE | RED,
     GRAY = LIGHT | BLACK,
 
-    MUTED_COL = GRAY,
-    NORMAL_COL = WHITE,
-    ERROR_COL = LIGHT | RED,
-    WARNING_COL = YELLOW,
-    SUCCESS_COL = LIGHT | GREEN,
-    CRITICAL_COL = FOREGROUND * BLACK | BACKGROUND * ERROR_COL,
+    COL_MUTED = GRAY,
+    COL_NORMAL = WHITE,
+    COL_ERROR = LIGHT | RED,
+    COL_WARNING = YELLOW,
+    COL_SUCCESS = LIGHT | GREEN,
+    COL_CRITICAL = FOREGROUND * BLACK | BACKGROUND * COL_ERROR,
 };
 
 class LogStream {
 public:
     LogStream(
-        std::ostream &output,
+        std::ostream& output,
         std::string prefix,
         std::string suffix = "\n",
-        COLOR color = NORMAL_COL
+        COLOR color = COL_NORMAL
     )
         : output(output),
           prefix(std::move(prefix)),
@@ -93,7 +93,7 @@ public:
     }
 
     template<typename T>
-    LogStream &operator<<(const T &value) {
+    LogStream& operator<<(const T& value) {
         buffer << value;
         return *this;
     }
@@ -104,8 +104,8 @@ private:
 
         CONSOLE_SCREEN_BUFFER_INFO info{};
         const bool has_console =
-            console != INVALID_HANDLE_VALUE &&
-            GetConsoleScreenBufferInfo(console, &info);
+                console != INVALID_HANDLE_VALUE &&
+                GetConsoleScreenBufferInfo(console, &info);
 
         if (has_console)
             SetConsoleTextAttribute(console, color);
@@ -117,7 +117,7 @@ private:
             SetConsoleTextAttribute(console, info.wAttributes);
     }
 
-    std::ostream &output;
+    std::ostream& output;
     std::string prefix;
     std::string suffix;
     COLOR color;

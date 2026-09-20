@@ -34,7 +34,7 @@ struct Mod {
     fs::path dll_path{};
     fs::path init_path{};
 
-    bool operator==(const Mod &other) const {
+    bool operator==(const Mod& other) const {
         if (weakly_canonical(path) == weakly_canonical(other.path)) { // path is the only thing that matters
             return true;
         }
@@ -54,4 +54,4 @@ struct Mod {
     }
 };
 
-std::string ReadFile(const fs::path &path);
+std::string ReadFile(const fs::path& path);

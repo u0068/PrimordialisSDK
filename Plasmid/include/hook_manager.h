@@ -23,7 +23,7 @@ namespace P {
             std::vector<Function> hooks;
             Function original = nullptr;
 
-            const char *name = nullptr;
+            const char* name = nullptr;
         };
 
         struct HookContextBase {
@@ -32,7 +32,7 @@ namespace P {
 
         template<typename Ret, typename... Args>
         struct HookContext : HookContextBase {
-            HookChain<Ret, Args...> *chain{};
+            HookChain<Ret, Args...>* chain{};
             size_t index{0};
 
             Ret InvokeNext(Args... args) {
@@ -50,7 +50,7 @@ namespace P {
 
         template<typename... Args>
         struct HookContext<void, Args...> : HookContextBase {
-            HookChain<void, Args...> *chain{};
+            HookChain<void, Args...>* chain{};
             size_t index{0};
 
             void InvokeNext(Args... args) {
@@ -67,7 +67,7 @@ namespace P {
 
         template<FixedString name, typename Ret, typename... Args>
         struct Dispatcher {
-            static HookChain<Ret, Args...> *chain;
+            static HookChain<Ret, Args...>* chain;
 
             static Ret Dispatch(Args... args) {
                 HookContext<Ret, Args...> context;
@@ -86,7 +86,7 @@ namespace P {
         };
 
         template<FixedString name, typename Ret, typename... Args>
-        HookChain<Ret, Args...> *Dispatcher<name, Ret, Args...>::chain = nullptr;
+        HookChain<Ret, Args...>* Dispatcher<name, Ret, Args...>::chain = nullptr;
     }
 
     template<typename Ret, typename... Args>
@@ -100,7 +100,7 @@ namespace P {
     namespace Internal {
         template<FixedString name, typename... Args>
         struct Dispatcher<name, void, Args...> {
-            static HookChain<void, Args...> *chain;
+            static HookChain<void, Args...>* chain;
 
             static void Dispatch(Args... args) {
                 HookContext<void, Args...> context;
@@ -117,10 +117,10 @@ namespace P {
         };
 
         template<FixedString name, typename... Args>
-        HookChain<void, Args...> *Dispatcher<name, void, Args...>::chain = nullptr;
+        HookChain<void, Args...>* Dispatcher<name, void, Args...>::chain = nullptr;
 
         template<typename Chain>
-        Chain *GetOrCreateChain(const char *name) {
+        Chain* GetOrCreateChain(const char* name) {
             auto it = nucleus->chains.find(name);
 
             if (it != nucleus->chains.end()) {
@@ -154,7 +154,7 @@ namespace P {
                     reinterpret_cast<Ret(*)(Args...)>
                     (nucleus->CreateHook(
                         (const char *) name.data,
-                        (void*)(&Disp::Dispatch)
+                        (void *) (&Disp::Dispatch)
                     ));
         }
     }

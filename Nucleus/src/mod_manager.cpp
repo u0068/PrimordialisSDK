@@ -5,7 +5,7 @@
 
 namespace fs = std::filesystem;
 
-std::string ReadFile(const fs::path &path) {
+std::string ReadFile(const fs::path& path) {
     std::ifstream file(path);
 
     if (!file) {
@@ -20,7 +20,7 @@ std::string ReadFile(const fs::path &path) {
 
 std::filesystem::path ModManager::GetLoaderFilesFolder() {
     int argc = 0;
-    LPWSTR *argv = CommandLineToArgvW(
+    LPWSTR* argv = CommandLineToArgvW(
         GetCommandLineW(),
         &argc
     );
@@ -43,16 +43,16 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
     LocalFree(argv);
 
     if (mod_folder_path.empty()) {
-        Log(WARNING_COL) << "--mod-folder path not given! Falling back to Primordialis root.";
+        Log(COL_WARNING) << "--mod-folder path not given! Falling back to Primordialis root.";
         mod_folder_path = ".";
     }
 
-    Log(MUTED_COL) << "Loader Files Folder at: " << mod_folder_path;
+    Log(COL_MUTED) << "Loader Files Folder at: " << mod_folder_path;
 
     return mod_folder_path;
 }
 
-void ParseModInfo(Mod &mod) {
+void ParseModInfo(Mod& mod) {
     if (mod.path.has_extension())
         return; // Mod is raw dll so has no info
 
@@ -60,7 +60,7 @@ void ParseModInfo(Mod &mod) {
     mod.name = modFolder.filename().string();
 
     std::vector<fs::path> dlls{};
-    for (const auto &entry: fs::recursive_directory_iterator(modFolder)) {
+    for (const auto& entry: fs::recursive_directory_iterator(modFolder)) {
         if (!entry.is_regular_file()) {
             continue;
         }
@@ -75,7 +75,7 @@ void ParseModInfo(Mod &mod) {
         }
     }
     if (dlls.size() > 1) {
-        for (auto &dll_path: dlls) {
+        for (auto& dll_path: dlls) {
             // Log() << modFolder.filename() << "\n";
             // Log() << dll_path.filename() << "\n";
             if (dll_path.filename() == "main.dll" or
@@ -85,7 +85,7 @@ void ParseModInfo(Mod &mod) {
             }
         }
         if (mod.dll_path.empty()) {
-            Log(ERROR_COL) << err << "Multiple .dll files detected! I don't know which one to load.\n"
+            Log(COL_ERROR) << err << "Multiple .dll files detected! I don't know which one to load.\n"
                     "\tPlease specify a \"main_dll\" in info.json,\n"
                     "or make the dll that should be loaded have same filename as the mod folder!";
         }
@@ -96,17 +96,17 @@ void ParseModInfo(Mod &mod) {
 }
 
 void ModManager::ParseMods() {
-    Log(MUTED_COL) << "Parsing Mods...";
+    Log(COL_MUTED) << "Parsing Mods...";
 
     if (mod_path.empty()) {
-        Log(ERROR_COL) << "No mods found in " << mod_path;
+        Log(COL_ERROR) << "No mods found in " << mod_path;
         return;
     }
 
     std::vector<Mod> installed_mods{};
-    for (const auto &entry: std::filesystem::directory_iterator(mod_path)) {
-        Log(MUTED_COL) << "Found Mod: "
-              << entry.path().filename().stem().string();
+    for (const auto& entry: std::filesystem::directory_iterator(mod_path)) {
+        Log(COL_MUTED) << "Found Mod: "
+                << entry.path().filename().stem().string();
 
         Mod nmod;
         nmod.path = entry.path();
@@ -120,7 +120,7 @@ void ModManager::ParseMods() {
 
     YAML::Node mods_yml = YAML::LoadFile((loader_files_path / "mods.yml").string());
     for (std::size_t i = 0; i < mods_yml.size(); i++) {
-        for (auto &mod: installed_mods) {
+        for (auto& mod: installed_mods) {
             if (mod.name == mods_yml[i]["name"].as<std::string>()
                 and mods_yml[i]["enabled"].as<bool>()) {
                 enabled_mods.push_back(mod);

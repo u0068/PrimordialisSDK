@@ -2,8 +2,8 @@
 
 typedef unsigned char undefined;
 
-typedef void *pointer32;
-typedef void *pointer64;
+typedef void* pointer32;
+typedef void* pointer64;
 //typedef unsigned char    bool;
 typedef unsigned char byte;
 typedef unsigned int dword;
@@ -28,7 +28,7 @@ typedef unsigned int wchar32;
 //typedef short    wchar_t;
 typedef unsigned short word;
 typedef std::string string;
-typedef void *pointer;
+typedef void* pointer;
 
 typedef unsigned long long ulong64;
 typedef unsigned long long __uint64;

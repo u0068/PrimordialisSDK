@@ -3,9 +3,8 @@
 #include "generated/globals.h"
 
 namespace P {
-
     inline context_t* GetContext() {
-        return (context_t*)FlsGetValue(fls_index);
+        return (context_t *) FlsGetValue(fls_index);
     }
 
     inline bool IsThreadSafe() {

@@ -1,7 +1,7 @@
 #pragma once
 #include "plasmid_api.h"
 
-inline void PiezoCell(P::cell *cell) {
+inline void PiezoCell(P::cell* cell) {
     constexpr float multiplier = 50.0f;
 
     float stress = 0.0f;
@@ -28,6 +28,6 @@ inline void AddPiezoCell() {
     material.uv = P::MatRef{"Feeler cell"}.GetCopy().uv; // Steal feelers texture, just to show how it's done.
     material.base_color = {0.3f, 0.0f, 1.0f, 0.8f};
     P::SetCellNameAndDesc(material, "Piezoelectric cell",
-                       "Produces a voltage proportional to how much the cell is squeezed.");
+                          "Produces a voltage proportional to how much the cell is squeezed.");
     P::materials_list[P::n_materials++] = material;
 }

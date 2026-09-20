@@ -2,7 +2,7 @@
 #include "generated/game_functions/cells.h" // Get all the cell functions
 #include "aerogel_cell.h" // Include cells from other files
 
-void acid_no_color_change(P::cell *cell) {
+void acid_no_color_change(P::cell* cell) {
     P::cell_acid(cell); // Call original acid function, which will make the cell spray acid when powered
 
     // Modify the acid to set its final color to its initial color with 0 alpha

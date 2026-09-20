@@ -23,8 +23,8 @@ static bool WaitForProcessExit(DWORD pid) {
 }
 
 static bool ReplaceFile(
-    const fs::path &target,
-    const fs::path &replacement) {
+    const fs::path& target,
+    const fs::path& replacement) {
     fs::path backup = target;
     backup += L".old";
 
@@ -71,7 +71,7 @@ static bool ReplaceFile(
 }
 
 static bool StartPilus(
-    const fs::path &executable) {
+    const fs::path& executable) {
     std::wstring commandLine =
             L"\"" + executable.wstring() + L"\"";
 
@@ -114,7 +114,7 @@ static bool StartPilus(
     return true;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc != 4) {
         std::wcerr
                 << L"Usage:\n"

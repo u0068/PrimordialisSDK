@@ -7,7 +7,7 @@ namespace fs = std::filesystem;
 
 class TeeBuf : public std::streambuf {
 public:
-    TeeBuf(std::streambuf *a, std::streambuf *b)
+    TeeBuf(std::streambuf* a, std::streambuf* b)
         : a(a), b(b) {}
 
 protected:
@@ -34,8 +34,8 @@ protected:
     }
 
 private:
-    std::streambuf *a;
-    std::streambuf *b;
+    std::streambuf* a;
+    std::streambuf* b;
 };
 
 inline std::stringstream console_buffer;

@@ -5,10 +5,10 @@
 
 namespace P {
     template<typename T>
-    T &Resolve(const char *name) {
+    T& Resolve(const char* name) {
         static std::unordered_map<std::string, T> cache;
 
-        auto &addr = cache[name];
+        auto& addr = cache[name];
 
         if (!addr) {
             addr = reinterpret_cast<T>(nucleus->ResolveSymbol(name));
@@ -19,11 +19,11 @@ namespace P {
 
     template<typename T>
     class ResolvedData {
-        const char *name;
-        T *ptr = nullptr;
+        const char* name;
+        T* ptr = nullptr;
         std::once_flag flag;
 
-        T &Ref() {
+        T& Ref() {
             std::call_once(flag, [&]() {
                 ptr = Resolve<T *>(name);
                 if (!ptr) {
@@ -34,18 +34,18 @@ namespace P {
         }
 
     public:
-        explicit ResolvedData(const char *name)
+        explicit ResolvedData(const char* name)
             : name(name) {}
 
-        operator T &() {
+        operator T&() {
             return Ref();
         }
 
-        T *operator->() {
+        T* operator->() {
             return &Ref();
         }
 
-        ResolvedData &operator=(const T &value) {
+        ResolvedData& operator=(const T& value) {
             Ref() = value;
             return *this;
         }

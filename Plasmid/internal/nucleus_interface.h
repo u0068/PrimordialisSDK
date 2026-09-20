@@ -10,21 +10,21 @@ namespace P::Internal {
 }
 
 struct Nucleus {
-    void * (*ResolveSymbol)(const char *);
+    void* (*ResolveSymbol)(const char*);
 
-    void * (*CreateHook)(const char *name, void *detour);
+    void* (*CreateHook)(const char* name, void* detour);
 
     std::unordered_map<std::string, P::Internal::HookChainBase *> chains;
 
-    void * (*GetCurrentContext)();
+    void* (*GetCurrentContext)();
 
-    void (*SetCurrentContext)(void *context);
+    void (*SetCurrentContext)(void* context);
 
-    LogStream (*LogSourced)(const std::string &source, const COLOR color);
+    LogStream (*LogSourced)(const std::string& source, const COLOR color);
 
-    void (*RegisterModule)(std::string name, void *module);
+    void (*RegisterModule)(std::string name, void* module);
 
-    void * (*GetModule)(std::string name);
+    void* (*GetModule)(std::string name);
 };
 
-inline Nucleus *nucleus;
+inline Nucleus* nucleus;

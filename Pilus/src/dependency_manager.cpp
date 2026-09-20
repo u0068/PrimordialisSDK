@@ -2,18 +2,18 @@
 #include "mod_loader.h"
 #include "dependency_manager.h"
 
-inline std::vector<Mod *> GetModDeps(Mod &mod) {
+inline std::vector<Mod *> GetModDeps(Mod& mod) {
     std::vector<Mod *> deps{};
-    for (auto &dep: mod.get_deps().items())
-        for (auto &other: ModManager::mods)
+    for (auto& dep: mod.get_deps().items())
+        for (auto& other: ModManager::mods)
             if (other.name == dep.key())
                 deps.push_back(&other);
     return deps;
 }
 
-inline std::vector<int> GetModDepIndices(Mod &mod) {
+inline std::vector<int> GetModDepIndices(Mod& mod) {
     std::vector<int> deps{};
-    for (auto &dep: mod.get_deps().items())
+    for (auto& dep: mod.get_deps().items())
         for (int idx = 0; idx < ModManager::mods.size(); idx++)
             if (ModManager::mods[idx].name == dep.key())
                 deps.push_back(idx);
@@ -21,16 +21,16 @@ inline std::vector<int> GetModDepIndices(Mod &mod) {
 }
 
 inline void EnableDeps() {
-    for (auto &mod: ModManager::mods)
+    for (auto& mod: ModManager::mods)
         mod.dep_enabled = false;
-    for (auto &mod: ModManager::mods)
+    for (auto& mod: ModManager::mods)
         if (mod.is_enabled())
             for (auto dep: GetModDeps(mod))
                 dep->dep_enabled = true;
 }
 
 inline void SortDeps() {
-    for (auto &mod: ModManager::mods)
+    for (auto& mod: ModManager::mods)
         for (auto dep: GetModDeps(mod))
             if (dep > &mod)
                 std::iter_swap(dep, &mod);
@@ -51,7 +51,7 @@ inline bool IsDependentOf(int mod_idx, int dependency) {
 
 inline void CollectDependencies(
     int mod_idx,
-    std::unordered_set<int> &result) {
+    std::unordered_set<int>& result) {
     for (auto dep: GetModDepIndices(ModManager::mods[mod_idx]))
         result.insert(dep).second;
     // if (result.insert(dep).second)
@@ -60,14 +60,14 @@ inline void CollectDependencies(
 
 inline void CollectDependents(
     int mod_idx,
-    std::unordered_set<int> &result) {
+    std::unordered_set<int>& result) {
     for (int idx = 0; idx < ModManager::mods.size(); idx++)
         if (DependsOn(idx, mod_idx) && result.insert(idx).second)
             CollectDependents(idx, result);
 }
 
 inline bool MoveMod(int mod_idx, int direction, std::unordered_set<int> group) {
-    auto &mods = ModManager::mods;
+    auto& mods = ModManager::mods;
 
     group.insert(mod_idx);
 

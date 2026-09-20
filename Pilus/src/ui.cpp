@@ -11,7 +11,7 @@
 int configured_mod = -1;
 bool config_open = true;
 
-static void InfoMarker(const char *desc, const char *sign = "(?)") {
+static void InfoMarker(const char* desc, const char* sign = "(?)") {
     ImGui::TextDisabled(sign);
     if (ImGui::BeginItemTooltip()) {
         ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
@@ -21,11 +21,11 @@ static void InfoMarker(const char *desc, const char *sign = "(?)") {
     }
 }
 
-void DrawSettings(Mod &mod) {
+void DrawSettings(Mod& mod) {
     ImGui::PushStyleVarY(ImGuiStyleVar_ItemSpacing, 1);
-    for (auto &el: mod.config_defaults.items()) {
+    for (auto& el: mod.config_defaults.items()) {
         auto name = el.key().c_str();
-        nlohmann::ordered_json &setting = el.value();
+        nlohmann::ordered_json& setting = el.value();
         if (mod.config_values[name].empty() and not setting["default"].empty())
             mod.config_values[name] = setting["default"];
         else if (setting["default"].empty() and mod.config_values[name].empty()) {
@@ -96,7 +96,7 @@ void DrawSettings(Mod &mod) {
 void DrawModConfig() {
     if (configured_mod < 0 or !config_open)
         return;
-    Mod &mod = ModManager::mods[configured_mod];
+    Mod& mod = ModManager::mods[configured_mod];
     ImGui::Begin((mod.name + " Config").c_str(), &config_open);
     ImGui::PushItemWidth(200);
 
@@ -189,7 +189,7 @@ void DrawActionBox() {
     ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4) ImColor::HSV(0.0f, 0.7f, 0.7f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4) ImColor::HSV(0.0f, 0.8f, 0.8f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4) ImColor::HSV(0.0f, 0.9f, 0.9f));
-    ImGuiStyle &style = ImGui::GetStyle();
+    ImGuiStyle& style = ImGui::GetStyle();
     if (ImGui::Button("Start Game", {
                           (ImGui::GetContentRegionAvail().x - style.ItemSpacing.x) / 2,
                           ImGui::GetContentRegionAvail().y
@@ -211,7 +211,7 @@ void DrawActionBox() {
     ImGui::End();
 }
 
-void DrawModInfo(Mod &mod) {
+void DrawModInfo(Mod& mod) {
     // ImGui::Text("%s", mod.info.dump().c_str());
     ImGui::Text("Author: %s", GetStringFromJson(mod.get_manifest(), "author", "Unknown").c_str());
     ImGui::TextWrapped("Description:\n\t%s",
@@ -219,9 +219,9 @@ void DrawModInfo(Mod &mod) {
     ImGui::Text("Installed Version: %s", mod.get_installed_version().c_str());
     if (not mod.get_deps().empty()) {
         ImGui::Text("Dependencies:");
-        for (auto &dep: mod.get_deps().items()) {
-            const char *name = dep.key().c_str();
-            const auto &dep_config = dep.value();
+        for (auto& dep: mod.get_deps().items()) {
+            const char* name = dep.key().c_str();
+            const auto& dep_config = dep.value();
             std::string min_version = GetStringFromJson(
                 dep_config, "min_version", "Unknown");
             std::string max_version = GetStringFromJson(
@@ -242,7 +242,7 @@ bool hide_uninstalled = false;
 
 void DrawModList() {
     ImGui::Begin("Mods");
-    auto &mods = ModManager::mods;
+    auto& mods = ModManager::mods;
 
     static ImGuiTextFilter filter;
     if (ImGui::IsWindowAppearing()) {
@@ -256,7 +256,7 @@ void DrawModList() {
     if (ImGui::BeginPopup("Options")) {
         ImGui::Checkbox("Hide Uninstalled Mods", &hide_uninstalled);
         if (ImGui::Button("Forget Uninstalled Mods"))
-            std::erase_if(mods, [](auto &mod) { return not mod.is_installed(); });
+            std::erase_if(mods, [](auto& mod) { return not mod.is_installed(); });
         ImGui::EndPopup();
     }
     ImGui::SameLine();
@@ -288,7 +288,7 @@ void DrawModList() {
 
         int row_idx = 0;
         for (int mod_idx = 0; mod_idx < mods.size(); ++mod_idx) {
-            Mod &mod = mods[mod_idx];
+            Mod& mod = mods[mod_idx];
             if (not filter.PassFilter(mod.name.c_str())
                 or hide_uninstalled and not mod.is_installed())
                 continue;
@@ -334,7 +334,7 @@ void DrawModList() {
                 if (dragged_mod_index == -1)
                     dragged_mod_index = mod_idx;
                 if (!is_hovered)
-                    move_direction = ImGui::GetMouseDragDelta(0).y<0.f ? -1 : 1;
+                    move_direction = ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1;
             }
             ImGui::TableNextColumn();
 
@@ -380,12 +380,12 @@ void DrawModList() {
     ImGui::End();
 }
 
-void DrawVersionConfig(const char *name, json &version_json, fs::path &download_path) {
+void DrawVersionConfig(const char* name, json& version_json, fs::path& download_path) {
     auto installed_version = GetStringFromJson(ModManager::pilus_config["installed_versions"], name, "Unknown Version").
             c_str();
     if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview)) {
-        for (auto &el: version_json["versions"].items()) {
-            auto &version = el.key();
+        for (auto& el: version_json["versions"].items()) {
+            auto& version = el.key();
             if (version.empty())
                 continue;
             if (ImGui::Button(version.c_str())) {
@@ -399,7 +399,7 @@ void DrawVersionConfig(const char *name, json &version_json, fs::path &download_
 void DrawVersionManager() {
     ImGui::Begin("Version Manager");
 
-    for (auto &mod: ModManager::mods) {
+    for (auto& mod: ModManager::mods) {
         ImGui::PushID(mod.name.c_str());
         if (ImGui::CollapsingHeader(mod.name.c_str())) {
             DrawVersionConfig(mod.name.c_str(), mod.get_manifest(), mod.path);

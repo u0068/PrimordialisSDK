@@ -41,7 +41,6 @@ void OnInitMats() {
 
         // Directionally conductive
         AddTogglingCell();
-
     }
     P::LaneSync(); // Make all other threads wait for us to finish. Not sure if I actually need this.
 }

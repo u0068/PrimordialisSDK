@@ -23,23 +23,23 @@ inline bool GetBit(const byte byte, const uint index) {
     return (byte >> index) & 1;
 }
 
-inline void SetBit(byte &byte, const uint index, const bool value) {
+inline void SetBit(byte& byte, const uint index, const bool value) {
     if (value)
         byte |= 1 << index;
     else
         byte &= ~(1 << index);
 }
 
-inline void ToggleBit(byte &byte, const uint index) {
+inline void ToggleBit(byte& byte, const uint index) {
     byte ^= 1 << index;
 }
 
-inline void TogglingCellConnections(P::cell *cell) {
+inline void TogglingCellConnections(P::cell* cell) {
     auto neighbors = GetExtraFields(cell)->neighbors;
     auto states = toggle_states((uint) cell->value);
     float own_dir_conductivity = P::materials_list[cell->material_index].directional_conductivity;
     for (int side = 0; side < 6; side++) {
-        if (auto *neighbor = neighbors[side]) {
+        if (auto* neighbor = neighbors[side]) {
             int index = side * 16; // cell properties are interweaved in 16 cell intervals for optimisation
             int opposite_side = (side + 3) % 6;
             int opposite_side_index = opposite_side * 16;
@@ -82,7 +82,7 @@ inline void TogglingCellConnections(P::cell *cell) {
 
 // This is actually identical to the isolator's electric_update_fn, so we could have just reused that,
 // But I wrote this anyway to use as an example.
-inline void TogglingCellElectric(P::cell *cell) {
+inline void TogglingCellElectric(P::cell* cell) {
     auto states = toggle_states((uint) cell->value);
     for (int side = 0; side < 6; side++) {
         int index = side * 16;
@@ -114,6 +114,6 @@ inline void AddTogglingCell() {
     material.electric_update_fn = TogglingCellElectric;
     material.base_color = {0.5f, 0.4f, 0.2f, 1.0f};
     P::SetCellNameAndDesc(material, "Toggling cell",
-                       "Toggles output between 0V and -1V when powered with 0.25V on the opposite side.");
+                          "Toggles output between 0V and -1V when powered with 0.25V on the opposite side.");
     P::materials_list[P::n_materials++] = material;
 }
