@@ -20,7 +20,7 @@ target_link_libraries(Nucleus PRIVATE
         minhook
         yaml-cpp::yaml-cpp
         miniz
-        ${CMAKE_SOURCE_DIR}/third_party/lua/lua51.lib
+        ${CMAKE_SOURCE_DIR}/third_party/lua/lib/lua51.lib
         lua_headers
 #        nlohmann_json
 )
