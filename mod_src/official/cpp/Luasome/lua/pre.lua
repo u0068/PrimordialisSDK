@@ -18,9 +18,9 @@ function crash()
 	require("ffi").cast("int *", 0)[0] = 0
 end
 
-dofile_once("pilus_files/luasome/key_codes.lua")
-dofile_once("pilus_files/luasome/mod_list.lua")
-local api = dofile_once("pilus_files/luasome/api.lua")
+dofile_once("mods/Luasome/key_codes.lua")
+dofile_once("mods/Luasome/mod_list.lua")
+local api = dofile_once("mods/Luasome/api.lua")
 
 for _, v in ipairs(LUA_MODLOADER_MOD_LIST) do
 	if type(v) == "string" then
