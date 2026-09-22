@@ -48,7 +48,7 @@ void ParseModInfo(Mod& mod) {
             dlls.push_back(entry.path());
         }
         else if (filename == "init.lua")
-            mod.init_path = entry.path();
+            mod.init_lua_path = entry.path();
     }
     if (dlls.size() > 1) {
         for (auto& dll_path: dlls) {
@@ -147,7 +147,7 @@ void ModParser::LoadPilusConfig() {
             mod.name = mod_json["name"].get<std::string>();
             mod.path = mod_json["path"].get<std::string>();
             mod.dll_path = mod_json["dll_path"].get<std::string>();
-            mod.init_path = mod_json["init_path"].get<std::string>();
+            mod.init_lua_path = mod_json["init_path"].get<std::string>();
             mod.user_enabled = mod_json["enabled"].get<bool>();
             mod.config_values = mod_json["config"];
             mods.push_back(mod);
@@ -172,7 +172,7 @@ void ModParser::SavePilusConfig() {
         mod_json["name"] = mod.name;
         mod_json["path"] = mod.path;
         mod_json["dll_path"] = mod.dll_path;
-        mod_json["init_path"] = mod.init_path;
+        mod_json["init_path"] = mod.init_lua_path;
         mod_json["enabled"] = mod.user_enabled;
         mod_json["config"] = mod.config_values;
         pilus_config["mods"].push_back(mod_json);

@@ -233,9 +233,9 @@ void DrawModInfo(Mod& mod) {
     if (not mod.dll_path.empty())
         ImGui::Text("main dll path: %s",
                     mod.dll_path.lexically_relative(mod.path.parent_path()).string().c_str());
-    if (not mod.init_path.empty())
+    if (not mod.init_lua_path.empty())
         ImGui::Text("init.lua path: %s",
-                    mod.init_path.lexically_relative(mod.path.parent_path()).string().c_str());
+                    mod.init_lua_path.lexically_relative(mod.path.parent_path()).string().c_str());
 }
 
 bool hide_uninstalled = false;

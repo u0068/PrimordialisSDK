@@ -33,7 +33,7 @@ namespace P {
                 Internal::PlasmidLog(COL_ERROR) << "CreatureRef not initialised!\n"
                         "Make sure that you are not trying to reference a creature that hasn't been created yet.\n"
                         "Falling back to index 1.";
-                P::FocusConsoleAndPause();
+                P::AttentionToConsole();
                 return 1;
             }
 
@@ -54,7 +54,7 @@ namespace P {
                     "Make sure that the name is spelled correctly "
                     "and the creature has been created before referencing it.\n"
                     "Falling back to index 1.";
-            P::FocusConsoleAndPause();
+            P::AttentionToConsole();
             return 1;
         }
     };

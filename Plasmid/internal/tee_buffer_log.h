@@ -81,7 +81,7 @@ public:
         std::ostream& output,
         std::string prefix,
         std::string suffix = "\n",
-        COLOR color = COL_NORMAL
+        int color = COL_NORMAL
     )
         : output(output),
           prefix(std::move(prefix)),
@@ -120,6 +120,6 @@ private:
     std::ostream& output;
     std::string prefix;
     std::string suffix;
-    COLOR color;
+    int color;
     std::stringstream buffer;
 };

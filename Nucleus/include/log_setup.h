@@ -21,8 +21,6 @@ static void InitConsole() {
 }
 
 inline std::ostream& GetDualLog() {
-    InitConsole();
-
     static std::ofstream log_file("mod_log.txt");
 
     static TeeBuf log_buffer(
@@ -36,7 +34,7 @@ inline std::ostream& GetDualLog() {
     return dual_log;
 }
 
-inline LogStream LogSourced(const std::string& source, const COLOR color = COL_NORMAL) {
+inline LogStream LogSourced(const std::string& source, const int color = COL_NORMAL) {
     return {
         GetDualLog(),
         "[" + source + "]\n  ",

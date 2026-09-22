@@ -59,13 +59,16 @@ void LoadMods() {
 void MainHook(void* context) {
     static std::once_flag flag;
     std::call_once(flag, []() {
-        P::Log(COL_MUTED) << "Starting mod loader";
-
-        P::Log(COL_MUTED) << "Loader Files Folder at: " << ModParser::profile_path;
+        P::Log(COL_MUTED) << "Starting Nucleus mod loader.";
 
         if (ModParser::profile_path.empty()) {
-            P::Log(COL_ERROR) << "Loader file path not given!\nFalling back to Primordialis root.";
+            if (ModParser::profile_path.empty() or not exists(ModParser::profile_path)) {
+                P::Log(COL_WARNING) << "Profile path not given!\nFalling back to Primordialis root.";
+                ModParser::profile_path = ModParser::game_path;
+            }
         }
+        P::Log(COL_MUTED) << "Profile Folder at: " << ModParser::profile_path;
+
         ModParser::ParseMods();
         P::Log(COL_MUTED) << "Mod Count:" << ModParser::enabled_mods.size();
         LoadMods();
@@ -75,16 +78,15 @@ void MainHook(void* context) {
 }
 
 void Bootstrap() {
+    InitConsole();
+
     nucleus = &api;
+
     P::mod_name = "Nucleus";
 
     P::Log(COL_MUTED) << "Bootstrapping Nucleus...";
 
-    if (MH_Initialize() != MH_OK) {
-        P::Log(COL_ERROR) << "MinHook init failed";
-        return;
-    }
-    P::Log(COL_MUTED) << "MinHook initialized";
+    InitMinHook();
 
     InitDbgHelp();
 

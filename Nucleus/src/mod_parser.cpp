@@ -45,9 +45,9 @@ std::filesystem::path ModParser::GetLoaderFilesFolder() {
 
     LocalFree(argv);
 
-    std::filesystem::path mod_folder_path {absolute(nucleus_dll_path)};
+    std::filesystem::path mod_folder_path {absolute(nucleus_dll_path).parent_path().parent_path()};
 
-    return mod_folder_path.parent_path().parent_path();
+    return mod_folder_path;
 }
 
 void ParseModInfo(Mod& mod) {
@@ -69,7 +69,7 @@ void ParseModInfo(Mod& mod) {
             dlls.push_back(entry.path());
         }
         else if (filename == "init.lua") {
-            mod.init_path = entry.path();
+            mod.init_lua_path = entry.path();
         }
     }
     if (dlls.size() > 1) {

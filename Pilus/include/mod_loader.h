@@ -46,7 +46,7 @@ struct Mod {
     // SAVED IN PILUS.CONFIG
     fs::path path{};
     fs::path dll_path{};
-    fs::path init_path{};
+    fs::path init_lua_path{};
     json config_values{};
     bool user_enabled = true;
 
@@ -63,7 +63,7 @@ struct Mod {
     }
 
     [[nodiscard]] bool is_lua() const {
-        return !init_path.empty();
+        return !init_lua_path.empty();
     }
 
     [[nodiscard]] bool is_cpp() const {

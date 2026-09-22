@@ -53,7 +53,7 @@ namespace P {
                 Internal::PlasmidLog(COL_ERROR) << "MatRef not initialised!\n"
                         "Make sure that you are not trying to reference a material that hasn't been created yet.\n"
                         "Falling back to Basic cell.";
-                P::FocusConsoleAndPause();
+                P::AttentionToConsole();
                 return 1;
             }
 
@@ -75,7 +75,7 @@ namespace P {
                     "and the material has been created before referencing it.\n"
                     "You could also use the cell id such as \"HART\" instead of the name.\n"
                     "Falling back to Basic cell.";
-            P::FocusConsoleAndPause();
+            P::AttentionToConsole();
             return 1;
         }
     };

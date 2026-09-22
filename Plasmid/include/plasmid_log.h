@@ -7,7 +7,7 @@ namespace P {
     inline std::string mod_name{"Unnamed Mod"};
 
     namespace Internal {
-        inline LogStream PlasmidLog(const COLOR color = COL_NORMAL) {
+        inline LogStream PlasmidLog(const int color = COL_NORMAL) {
             return nucleus->LogSourced(
                 "PLASMID (" + mod_name + ")",
                 color
@@ -15,7 +15,7 @@ namespace P {
         }
     }
 
-    inline LogStream Log(const COLOR color = COL_NORMAL) {
+    inline LogStream Log(const int color = COL_NORMAL) {
         return nucleus->LogSourced(
             mod_name,
             color
@@ -39,7 +39,7 @@ namespace P {
     }
 
     // Brings the console to the front and pauses the game, to demand attention to the error
-    inline void FocusConsoleAndPause() {
+    inline void AttentionToConsole() {
         BringConsoleToFront();
         system("pause");
     }

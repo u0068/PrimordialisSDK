@@ -23,7 +23,7 @@ struct Mod {
     std::string name{"Unnamed Mod"}; // mod name is the filename
     fs::path path{};
     fs::path dll_path{};
-    fs::path init_path{};
+    fs::path init_lua_path{};
 
     bool operator==(const Mod& other) const {
         if (weakly_canonical(path) == weakly_canonical(other.path)) { // path is the only thing that matters
@@ -33,7 +33,7 @@ struct Mod {
     }
 
     [[nodiscard]] bool is_lua() const {
-        return !init_path.empty();
+        return !init_lua_path.empty();
     }
 
     [[nodiscard]] bool is_cpp() const {

@@ -1,9 +1,16 @@
 #pragma once
-#include "log_setup.h"
+#include "include/plasmid_log.h"
 #include <MinHook.h>
 
+inline void InitMinHook() {
+    if (MH_Initialize() != MH_OK) {
+        P::Log(COL_CRITICAL) << "MinHook init failed";
+        return;
+    }
+    P::Log(COL_MUTED) << "MinHook initialized";
+}
+
 inline bool HookWrapper(void* target, void* hook, void** trampoline) {
-    // Log("Attempting Hooking address %p\n", target);
 
     auto status = MH_CreateHook(
         target,
@@ -21,8 +28,6 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline) {
         P::Log(COL_ERROR) << "MH_EnableHook failed: " << status;
         return false;
     }
-
-    // Log("Hooking successful!\n\tTarget: %p\n\tHook: %p\n\tTrampoline: %p\n", target, hook, trampoline);
 
     return true;
 }
