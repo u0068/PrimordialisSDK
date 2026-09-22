@@ -1,7 +1,7 @@
 #pragma once
 #include <fstream>
 #include <iostream>
-#include <internal/dual_buffer_log.h>
+#include <internal/tee_buffer_log.h>
 
 inline std::string err = "[ERROR]: ";
 
@@ -25,7 +25,7 @@ inline std::ostream& GetDualLog() {
 
     static std::ofstream log_file("mod_log.txt");
 
-    static DualBuf log_buffer(
+    static TeeBuf log_buffer(
         // nullptr, nullptr
         std::cout.rdbuf(),
         log_file.rdbuf()

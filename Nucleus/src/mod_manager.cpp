@@ -35,7 +35,7 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
     std::filesystem::path mod_folder_path{};
 
     for (int i = 0; i < argc; ++i) {
-        if (wcscmp(argv[i], L"--mod-folder") == 0) {
+        if (wcscmp(argv[i], L"--customdll") == 0) {
             if (i + 1 < argc) {
                 mod_folder_path = argv[i + 1];
             }
@@ -45,7 +45,7 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
 
     LocalFree(argv);
 
-    return mod_folder_path;
+    return absolute(mod_folder_path).parent_path().parent_path();
 }
 
 void ParseModInfo(Mod& mod) {

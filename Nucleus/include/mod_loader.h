@@ -2,7 +2,6 @@
 #include <vector>
 #include <windows.h>
 #include <filesystem>
-#include "log_setup.h"
 
 namespace fs = std::filesystem;
 

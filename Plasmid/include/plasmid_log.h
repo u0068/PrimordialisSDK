@@ -1,6 +1,6 @@
 #pragma once
 #include "generated/globals.h"
-#include "internal/dual_buffer_log.h"
+#include "internal/tee_buffer_log.h"
 #include "internal/nucleus_interface.h"
 
 namespace P {

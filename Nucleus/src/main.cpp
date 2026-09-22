@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <string>
 
-#include "lua.h"
+//#include "lua.h"
 #include "mod_loader.h"
 #include "nucleus_api.h"
 #include "plasmid_api.h"
@@ -71,7 +71,7 @@ uint64_t ThreadMainHook(void* context) {
             return original(context);
         }
         ModManager::ParseMods();
-        DoLuaInitHook();
+        // DoLuaInitHook();
         P::Log(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
         LoadMods();
     }

@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
-#include "dual_buffer_log.h"
+#include "tee_buffer_log.h"
 
 namespace P::Internal {
     struct HookChainBase {

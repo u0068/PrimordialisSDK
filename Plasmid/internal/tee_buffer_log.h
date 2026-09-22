@@ -8,9 +8,9 @@
 
 namespace fs = std::filesystem;
 
-class DualBuf : public std::streambuf {
+class TeeBuf : public std::streambuf {
 public:
-    DualBuf(std::streambuf* a, std::streambuf* b)
+    TeeBuf(std::streambuf* a, std::streambuf* b)
         : a(a), b(b) {}
 
 protected:
