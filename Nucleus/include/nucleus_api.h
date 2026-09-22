@@ -3,6 +3,7 @@
 #include "resolution_manager.h"
 #include "hook_manager.h"
 #include "module_manager.h"
+#include "mods.h"
 
 inline Nucleus api
 {
@@ -13,5 +14,6 @@ inline Nucleus api
     SetCurrentContext,
     LogSourced,
     RegisterModule,
-    GetModule
+    GetModule,
+    ModParser::profile_path
 };

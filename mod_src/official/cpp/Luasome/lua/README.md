@@ -2,6 +2,6 @@
 Loads Lua mods into Primordialis.
 
 # TODO:
-- Extend with Plasmid
-- Put simple template mod in a more appropriate place
+- Make it a mod
+- Extend lua api with c++
 # DONE:

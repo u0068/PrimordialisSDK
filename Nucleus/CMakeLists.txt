@@ -4,7 +4,7 @@ project(Nucleus LANGUAGES CXX)
 
 add_library(Nucleus SHARED
         src/main.cpp
-        src/mod_manager.cpp
+        src/mod_parser.cpp
 )
 
 target_include_directories(Nucleus PRIVATE
@@ -20,9 +20,6 @@ target_link_libraries(Nucleus PRIVATE
         minhook
         yaml-cpp::yaml-cpp
         miniz
-        ${CMAKE_SOURCE_DIR}/third_party/lua/lib/lua51.lib
-        lua_headers
-#        nlohmann_json
 )
 
 set_target_properties(Nucleus PROPERTIES

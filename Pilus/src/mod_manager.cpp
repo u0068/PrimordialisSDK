@@ -39,7 +39,7 @@ void ParseModInfo(Mod& mod) {
 
         if (filename == "info.json") {
             mod.local_info = safe_parse(ReadFile(entry), nullptr, true, true);
-            ModManager::pilus_config["installed_versions"][mod.name] = GetStringFromJson(mod.local_info, "version");
+            ModParser::pilus_config["installed_versions"][mod.name] = GetStringFromJson(mod.local_info, "version");
         }
         else if (filename == "config.json")
             mod.config_defaults = safe_parse(ReadFile(entry), nullptr, true, true);
@@ -69,14 +69,16 @@ void ParseModInfo(Mod& mod) {
         mod.dll_path = dlls[0];
 }
 
-void ModManager::MakeModsYML() {
+void ModParser::MakeModsYML() {
     std::ofstream file("mods.yml");
     file.clear();
 
-    for (Mod& mod: ModManager::mods) {
-        if (mod.is_enabled() and mod.name != "Nucleus") {
+    for (Mod& mod: ModParser::mods) {
+        if (mod.name != "Nucleus") {
             file << "- name: " << mod.name << "\n";
-            file << "  enabled: true\n";
+            file << "  enabled: " << (mod.is_enabled() ? "true" : "false") << "\n";
+            file << "  is_cpp: " << (mod.is_cpp() ? "true" : "false") << "\n";
+            file << "  is_lua: " << (mod.is_lua() ? "true" : "false") << "\n";
             console_log << mod.name << "\n";
         }
     }
@@ -84,7 +86,7 @@ void ModManager::MakeModsYML() {
     file.close();
 }
 
-void ModManager::RefreshMods() {
+void ModParser::RefreshMods() {
     console_log << "Refreshing Mods...\n";
     std::vector<Mod> installed_mods;
     for (const auto& entry: std::filesystem::directory_iterator(mod_path)) {
@@ -125,7 +127,7 @@ void ModManager::RefreshMods() {
     SavePilusConfig();
 }
 
-void ModManager::LoadPilusConfig() {
+void ModParser::LoadPilusConfig() {
     auto file = ReadFile(config_path);
 
     if (file.empty()) {
@@ -158,7 +160,7 @@ void ModManager::LoadPilusConfig() {
     }
 }
 
-void ModManager::SavePilusConfig() {
+void ModParser::SavePilusConfig() {
     std::ofstream file(config_path);
 
     if (!file) return;
@@ -182,78 +184,78 @@ void ModManager::SavePilusConfig() {
     file.close();
 }
 
-std::string ModConfigToLua(json config) {
-    std::stringstream lua;
-    lua << "\t{\n";
-    for (auto& el: config.items())
-        lua << "\t\t" << el.key() << " = " << el.value() << ",\n";
-    lua << "\t},\n";
-    return lua.str();
-}
-
-void ModManager::SaveLuaModlist() {
-    std::ofstream file(lua_mod_list_path);
-
-    if (!file) return;
-
-    file.clear();
-    file << "LUA_MODLOADER_MOD_LIST = {\n";
-
-    for (auto& mod: mods) {
-        if (!mod.is_lua())
-            continue;
-        if (!mod.user_enabled)
-            continue;
-        if (mod.config_defaults.empty()) {
-            file << "\t\"" << mod.name << "\",\n";
-            continue;
-        }
-        if (mod.config_values.empty())
-            GetModConfigValuesFromDefaults(mod);
-
-        file << "\t{\"" << mod.name << "\",\n";
-        file << ModConfigToLua(mod.config_values);
-        file << "\t},\n";
-    }
-
-    file << "} -- Make sure that all mods are before this line!!!";
-    file.close();
-}
-
-void ModManager::PatchInitLua() {
-    fs::path init_lua_path = game_path / "data/scripts/init.lua";
-    fs::path temp_init_lua_path = game_path / "data/scripts/init.temp";
-    std::string preline = "dofile(\"pilus_files/luasome/pre.lua\")\n";
-    std::string postline = "dofile(\"pilus_files/luasome/post.lua\")";
-
-    std::ifstream init_file;
-    std::ofstream temp_init_file;
-    init_file.open(init_lua_path);
-    temp_init_file.open(temp_init_lua_path);
-
-    std::string init_content, line;
-    while (std::getline(init_file, line))
-        init_content += line + "\n";
-
-    console_log << "Patching init.lua\n";
-
-    init_file.close();
-
-    size_t pos = init_content.find(preline);
-    if (pos == std::string::npos)
-        init_content = preline + init_content;
-    else
-        console_log << "Mod loader content already found in init.lua, skipping preline append\n";
-
-    pos = init_content.find(postline);
-    if (pos == std::string::npos)
-        init_content = init_content + postline;
-    else
-        console_log << "Mod loader content already found in init.lua, skipping postline append\n";
-
-    temp_init_file << init_content;
-    temp_init_file.close();
-
-    fs::remove(init_lua_path);
-    fs::rename(temp_init_lua_path, init_lua_path);
-}
+// std::string ModConfigToLua(json config) {
+//     std::stringstream lua;
+//     lua << "\t{\n";
+//     for (auto& el: config.items())
+//         lua << "\t\t" << el.key() << " = " << el.value() << ",\n";
+//     lua << "\t},\n";
+//     return lua.str();
+// }
+//
+// void ModManager::SaveLuaModlist() {
+//     std::ofstream file(lua_mod_list_path);
+//
+//     if (!file) return;
+//
+//     file.clear();
+//     file << "LUA_MODLOADER_MOD_LIST = {\n";
+//
+//     for (auto& mod: mods) {
+//         if (!mod.is_lua())
+//             continue;
+//         if (!mod.user_enabled)
+//             continue;
+//         if (mod.config_defaults.empty()) {
+//             file << "\t\"" << mod.name << "\",\n";
+//             continue;
+//         }
+//         if (mod.config_values.empty())
+//             GetModConfigValuesFromDefaults(mod);
+//
+//         file << "\t{\"" << mod.name << "\",\n";
+//         file << ModConfigToLua(mod.config_values);
+//         file << "\t},\n";
+//     }
+//
+//     file << "} -- Make sure that all mods are before this line!!!";
+//     file.close();
+// }
+//
+// void ModManager::PatchInitLua() {
+//     fs::path init_lua_path = game_path / "data/scripts/init.lua";
+//     fs::path temp_init_lua_path = game_path / "data/scripts/init.temp";
+//     std::string preline = "dofile(\"pilus_files/luasome/pre.lua\")\n";
+//     std::string postline = "dofile(\"pilus_files/luasome/post.lua\")";
+//
+//     std::ifstream init_file;
+//     std::ofstream temp_init_file;
+//     init_file.open(init_lua_path);
+//     temp_init_file.open(temp_init_lua_path);
+//
+//     std::string init_content, line;
+//     while (std::getline(init_file, line))
+//         init_content += line + "\n";
+//
+//     console_log << "Patching init.lua\n";
+//
+//     init_file.close();
+//
+//     size_t pos = init_content.find(preline);
+//     if (pos == std::string::npos)
+//         init_content = preline + init_content;
+//     else
+//         console_log << "Mod loader content already found in init.lua, skipping preline append\n";
+//
+//     pos = init_content.find(postline);
+//     if (pos == std::string::npos)
+//         init_content = init_content + postline;
+//     else
+//         console_log << "Mod loader content already found in init.lua, skipping postline append\n";
+//
+//     temp_init_file << init_content;
+//     temp_init_file.close();
+//
+//     fs::remove(init_lua_path);
+//     fs::rename(temp_init_lua_path, init_lua_path);
+// }

@@ -13,12 +13,12 @@ int main() {
 
 
     CreateDirectories();
-    ModManager::LoadPilusConfig();
+    ModParser::LoadPilusConfig();
     UpdateLocalVersionManifest();
     // console_log << ModManager::version_manifest.dump(1);
     UpdateModloader();
 
-    ModManager::RefreshMods();
+    ModParser::RefreshMods();
     // CheckAllForUpdates();
 
     glfwSetErrorCallback(glfwErrorCallback);
@@ -94,8 +94,8 @@ int main() {
     glfwDestroyWindow(window);
     glfwTerminate();
 
-    ModManager::SaveLuaModlist();
-    ModManager::SavePilusConfig();
+    // ModManager::SaveLuaModlist();
+    ModParser::SavePilusConfig();
 
     return 0;
 }

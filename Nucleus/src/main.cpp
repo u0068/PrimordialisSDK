@@ -2,13 +2,12 @@
 #include <filesystem>
 #include <string>
 
-#include "lua_setup.h"
-#include "mod_loader.h"
+#include "mods.h"
 #include "nucleus_api.h"
 #include "plasmid_api.h"
 #include "include/primordialis_log.h"
 
-constexpr std::string NUCLEUS_VERSION = "0.2.0";
+const std::string NUCLEUS_VERSION = "0.2.0";
 
 using ModInit = void(*)(Nucleus*, const char*, const char*);
 
@@ -39,7 +38,7 @@ void LoadMod(Mod& mod) {
 
 void LoadMods() {
     std::string mod_names;
-    for (auto& mod: ModManager::enabled_mods) {
+    for (auto& mod: ModParser::enabled_mods) {
         mod_names += "\t";
         mod_names += mod.name;
         mod_names += "\n";
@@ -48,9 +47,9 @@ void LoadMods() {
     P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS v" + NUCLEUS_VERSION +
                        "MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
                        "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK,"
-                       " NOT to THE DEVELOPERS OF PRIMORDIALIS!\n\n");
+                       " NOT TO THE DEVELOPERS OF PRIMORDIALIS!\n\n");
 
-    for (auto& mod: ModManager::enabled_mods) {
+    for (auto& mod: ModParser::enabled_mods) {
         LoadMod(mod);
     }
 
@@ -64,15 +63,14 @@ uint64_t ThreadMainHook(void* context) {
     if (context == nullptr) {
         P::Log(COL_MUTED) << "Starting mod loader";
 
-        P::Log(COL_MUTED) << "Loader Files Folder at: " << ModManager::loader_files_path;
+        P::Log(COL_MUTED) << "Loader Files Folder at: " << ModParser::profile_path;
 
-        if (ModManager::loader_files_path.empty()) {
+        if (ModParser::profile_path.empty()) {
             P::Log(COL_ERROR) << "Loader file path not given!\nFalling back to Primordialis root.";
             return original(context);
         }
-        ModManager::ParseMods();
-        DoLuaInitHook();
-        P::Log(COL_MUTED) << "Mod Count:" << ModManager::enabled_mods.size();
+        ModParser::ParseMods();
+        P::Log(COL_MUTED) << "Mod Count:" << ModParser::enabled_mods.size();
         LoadMods();
     }
 

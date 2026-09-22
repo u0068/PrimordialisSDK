@@ -7,25 +7,20 @@ namespace fs = std::filesystem;
 
 struct Mod;
 
-namespace ModManager {
+namespace ModParser {
     inline std::vector<Mod> enabled_mods{};
 
     std::filesystem::path GetLoaderFilesFolder();
 
-    inline fs::path game_path = fs::current_path();
-    inline fs::path loader_files_path{GetLoaderFilesFolder()};
-    // inline fs::path loader_files_path{game_path};
-    inline fs::path luasome_path{loader_files_path / "luasome"};
-    inline fs::path lua_mod_list_path{luasome_path / "mod_list.lua"};
-    inline fs::path mod_path{loader_files_path / "mods"};
+    inline fs::path game_path {fs::current_path()};
+    inline fs::path profile_path {GetLoaderFilesFolder()};
+    inline fs::path mod_path {profile_path / "mods"};
 
     void ParseMods();
-
-    // void SaveLuaModlist();
 }
 
 struct Mod {
-    std::string name = "Unnamed Mod"; // mod name is the filename or whatever is held in info.json
+    std::string name{"Unnamed Mod"}; // mod name is the filename
     fs::path path{};
     fs::path dll_path{};
     fs::path init_path{};

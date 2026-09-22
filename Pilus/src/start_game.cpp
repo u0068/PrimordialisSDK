@@ -45,7 +45,7 @@ bool IsProcessRunning(const char* processName) {
     return false;
 }
 
-void ModManager::StartGame() {
+void ModParser::StartGame() {
     constexpr const char* lpprocessname = "primordialis.exe";
 
     // we assume modloader is running inside primordialis working directory
@@ -54,7 +54,7 @@ void ModManager::StartGame() {
     PROCESS_INFORMATION procI{nullptr};
 
     if (!IsProcessRunning(lpprocessname)) {
-        char cmdLine[] = "primordialis.exe --steamless --autoreload --customdll \"mods/Nucleus.dll\"";
+        char cmdLine[] = "primordialis.exe --steamless --autoreload --customdll mods/Nucleus.dll";
         if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE,
                             SYNCHRONIZE, nullptr, nullptr, &startI, &procI)) {
             console_log << "Failed to start primordialis: ";

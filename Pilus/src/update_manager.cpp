@@ -64,7 +64,7 @@ bool DownloadFromURL(
 bool GetVersionManifest(
     const std::string& source_url,
     bool temporary = true) {
-    fs::path path = ModManager::version_manifest_path.string();
+    fs::path path = ModParser::version_manifest_path.string();
     if (temporary)
         path += ".tmp";
     if (not DownloadFromURL(source_url, path)) {
@@ -88,14 +88,14 @@ bool GetVersionManifest(
         return false;
     }
 
-    ModManager::version_manifest.merge_patch(parsed);
+    ModParser::version_manifest.merge_patch(parsed);
     return true;
 }
 
 void SaveVersionManifest() {
-    std::ofstream file(ModManager::version_manifest_path);
+    std::ofstream file(ModParser::version_manifest_path);
     file.clear();
-    file << ModManager::version_manifest.dump(2);
+    file << ModParser::version_manifest.dump(2);
     file.close();
 }
 
@@ -121,7 +121,7 @@ std::string CheckForUpdates(
     }
 
     Version latest_version = GetLatestVersion(version_json);
-    json installed_version_json = ModManager::pilus_config["installed_versions"][name];
+    json installed_version_json = ModParser::pilus_config["installed_versions"][name];
 
     if ((check_path != "" and not exists(check_path)) or installed_version_json.empty())
         console_log << name << " not installed!\n";
@@ -146,9 +146,9 @@ std::string CheckForUpdates(
 }
 
 void UpdateLocalVersionManifest() {
-    ModManager::version_manifest.merge_patch(safe_parse(ReadFile(ModManager::version_manifest_path)));
-    GetVersionManifest(ModManager::version_manifest_url, false);
-    for (auto& mod: ModManager::mods) {
+    ModParser::version_manifest.merge_patch(safe_parse(ReadFile(ModParser::version_manifest_path)));
+    GetVersionManifest(ModParser::version_manifest_url, false);
+    for (auto& mod: ModParser::mods) {
         std::string manifest_url = GetStringFromJson(mod.local_info, "version_manifest_url");
         if (manifest_url.empty())
             continue;
@@ -162,7 +162,7 @@ int CheckSteamBuild() {
     const char* manifest_filename = "appmanifest_3011360.acf";
 
     auto steam_manifest_path =
-            ModManager::game_path.parent_path().parent_path() / manifest_filename;
+            ModParser::game_path.parent_path().parent_path() / manifest_filename;
 
     console_log << "steam manifest path: " << steam_manifest_path << "\n";
 
@@ -212,10 +212,10 @@ bool UpdatePDB() {
         return false;
 
     int installed_pdb_build_id{0};
-    if (!ModManager::pilus_config.contains("installed_pdb_build_id"))
+    if (!ModParser::pilus_config.contains("installed_pdb_build_id"))
         console_log << err << "Installed PDB build ID not found\n";
     else
-        installed_pdb_build_id = ModManager::pilus_config["installed_pdb_build_id"].get<int>();
+        installed_pdb_build_id = ModParser::pilus_config["installed_pdb_build_id"].get<int>();
 
     if (!fs::exists("primordialis_avx.pdb") || !fs::exists("primordialis_sse3.pdb"))
         console_log << err << "PDBs not found\n";
@@ -225,34 +225,34 @@ bool UpdatePDB() {
     }
 
     if (fs::exists("pdbs.zip"))
-        ExtractZip("pdbs.zip", ModManager::game_path);
+        ExtractZip("pdbs.zip", ModParser::game_path);
     else {
         console_log << err << "pdbs.zip not found. If you are on Primordialis v0.1, switch to the beta branch!\n";
         return false;
     }
 
     console_log << "Installed all PBDs for build " << actual_build_id << " successfully!\n";
-    ModManager::pilus_config["installed_pdb_build_id"] = actual_build_id;
-    ModManager::SavePilusConfig();
+    ModParser::pilus_config["installed_pdb_build_id"] = actual_build_id;
+    ModParser::SavePilusConfig();
     return true;
 }
 
 void CreateDirectories() {
-    if (!exists(ModManager::loader_files_path)) {
-        create_directory(ModManager::loader_files_path);
+    if (!exists(ModParser::profile_path)) {
+        create_directory(ModParser::profile_path);
         console_log << "Created pilus_files directory\n";
     }
 
-    if (exists(ModManager::config_path))
-        ModManager::LoadPilusConfig();
+    if (exists(ModParser::config_path))
+        ModParser::LoadPilusConfig();
 
-    if (!exists(ModManager::mod_path)) {
-        create_directory(ModManager::mod_path);
+    if (!exists(ModParser::mod_path)) {
+        create_directory(ModParser::mod_path);
         console_log << "Created mod directory\n";
     }
 
-    if (!exists(ModManager::luasome_path)) {
-        create_directory(ModManager::luasome_path);
+    if (!exists(ModParser::luasome_path)) {
+        create_directory(ModParser::luasome_path);
         console_log << "Created luasome directory\n";
     }
 }
@@ -270,7 +270,7 @@ void CreateDirectories() {
 
 bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path) {
     std::string download_url_json = GetStringFromJson(
-        ModManager::version_manifest[name]["versions"][version.to_string()], "download_url");
+        ModParser::version_manifest[name]["versions"][version.to_string()], "download_url");
     if (download_url_json.empty()) {
         console_log << err << "No download url found for " << name << " " << version.to_string() << "\n";
         return false;
@@ -361,19 +361,19 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version) {
 void UpdateModloader() {
     // Get the latest versions for now.
 
-    auto latest_ver = GetLatestVersion(ModManager::version_manifest["Pilus"]);
+    auto latest_ver = GetLatestVersion(ModParser::version_manifest["Pilus"]);
     if (latest_ver > PILUS_VERSION)
         UpdatePilus(latest_ver,
-                    GetLatestVersion(ModManager::version_manifest["PilusUpdater"])
+                    GetLatestVersion(ModParser::version_manifest["PilusUpdater"])
         );
 
     DownloadUpdate("Luasome",
-                   GetLatestVersion(ModManager::version_manifest["Luasome"]),
-                   ModManager::luasome_path);
+                   GetLatestVersion(ModParser::version_manifest["Luasome"]),
+                   ModParser::luasome_path);
 
     DownloadUpdate("Nucleus",
-                   GetLatestVersion(ModManager::version_manifest["Nucleus"]),
-                   ModManager::mod_path / "Nucleus.dll");
+                   GetLatestVersion(ModParser::version_manifest["Nucleus"]),
+                   ModParser::mod_path / "Nucleus.dll");
 
     UpdatePDB();
 }

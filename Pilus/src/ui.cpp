@@ -96,7 +96,7 @@ void DrawSettings(Mod& mod) {
 void DrawModConfig() {
     if (configured_mod < 0 or !config_open)
         return;
-    Mod& mod = ModManager::mods[configured_mod];
+    Mod& mod = ModParser::mods[configured_mod];
     ImGui::Begin((mod.name + " Config").c_str(), &config_open);
     ImGui::PushItemWidth(200);
 
@@ -195,18 +195,18 @@ void DrawActionBox() {
                           ImGui::GetContentRegionAvail().y
                       })) {
         SortDeps();
-        ModManager::MakeModsYML();
-        ModManager::SaveLuaModlist();
-        ModManager::PatchInitLua();
-        ModManager::StartGame();
+        ModParser::MakeModsYML();
+        // ModManager::SaveLuaModlist();
+        // ModManager::PatchInitLua();
+        ModParser::StartGame();
     }
     ImGui::PopStyleColor(3);
 
     ImGui::SameLine();
     if (ImGui::Button("Refresh Mods", ImGui::GetContentRegionAvail())) {
-        ModManager::SaveLuaModlist();
-        ModManager::RefreshMods();
-        ModManager::MakeModsYML();
+        // ModManager::SaveLuaModlist();
+        ModParser::RefreshMods();
+        ModParser::MakeModsYML();
     }
     ImGui::End();
 }
@@ -242,7 +242,7 @@ bool hide_uninstalled = false;
 
 void DrawModList() {
     ImGui::Begin("Mods");
-    auto& mods = ModManager::mods;
+    auto& mods = ModParser::mods;
 
     static ImGuiTextFilter filter;
     if (ImGui::IsWindowAppearing()) {
@@ -298,7 +298,7 @@ void DrawModList() {
             if (not mod.is_installed())
                 ImGui::BeginDisabled();
             if (ImGui::Checkbox("##Enabled", &mod.user_enabled))
-                ModManager::SavePilusConfig();
+                ModParser::SavePilusConfig();
             if (not mod.is_installed()) {
                 mod.user_enabled = false;
                 if (ImGui::IsItemHovered(ImGuiHoveredFlags_ForTooltip))
@@ -374,14 +374,14 @@ void DrawModList() {
         if (move_direction != 0) {
             if (MoveMod(dragged_mod_index, move_direction))
                 ImGui::ResetMouseDragDelta();
-            ModManager::SavePilusConfig();
+            ModParser::SavePilusConfig();
         }
     }
     ImGui::End();
 }
 
 void DrawVersionConfig(const char* name, json& version_json, fs::path& download_path) {
-    auto installed_version = GetStringFromJson(ModManager::pilus_config["installed_versions"], name, "Unknown Version").
+    auto installed_version = GetStringFromJson(ModParser::pilus_config["installed_versions"], name, "Unknown Version").
             c_str();
     if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview)) {
         for (auto& el: version_json["versions"].items()) {
@@ -399,7 +399,7 @@ void DrawVersionConfig(const char* name, json& version_json, fs::path& download_
 void DrawVersionManager() {
     ImGui::Begin("Version Manager");
 
-    for (auto& mod: ModManager::mods) {
+    for (auto& mod: ModParser::mods) {
         ImGui::PushID(mod.name.c_str());
         if (ImGui::CollapsingHeader(mod.name.c_str())) {
             DrawVersionConfig(mod.name.c_str(), mod.get_manifest(), mod.path);

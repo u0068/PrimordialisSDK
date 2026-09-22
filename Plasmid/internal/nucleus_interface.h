@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include "tee_buffer_log.h"
+#include <filesystem>
 
 namespace P::Internal {
     struct HookChainBase {
@@ -25,6 +26,8 @@ struct Nucleus {
     void (*RegisterModule)(std::string name, void* module);
 
     void* (*GetModule)(std::string name);
+
+    std::filesystem::path profile_path;
 };
 
 inline Nucleus* nucleus;

@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-#include "mod_loader.h"
+#include "mods.h"
 #include "nucleus_api.h"
 #include "include/plasmid_log.h"
 #include "internal/nucleus_interface.h"
@@ -21,7 +21,7 @@ std::string ReadFile(const fs::path& path) {
     return buffer.str();
 }
 
-std::filesystem::path ModManager::GetLoaderFilesFolder() {
+std::filesystem::path ModParser::GetLoaderFilesFolder() {
     int argc = 0;
     LPWSTR* argv = CommandLineToArgvW(
         GetCommandLineW(),
@@ -32,12 +32,12 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
         return {};
     }
 
-    std::filesystem::path mod_folder_path{};
+    std::filesystem::path nucleus_dll_path{};
 
     for (int i = 0; i < argc; ++i) {
         if (wcscmp(argv[i], L"--customdll") == 0) {
             if (i + 1 < argc) {
-                mod_folder_path = argv[i + 1];
+                nucleus_dll_path = argv[i + 1];
             }
             break;
         }
@@ -45,7 +45,9 @@ std::filesystem::path ModManager::GetLoaderFilesFolder() {
 
     LocalFree(argv);
 
-    return absolute(mod_folder_path).parent_path().parent_path();
+    std::filesystem::path mod_folder_path {absolute(nucleus_dll_path)};
+
+    return mod_folder_path.parent_path().parent_path();
 }
 
 void ParseModInfo(Mod& mod) {
@@ -91,7 +93,7 @@ void ParseModInfo(Mod& mod) {
     }
 }
 
-void ModManager::ParseMods() {
+void ModParser::ParseMods() {
     P::Log(COL_MUTED) << "Parsing Mods...";
 
     if (mod_path.empty()) {
@@ -101,8 +103,8 @@ void ModManager::ParseMods() {
 
     std::vector<Mod> installed_mods{};
     for (const auto& entry: std::filesystem::directory_iterator(mod_path)) {
-        P::Log(COL_MUTED) << "Found Mod: "
-                << entry.path().filename().stem().string();
+        // P::Log(COL_MUTED) << "Found Mod: "
+        //         << entry.path().filename().stem().string();
 
         Mod nmod;
         nmod.path = entry.path();
@@ -114,11 +116,12 @@ void ModManager::ParseMods() {
         installed_mods.push_back(nmod);
     }
 
-    YAML::Node mods_yml = YAML::LoadFile((loader_files_path / "mods.yml").string());
+    YAML::Node mods_yml = YAML::LoadFile((profile_path / "mods.yml").string());
     for (std::size_t i = 0; i < mods_yml.size(); i++) {
         for (auto& mod: installed_mods) {
             if (mod.name == mods_yml[i]["name"].as<std::string>()
-                and mods_yml[i]["enabled"].as<bool>()) {
+            and mods_yml[i]["enabled"].as<bool>()
+            and mods_yml[i]["is_cpp"].as<bool>()) {
                 enabled_mods.push_back(mod);
             }
         }
