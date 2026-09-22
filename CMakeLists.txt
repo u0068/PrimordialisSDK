@@ -21,6 +21,8 @@ add_subdirectory_if_exists(mod_src)
 
 add_subdirectory_if_exists(Pilus)
 
+#add_subdirectory_if_exists(lua/Luasome)
+
 add_subdirectory_if_exists(lua/Luazyme)
 
 add_subdirectory_if_exists(reverse_engineering/Tools/cpp)

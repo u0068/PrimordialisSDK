@@ -1,7 +1,5 @@
 #pragma once
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include <lua.hpp>
 #include "mod_loader.h"
 #include <include/primordialis_log.h>
 
