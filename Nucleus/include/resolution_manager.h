@@ -1,7 +1,9 @@
 #pragma once
 #include "include/plasmid_log.h"
+#include <mutex>
 #include <windows.h>
 #include <dbghelp.h>
+
 #pragma comment(lib, "dbghelp.lib")
 
 inline void InitDbgHelp() {

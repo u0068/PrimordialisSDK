@@ -56,25 +56,22 @@ void LoadMods() {
     P::Log(COL_SUCCESS) << "All Mods Initialised!";
 }
 
-void* trampoline;
-
-uint64_t ThreadMainHook(void* context) {
-    auto original = reinterpret_cast<uint64_t(*)(void*)>(trampoline);
-    if (context == nullptr) {
+void MainHook(void* context) {
+    static std::once_flag flag;
+    std::call_once(flag, []() {
         P::Log(COL_MUTED) << "Starting mod loader";
 
         P::Log(COL_MUTED) << "Loader Files Folder at: " << ModParser::profile_path;
 
         if (ModParser::profile_path.empty()) {
             P::Log(COL_ERROR) << "Loader file path not given!\nFalling back to Primordialis root.";
-            return original(context);
         }
         ModParser::ParseMods();
         P::Log(COL_MUTED) << "Mod Count:" << ModParser::enabled_mods.size();
         LoadMods();
-    }
+    });
 
-    return original(context);
+    return P::Next<void>(context);
 }
 
 void Bootstrap() {
@@ -91,7 +88,7 @@ void Bootstrap() {
 
     InitDbgHelp();
 
-    trampoline = CreateHook("thread_main", ThreadMainHook);
+    P::Hook<"fiber_main">(MainHook);
 }
 
 BOOL APIENTRY DllMain(
