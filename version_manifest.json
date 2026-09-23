@@ -15,6 +15,9 @@
       },
       "0.6.0" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.6.0-alpha/Pilus.exe"
+      },
+      "0.6.2" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Pilus-v0.6.2-alpha/Pilus.exe"
       }
     }
   },

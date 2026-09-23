@@ -5,7 +5,7 @@
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake increment the version number automatically
-const char* PILUS_VERSION{"0.6.1"};
+const char* PILUS_VERSION{"0.6.2"};
 
 void ExtractZip(
     const fs::path& zip,
