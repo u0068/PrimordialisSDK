@@ -25,5 +25,9 @@ T GetFromJson(json json, const char* name, const T& fallback = 0) {
 
 // You need to c_str() the output otherwise you get garbage.
 inline std::string GetStringFromJson(json json, const std::string& name, const std::string& fallback = "") {
-    return json[name].empty() ? fallback : json[name].get<std::string>();
+    if (json[name].empty()) {
+        return fallback;
+    } else {
+        return json[name].get<std::string>();
+    }
 }

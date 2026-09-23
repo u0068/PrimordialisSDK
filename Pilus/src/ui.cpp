@@ -380,36 +380,36 @@ void DrawModList() {
     ImGui::End();
 }
 
-void DrawVersionConfig(const char* name, json& version_json, fs::path& download_path) {
-    auto installed_version = GetStringFromJson(ModParser::pilus_config["installed_versions"], name, "Unknown Version").
-            c_str();
-    if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview)) {
-        for (auto& el: version_json["versions"].items()) {
-            auto& version = el.key();
-            if (version.empty())
-                continue;
-            if (ImGui::Button(version.c_str())) {
-                DownloadUpdate(name, ParseVersion(version), download_path);
-            }
-        }
-        ImGui::EndCombo();
-    }
-}
+// void DrawVersionConfig(const char* name, json& version_json, fs::path& download_path) {
+//     auto installed_version = GetStringFromJson(ModParser::pilus_config["installed_versions"], name, "Unknown Version").
+//             c_str();
+//     if (ImGui::BeginCombo("Install Version", installed_version, ImGuiComboFlags_NoPreview)) {
+//         for (auto& el: version_json["versions"].items()) {
+//             auto& version = el.key();
+//             if (version.empty())
+//                 continue;
+//             if (ImGui::Button(version.c_str())) {
+//                 DownloadUpdate(name, Version(version), download_path);
+//             }
+//         }
+//         ImGui::EndCombo();
+//     }
+// }
 
-void DrawVersionManager() {
-    ImGui::Begin("Version Manager");
-
-    for (auto& mod: ModParser::mods) {
-        ImGui::PushID(mod.name.c_str());
-        if (ImGui::CollapsingHeader(mod.name.c_str())) {
-            DrawVersionConfig(mod.name.c_str(), mod.get_manifest(), mod.path);
-            DrawModInfo(mod);
-        }
-        ImGui::PopID();
-    }
-
-    ImGui::End();
-}
+// void DrawVersionManager() {
+//     ImGui::Begin("Version Manager");
+//
+//     for (auto& mod: ModParser::mods) {
+//         ImGui::PushID(mod.name.c_str());
+//         if (ImGui::CollapsingHeader(mod.name.c_str())) {
+//             DrawVersionConfig(mod.name.c_str(), mod.get_manifest(), mod.path);
+//             DrawModInfo(mod);
+//         }
+//         ImGui::PopID();
+//     }
+//
+//     ImGui::End();
+// }
 
 void DrawUI() {
     DrawActionBox();

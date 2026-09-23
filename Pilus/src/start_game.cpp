@@ -54,7 +54,7 @@ void ModParser::StartGame() {
     PROCESS_INFORMATION procI{nullptr};
 
     if (!IsProcessRunning(lpprocessname)) {
-        char cmdLine[] = "primordialis.exe --steamless --autoreload --customdll mods/Nucleus.dll";
+        char cmdLine[] = "primordialis.exe --steamless --autoreload --customdll \"mods/Nucleus.dll\"";
         if (!CreateProcessA(nullptr, cmdLine, nullptr, nullptr, FALSE,
                             SYNCHRONIZE, nullptr, nullptr, &startI, &procI)) {
             console_log << "Failed to start primordialis: ";

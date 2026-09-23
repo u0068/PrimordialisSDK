@@ -179,7 +179,7 @@ void ModParser::SavePilusConfig() {
     }
 
     file.clear();
-    file << pilus_config.dump(1, *"\t");
+    file << pilus_config.dump(2);
 
     file.close();
 }
