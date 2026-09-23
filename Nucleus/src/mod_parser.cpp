@@ -83,9 +83,8 @@ void ParseModInfo(Mod& mod) {
             }
         }
         if (mod.dll_path.empty()) {
-            P::Log(COL_ERROR) << err << "Multiple .dll files detected! I don't know which one to load.\n"
-                    "\tPlease specify a \"main_dll\" in info.json,\n"
-                    "or make the dll that should be loaded have same filename as the mod folder!";
+            P::ELog(COL_ERROR) << err << "Multiple .dll files detected! I don't know which one to load.\n"
+                    "Please make the dll that should be loaded have same filename as the mod folder!";
         }
     }
     else if (dlls.size() == 1) {
@@ -97,7 +96,7 @@ void ModParser::ParseMods() {
     P::Log(COL_MUTED) << "Parsing Mods...";
 
     if (mod_path.empty()) {
-        P::Log(COL_ERROR) << "No mods found in " << mod_path;
+        P::ELog(COL_ERROR) << "No mods found in " << mod_path;
         return;
     }
 

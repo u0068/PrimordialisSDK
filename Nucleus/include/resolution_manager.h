@@ -17,7 +17,9 @@ inline void InitDbgHelp() {
             GetCurrentProcess(),
             nullptr,
             TRUE)) {
-            P::Log(COL_CRITICAL) << "SymInitialize failed: " << GetLastError();
+            P::ELog(COL_CRITICAL) << "SymInitialize failed: " << GetLastError() << "\n"
+                                      << "Mods will not work!\n"
+                                         "This error may be caused by loading 2 instances of Nucleus";
         }
 
         P::Log(COL_MUTED) << "DbgHelp initialized";
@@ -36,14 +38,12 @@ inline void* ResolveSymbol(const char* name) {
     symbol->MaxNameLen = MAX_SYM_NAME;
 
     if (!SymFromName(GetCurrentProcess(), name, symbol)) {
-        P::Log(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
-        P::AttentionToConsole();
+        P::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
         return nullptr;
     }
     addr = reinterpret_cast<void *>(symbol->Address);
     if (addr == nullptr) {
-        P::Log(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
-        P::AttentionToConsole();
+        P::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
     }
     return addr;
 }

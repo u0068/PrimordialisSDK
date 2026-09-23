@@ -34,7 +34,7 @@ inline void Initialise(Nucleus *api, const char *mod_path, const char *mod_name)
     P::mod_path = mod_path;
     P::mod_name = mod_name;
     P::translation_values.reserve(2048);
-    P::Internal::PlasmidLog(COL_MUTED) << "Initialised Plasmid!";
+    P::Internal::PLog(COL_MUTED) << "Initialised Plasmid!";
     P::InitialiseMod();
     P::Log(COL_MUTED) << "Initialised Mod!";
 }

@@ -5,6 +5,8 @@
 inline void InitMinHook() {
     if (MH_Initialize() != MH_OK) {
         P::Log(COL_CRITICAL) << "MinHook init failed";
+        P::Log(COL_ERROR) << "Mods will not work!";
+        P::AttentionToConsole();
         return;
     }
     P::Log(COL_MUTED) << "MinHook initialized";
@@ -19,6 +21,16 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline) {
 
     if (status != MH_OK) {
         P::Log(COL_ERROR) << "MH_CreateHook failed: " << status;
+        if (status == MH_ERROR_FUNCTION_NOT_FOUND) {
+            P::Log(COL_ERROR) << "Specified function was not found!";
+        }
+        else if (status == MH_ERROR_NOT_EXECUTABLE) {
+            P::Log(COL_ERROR) << "Specified function is not executable!";
+        }
+        else if (status == MH_ERROR_UNSUPPORTED_FUNCTION) {
+            P::Log(COL_ERROR) << "Specified function cannot be hooked!";
+        }
+        P::AttentionToConsole();
         return false;
     }
 
@@ -26,6 +38,16 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline) {
 
     if (status != MH_OK) {
         P::Log(COL_ERROR) << "MH_EnableHook failed: " << status;
+        if (status == MH_ERROR_FUNCTION_NOT_FOUND) {
+            P::Log(COL_ERROR) << "Specified function was not found!";
+        }
+        else if (status == MH_ERROR_NOT_EXECUTABLE) {
+            P::Log(COL_ERROR) << "Specified function is not executable!";
+        }
+        else if (status == MH_ERROR_UNSUPPORTED_FUNCTION) {
+            P::Log(COL_ERROR) << "Specified function cannot be hooked!";
+        }
+        P::AttentionToConsole();
         return false;
     }
 

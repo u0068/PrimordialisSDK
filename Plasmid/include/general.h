@@ -57,8 +57,7 @@ namespace P::Internal {
         }
 
         virtual int GetIndex() const {
-            P::Log(COL_CRITICAL) << "GetIndex() not implemented for this struct!\nFalling back to 1.";
-            P::AttentionToConsole();
+            Internal::PELog(COL_CRITICAL) << "GetIndex() not implemented for this struct!\nFalling back to 1.";
             return 1;
         }
 

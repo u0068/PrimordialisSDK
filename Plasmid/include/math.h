@@ -26,7 +26,7 @@ namespace P {
             hash_byte(c);
         }
 
-        Internal::PlasmidLog(COL_MUTED) << "Generated id: " << hash << " for: " << name;
+        Internal::PLog(COL_MUTED) << "Generated id: " << hash << " for: " << name;
 
         return hash;
     }

@@ -32,5 +32,5 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE_DIR:${PROJECT_NAME}>/Nucleus.dll
         "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods"
-        COMMENT "Copying LoaderProxy to Primordialis"
+        COMMENT "Copying Nucleus to Primordialis"
 )

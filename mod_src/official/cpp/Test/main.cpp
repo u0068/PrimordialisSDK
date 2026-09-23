@@ -1,3 +1,5 @@
+#include <format>
+
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
 #include "generated/game_functions/creatures.h"

@@ -30,18 +30,17 @@ namespace P {
             }
 
             if (not IsInitialised() and name == nullptr) {
-                Internal::PlasmidLog(COL_ERROR) << "CreatureRef not initialised!\n"
+                Internal::PELog(COL_ERROR) << "CreatureRef not initialised!\n"
                         "Make sure that you are not trying to reference a creature that hasn't been created yet.\n"
                         "Falling back to index 1.";
-                P::AttentionToConsole();
                 return 1;
             }
 
-            Internal::PlasmidLog(COL_MUTED) << "Searching for creature '" << name << "'";
+            Internal::PLog(COL_MUTED) << "Searching for creature '" << name << "'";
             for (int i = 1; i < n_creatures; i++) {
                 if (std::filesystem::path(list[i].filename).filename().compare(name) == 0) {
                     numeric = list[i].id;
-                    Internal::PlasmidLog(COL_MUTED) << "Found creature '" << name << "' with id " << numeric <<
+                    Internal::PLog(COL_MUTED) << "Found creature '" << name << "' with id " << numeric <<
                             " at index " <<
                             i;
                     if (numeric == 0)
@@ -50,11 +49,10 @@ namespace P {
                     return i;
                 }
             }
-            Internal::PlasmidLog(COL_ERROR) << "Failed to find creature '" << name << "'\n"
+            Internal::PELog(COL_ERROR) << "Failed to find creature '" << name << "'\n"
                     "Make sure that the name is spelled correctly "
                     "and the creature has been created before referencing it.\n"
                     "Falling back to index 1.";
-            P::AttentionToConsole();
             return 1;
         }
     };

@@ -1,30 +1,11 @@
 #include "update_manager.h"
 #include "mod_loader.h"
 #include <zip_file.hpp>
-#include <regex>
 #include <urlmon.h>
 #pragma comment(lib, "urlmon.lib")
 
 // TODO: Make cmake increment the version number automatically
-constexpr Version PILUS_VERSION{0, 6, 0};
-
-Version ParseVersion(const std::string& tag) {
-    Version version{0, 0, 0};
-
-    std::regex tag_regex(R"((\d+)(?:.(\d+))?(?:.(\d+))?)");
-
-    std::smatch match;
-    if (std::regex_search(tag, match, tag_regex)) {
-        version.major = std::stoi(match[1].str());
-        version.minor = std::stoi(match[2].matched ? match[2].str() : "0");
-        version.patch = std::stoi(match[3].matched ? match[3].str() : "0");
-        return version;
-    }
-
-    console_log << err << "Failed to Parse Version: " << tag << "\n";
-
-    return {0, 0, 0};
-}
+const char* PILUS_VERSION{"0.6.1"};
 
 void ExtractZip(
     const fs::path& zip,
@@ -99,11 +80,11 @@ void SaveVersionManifest() {
     file.close();
 }
 
-Version GetLatestVersion(json& version_manifest) {
-    Version latest_version{};
+std::string GetLatestVersion(json& version_manifest) {
+    std::string latest_version{"0.0.0"};
     for (auto& el: version_manifest["versions"].items()) {
-        const auto& version = ParseVersion(el.key());
-        if (version > latest_version)
+        const auto& version = el.key();
+        if (Version(version) > Version(latest_version))
             latest_version = version;
     }
     return latest_version;
@@ -111,27 +92,27 @@ Version GetLatestVersion(json& version_manifest) {
 
 std::string CheckForUpdates(
     const char* name,
-    json& version_json,
     const fs::path& check_path = "") {
     console_log << "Checking for " << name << " updates...\n";
+
+    json& version_json = ModParser::version_manifest[name];
 
     if (version_json.empty()) {
         console_log << err << "Version JSON for " << name << " not found, unable to update.\n";
         return "";
     }
 
-    Version latest_version = GetLatestVersion(version_json);
-    json installed_version_json = ModParser::pilus_config["installed_versions"][name];
+    std::string latest_version = GetLatestVersion(version_json);
+    std::string installed_version = GetStringFromJson(ModParser::pilus_config["installed_versions"], name, "");
 
-    if ((check_path != "" and not exists(check_path)) or installed_version_json.empty())
+    if ((not check_path.empty() and not exists(check_path)) or installed_version.empty())
         console_log << name << " not installed!\n";
     else {
-        auto installed_version = GetStringFromJson(installed_version_json, "0.0.0");
 
         console_log << "Current " << name << " version: " << installed_version << "\n";
-        console_log << "Latest " << name << " version: " << latest_version.to_string() << "\n";
+        console_log << "Latest " << name << " version: " << latest_version << "\n";
 
-        if (not(latest_version > ParseVersion(installed_version))) {
+        if (not(Version(latest_version) > Version(installed_version))) {
             console_log << name << " is up to date.\n";
             return "";
         }
@@ -139,10 +120,10 @@ std::string CheckForUpdates(
 
     console_log
             << "Update found for " << name << ", version: "
-            << latest_version.to_string()
+            << latest_version
             << "\n";
 
-    return GetStringFromJson(version_json["versions"][latest_version.to_string()], "download_url");
+    return GetStringFromJson(version_json["versions"][latest_version], "download_url");
 }
 
 void UpdateLocalVersionManifest() {
@@ -270,24 +251,28 @@ void CreateDirectories() {
 
 bool DownloadUpdate(const char* name, const Version& version, const fs::path& dest_path) {
     std::string download_url_json = GetStringFromJson(
-        ModParser::version_manifest[name]["versions"][version.to_string()], "download_url");
+        ModParser::version_manifest[name]["versions"][version.to_string()], "download_url", "");
     if (download_url_json.empty()) {
         console_log << err << "No download url found for " << name << " " << version.to_string() << "\n";
         return false;
     }
+    bool success = true;
     if (download_url_json.ends_with(".zip")) {
         fs::path temp_zip_path{dest_path.string() + ".tmp"};
-        if (not DownloadFromURL(download_url_json, temp_zip_path))
+        success = DownloadFromURL(download_url_json, temp_zip_path);
+        if (not success)
             return false;
         ExtractZip(temp_zip_path, dest_path);
         fs::remove(temp_zip_path);
-        return true;
+    } else {
+        success = DownloadFromURL(download_url_json, dest_path);
     }
-    return DownloadFromURL(download_url_json, dest_path);
+    ModParser::pilus_config["installed_versions"][name] = version.to_string();
+    return success;
 }
 
 bool UpdatePilus(const Version& pilus_version, const Version& updater_version) {
-    // ModManager::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION.to_string();
+    ModParser::pilus_config["installed_versions"]["Pilus"] = PILUS_VERSION;
 
     fs::path pilus_path = absolute(fs::path("Pilus.exe"));
 
@@ -295,6 +280,8 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version) {
 
     if (not DownloadUpdate("Pilus", pilus_version, update_path))
         return false;
+
+    ModParser::SavePilusConfig();
 
     // Find our own PID and launch the updater.
 
@@ -358,22 +345,30 @@ bool UpdatePilus(const Version& pilus_version, const Version& updater_version) {
     // This ends up never actually returning true because if everything goes right Pilus needs to close anyway.
 }
 
+void DownloadLatest(const char* name, fs::path path) {
+    auto url = CheckForUpdates(name, path);
+    if (not url.empty()) {
+        auto latest = GetLatestVersion(ModParser::version_manifest[name]);
+        DownloadUpdate(name, latest, path);
+    }
+}
+
 void UpdateModloader() {
     // Get the latest versions for now.
 
     auto latest_ver = GetLatestVersion(ModParser::version_manifest["Pilus"]);
-    if (latest_ver > PILUS_VERSION)
+    if (Version(latest_ver) > Version(PILUS_VERSION))
         UpdatePilus(latest_ver,
                     GetLatestVersion(ModParser::version_manifest["PilusUpdater"])
         );
 
-    DownloadUpdate("Luasome",
-                   GetLatestVersion(ModParser::version_manifest["Luasome"]),
+    DownloadLatest("Luasome",
                    ModParser::luasome_path);
 
-    DownloadUpdate("Nucleus",
-                   GetLatestVersion(ModParser::version_manifest["Nucleus"]),
+    DownloadLatest("Nucleus",
                    ModParser::mod_path / "Nucleus.dll");
 
     UpdatePDB();
+
+    ModParser::SavePilusConfig();
 }
