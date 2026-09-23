@@ -37,6 +37,9 @@
       },
       "0.2.0" : {
         "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.2.0/Nucleus.dll"
+      },
+      "0.2.2" : {
+        "download_url" : "https://github.com/u0068/PrimordialisSDK/releases/download/Nucleus-v0.2.2/Nucleus.dll"
       }
     }
   },
