@@ -23,7 +23,7 @@ static void InitConsole() {
 inline std::ostream& GetTeeLog() {
     static std::ofstream log_file("mod_log.txt");
 
-    static TeeBuf log_buffer(
+    static P::Internal::TeeBuf log_buffer(
         // nullptr, nullptr
         std::cout.rdbuf(),
         log_file.rdbuf()
@@ -34,11 +34,12 @@ inline std::ostream& GetTeeLog() {
     return dual_log;
 }
 
-inline LogStream LogSourced(const std::string& source, const int color = COL_NORMAL) {
+inline P::Internal::LogStream LogSourced(const std::string& source, const int color = COL_NORMAL, const bool important = false) {
     return {
         GetTeeLog(),
         "[" + source + "]\n  ",
         "\n",
-        color
+        color,
+        important
     };
 }

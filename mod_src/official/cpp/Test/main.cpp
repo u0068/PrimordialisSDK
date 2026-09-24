@@ -15,8 +15,5 @@ void OnInitMats() {
 void P::InitialiseMod() {
     // P::Hook<"init_materials_list">(OnInitMats);
 
-    for (int i = 0; i <= 0xFF; i++) {
-        P::Log(i) << std::format("COLOR: {:2X}", i);
-    }
-    P::AttentionToConsole();
+    ELog() << "TEST " << "TEST " << "TEST ";
 }

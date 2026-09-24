@@ -21,7 +21,7 @@ struct Nucleus {
 
     void (*SetCurrentContext)(void* context);
 
-    LogStream (*LogSourced)(const std::string& source, const int color);
+    P::Internal::LogStream (*LogSourced)(const std::string& source, const int color, const bool important);
 
     void (*RegisterModule)(std::string name, void* module);
 
