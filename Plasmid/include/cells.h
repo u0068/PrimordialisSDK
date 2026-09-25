@@ -64,9 +64,10 @@ namespace P {
             for (int i = 1; i < n_materials; i++) {
                 if (strcmp(list[i].name, name) == 0) {
                     numeric = list[i].id;
-                    Internal::PLog(COL_MUTED) << "Found material '" << name << "' with id " << numeric <<
-                            " at index " <<
-                            i;
+                    Internal::PLog(COL_MUTED)
+                            << "Found material '" << name << "' with id "
+                            << GetString() << " (" << numeric << ")"
+                            " at index " << i;
                     if (numeric == 0)
                         numeric = HashId(name);
                     index = i;

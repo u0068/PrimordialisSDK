@@ -4,153 +4,166 @@
 #include "generated/game_functions/essential.h"
 #include "generated/globals.h"
 
-namespace P::Internal {
-    // I hope that using inheritance and polymorphism here doesn't come back to bite me in the ass
-    // I did it mostly to learn how to do it
-
-    // A reference to an object
-    // Allows you to refer to an object using its pointer, index, name, numeric id, string id interchangeably
-    template<typename T>
-    struct ObjRef {
-    protected:
-        T* list{nullptr};
-
-        // I'm making these private and enforcing getters so you can't accidentally use a thing that hasn't been set yet
-        // Might change this later to find all the stuff on initialisation rather than doing lazy resolution, idk
-        mutable int index{-1};
-        mutable const char* name{nullptr};
-        mutable T* pointer{nullptr};
-
+namespace P {
+    inline const char* UintToStr(uint i) {
         union {
-            mutable uint numeric{0};
-            mutable char string[5];
+            uint numeric{0};
+            char string[5];
         };
+        numeric = i;
+        string[4] = '\0';
+        return string;
+    }
 
-    public:
-        virtual ~ObjRef() = default;
+    namespace Internal {
+        // I hope that using inheritance and polymorphism here doesn't come back to bite me in the ass
+        // I did it mostly to learn how to do it
 
-        // No default constructor to force you to initialise
-        // ObjRef() = default;
+        // A reference to an object
+        // Allows you to refer to an object using its pointer, index, name, numeric id, string id interchangeably
+        template<typename T>
+        struct ObjRef {
+        protected:
+            T* list{nullptr};
 
-        explicit ObjRef(T* object_list)
-            : list(object_list), numeric(0) {}
+            // I'm making these private and enforcing getters so you can't accidentally use a thing that hasn't been set yet
+            // Might change this later to find all the stuff on initialisation rather than doing lazy resolution, idk
+            mutable int index{-1};
+            mutable const char* name{nullptr};
+            mutable T* pointer{nullptr};
 
-        ObjRef(T* object_list, int idx)
-            : list(object_list), index(idx), numeric(0) {}
+            union {
+                mutable uint numeric{0};
+                // Use GetString() to prevent issues arising from the lack of a \0
+                mutable char string[5];
+            };
 
-        ObjRef(T* object_list, uint id)
-            : list(object_list), numeric(id) {}
+        public:
+            virtual ~ObjRef() = default;
 
-        ObjRef(T* object_list, const char* id)
-            : list(object_list), numeric(0) {
-            if (strlen(id) == 4)
-                strcpy_s(string, id);
-            else
-                name = id;
-        }
+            // No default constructor to force you to initialise
+            // ObjRef() = default;
 
-        ObjRef(T* object_list, T* ptr)
-            : list(object_list), pointer(ptr), numeric(0) {}
+            explicit ObjRef(T* object_list)
+                : list(object_list), numeric(0) {}
 
-        bool IsInitialised() const {
-            return index >= 0 or numeric > 0 or pointer != nullptr;
-        }
+            ObjRef(T* object_list, int idx)
+                : list(object_list), index(idx), numeric(0) {}
 
-        virtual int GetIndex() const {
-            Internal::PELog(COL_CRITICAL) << "GetIndex() not implemented for this struct!\nFalling back to 1.";
-            return 1;
-        }
+            ObjRef(T* object_list, uint id)
+                : list(object_list), numeric(id) {}
 
-        uint GetNumeric() const {
-            if (numeric == 0) {
-                if (index == -1) {
-                    index = GetIndex();
-                }
-                if (index == -1) {
-                    return 0;
-                }
-                numeric = list[index].id;
+            ObjRef(T* object_list, const char* id)
+                : list(object_list), numeric(0) {
+                if (strlen(id) == 4)
+                    strcpy_s(string, id);
+                else
+                    name = id;
             }
-            return numeric;
-        }
 
-        const char* GetString() const {
-            numeric = GetNumeric();
-            string[4] = '\0';
-            return string;
-        }
+            ObjRef(T* object_list, T* ptr)
+                : list(object_list), pointer(ptr), numeric(0) {}
 
-        const char* GetName() const {
-            if (name == nullptr) {
-                if (index == -1) {
-                    index = GetIndex();
+            bool IsInitialised() const {
+                return index >= 0 or numeric > 0 or pointer != nullptr;
+            }
+
+            virtual int GetIndex() const {
+                Internal::PELog(COL_CRITICAL) << "GetIndex() not implemented for this struct!\nFalling back to 1.";
+                return 1;
+            }
+
+            uint GetNumeric() const {
+                if (numeric == 0) {
+                    if (index == -1) {
+                        index = GetIndex();
+                    }
+                    if (index == -1) {
+                        return 0;
+                    }
+                    numeric = list[index].id;
                 }
-                if (index == -1) {
-                    return nullptr;
+                return numeric;
+            }
+
+            const char* GetString() const {
+                numeric = GetNumeric();
+                string[4] = '\0';
+                return string;
+            }
+
+            const char* GetName() const {
+                if (name == nullptr) {
+                    if (index == -1) {
+                        index = GetIndex();
+                    }
+                    if (index == -1) {
+                        return nullptr;
+                    }
+                    name = list[index].name;
+                    return name;
                 }
-                name = list[index].name;
                 return name;
             }
-            return name;
-        }
 
-        T* GetPointer() const {
-            if (pointer == nullptr) {
-                if (index == -1) {
-                    index = GetIndex();
+            T* GetPointer() const {
+                if (pointer == nullptr) {
+                    if (index == -1) {
+                        index = GetIndex();
+                    }
+                    if (index == -1) {
+                        return nullptr;
+                    }
+                    pointer = &list[index];
                 }
-                if (index == -1) {
-                    return nullptr;
-                }
-                pointer = &list[index];
+                return pointer;
             }
-            return pointer;
-        }
 
-        T GetCopy() const {
-            if (pointer == nullptr) {
-                if (index == -1) {
-                    index = GetIndex();
+            T GetCopy() const {
+                if (pointer == nullptr) {
+                    if (index == -1) {
+                        index = GetIndex();
+                    }
+                    if (index == -1) {
+                        return {};
+                    }
+                    pointer = &list[index];
                 }
-                if (index == -1) {
-                    return {};
-                }
-                pointer = &list[index];
+                return *pointer;
             }
-            return *pointer;
-        }
 
-        T& GetReference() const {
-            if (pointer == nullptr) {
-                if (index == -1) {
-                    index = GetIndex();
+            T& GetReference() const {
+                if (pointer == nullptr) {
+                    if (index == -1) {
+                        index = GetIndex();
+                    }
+                    if (index == -1) {
+                        return {};
+                    }
+                    pointer = &list[index];
                 }
-                if (index == -1) {
-                    return {};
-                }
-                pointer = &list[index];
+                return *pointer;
             }
-            return *pointer;
-        }
 
-        operator int() const {
-            return GetIndex();
-        }
+            operator int() const {
+                return GetIndex();
+            }
 
-        operator const char *() const {
-            return GetString();
-        }
+            operator const char *() const {
+                return GetString();
+            }
 
-        operator uint() const {
-            return GetNumeric();
-        }
+            operator uint() const {
+                return GetNumeric();
+            }
 
-        operator T *() const {
-            return GetPointer();
-        }
+            operator T *() const {
+                return GetPointer();
+            }
 
-        operator T() const {
-            return GetCopy();
-        }
-    };
+            operator T() const {
+                return GetCopy();
+            }
+        };
+    }
 }

@@ -35,7 +35,7 @@ inline void GreenFishBrain(P::body *self) {
         // No target
         self->brain.action = IDLE;
     }
-    else if (self->health / self->max_health < 0.5) {
+    else if (self->health / self->max_health < 0.5f) {
         // HP under 50%
         self->brain.action = FLEE;
     }

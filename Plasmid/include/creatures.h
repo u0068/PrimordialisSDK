@@ -44,9 +44,10 @@ namespace P {
             for (int i = 1; i < n_creatures; i++) {
                 if (std::filesystem::path(list[i].filename).filename().stem().compare(name) == 0) {
                     numeric = list[i].id;
-                    Internal::PLog(COL_MUTED) << "Found creature '" << name << "' with id " << numeric <<
-                            " at index " <<
-                            i;
+                    Internal::PLog(COL_MUTED)
+                            << "Found creature '" << name << "' with id "
+                            << GetString() << " (" << numeric << ")"
+                            " at index " << i;
                     if (numeric == 0)
                         numeric = HashId(name);
                     index = i;
