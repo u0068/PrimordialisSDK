@@ -31,13 +31,11 @@ void OnInitMats() {
 
     // First, lets make the Acid Cell spew acid that doesn't change color
     material = P::MatRef{"Acid cell"}.GetCopy(); // Copy the acid cell material
-    // Make it use our function.
-    material.physics_update_fn = acid_no_color_change;
+    material.physics_update_fn = acid_no_color_change; // Make it use our function.
     // Using P::Hook on cell functions could also work, but it's better to use the method shown here.
-
     P::materials_list[P::MatRef{"Acid cell"}.GetIndex()] = material; // Overwrite the acid cell material
-    // You could also edit existing cells by writing directly to the original's fields,
-    // rather than replacing them with an edited copy of themselves.
+    // There are many other ways to use MatRef to edit existing materials.
+    // The way shown here is most similar to making a new material.
 
     // Next, lets make our own cell!
     // We want to have a cell that is quite stiff but not entirely rigid.
@@ -54,7 +52,7 @@ void OnInitMats() {
 
     // If your mod adds a lot of materials, using the same file for all of them will quickly turn into a mess
     // To organise your materials, put your material definitions in their own files
-    // Do #include "file_path" to import the code from that file (see top of this file)
+    // Do #include "path/to/your/material" to import the code from that file (see top of this file)
     // Once you have included a file, you can use the code from it:
     AddAeroGelCell(); // Add Aero-gel cell, defined in "materials/aerogel_cell.h"
 }
