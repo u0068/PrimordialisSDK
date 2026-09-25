@@ -44,6 +44,10 @@ namespace P {
                 return index;
             }
 
+            if (pointer) {
+                numeric = pointer->id;
+            }
+
             if (numeric) {
                 index = get_material_index(numeric);
                 return index;

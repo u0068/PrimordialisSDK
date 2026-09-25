@@ -24,6 +24,10 @@ namespace P {
                 return index;
             }
 
+            if (pointer) {
+                numeric = pointer->id;
+            }
+
             if (numeric) {
                 index = get_creature_index(numeric);
                 return index;
@@ -38,7 +42,7 @@ namespace P {
 
             Internal::PLog(COL_MUTED) << "Searching for creature '" << name << "'";
             for (int i = 1; i < n_creatures; i++) {
-                if (std::filesystem::path(list[i].filename).filename().compare(name) == 0) {
+                if (std::filesystem::path(list[i].filename).filename().stem().compare(name) == 0) {
                     numeric = list[i].id;
                     Internal::PLog(COL_MUTED) << "Found creature '" << name << "' with id " << numeric <<
                             " at index " <<
