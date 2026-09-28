@@ -1,9 +1,8 @@
 # Add mod and copy to mods folder
 
 # This is the directory where the built cpp mods go
-# If you are using Pilus modloader, you will probably want to make them go in your Primordialis directory instead, such as
-set(MODS_DIR "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods")
-#set(MODS_DIR "${CMAKE_SOURCE_DIR}/r2_profile_test/mods")
+#set(MODS_DIR "$ENV{APPDATA}/com.kesomannen.gale/primordialis/profiles/Testing/mods")
+set(MODS_DIR "${CMAKE_SOURCE_DIR}/test_profile/mods")
 
 function(add_plasmid_mod NAME)
     cmake_parse_arguments(
@@ -27,18 +26,28 @@ function(add_plasmid_mod NAME)
     set_target_properties(${NAME}
             PROPERTIES
             OUTPUT_NAME ${NAME}
-            # RUNTIME_OUTPUT_DIRECTORY ${MOD_DIR}
+            RUNTIME_OUTPUT_DIRECTORY ${MOD_DIR}
     )
 
     add_custom_command(TARGET ${NAME} PRE_BUILD
             COMMAND ${CMAKE_COMMAND} -E make_directory
             "${MOD_DIR}"
     )
-    add_custom_command(TARGET ${NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "$<TARGET_FILE:${NAME}>"
-            "${MOD_DIR}"
-    )
+#    add_custom_command(TARGET ${NAME} POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E copy
+#            "$<TARGET_FILE:${NAME}>"
+#            "${MOD_DIR}"
+#    )
+
+    if(MSVC)
+        target_compile_options(${NAME} PRIVATE
+                $<$<CONFIG:Release>:/Zi>
+        )
+
+        target_link_options(${NAME} PRIVATE
+                $<$<CONFIG:Release>:/DEBUG>
+        )
+    endif()
 
     foreach(ASSET ${MOD_ASSETS})
         set(ASSET_PATH

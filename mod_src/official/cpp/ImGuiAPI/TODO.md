@@ -1,10 +1,7 @@
-# ImGuiAPI
-Lets mods use ImGui ingame.
-
-## TO-DO:
+# TO-DO:
 - Re-init automatically on resolution change.
 - **Fix Bugs:**
-## DONE:
+# DONE:
 - Fix colors (~DONE)
 - Fix character input (DONE)
 - Fix click-through (DONE)

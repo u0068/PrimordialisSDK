@@ -1,6 +1,3 @@
-# More cells mod
-Does what it says in the title.
-
 # TO-DO:
 - Config
 - Spotlight cell

@@ -37,4 +37,6 @@ void DrawUI() {
 void P::InitialiseMod() {
     P::RegisterModule("ImGuiAPI", &imgui_api);
     do_imgui_hooks();
+
+    ELog() << "TEST";
 }

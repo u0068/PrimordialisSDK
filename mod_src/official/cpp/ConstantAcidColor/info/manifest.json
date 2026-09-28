@@ -1,0 +1,7 @@
+{
+  "name": "ConstantAcidColor",
+  "description": "Makes acid not change color.",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/u0068/PrimordialisSDK",
+  "dependencies": []
+}

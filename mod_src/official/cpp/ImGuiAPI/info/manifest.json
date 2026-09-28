@@ -1,0 +1,7 @@
+{
+  "name": "ImGuiAPI",
+  "description": "Lets mods use Dear ImGui in game.",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/u0068/PrimordialisSDK",
+  "dependencies": []
+}

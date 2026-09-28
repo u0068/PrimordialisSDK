@@ -1,0 +1,7 @@
+{
+  "name": "ExampleBiomeMod",
+  "description": "An example mod showing how to add biomes using C++.",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/u0068/PrimordialisSDK",
+  "dependencies": []
+}

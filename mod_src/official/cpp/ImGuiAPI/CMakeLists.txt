@@ -5,7 +5,7 @@ add_plasmid_mod(${MOD_NAME}
         main.cpp
 
         ASSETS
-#            ImGui.dll
+            info/
 )
 
 target_include_directories(${MOD_NAME} PUBLIC
