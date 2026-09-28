@@ -77,8 +77,8 @@ void ModParser::MakeModsYML() {
         if (mod.name != "Nucleus") {
             file << "- name: " << mod.name << "\n";
             file << "  enabled: " << (mod.is_enabled() ? "true" : "false") << "\n";
-            file << "  is_cpp: " << (mod.is_cpp() ? "true" : "false") << "\n";
-            file << "  is_lua: " << (mod.is_lua() ? "true" : "false") << "\n";
+            // file << "  is_cpp: " << (mod.is_cpp() ? "true" : "false") << "\n";
+            // file << "  is_lua: " << (mod.is_lua() ? "true" : "false") << "\n";
             console_log << mod.name << "\n";
         }
     }

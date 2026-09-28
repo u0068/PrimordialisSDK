@@ -7,8 +7,6 @@
 #include "plasmid_api.h"
 #include "include/primordialis_log.h"
 
-const std::string NUCLEUS_VERSION = "0.2.0";
-
 using ModInit = void(*)(Nucleus*, const char*, const char*);
 
 void P::InitialiseMod() {}
@@ -44,10 +42,10 @@ void LoadMods() {
         mod_names += "\n";
     }
 
-    P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS v" + NUCLEUS_VERSION +
-                       "MODLOADER AND THE FOLLOWING MODS:\n" + mod_names +
-                       "\nREPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK,"
-                       " NOT TO THE DEVELOPERS OF PRIMORDIALIS!\n\n");
+    P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODLOADER "
+                       "AND THE FOLLOWING MODS:\n" + mod_names + "\n"
+                       "REPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, "
+                       "NOT TO THE DEVELOPERS OF PRIMORDIALIS!\n\n");
 
     for (auto& mod: ModParser::enabled_mods) {
         LoadMod(mod);

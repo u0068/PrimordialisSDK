@@ -1,0 +1,7 @@
+{
+  "name": "Nucleus",
+  "description": "The Primordialis mod loader.",
+  "version_number": "1.0.4",
+  "website_url": "https://github.com/u0068/PrimordialisSDK",
+  "dependencies": []
+}

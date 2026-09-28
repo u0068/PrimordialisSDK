@@ -21,7 +21,7 @@ std::string ReadFile(const fs::path& path) {
     return buffer.str();
 }
 
-std::filesystem::path ModParser::GetLoaderFilesFolder() {
+std::filesystem::path ModParser::GetProfilePath() {
     int argc = 0;
     LPWSTR* argv = CommandLineToArgvW(
         GetCommandLineW(),
@@ -45,9 +45,19 @@ std::filesystem::path ModParser::GetLoaderFilesFolder() {
 
     LocalFree(argv);
 
-    std::filesystem::path mod_folder_path {absolute(nucleus_dll_path).parent_path().parent_path()};
+    std::filesystem::path profile_path {absolute(nucleus_dll_path).parent_path()};
 
-    return mod_folder_path;
+    // For loop because I don't trust while loops
+    for (auto i = 0; i <= 3; i++) {
+        if (not exists(profile_path/"mods")) {
+            profile_path = profile_path.parent_path();
+        }
+        else {
+            break;
+        }
+    }
+
+    return profile_path;
 }
 
 void ParseModInfo(Mod& mod) {
@@ -115,12 +125,22 @@ void ModParser::ParseMods() {
         installed_mods.push_back(nmod);
     }
 
-    YAML::Node mods_yml = YAML::LoadFile((profile_path / "mods.yml").string());
-    for (std::size_t i = 0; i < mods_yml.size(); i++) {
+    auto mods_yml_path = profile_path / "mods.yml"; // For r2modman profile
+    if (exists(mods_yml_path)) {
+        YAML::Node mods_yml = YAML::LoadFile(mods_yml_path.string());
+        for (std::size_t i = 0; i < mods_yml.size(); i++) {
+            for (auto& mod: installed_mods) {
+                if (mod.name == mods_yml[i]["name"].as<std::string>()
+                and mods_yml[i]["enabled"].as<bool>()
+                and mod.is_cpp()) {
+                    enabled_mods.push_back(mod);
+                }
+            }
+        }
+    }
+    else {
         for (auto& mod: installed_mods) {
-            if (mod.name == mods_yml[i]["name"].as<std::string>()
-            and mods_yml[i]["enabled"].as<bool>()
-            and mods_yml[i]["is_cpp"].as<bool>()) {
+            if (mod.is_cpp()) {
                 enabled_mods.push_back(mod);
             }
         }

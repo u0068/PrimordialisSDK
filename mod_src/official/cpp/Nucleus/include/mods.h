@@ -10,10 +10,10 @@ struct Mod;
 namespace ModParser {
     inline std::vector<Mod> enabled_mods{};
 
-    std::filesystem::path GetLoaderFilesFolder();
+    std::filesystem::path GetProfilePath();
 
     inline fs::path game_path {fs::current_path()};
-    inline fs::path profile_path {GetLoaderFilesFolder()};
+    inline fs::path profile_path {GetProfilePath()};
     inline fs::path mod_path {profile_path / "mods"};
 
     void ParseMods();
