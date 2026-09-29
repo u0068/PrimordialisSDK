@@ -69,9 +69,6 @@ Use this invite to join the Primordialis Server and get the Mod SDK Dev role:\
 https://discord.gg/Fz5RaRBNj8
 ## CONTRIBUTION POLICY:
 - Everything must be as simple to use and understand as possible, both for the users and maintainers.
-- Everything must be working before pushing commits to the master branch.
-  - Make a new branch for experiments that might break stuff.
-- You must consult the key contributors (h (u0068) and gunno (guunno)) before making key decisions.
 - Code must be organised and documented.
 - Commits must be small and focused.
 - Commit messages must concisely and adequately describe the changes made.
