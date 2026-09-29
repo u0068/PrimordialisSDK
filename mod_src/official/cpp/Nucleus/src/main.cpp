@@ -5,6 +5,7 @@
 #include "mods.h"
 #include "nucleus_api.h"
 #include "plasmid_api.h"
+#include "zip.h"
 #include "include/primordialis_log.h"
 
 using ModInit = void(*)(Nucleus*, const char*, const char*);
@@ -83,6 +84,8 @@ void Bootstrap() {
     P::mod_name = "Nucleus";
 
     P::Log(COL_MUTED) << "Bootstrapping Nucleus...";
+
+    ExtractPDBs();
 
     InitMinHook();
 
