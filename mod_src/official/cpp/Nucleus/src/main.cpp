@@ -4,13 +4,10 @@
 
 #include "mods.h"
 #include "nucleus_api.h"
-#include "plasmid_api.h"
 #include "zip.h"
-#include "include/primordialis_log.h"
+#include "include/logstream.h"
 
 using ModInit = void(*)(Nucleus*, const char*, const char*);
-
-void P::InitialiseMod() {}
 
 void LoadMod(Mod& mod) {
     HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
@@ -31,8 +28,6 @@ void LoadMod(Mod& mod) {
     }
 
     mod_init(&api, mod.path.string().c_str(), mod.name.c_str());
-
-    // P::GamePrint("Loaded %s", mod.name);
 }
 
 void LoadMods() {
@@ -43,7 +38,7 @@ void LoadMods() {
         mod_names += "\n";
     }
 
-    P::PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODLOADER "
+    PrimordialisLog("\n\nTHIS SESSION HAS BEEN MODIFIED USING THE NUCLEUS MODLOADER "
                        "AND THE FOLLOWING MODS:\n" + mod_names + "\n"
                        "REPORT BUGS CAUSED BY MODS TO THE DEVELOPERS OF THE MODS AND MODDING SDK, "
                        "NOT TO THE DEVELOPERS OF PRIMORDIALIS!\n\n");

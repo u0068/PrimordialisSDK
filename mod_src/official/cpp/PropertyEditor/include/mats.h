@@ -9,10 +9,10 @@ inline bool has_initialised_mats = false;
 //     byte data[280];
 // };
 
-inline P::material_t CopyMaterial(P::material_t mat) {
+inline Game::material_t CopyMaterial(Game::material_t mat) {
     // Idk if this is a good way to unlink char* but it works
     mat.name = (char *) (new std::string(mat.name))->c_str();
-    mat.id = P::HashId(mat.name);
+    mat.id = Game::HashId(mat.name);
     return mat;
 }
 
@@ -87,11 +87,11 @@ inline P::material_t CopyMaterial(P::material_t mat) {
 inline void InitMaterialsHook() {
     if (not reset_mats_on_reload and has_initialised_mats) {
         // TO-DO: Get number of vanilla cells automatically
-        P::next_icon_index = 82;
+        Game::next_icon_index = 82;
         return;
     }
-    P::Next<void>();
-    if (!P::IsThreadSafe()) {
+    Game::Next<void>();
+    if (!Game::IsThreadSafe()) {
         return;
     }
     has_initialised_mats = true;

@@ -5,9 +5,9 @@
 
 constexpr float max_mass = 1e4f;
 
-inline void PinCell(P::cell* cell) {
+inline void PinCell(Game::cell* cell) {
     // TODO: Make it work when paused
-    if (P::w->sm.dragged_body == cell->body_id) {
+    if (Game::w->sm.dragged_body == cell->body_id) {
         cell->stasis = 0.0f;
         // cell->mass = 1.0f;
         // cell->custom_mass = true;
@@ -30,17 +30,17 @@ inline void PinCell(P::cell* cell) {
 }
 
 inline void AddPinCell() {
-    auto material = P::MatRef{"Heavy cell"}.GetCopy();
+    auto material = Game::MatRef{"Heavy cell"}.GetCopy();
     material.is_hard = true;
     material.growth_rate = 0.01f;
     material.density = max_mass;
     material.force_update_fn = PinCell;
-    const P::material_t conductive = P::MatRef{"Conductive cell"}.GetCopy();
+    const Game::material_t conductive = Game::MatRef{"Conductive cell"}.GetCopy();
     material.conductivity = conductive.conductivity;
     material.leak_conductivity = conductive.leak_conductivity;
     material.capacitance = conductive.capacitance;
     material.inv_capacitance = conductive.inv_capacitance;
     material.base_color = {0.9f, 0.8f, 0.9f, 1.0f};
-    P::SetCellNameAndDesc(material, "Pin cell", "An nigh immovable cell, unless powered.");
-    P::materials_list[P::n_materials++] = material;
+    Game::SetCellNameAndDesc(material, "Pin cell", "An nigh immovable cell, unless powered.");
+    Game::materials_list[Game::n_materials++] = material;
 }

@@ -16,6 +16,8 @@
   - Particles emit light
   - Reverse entropy compatibility
 - Semi-connected cell
+- Directing cell
+  - Treated as empty cell for determining cell direction
 # Done:
 - Cartilage cell (old hard cell)
 - Aero-gel cell

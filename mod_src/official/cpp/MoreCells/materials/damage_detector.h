@@ -1,7 +1,7 @@
 #pragma once
 #include "plasmid_api.h"
 
-inline void DamageDetector(P::cell* cell) {
+inline void DamageDetector(Game::cell* cell) {
     // Using low pass filters to eliminate the noise from health transfer
 
     constexpr float health_alpha = 0.01f;
@@ -27,11 +27,11 @@ inline void DamageDetector(P::cell* cell) {
 }
 
 inline void AddDamageDetector() {
-    auto material = P::MatRef{"Health monitor cell"}.GetCopy();
+    auto material = Game::MatRef{"Health monitor cell"}.GetCopy();
     material.electric_update_fn = DamageDetector;
     // material.transfer_rate *= 0.5f;
     material.max_health = 5.0f;
     material.base_color = {0.4f, 0.01f, 0.0f, 1.0f}; // Dark reddish
-    P::SetCellNameAndDesc(material, "Damage detector cell", "Produces a voltage proportional to damage to it.");
-    P::materials_list[P::n_materials++] = material;
+    Game::SetCellNameAndDesc(material, "Damage detector cell", "Produces a voltage proportional to damage to it.");
+    Game::materials_list[Game::n_materials++] = material;
 }

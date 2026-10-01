@@ -9,7 +9,7 @@ Required by all Primordialis mods.
 - Facilitates communication between mods
 
 ## Installation
-Install with your mod manager
+Install with your mod manager, or download the zip manually and extract into your profile folder.
 
 ## Configuration
 None

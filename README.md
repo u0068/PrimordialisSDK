@@ -115,14 +115,3 @@ https://discord.gg/Fz5RaRBNj8
   - ```c++
     // Made by [USERNAME] and ChatGPT
     void ExampleFunction(){}
-
-# TO-DO:
-- Make tutorials for:
-  - Loading mods
-  - Making mods
-  - Contributing to the SDK
-- Improve error messages everywhere
-
-See the README.md's inside the projects for their TO-DO lists.
-# DONE:
-- Put Ghidra scripts in SDK repo (DONE)

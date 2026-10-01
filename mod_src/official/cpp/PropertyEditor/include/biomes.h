@@ -15,17 +15,17 @@ inline void InitBiomeTypesHook() {
     if (not reset_biomes_on_reload and has_initialised_biomes) {
         return;
     }
-    P::Next<void>();
-    if (!P::IsThreadSafe()) {
+    Game::Next<void>();
+    if (!Game::IsThreadSafe()) {
         return;
     }
     has_initialised_biomes = true;
 }
 
-inline void DrawWallsHook(P::render_context* rc, P::map_t* map, float fade_in) {
+inline void DrawWallsHook(Game::render_context* rc, Game::map_t* map, float fade_in) {
     if (remove_view_limit) {
-        P::w->vision_radius = 1e6f;
+        Game::w->vision_radius = 1e6f;
         // fade_in = 1.0f;
     }
-    P::Next<void>(rc, map, fade_in);
+    Game::Next<void>(rc, map, fade_in);
 }

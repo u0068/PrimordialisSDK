@@ -4,7 +4,7 @@
 // We will call this function in OnInitMats in main.cpp
 inline void AddAeroGelCell() {
     // This is an Aero-gel cell, which is very light, brittle and insulating like aero-gel in real life
-    auto material = P::MatRef{"Lightweight cell"}.GetCopy(); // Use Lightweight cell as base
+    auto material = Game::MatRef{"Lightweight cell"}.GetCopy(); // Use Lightweight cell as base
     material.tags = TAG_UTILITY | TAG_STRUCTURE; // Tags are combined using the bitwise-or operator |
     material.drop_weight = 0.05f;
     material.is_hard = true;
@@ -29,6 +29,6 @@ inline void AddAeroGelCell() {
     material.base_color = {1.5f, 1.5f, 2.0f, 0.3f}; // Transparent super-luminous blue
     // There are more material properties that I haven't shown here.
     // See the definition of struct material_t in Plasmid/generated/data_types.h for all the properties.
-    P::SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
-    P::materials_list[P::n_materials++] = material;
+    Game::SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
+    Game::materials_list[Game::n_materials++] = material;
 }

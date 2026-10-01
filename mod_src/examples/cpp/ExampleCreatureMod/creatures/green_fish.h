@@ -16,7 +16,7 @@
 //        While charging, use Ability 2 to blow the poison out of its way so that it doesn't poison itself.
 
 // Now let's translate this to code!
-inline void GreenFishBrain(P::body *self) {
+inline void GreenFishBrain(Game::body *self) {
     // First lets use an enum to conveniently represent the behaviour states
     // Enums are just labels for numbers.
     enum STATE {
@@ -28,7 +28,7 @@ inline void GreenFishBrain(P::body *self) {
     };
 
     // First, look around for enemies
-    P::body* target = P::aggro(self, 500.0f); // aggro looks for enemies around a creature in a given range
+    Game::body* target = Game::aggro(self, 500.0f); // aggro looks for enemies around a creature in a given range
 
     // Now lets code the basic state logic:
     if (not target) {
@@ -52,18 +52,18 @@ inline void GreenFishBrain(P::body *self) {
     // but in this example I will implement them below to show the step-by-step thinking process,
     // and because I think this way is more organised
 
-    P::avoid_walls(self, 100.0f); // Avoid range is 100 to be safe, we don't want our poison to bounce back at us
-    P::avoid_allies(self, 50.0f); // Avoid allies to be polite
+    Game::avoid_walls(self, 100.0f); // Avoid range is 100 to be safe, we don't want our poison to bounce back at us
+    Game::avoid_allies(self, 50.0f); // Avoid allies to be polite
 
     // A switch statement is like a chain of if else statements
     // that compare the same value to different cases
     switch (self->brain.action) {
         default: // Default is idle
         case IDLE: {
-            P::passive_ai(self);
+            Game::passive_ai(self);
         } break;
         case FLEE: {
-            P::avoid_body(self, target, 500.0f);
+            Game::avoid_body(self, target, 500.0f);
         } break;
         case APPROACH: {
 
@@ -78,10 +78,10 @@ inline void GreenFishBrain(P::body *self) {
 }
 
 inline void AddGreenFish() {
-    P::creature_t creature{};
-    creature.id = P::HashId("Green Fish");
+    Game::creature_t creature{};
+    creature.id = Game::HashId("Green Fish");
     creature.ai_func = GreenFishBrain;
-    creature.filename = (P::mod_path/"bodies/green_fish.bod").string().c_str(); // Get path to our bod and convert
-    P::load_body_plan(&creature.plan, creature.filename); // Load the body plan
-    P::creature_list[P::n_creatures++] = creature; // Save the creature to the end of the creature list
+    creature.filename = (Game::mod_path/"bodies/green_fish.bod").string().c_str(); // Get path to our bod and convert
+    Game::load_body_plan(&creature.plan, creature.filename); // Load the body plan
+    Game::creature_list[Game::n_creatures++] = creature; // Save the creature to the end of the creature list
 }

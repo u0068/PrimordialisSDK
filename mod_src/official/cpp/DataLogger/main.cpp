@@ -5,14 +5,14 @@
 
 // This function will be hooked to the game's init_materials_list function
 void OnInitMats() {
-    P::Next<void>(); // Call original function
-    if (P::IsThreadSafe()) // Make sure we are only on the main thread
+    Game::Next<void>(); // Call original function
+    if (Game::IsThreadSafe()) // Make sure we are only on the main thread
     {
         PrintMaterialProperties();
     }
-    P::LaneSync(); // Make all other threads wait for us to finish. Not sure if I actually need this.
+    Game::LaneSync(); // Make all other threads wait for us to finish. Not sure if I actually need this.
 }
 
-void P::InitialiseMod() {
-    P::Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
+void Game::InitialiseMod() {
+    Game::Hook<"init_materials_list">(OnInitMats); // Hook our OnInitMats function to the game's init_materials_list
 }

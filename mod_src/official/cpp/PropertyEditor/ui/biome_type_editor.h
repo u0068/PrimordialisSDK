@@ -1,10 +1,10 @@
 #pragma once
 #include "plasmid_api.h"
-#include "include/biomes.h"
+#include "../../../../../adapters/cpp/include/biomes.h"
 #include "generated/game_functions/world.h"
 #include "imgui_extra.h"
 
-inline void DrawBiomeTypeEditor(int idx, P::biome_type& type) {
+inline void DrawBiomeTypeEditor(int idx, Game::biome_type& type) {
     ImGui::PushID(idx);
     bool open = ImGui::CollapsingHeader("##header");
     ImGui::SameLine();
@@ -92,29 +92,29 @@ inline bool was_in_map_mode = true;
 
 inline void DrawBiomeTypesEditor() {
     // If this runs during loading screen, the skies will split and woe will be upon us
-    if (P::w->loading_screen) return;
+    if (Game::w->loading_screen) return;
 
     // Restore zoom state after regening map
     if (has_just_regened_map) {
         has_just_regened_map = false;
-        P::w->map_mode = was_in_map_mode;
-        P::w->camera_dist = P::w->map_camera_dist;
+        Game::w->map_mode = was_in_map_mode;
+        Game::w->camera_dist = Game::w->map_camera_dist;
     }
 
     ImGui::Begin("Biome Types Editor");
 
     if (ImGui::Button("Regenerate map")) {
-        P::w->starting_game = true;
-        P::w->loading_screen = false;
-        P::w->done_loading = false;
-        P::w->fade_in = 1.0f;
-        P::w->start_trans = 1.0f;
-        P::w->starting_new_run = false;
-        P::w->starting_sandbox = true;
-        P::w->sandbox_start_params.loading = false;
+        Game::w->starting_game = true;
+        Game::w->loading_screen = false;
+        Game::w->done_loading = false;
+        Game::w->fade_in = 1.0f;
+        Game::w->start_trans = 1.0f;
+        Game::w->starting_new_run = false;
+        Game::w->starting_sandbox = true;
+        Game::w->sandbox_start_params.loading = false;
 
         has_just_regened_map = true;
-        was_in_map_mode = P::w->map_mode;
+        was_in_map_mode = Game::w->map_mode;
 
         ImGui::End();
         return;
@@ -122,7 +122,7 @@ inline void DrawBiomeTypesEditor() {
     ImGui::SameLine();
     ImGui::Checkbox("Remove view radius", &remove_view_limit);
     ImGui::SameLine();
-    ImGui::Checkbox("Keep seed", &P::w->sandbox_start_params.keep_seed);
+    ImGui::Checkbox("Keep seed", &Game::w->sandbox_start_params.keep_seed);
     // ImGui::SameLine();
     // ImGui::Checkbox("Reset on Reload", &reset_biomes_on_reload);
     static ImGuiTextFilter filter;
@@ -132,8 +132,8 @@ inline void DrawBiomeTypesEditor() {
     }
     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
     filter.Draw("##Filter");
-    for (int i = 0; i < P::w->n_biome_types; i++) {
-        P::biome_type& type = P::w->biome_types[i];
+    for (int i = 0; i < Game::w->n_biome_types; i++) {
+        Game::biome_type& type = Game::w->biome_types[i];
         if (not filter.PassFilter(biome_id{type.id}.string)) continue;
         DrawBiomeTypeEditor(i, type);
     }

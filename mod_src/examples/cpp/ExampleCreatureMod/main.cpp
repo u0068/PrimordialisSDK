@@ -5,26 +5,26 @@
 
 // This function will be hooked to the game's init_creature_list function
 void OnInitCreatures() {
-    P::Next<void>(); // Call original function
-    if (not P::IsThreadSafe()) { // Make sure we are only on the main thread
+    Game::Next<void>(); // Call original function
+    if (not Game::IsThreadSafe()) { // Make sure we are only on the main thread
         return;
     }
 
-    P::creature_t creature{}; // The variable we use to store the creature we are working on
+    Game::creature_t creature{}; // The variable we use to store the creature we are working on
 
     // We can use existing brains and bods in modded creatures like this:
-    creature.id = P::HashId("Antenna Bug Clone");
-    creature.ai_func = P::passive_ai;
+    creature.id = Game::HashId("Antenna Bug Clone");
+    creature.ai_func = Game::passive_ai;
     creature.filename = "body plans/antenna_bug.bod";
-    P::load_body_plan(&creature.plan, creature.filename); // Load the body plan
-    P::creature_list[P::n_creatures++] = creature; // Save the creature to the end of the creature list
+    Game::load_body_plan(&creature.plan, creature.filename); // Load the body plan
+    Game::creature_list[Game::n_creatures++] = creature; // Save the creature to the end of the creature list
 
     // We can also modify vanilla creatures in a very similar way:
     // Lets make the player show damage numbers like a target dummy
-    auto ref_to_original = P::CreatureRef{"start_player"}; // Get the reference to the original
+    auto ref_to_original = Game::CreatureRef{"start_player"}; // Get the reference to the original
     creature = ref_to_original.GetCopy(); // Copy the original
     creature.show_damage_numbers = true; // Edit our copy
-    P::creature_list[ref_to_original.GetIndex()] = creature; // Overwrite the original
+    Game::creature_list[ref_to_original.GetIndex()] = creature; // Overwrite the original
     // See ObjRefTutorial for other methods of using CreatureRef that you might prefer!
 
     // We can also make creatures with our own bods and brains!
@@ -36,7 +36,7 @@ void OnInitCreatures() {
     AddGreenFish(); // All the green fish code is in creatures/green_fish.h
 }
 
-void P::InitialiseMod() {
+void Game::InitialiseMod() {
     // Hook our OnInitCreatures function to the game's init_creature_list
-    P::Hook<"init_creature_list">(OnInitCreatures);
+    Game::Hook<"init_creature_list">(OnInitCreatures);
 }

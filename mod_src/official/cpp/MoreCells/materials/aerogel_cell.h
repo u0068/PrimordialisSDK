@@ -3,7 +3,7 @@
 
 inline void AddAeroGelCell() {
     // This is an Aero-gel cell, which is very light, brittle and insulating like aero-gel in real life
-    auto material = P::MatRef{"Lightweight cell"}.GetCopy();
+    auto material = Game::MatRef{"Lightweight cell"}.GetCopy();
     material.tags = TAG_UTILITY;
     material.drop_weight = 0.05f;
     material.is_hard = true;
@@ -26,6 +26,6 @@ inline void AddAeroGelCell() {
     material.heat_capacity = 1e4f;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.5f, 1.5f, 2.0f, 0.3f}; // Transparent super-luminous blue
-    P::SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
-    P::materials_list[P::n_materials++] = material;
+    Game::SetCellNameAndDesc(material, "Aero-gel cell", "A very light, insulating and brittle cell");
+    Game::materials_list[Game::n_materials++] = material;
 }

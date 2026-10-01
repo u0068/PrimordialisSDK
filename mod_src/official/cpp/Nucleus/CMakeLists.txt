@@ -12,6 +12,7 @@ target_link_libraries(Nucleus
 )
 
 target_include_directories(Nucleus PRIVATE
+        core/
         include/
 )
 

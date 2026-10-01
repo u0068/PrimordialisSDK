@@ -3,10 +3,40 @@ Mods made by the SDK dev team.
 You can use them as examples.
 
 # TO-DO:
+- Dependency sorting
+- Mod order agnostic
 - Publish on thunderstore (once possible)
-- C++ multiplayer mod
+- Proper multiplayer mod
 - Convert popular lua mods
 - Thoroughly document everything
+- Language support (Priority order)
+  - C++
+    - API Wrapper (DOING)
+    - Examples (DOING)
+    - Mods (DONE)
+  - LuaJIT
+    - Hook (DONE)
+    - API Wrapper (DOING)
+    - Examples (DOING)
+    - Mods (DONE)
+  - CPython
+    - Runtime
+    - API Wrapper
+    - Examples
+    - Mods
+  - C#
+    - Runtime
+    - API Wrapper
+    - Examples
+    - Mods
+  - Rust
+    - API Wrapper
+    - Examples
+    - Mods
+  - C
+    - API
+    - Examples
+    - Mods
 
 ### Potentially doable:
 - Cells:
@@ -19,12 +49,13 @@ You can use them as examples.
   - Custom cell maker
     - Simple stat changer (DONE)
     - Logic cells
-  - Directing cell
-    - Treated as empty cell for determining cell direction
+    - Complex cell functions
   - Cell spawn rate config
   - Combo rework
       - Combine stats commutatively and associatively
       - Combine based on the stats' deviation from basic cell
+- Creatures:
+  - Creature brain maker tool
 - Mutations:
   - Acid resist
   - Poison resist

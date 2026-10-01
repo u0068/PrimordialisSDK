@@ -2,13 +2,13 @@
 #include "generated/game_functions/world.h"
 
 void OnInitBiomeTypes() {
-    P::Next<void>();
-    if (!P::IsThreadSafe())
+    Game::Next<void>();
+    if (!Game::IsThreadSafe())
         return;
 
     // Here we define the biome type, which controls *HOW* it generates
-    auto* new_biome_type = P::new_biome_type();
-    new_biome_type->id = P::str_to_id("TEST"); // TODO: Generate unique biome ids
+    auto* new_biome_type = Game::new_biome_type();
+    new_biome_type->id = Game::str_to_id("TEST"); // TODO: Generate unique biome ids
     new_biome_type->color = {1.0, 1.0, 0.5}; // Background color, float RGB
     new_biome_type->light = 1.0f; // Ambient light brightness
     // new_biome_type->flags = 1; // Safe zone
@@ -37,12 +37,12 @@ void OnInitBiomeTypes() {
 // This controls when we insert the biome
 static bool insert_biome = false;
 
-P::biome_core* OnCreateBiomeCore(int id, int size) {
+Game::biome_core* OnCreateBiomeCore(int id, int size) {
     // Here we define *WHERE* the biome generates
 
-    auto result = P::Next<P::biome_core *>(id, size);
+    auto result = Game::Next<Game::biome_core *>(id, size);
     // Execute the hook AFTER the specified biome is defined, so the last node is in a known location
-    if (id == P::str_to_id("ICEE")) {
+    if (id == Game::str_to_id("ICEE")) {
         insert_biome = true;
         return result;
     }
@@ -50,10 +50,10 @@ P::biome_core* OnCreateBiomeCore(int id, int size) {
         return result;
     insert_biome = false;
 
-    auto biome_core = P::create_biome_core(P::str_to_id("TEST"), 1000);
-    auto node_1 = &P::w->map.biome_nodes[P::w->map.n_biome_nodes - 1]; // Existing node at end of ICEE biome
-    auto node_2 = P::add_biome_node(biome_core); // New node for our biome
-    P::biome_edge new_edge{
+    auto biome_core = Game::create_biome_core(Game::str_to_id("TEST"), 1000);
+    auto node_1 = &Game::w->map.biome_nodes[Game::w->map.n_biome_nodes - 1]; // Existing node at end of ICEE biome
+    auto node_2 = Game::add_biome_node(biome_core); // New node for our biome
+    Game::biome_edge new_edge{
         nullptr, nullptr,
         {1, 0},
         200,
@@ -62,18 +62,18 @@ P::biome_core* OnCreateBiomeCore(int id, int size) {
         0,
         0
     };
-    P::add_biome_edge(node_1, node_2, {1, 0}, &new_edge);
+    Game::add_biome_edge(node_1, node_2, {1, 0}, &new_edge);
 
-    P::biome_entrance entrance{
+    Game::biome_entrance entrance{
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 0, 1, 1, 0, 0
     };
-    P::add_biome_entrance(biome_core, biome_core - 2, &entrance);
+    Game::add_biome_entrance(biome_core, biome_core - 2, &entrance);
 
     return result;
 }
 
-void P::InitialiseMod() {
-    P::Hook<"init_biome_types">(OnInitBiomeTypes);
-    P::Hook<"create_biome_core">(OnCreateBiomeCore);
+void Game::InitialiseMod() {
+    Game::Hook<"init_biome_types">(OnInitBiomeTypes);
+    Game::Hook<"create_biome_core">(OnCreateBiomeCore);
 }

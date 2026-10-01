@@ -13,7 +13,7 @@ endfunction()
 
 add_subdirectory_if_exists(third_party)
 
-add_subdirectory_if_exists(Plasmid)
+add_subdirectory_if_exists(adapters/cpp)
 
 add_subdirectory_if_exists(mod_src)
 

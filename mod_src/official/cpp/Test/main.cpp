@@ -5,20 +5,20 @@
 #include "generated/game_functions/creatures.h"
 
 void OnInitMats() {
-    P::Next<void>();
-    if (not P::IsThreadSafe()) {
+    Game::Next<void>();
+    if (not Game::IsThreadSafe()) {
         return;
     }
 
 }
 
-void P::InitialiseMod() {
+void Game::InitialiseMod() {
     // P::Hook<"init_materials_list">(OnInitMats);
 
     for (int i = 0; i <= 0xF; i++) {
         Log(i) << std::format("COLOR: {:x}", i);
     }
-    P::AttentionToConsole();
+    Game::AttentionToConsole();
 
     // ELog() << "TEST " << "TEST " << "TEST ";
 }

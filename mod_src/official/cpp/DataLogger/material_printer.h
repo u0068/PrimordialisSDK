@@ -33,13 +33,13 @@ inline void PrintMaterialProperties() {
     }
 
     std::vector<const char *> names_per_tag[tag_count];
-    const auto& basic = P::materials_list[1];
+    const auto& basic = Game::materials_list[1];
 
-    for (int i = 1; i < P::n_materials; i++) {
-        P::material_t material = P::materials_list[i];
+    for (int i = 1; i < Game::n_materials; i++) {
+        Game::material_t material = Game::materials_list[i];
         outFile << std::format("---- {} ----\n", material.name);
         outFile << "General:\n";
-        outFile << std::format("    id: {} {}\n", P::MatRef{material.id}.GetString(), material.id);
+        outFile << std::format("    id: {} {}\n", Game::MatRef{material.id}.GetString(), material.id);
         outFile << std::format("    cell_type_index: {}\n", i);
         if (material.next_variant)
             outFile << std::format("    next_variant: {}\n", material.next_variant);

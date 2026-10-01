@@ -3,7 +3,7 @@
 #include <plasmid_api.h>
 #include <include/primordialis_log.h>
 #include "yaml-cpp/yaml.h"
-#include "internal/nucleus_interface.h"
+#include "include/nucleus_interface.h"
 
 void RunLuaFile(lua_State *L, const std::filesystem::path& path) {
     int error = luaL_loadfile(L, path.string().c_str());
@@ -11,11 +11,11 @@ void RunLuaFile(lua_State *L, const std::filesystem::path& path) {
     if (error != 0) {
         const char *message = lua_tostring(L, -1);
 
-        P::PrimordialisLog(
+        Game::PrimordialisLog(
             std::format("lua warning: {}\n", message)
         );
 
-        P::Log(COL_WARNING) << "lua warning: " << message;
+        Game::Log(COL_WARNING) << "lua warning: " << message;
 
         lua_pop(L, 1);
         return;
@@ -26,24 +26,24 @@ void RunLuaFile(lua_State *L, const std::filesystem::path& path) {
     if (error != 0) {
         const char *message = lua_tostring(L, -1);
 
-        P::PrimordialisLog(
+        Game::PrimordialisLog(
             std::format("lua warning: {}\n", message)
         );
 
-        P::Log(COL_WARNING) << "lua warning: " << message;
+        Game::Log(COL_WARNING) << "lua warning: " << message;
 
         lua_pop(L, 1);
     }
 };
 
 void LuaInitHook(lua_State *L) {
-    RunLuaFile(L, P::mod_path / "pre.lua");
-    P::Next<void>(L);
-    RunLuaFile(L, P::mod_path / "post.lua");
+    RunLuaFile(L, Game::mod_path / "pre.lua");
+    Game::Next<void>(L);
+    RunLuaFile(L, Game::mod_path / "post.lua");
 }
 
 void SaveLuaModlist() {
-    std::ofstream file(P::mod_path/"mod_list.lua");
+    std::ofstream file(Game::mod_path/"mod_list.lua");
 
     if (!file) return;
 
@@ -61,7 +61,7 @@ void SaveLuaModlist() {
     file.close();
 }
 
-inline void P::InitialiseMod() {
+inline void Game::InitialiseMod() {
     SaveLuaModlist();
-    P::Hook<"run_lua_init_script">(LuaInitHook);
+    Game::Hook<"run_lua_init_script">(LuaInitHook);
 }

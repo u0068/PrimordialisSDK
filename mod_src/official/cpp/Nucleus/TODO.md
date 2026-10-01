@@ -1,4 +1,4 @@
 # TO-DO:
-- Re-add lua config support
+- Migrate parts of Plasmid into Nucleus
 - Support shader replacements
-- Support translations.tsv
+- Support translations.tsv replacements

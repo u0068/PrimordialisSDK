@@ -1,14 +1,14 @@
 #pragma once
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
-#include "include/mats.h"
+#include "../../../../../adapters/cpp/include/mats.h"
 
 inline int copy_from = 1;
 inline bool show_combos = false;
 inline bool show_vanilla = true;
 inline bool show_cell_editor = true;
 
-inline void DrawMaterialEditor(int idx, P::material_t& mat) {
+inline void DrawMaterialEditor(int idx, Game::material_t& mat) {
     ImGui::PushID(idx);
     bool open = ImGui::CollapsingHeader("##header");
     ImGui::SameLine();
@@ -16,7 +16,7 @@ inline void DrawMaterialEditor(int idx, P::material_t& mat) {
     if (ImGui::BeginPopupContextItem(mat.name)) {
         ImGui::PushItemFlag(ImGuiItemFlags_LiveEditOnInputText, false);
         if (ImGui::InputText("##name", (char *) mat.name, 32, ImGuiInputTextFlags_EnterReturnsTrue))
-            mat.id = P::HashId(mat.name);
+            mat.id = Game::HashId(mat.name);
         ImGui::PopItemFlag();
         // if (ImGui::Button("Copy to Clipboard")) {
         //     // TO-DO: Make this human-readable and only store the changes
@@ -36,11 +36,11 @@ inline void DrawMaterialEditor(int idx, P::material_t& mat) {
         //     }
         // }
         if (ImGui::Button("Give")) {
-            P::cell_item cell_item = {0, idx};
-            P::create_cell_item(&cell_item);
+            Game::cell_item cell_item = {0, idx};
+            Game::create_cell_item(&cell_item);
         }
         if (ImGui::Button("Duplicate")) {
-            P::materials_list[P::n_materials++] = CopyMaterial(P::materials_list[idx]);
+            Game::materials_list[Game::n_materials++] = CopyMaterial(Game::materials_list[idx]);
         }
         ImGui::EndPopup();
     }
@@ -106,7 +106,7 @@ inline void DrawMaterialEditor(int idx, P::material_t& mat) {
             ImGui::DragFloat("light_intensity", &mat.light_intensity, speed);
             ImGui::ColorEdit3("emission", mat.emission.data);
             ImGui::SliderInt("texture_type", &mat.texture_type, 0, 4);
-            P::int_2 uv = {(int) (mat.uv.x * 32 + 0.5f), (int) (mat.uv.y * 32 + 0.5f)};
+            Game::int_2 uv = {(int) (mat.uv.x * 32 + 0.5f), (int) (mat.uv.y * 32 + 0.5f)};
             ImGui::DragInt2("uv", uv.data, 0.1);
             mat.uv = {(float) (uv.x - 0.5f) / 32.f, (float) (uv.y - 0.5f) / 32.f};
 
@@ -162,7 +162,7 @@ inline void DrawMaterialEditor(int idx, P::material_t& mat) {
 
 inline void DrawMaterialsEditor() {
     // If this runs during loading screen, the skies will split and woe will be upon us
-    if (P::w->loading_screen) return;
+    if (Game::w->loading_screen) return;
 
     ImGui::Begin("Materials Editor");
 
@@ -184,8 +184,8 @@ inline void DrawMaterialsEditor() {
     // ImGui::SameLine();
     // if (ImGui::Button("Load Materials"))
     //     LoadAllMats();
-    for (int i = 0; i < P::n_materials; i++) {
-        P::material_t& mat = P::materials_list[i];
+    for (int i = 0; i < Game::n_materials; i++) {
+        Game::material_t& mat = Game::materials_list[i];
         if (not filter.PassFilter(mat.name)) continue;
         if (((std::string) mat.name).starts_with("Combo") && !show_combos) continue;
         if (i < 83 && !show_vanilla) continue;

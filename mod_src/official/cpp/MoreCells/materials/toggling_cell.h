@@ -34,17 +34,17 @@ inline void ToggleBit(byte& byte, const uint index) {
     byte ^= 1 << index;
 }
 
-inline void TogglingCellConnections(P::cell* cell) {
+inline void TogglingCellConnections(Game::cell* cell) {
     auto neighbors = GetExtraFields(cell)->neighbors;
     auto states = toggle_states((uint) cell->value);
-    float own_dir_conductivity = P::materials_list[cell->material_index].directional_conductivity;
+    float own_dir_conductivity = Game::materials_list[cell->material_index].directional_conductivity;
     for (int side = 0; side < 6; side++) {
         if (auto* neighbor = neighbors[side]) {
             int index = side * 16; // cell properties are interweaved in 16 cell intervals for optimisation
             int opposite_side = (side + 3) % 6;
             int opposite_side_index = opposite_side * 16;
-            float neighbor_conductivity = P::materials_list[neighbor->material_index].conductivity;
-            float neighbor_dir_conductivity = P::materials_list[neighbor->material_index].directional_conductivity;
+            float neighbor_conductivity = Game::materials_list[neighbor->material_index].conductivity;
+            float neighbor_dir_conductivity = Game::materials_list[neighbor->material_index].directional_conductivity;
             float neighbor_voltage = neighbor->voltage;
             if (neighbor_dir_conductivity > 0.0f) {
                 // If the neighbor is directionally conductive, use the directional values
@@ -82,7 +82,7 @@ inline void TogglingCellConnections(P::cell* cell) {
 
 // This is actually identical to the isolator's electric_update_fn, so we could have just reused that,
 // But I wrote this anyway to use as an example.
-inline void TogglingCellElectric(P::cell* cell) {
+inline void TogglingCellElectric(Game::cell* cell) {
     auto states = toggle_states((uint) cell->value);
     for (int side = 0; side < 6; side++) {
         int index = side * 16;
@@ -109,11 +109,11 @@ inline void TogglingCellElectric(P::cell* cell) {
 }
 
 inline void AddTogglingCell() {
-    auto material = P::MatRef{"Electric isolator cell"}.GetCopy();
+    auto material = Game::MatRef{"Electric isolator cell"}.GetCopy();
     material.connection_update_fn = TogglingCellConnections;
     material.electric_update_fn = TogglingCellElectric;
     material.base_color = {0.5f, 0.4f, 0.2f, 1.0f};
-    P::SetCellNameAndDesc(material, "Toggling cell",
+    Game::SetCellNameAndDesc(material, "Toggling cell",
                           "Toggles output between 0V and -1V when powered with 0.25V on the opposite side.");
-    P::materials_list[P::n_materials++] = material;
+    Game::materials_list[Game::n_materials++] = material;
 }

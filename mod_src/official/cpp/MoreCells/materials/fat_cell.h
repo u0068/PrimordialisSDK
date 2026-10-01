@@ -3,8 +3,8 @@
 
 constexpr float density = 10.0f;
 
-inline void FatCell(P::cell* cell) {
-    float health_normalised = cell->health / P::materials_list[cell->material_index].max_health;
+inline void FatCell(Game::cell* cell) {
+    float health_normalised = cell->health / Game::materials_list[cell->material_index].max_health;
     // cell->mass = (0.1f + health_normalised) * P::materials_list[cell->material_index].density;
     cell->target_spacing = health_normalised * 2.0f;
     cell->base_r = health_normalised * 2.0f;
@@ -13,7 +13,7 @@ inline void FatCell(P::cell* cell) {
 }
 
 inline void AddFatCell() {
-    auto material = P::MatRef{"Elastic cell"}.GetCopy();
+    auto material = Game::MatRef{"Elastic cell"}.GetCopy();
     material.tags = TAG_STRUCTURE | TAG_UTILITY;
     material.drop_weight = 0.1f;
     material.base_radius = 2.0f;
@@ -29,7 +29,7 @@ inline void AddFatCell() {
     material.physics_update_fn = FatCell;
     material.inv_heat_capacity = 1.0f / material.heat_capacity;
     material.base_color = {1.0f, 0.9f, 0.2f, 1.0f}; // Yellow
-    P::SetCellNameAndDesc(material, "Fat cell",
+    Game::SetCellNameAndDesc(material, "Fat cell",
                           "A soft, fatty cell with high biomass storage. Swells when storing biomass. Insulates heat.");
-    P::materials_list[P::n_materials++] = material;
+    Game::materials_list[Game::n_materials++] = material;
 }
