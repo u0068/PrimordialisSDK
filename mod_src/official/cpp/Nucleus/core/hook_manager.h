@@ -76,7 +76,7 @@ inline void InitHookContextStorage()
     current_context_fls = FlsAlloc(nullptr);
 
     if (current_context_fls == FLS_OUT_OF_INDEXES) {
-        P::ELog() << "FLS_OUT_OF_INDEXES";
+        A::ELog() << "FLS_OUT_OF_INDEXES";
     }
 }
 

@@ -4,7 +4,7 @@
 #set(MODS_DIR "$ENV{APPDATA}/com.kesomannen.gale/primordialis/profiles/Testing/mods")
 set(MODS_DIR "${CMAKE_SOURCE_DIR}/test_profile/mods")
 
-function(add_cpp_mod NAME)
+function(add_compiled_mod NAME)
     cmake_parse_arguments(
             MOD
             ""
@@ -15,10 +15,6 @@ function(add_cpp_mod NAME)
 
     add_library(${NAME} SHARED
             ${MOD_UNPARSED_ARGUMENTS}
-    )
-
-    target_link_libraries(${NAME}
-            PRIVATE AdapterCPP
     )
 
     set(MOD_DIR "${MODS_DIR}/${NAME}")
@@ -33,11 +29,6 @@ function(add_cpp_mod NAME)
             COMMAND ${CMAKE_COMMAND} -E make_directory
             "${MOD_DIR}"
     )
-#    add_custom_command(TARGET ${NAME} POST_BUILD
-#            COMMAND ${CMAKE_COMMAND} -E copy
-#            "$<TARGET_FILE:${NAME}>"
-#            "${MOD_DIR}"
-#    )
 
     # Include the pdb
     if(MSVC)
@@ -66,6 +57,42 @@ function(add_cpp_mod NAME)
                 DESTINATION "${MOD_DIR}"
         )
     endforeach()
+endfunction()
+
+function(add_c_mod NAME)
+    cmake_parse_arguments(
+            MOD
+            ""
+            ""
+            "ASSETS"
+            ${ARGN}
+    )
+
+    add_compiled_mod(${NAME}
+            ${MOD_UNPARSED_ARGUMENTS}
+    )
+
+    target_compile_features(${NAME} PRIVATE c_std_20)
+endfunction()
+
+function(add_cpp_mod NAME)
+    cmake_parse_arguments(
+            MOD
+            ""
+            ""
+            "ASSETS"
+            ${ARGN}
+    )
+
+    add_compiled_mod(${NAME}
+            ${MOD_UNPARSED_ARGUMENTS}
+    )
+
+    target_compile_features(${NAME} PRIVATE cxx_std_20)
+
+    target_link_libraries(${NAME}
+            PRIVATE AdapterCPP
+    )
 endfunction()
 
 function(add_mod_targets_from_this_dir BuildAllTargetName)
