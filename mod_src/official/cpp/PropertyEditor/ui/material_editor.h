@@ -2,6 +2,7 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/cells.h"
 #include "include/mats.h"
+#include "include/filebrowser.h"
 
 inline int copy_from = 1;
 inline bool show_combos = false;
@@ -160,6 +161,7 @@ inline void DrawMaterialEditor(int idx, P::material_t& mat) {
     ImGui::PopID();
 }
 
+
 inline void DrawMaterialsEditor() {
     // If this runs during loading screen, the skies will split and woe will be upon us
     if (P::w->loading_screen) return;
@@ -179,16 +181,25 @@ inline void DrawMaterialsEditor() {
     ImGui::Checkbox("Reset on Reload", &reset_mats_on_reload);
     ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_F);
     filter.Draw("##Filter");
-    // if (ImGui::Button("Save Materials"))
-    //     SaveAllMats();
-    // ImGui::SameLine();
-    // if (ImGui::Button("Load Materials"))
-    //     LoadAllMats();
+
+    if (ImGui::Button("Save Materials")) {
+        auto selected = pfd::save_file("Select a file").result();
+        if (not selected.empty()) {
+            SaveAllMats(selected);
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load Materials")) {
+        auto selected = pfd::open_file("Select a file").result();
+        if (not selected.empty()) {
+            LoadAllMats(selected[0]);
+        }
+    }
     for (int i = 0; i < P::n_materials; i++) {
         P::material_t& mat = P::materials_list[i];
         if (not filter.PassFilter(mat.name)) continue;
         if (((std::string) mat.name).starts_with("Combo") && !show_combos) continue;
-        if (i < 83 && !show_vanilla) continue;
+        if (i < n_vanilla_mats && !show_vanilla) continue; // TODO: Get vanilla cell count automatically
         DrawMaterialEditor(i, mat);
     }
 

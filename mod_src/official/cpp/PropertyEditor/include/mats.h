@@ -3,11 +3,7 @@
 
 inline bool reset_mats_on_reload = false;
 inline bool has_initialised_mats = false;
-
-// union material_u {
-//     P::material_t mat;
-//     byte data[280];
-// };
+constexpr int n_vanilla_mats = 86;
 
 inline P::material_t CopyMaterial(P::material_t mat) {
     // Idk if this is a good way to unlink char* but it works
@@ -16,78 +12,50 @@ inline P::material_t CopyMaterial(P::material_t mat) {
     return mat;
 }
 
-// inline std::string SaveMat(P::material_t &mat) {
-//     std::stringstream output;
-//     output << mat.name << "\n";
-//     output << "{";
-//     for (unsigned char data: material_u{mat}.data) {
-//         if (data < 100) {
-//             output << "0";
-//         }
-//         if (data < 10) {
-//             output << "0";
-//         }
-//         output << std::to_string(data);
-//         output << ",";
-//     }
-//     output << "}\n";
-//     return output.str();
-// }
-//
-// inline void SaveAllMats() {
-//     std::ofstream file("materials.txt");
-//
-//     if (!file) return;
-//
-//     file.clear();
-//
-//     for (int idx = 0; idx < P::n_materials; idx++) {
-//         P::material_t &mat = P::materials_list[idx];
-//         file << SaveMat(mat);
-//     }
-//
-//     file.close();
-// }
-//
-// inline P::material_t LoadMat(std::string &data_string, std::string &name) {
-//     material_u mat_data{};
-//     for (int i = 0; i < 280; i++) {
-//         byte data = std::stoi(data_string.substr(1 + i * 4, 3));
-//         mat_data.data[i] = data;
-//     }
-//     mat_data.mat.name = (char *) (new std::string(name))->c_str();
-//     return mat_data.mat;
-// }
-//
-// inline void LoadAllMats() {
-//     std::ifstream file("materials.txt");
-//
-//     if (!file) return;
-//
-//     file.clear();
-//
-//     material_u mat_data{};
-//     int line_num{};
-//     std::string line{};
-//     std::string name;
-//     while (getline(file, line)) {
-//         if (line_num % 2 == 0) {
-//             name = line;
-//         }
-//         else {
-//             LoadMat(line, name);
-//             P::materials_list[line_num / 2] = mat_data.mat;
-//         }
-//         line_num++;
-//     }
-//
-//     file.close();
-// }
+inline void SaveAllMats(const fs::path& file_path) {
+    std::ofstream file(file_path, std::ios::out | std::ios::binary);
+
+    if (!file) return;
+
+    file.clear();
+
+    int n_mats = P::n_materials;
+    file.write((char*)&n_mats, sizeof(int));
+    file.write((char*)&*P::materials_list, n_mats * sizeof(P::material_t));
+    for (auto i = 0; i < n_mats; i++) {
+        file.write(P::materials_list[i].name, 32);
+    }
+    P::Log() << n_mats;
+
+    file.close();
+}
+
+inline void LoadAllMats(const fs::path& file_path) {
+    std::ifstream file(file_path, std::ios::in | std::ios::binary);
+
+    if (!file) return;
+
+    file.clear();
+
+    int n_mats{};
+    file.read((char*)&n_mats, sizeof(int));
+    file.read((char*)&*P::materials_list, n_mats * sizeof(P::material_t));
+    for (auto i = 0; i < n_mats; i++) {
+        if (i > n_vanilla_mats - 1) {
+            P::materials_list[i].name = new char[32]{"Unnamed cell"};
+        }
+        file.read((char*)P::materials_list[i].name, 32);
+    }
+    P::Log() << n_mats;
+    P::n_materials = n_mats;
+
+    file.close();
+}
 
 inline void InitMaterialsHook() {
     if (not reset_mats_on_reload and has_initialised_mats) {
         // TO-DO: Get number of vanilla cells automatically
-        P::next_icon_index = 82;
+        P::next_icon_index = n_vanilla_mats-1;
         return;
     }
     P::Next<void>();
