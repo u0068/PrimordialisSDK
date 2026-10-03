@@ -6,8 +6,9 @@ inline bool has_initialised_mats = false;
 constexpr int n_vanilla_mats = 86;
 
 inline P::material_t CopyMaterial(P::material_t mat) {
-    // Idk if this is a good way to unlink char* but it works
-    mat.name = (char *) (new std::string(mat.name))->c_str();
+    auto buffer = new char{};
+    strcpy_s(buffer, 32, mat.name);
+    mat.name = buffer;
     mat.id = P::HashId(mat.name);
     return mat;
 }
