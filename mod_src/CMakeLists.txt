@@ -72,7 +72,7 @@ function(add_c_mod NAME)
             ${MOD_UNPARSED_ARGUMENTS}
     )
 
-    target_compile_features(${NAME} PRIVATE c_std_20)
+    target_compile_features(${NAME} PRIVATE c_std_17)
 endfunction()
 
 function(add_cpp_mod NAME)
@@ -88,7 +88,7 @@ function(add_cpp_mod NAME)
             ${MOD_UNPARSED_ARGUMENTS}
     )
 
-    target_compile_features(${NAME} PRIVATE cxx_std_20)
+    target_compile_features(${NAME} PRIVATE cxx_std_23)
 
     target_link_libraries(${NAME}
             PRIVATE AdapterCPP
@@ -137,6 +137,10 @@ endfunction()
 add_subdirectory(examples/cpp)
 add_subdirectory(official/cpp)
 add_subdirectory(my_mods/cpp)
+
+add_subdirectory(examples/c)
+#add_subdirectory(official/c)
+#add_subdirectory(my_mods/c)
 
 add_subdirectory(examples/lua)
 add_subdirectory(official/lua)

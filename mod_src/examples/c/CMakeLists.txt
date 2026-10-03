@@ -1,0 +1,2 @@
+
+add_mod_targets_from_this_dir(BuildCExampleMods)
