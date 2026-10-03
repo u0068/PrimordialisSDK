@@ -40,15 +40,15 @@ function(add_plasmid_mod NAME)
 #    )
 
     # Include the pdb
-#    if(MSVC)
-#        target_compile_options(${NAME} PRIVATE
-#                $<$<CONFIG:Release>:/Zi>
-#        )
-#
-#        target_link_options(${NAME} PRIVATE
-#                $<$<CONFIG:Release>:/DEBUG>
-#        )
-#    endif()
+    if(MSVC)
+        target_compile_options(${NAME} PRIVATE
+                $<$<CONFIG:Release>:/Zi>
+        )
+
+        target_link_options(${NAME} PRIVATE
+                $<$<CONFIG:Release>:/DEBUG>
+        )
+    endif()
 
     foreach(ASSET ${MOD_ASSETS})
         set(ASSET_PATH
@@ -112,5 +112,5 @@ add_subdirectory(official/cpp)
 add_subdirectory(my_mods/cpp)
 
 add_subdirectory(examples/lua)
-#add_subdirectory(official/lua)
-#add_subdirectory(my_mods/lua)
+add_subdirectory(official/lua)
+add_subdirectory(my_mods/lua)

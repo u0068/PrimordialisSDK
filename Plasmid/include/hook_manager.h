@@ -75,11 +75,12 @@ namespace P {
                 context.chain = chain;
                 context.index = 0;
 
+                void* previous = nucleus->GetCurrentContext();
                 nucleus->SetCurrentContext(&context);
 
                 Ret result = Next<Ret>(args...);
 
-                nucleus->SetCurrentContext(nullptr);
+                nucleus->SetCurrentContext(previous);
 
                 return result;
             }
@@ -108,11 +109,12 @@ namespace P {
                 context.chain = chain;
                 context.index = 0;
 
+                void* previous = nucleus->GetCurrentContext();
                 nucleus->SetCurrentContext(&context);
 
                 Next<void>(args...);
 
-                nucleus->SetCurrentContext(nullptr);
+                nucleus->SetCurrentContext(previous);
             }
         };
 

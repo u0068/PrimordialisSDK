@@ -1,5 +1,6 @@
 -- api_version should be the current version of the modloader, if your mod requires a more recent version than is installed we will error
-local M = { api_version = 7 }
+local M = { api_version = 8 }
+local MOD_NAME, MOD_FILEPATH = ...
 
 dofile(MOD_FILEPATH.."/brain_utils.lua") -- Load in the brain_utils
 

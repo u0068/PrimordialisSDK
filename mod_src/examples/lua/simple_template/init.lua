@@ -1,5 +1,6 @@
 -- api_version should be the current version of the modloader, if your mod requires a more recent version than is installed we will error
-local M = { api_version = 6}
+local M = { api_version = 8 }
+local MOD_NAME, MOD_FILEPATH = ...
 
 -- DON'T FORGET TO LOAD IN ANY EXTRA FILES THAT YOU MAY BE USING!
 -- If you're making a big mod with lots of brains and functions, its good to organise it in multiple files.

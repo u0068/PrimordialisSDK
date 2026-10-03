@@ -90,6 +90,8 @@ void Bootstrap() {
 
     ExtractPDBs();
 
+    InitHookContextStorage();
+
     InitMinHook();
 
     InitDbgHelp();

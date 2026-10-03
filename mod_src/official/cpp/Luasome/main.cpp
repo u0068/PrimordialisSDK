@@ -1,9 +1,11 @@
 #pragma once
+#include <format>
 #include <lua.hpp>
 #include <plasmid_api.h>
 #include <include/primordialis_log.h>
 #include "yaml-cpp/yaml.h"
 #include "internal/nucleus_interface.h"
+#include "generated/game_functions/misc.h"
 
 void RunLuaFile(lua_State *L, const std::filesystem::path& path) {
     // P::Log(COL_MUTED) << "Running " << path.filename();
@@ -65,14 +67,16 @@ int gamelua_elog(lua_State* L)
 }
 
 void LuaInitHook(lua_State *L) {
-    lua_pushcclosure(L, gamelua_get_mods_dir,0);
-    lua_setfield(L,(int)0xffffd8ee,"get_mods_dir");
-    lua_pushcclosure(L, gamelua_get_own_dir,0);
-    lua_setfield(L,(int)0xffffd8ee,"get_own_dir");
-    lua_pushcclosure(L, gamelua_log,0);
-    lua_setfield(L,(int)0xffffd8ee,"log");
-    lua_pushcclosure(L, gamelua_elog,0);
-    lua_setfield(L,(int)0xffffd8ee,"elog");
+    // P::Log() << "LuaInitHook L = " << L;
+
+    lua_pushcfunction(L, gamelua_get_mods_dir);
+    lua_setfield(L, LUA_GLOBALSINDEX, "get_mods_dir");
+    lua_pushcfunction(L, gamelua_get_own_dir);
+    lua_setfield(L, LUA_GLOBALSINDEX, "get_own_dir");
+    lua_pushcfunction(L, gamelua_log);
+    lua_setfield(L, LUA_GLOBALSINDEX, "log");
+    lua_pushcfunction(L, gamelua_elog);
+    lua_setfield(L, LUA_GLOBALSINDEX, "elog");
 
     RunLuaFile(L, P::mod_path / "pre.lua");
     P::Next<void>(L);
@@ -112,7 +116,24 @@ void SaveLuaModlist() {
     file.close();
 }
 
+// Force reload lua once on startup
+static bool has_reinited{false};
+void reinit_game_hook(P::window_t *window) {
+    has_reinited = true;
+    P::Next<void>(window);
+}
+void update_game_hook(P::window_t *window) {
+    P::Next<void>(window);
+
+    if (not has_reinited) {
+        window->frame_input.pressed_buttons[0xe] = 0x10;
+    }
+}
+
 inline void P::InitialiseMod() {
+    P::autoreload = true;
     SaveLuaModlist();
     P::Hook<"run_lua_init_script">(LuaInitHook);
+    P::Hook<"update_window">(update_game_hook);
+    P::Hook<"reinit_game">(reinit_game_hook);
 }

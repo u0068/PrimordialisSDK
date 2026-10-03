@@ -1,0 +1,7 @@
+{
+  "name": "simple_template",
+  "description": "An example mod showing how to add creatures using lua.",
+  "version_number": "1.0.1",
+  "website_url": "https://github.com/u0068/PrimordialisSDK",
+  "dependencies": ["u0068-Luasome-1.0.3"]
+}

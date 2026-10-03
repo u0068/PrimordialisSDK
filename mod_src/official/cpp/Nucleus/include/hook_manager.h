@@ -69,12 +69,23 @@ inline void* CreateHook(const char* name, void* hook) {
     return trampoline;
 }
 
-inline thread_local void* current_context;
+inline DWORD current_context_fls = FLS_OUT_OF_INDEXES;
 
-inline void* GetCurrentContext() {
-    return current_context;
+inline void InitHookContextStorage()
+{
+    current_context_fls = FlsAlloc(nullptr);
+
+    if (current_context_fls == FLS_OUT_OF_INDEXES) {
+        P::ELog() << "FLS_OUT_OF_INDEXES";
+    }
 }
 
-inline void SetCurrentContext(void* context) {
-    current_context = context;
+inline void* GetCurrentContext()
+{
+    return FlsGetValue(current_context_fls);
+}
+
+inline void SetCurrentContext(void* context)
+{
+    FlsSetValue(current_context_fls, context);
 }
