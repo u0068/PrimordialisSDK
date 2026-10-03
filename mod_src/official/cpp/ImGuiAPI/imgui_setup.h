@@ -81,9 +81,9 @@ inline LRESULT CALLBACK imgui_wndproc(
     );
 }
 
-inline void BlockInputs(Game::window_t* window) {
-    Game::Next<void>(window);
-    if (!Game::IsThreadSafe()) {
+inline void BlockInputs(P::window_t* window) {
+    P::Next<void>(window);
+    if (!P::IsThreadSafe()) {
         return;
     }
     if (!ImGui::GetIO().WantCaptureMouse) {
@@ -102,8 +102,8 @@ inline void BlockInputs(Game::window_t* window) {
     window->frame_input.escape_blocked = true;
     window->frame_input.right_click_blocked = true;
 
-    Game::w->block_mouse = 1;
-    Game::w->scroll_blocked = 1;
+    P::w->block_mouse = 1;
+    P::w->scroll_blocked = 1;
 
     window->input.cursor_type = 0;
     window->input.mouse_wheel = 0;
@@ -130,14 +130,14 @@ inline void DrawImgui() {
         static_cast<float>(viewport[3])
     );;
 
-    Game::real_2 scale_factor{
-        (float) viewport[2] / (float) Game::main_wnd->size.x,
-        (float) viewport[3] / (float) Game::main_wnd->size.y
+    P::real_2 scale_factor{
+        (float) viewport[2] / (float) P::main_wnd->size.x,
+        (float) viewport[3] / (float) P::main_wnd->size.y
     };
     POINT mouse_pos;
     if (GetCursorPos(&mouse_pos)) {
         ScreenToClient(
-            (HWND) Game::main_wnd->hwnd,
+            (HWND) P::main_wnd->hwnd,
             &mouse_pos
         );
 
@@ -157,18 +157,18 @@ inline void DrawImgui() {
 }
 
 inline void ImguiHookSoftwareCursor(
-    Game::render_context* param_1, Game::real_3* param_2, float param_3, Game::real_4* param_4, int param_5) {
-    if (Game::IsThreadSafe()) {
+    P::render_context* param_1, P::real_3* param_2, float param_3, P::real_4* param_4, int param_5) {
+    if (P::IsThreadSafe()) {
         DrawImgui();
     }
-    Game::Next<void>(param_1, param_2, param_3, param_4, param_5);
+    P::Next<void>(param_1, param_2, param_3, param_4, param_5);
 }
 
 inline void ImguiHookHardwareCursor(
-    Game::render_context* param_1, Game::render_context* param_2, Game::user_input* param_3,
-    Game::recording_buffer* param_4, float param_5, Game::window_t* param_6) {
-    Game::Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
-    if (Game::IsThreadSafe() and Game::settings->hardware_cursor) {
+    P::render_context* param_1, P::render_context* param_2, P::user_input* param_3,
+    P::recording_buffer* param_4, float param_5, P::window_t* param_6) {
+    P::Next<void>(param_1, param_2, param_3, param_4, param_5, param_6);
+    if (P::IsThreadSafe() and P::settings->hardware_cursor) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
         DrawImgui();
     }
@@ -176,16 +176,16 @@ inline void ImguiHookHardwareCursor(
 
 inline bool imgui_initialized = false;
 
-inline void WindowInitHook(Game::window_t* window) {
-    Game::Next<void>(window);
+inline void WindowInitHook(P::window_t* window) {
+    P::Next<void>(window);
 
-    if (!Game::IsThreadSafe()) {
+    if (!P::IsThreadSafe()) {
         return;
     }
 
     if (imgui_initialized) {
         // TODO: automatic re-initialisation without restarting
-        Game::Log(COL_WARNING) << "Restart the game to re-initialise ImGui!";
+        P::Log(COL_WARNING) << "Restart the game to re-initialise ImGui!";
         return;
     }
 
@@ -227,14 +227,14 @@ inline void WindowInitHook(Game::window_t* window) {
     );
 
     imgui_initialized = true;
-    Game::Log(COL_MUTED) << "ImGui Initialised";
-    Game::Log(COL_MUTED) << "ImGui Context: " << ImGui::GetCurrentContext();
+    P::Log(COL_MUTED) << "ImGui Initialised";
+    P::Log(COL_MUTED) << "ImGui Context: " << ImGui::GetCurrentContext();
 }
 
 inline void do_imgui_hooks() {
-    Game::Hook<"init_gl_context">(WindowInitHook);
-    Game::Hook<"draw_cursor">(ImguiHookSoftwareCursor);
-    Game::Hook<"render_game">(ImguiHookHardwareCursor);
-    Game::Hook<"update_mouse_pos">(BlockInputs);
-    Game::Log() << "Done ImGui Hooks!";
+    P::Hook<"init_gl_context">(WindowInitHook);
+    P::Hook<"draw_cursor">(ImguiHookSoftwareCursor);
+    P::Hook<"render_game">(ImguiHookHardwareCursor);
+    P::Hook<"update_mouse_pos">(BlockInputs);
+    P::Log(COL_MUTED) << "Done ImGui Hooks!";
 }

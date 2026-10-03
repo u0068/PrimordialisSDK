@@ -1,12 +1,6 @@
 -- api_version should be the current version of the modloader, if your mod requires a more recent version than is installed we will error
--- version is the version number of your mod
-local M = { api_version = 6, version = "1.2.5" }
-
--- For convenience, I made a variable to store the mod's name and filepath
--- If you change the mod's name or filepath, you only need to change these variables
--- Instead of having to change it in a hundred places scattered throughout the mod and then crashing because you missed one
-local MOD_NAME = "simple_template"
-local MOD_FILEPATH = "mods/"..MOD_NAME.."/" -- Make sure this matches your folder structure or else nothing will work
+local M = { api_version = 8 }
+local MOD_NAME, MOD_FILEPATH = ...
 
 -- DON'T FORGET TO LOAD IN ANY EXTRA FILES THAT YOU MAY BE USING!
 -- If you're making a big mod with lots of brains and functions, its good to organise it in multiple files.

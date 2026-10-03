@@ -18,48 +18,49 @@ function crash()
 	require("ffi").cast("int *", 0)[0] = 0
 end
 
-dofile_once("mods/Luasome/key_codes.lua")
-dofile_once("mods/Luasome/mod_list.lua")
-local api = dofile_once("mods/Luasome/api.lua")
+local mods = get_mods_dir()
+local Luasome = get_own_dir()
+dofile_once(Luasome.."/key_codes.lua")
+dofile_once(Luasome.."/mod_list.lua")
+local api = dofile_once(Luasome.."/api.lua")
 
 for _, v in ipairs(LUA_MODLOADER_MOD_LIST) do
-	if type(v) == "string" then
-		local success, callbacks = pcall(dofile_once, "mods/" .. v .. "/init.lua")
-		if not success then
-			table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: " .. v .. " got the error " .. callbacks)
-		end
-		table.insert(LUA_MODLOADER_LOADED_MODS, { name = v, callbacks = callbacks, config = {} })
-	elseif type(v) == "table" then
-		LUA_MODLOADER_CONFIG = v[2]
-		local name = v[1]
-		local success, callbacks = pcall(dofile_once, "mods/" .. name .. "/init.lua")
-		if not success then
-			table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: " .. name .. " got the error " .. callbacks)
-		end
-		LUA_MODLOADER_CONFIG = nil
-		table.insert(LUA_MODLOADER_LOADED_MODS, { name = name, callbacks = callbacks, config = v[2] })
-	else
+    if type(v) ~= "string" and type(v) ~= "table" then
 		table.insert(
 			LUA_MODLOADER_ERRORS,
 			"ERROR: invalid mod list, " .. tostring(v) .. ": " .. type(v) .. " is not a valid mod"
-		)
+        )
+	else
+        local name = type(v) == "table" and v[1] or v
+		LUA_MODLOADER_CONFIG = type(v) == "table" and v[2] or {}
+        local path = mods .. "/" .. name .. "/"
+
+		local chunk, err = loadfile(path.."/init.lua")
+        if not chunk then
+            table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: " .. v .. " got the error " .. err)
+        else
+            local success, callbacks = pcall(chunk, name, path)
+            if not success then
+                table.insert(LUA_MODLOADER_ERRORS, "Error in mod: " .. v .. " got the error " .. callbacks)
+            end
+            table.insert(LUA_MODLOADER_LOADED_MODS, { name = v, callbacks = callbacks, config = LUA_MODLOADER_CONFIG })
+        end
 	end
 end
 
 api.log("Active mods:\n")
 for _, v in ipairs(LUA_MODLOADER_LOADED_MODS) do
-	api.log(v.name .. (v.callbacks.version and (" - " .. v.callbacks.version) or "") .. "\n")
+	api.log(v.name .. "\n")
 end
 for _, v in ipairs(LUA_MODLOADER_LOADED_MODS) do
 	if (v.callbacks.api_version or 0) > LUA_MODLOADER_VERSION then
 		table.insert(
 			LUA_MODLOADER_ERRORS,
-			"Mod '" .. v.name .. v.callbacks.version and ("' - " .. v.callbacks.version)
-				or "' "
+			"Mod '" .. v.name .. "' "
 					.. "requires a newer version of the modloader, modloader version is v"
 					.. LUA_MODLOADER_VERSION
 					.. " mod requires v"
-					.. v.callbacks.version
+					.. v.callbacks.api_version
 		)
 	end
 end

@@ -39,6 +39,7 @@ function(add_cpp_mod NAME)
 #            "${MOD_DIR}"
 #    )
 
+    # Include the pdb
     if(MSVC)
         target_compile_options(${NAME} PRIVATE
                 $<$<CONFIG:Release>:/Zi>
@@ -90,6 +91,26 @@ function(add_mod_targets_from_this_dir BuildAllTargetName)
     endif()
 endfunction()
 
+function(copy_lua_mods)
+    file(GLOB MODS CONFIGURE_DEPENDS
+            RELATIVE ${CMAKE_CURRENT_LIST_DIR}
+            *)
+
+    foreach(MOD ${MODS})
+        message("Found mod: ${MOD}")
+        if(IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/${MOD})
+            file(COPY
+                    "${CMAKE_CURRENT_LIST_DIR}/${MOD}"
+                    DESTINATION "${MODS_DIR}"
+            )
+        endif()
+    endforeach()
+endfunction()
+
 add_subdirectory(examples/cpp)
 add_subdirectory(official/cpp)
 add_subdirectory(my_mods/cpp)
+
+add_subdirectory(examples/lua)
+add_subdirectory(official/lua)
+add_subdirectory(my_mods/lua)

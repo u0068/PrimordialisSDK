@@ -1,7 +1,7 @@
 {
   "name": "Luasome",
   "description": "Lua modloader for Primordialis.",
-  "version_number": "1.0.0",
+  "version_number": "1.0.3",
   "website_url": "https://github.com/u0068/PrimordialisSDK",
   "dependencies": []
 }
