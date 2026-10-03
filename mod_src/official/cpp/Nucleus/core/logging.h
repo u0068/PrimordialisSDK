@@ -2,8 +2,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "plasmid_api.h"
-#include "../include/enums.h"
+#include "enums.h"
+#include "generated/game_functions/essential.h"
 
 static void InitConsole() {
     if (!AllocConsole()) {

@@ -2,8 +2,7 @@
 #include <iostream>
 #include "mods.h"
 #include "nucleus_api.h"
-#include "include/plasmid_log.h"
-#include "include/nucleus_interface.h"
+#include "nucleus_interface.h"
 #include "yaml-cpp/yaml.h"
 
 namespace fs = std::filesystem;
@@ -93,7 +92,7 @@ void ParseModInfo(Mod& mod) {
             }
         }
         if (mod.dll_path.empty()) {
-            Game::ELog(COL_ERROR) << err << "Multiple .dll files detected! I don't know which one to load.\n"
+            A::ELog(COL_ERROR) << "Multiple .dll files detected! I don't know which one to load.\n"
                     "Please make the dll that should be loaded have same filename as the mod folder!";
         }
     }
@@ -103,10 +102,10 @@ void ParseModInfo(Mod& mod) {
 }
 
 void ModParser::ParseMods() {
-    Game::Log(COL_MUTED) << "Parsing Mods...";
+    A::Log(COL_MUTED) << "Parsing Mods...";
 
     if (mod_path.empty()) {
-        Game::ELog(COL_ERROR) << "No mods found in " << mod_path;
+        A::ELog(COL_ERROR) << "No mods found in " << mod_path;
         return;
     }
 

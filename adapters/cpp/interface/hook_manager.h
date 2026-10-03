@@ -1,10 +1,10 @@
 #pragma once
-#include "include/nucleus_interface.h"
+#include "nucleus_interface.h"
 #include <vector>
 #include <algorithm>
 // #include "plasmid_log.h"
 
-namespace P {
+namespace A {
     namespace Internal {
         template<size_t N>
         struct FixedString {

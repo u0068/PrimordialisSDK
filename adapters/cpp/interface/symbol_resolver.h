@@ -3,9 +3,9 @@
 #include <unordered_map>
 
 #include "logstream.h"
-#include "../core/nucleus_interface.h"
+#include "nucleus_interface.h"
 
-namespace P {
+namespace A {
     template<typename T>
     T& Resolve(const char* name) {
         static std::unordered_map<std::string, T> cache;
@@ -29,7 +29,7 @@ namespace P {
             std::call_once(flag, [&]() {
                 ptr = Resolve<T *>(name);
                 if (not ptr) {
-                    P::ELog() << "Failed to resolve " << name;
+                    A::ELog() << "Failed to resolve " << name;
                 }
             });
             return *ptr;

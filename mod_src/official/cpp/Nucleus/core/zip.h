@@ -1,12 +1,11 @@
 #pragma once
 #include <zip_file.hpp>
 #include "mods.h"
-#include "include/plasmid_log.h"
 
 inline void ExtractZip(
     const fs::path& zip,
     const fs::path& destination) {
-    Game::Log(COL_MUTED) << "Extracting " << zip << " to " << destination << "\n";
+    A::Log(COL_MUTED) << "Extracting " << zip << " to " << destination << "\n";
     miniz_cpp::zip_file file(zip.string());
     for (const auto& name: file.namelist()) {
         fs::path output = destination / name;
@@ -28,8 +27,6 @@ inline bool ExtractPDBs() {
         ExtractZip("pdbs.zip", ModParser::game_path);
         return true;
     }
-    else {
-        Game::ELog(COL_CRITICAL) << "pdbs.zip not found.\nVerify integrity game files!";
-        return false;
-    }
+    A::ELog(COL_CRITICAL) << "pdbs.zip not found.\nVerify integrity game files!";
+    return false;
 }

@@ -1,5 +1,5 @@
 
-add_plasmid_mod(Nucleus
+add_cpp_mod(Nucleus
         src/main.cpp
         src/mod_parser.cpp
 
@@ -8,12 +8,13 @@ add_plasmid_mod(Nucleus
 )
 
 target_link_libraries(Nucleus
-        PRIVATE Plasmid
+        PRIVATE AdapterCPP
 )
 
 target_include_directories(Nucleus PRIVATE
         core/
-        include/
+        utils/
+        shared/
 )
 
 target_compile_definitions(Nucleus PRIVATE

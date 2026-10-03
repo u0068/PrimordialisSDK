@@ -5,7 +5,7 @@
 
 namespace fs = std::filesystem;
 
-namespace P {
+namespace A {
     inline std::string mod_name{"Unnamed Mod"};
 
     namespace Internal {
@@ -53,6 +53,14 @@ namespace P {
                 color,
                 important
             };
+        }
+
+        inline LogStream ALog(const int color = COL_NORMAL, const bool important = false) {
+            return LogSourced("ADAPTER ("+mod_name+")", color, important);
+        }
+
+        inline LogStream AELog(const int color = COL_ERROR, const bool important = true) {
+            return LogSourced("ADAPTER ("+mod_name+")", color, important);
         }
     }
 

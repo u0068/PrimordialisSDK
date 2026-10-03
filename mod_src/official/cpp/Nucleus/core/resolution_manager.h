@@ -1,8 +1,9 @@
 #pragma once
-#include "include/plasmid_log.h"
 #include <mutex>
 #include <windows.h>
 #include <dbghelp.h>
+
+#include "interface/logstream.h"
 
 #pragma comment(lib, "dbghelp.lib")
 
@@ -17,12 +18,12 @@ inline void InitDbgHelp() {
             GetCurrentProcess(),
             nullptr,
             TRUE)) {
-            Game::ELog(COL_CRITICAL) << "SymInitialize failed: " << GetLastError() << "\n"
+            A::ELog(COL_CRITICAL) << "SymInitialize failed: " << GetLastError() << "\n"
                                       << "Mods will not work!\n"
                                          "This error may be caused by loading 2 instances of Nucleus";
         }
 
-        Game::Log(COL_MUTED) << "DbgHelp initialized";
+        A::Log(COL_MUTED) << "DbgHelp initialized";
     });
 }
 
@@ -38,12 +39,12 @@ inline void* ResolveSymbol(const char* name) {
     symbol->MaxNameLen = MAX_SYM_NAME;
 
     if (!SymFromName(GetCurrentProcess(), name, symbol)) {
-        Game::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
+        A::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
         return nullptr;
     }
     addr = reinterpret_cast<void *>(symbol->Address);
     if (addr == nullptr) {
-        Game::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
+        A::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
     }
     return addr;
 }

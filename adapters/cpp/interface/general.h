@@ -1,20 +1,7 @@
 #pragma once
-#include "math.h"
+#include "interface/logstream.h"
 
-#include "generated/game_functions/essential.h"
-#include "generated/globals.h"
-
-inline const char* UintToStr(uint i) {
-    union {
-        uint numeric{0};
-        char string[5];
-    };
-    numeric = i;
-    string[4] = '\0';
-    return string;
-}
-
-namespace Internal {
+namespace A::Internal {
     // I hope that using inheritance and polymorphism here doesn't come back to bite me in the ass
     // I did it mostly to learn how to do it
 
@@ -68,7 +55,7 @@ namespace Internal {
         }
 
         virtual int GetIndex() const {
-            Internal::PELog(COL_CRITICAL) << "GetIndex() not implemented for this struct!\nFalling back to 1.";
+            AELog(COL_CRITICAL) << "GetIndex() not implemented for this struct!\nFalling back to 1.";
             return 1;
         }
 

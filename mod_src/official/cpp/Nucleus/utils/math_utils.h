@@ -1,12 +1,10 @@
 #pragma once
 #include <numbers>
-#include <cmath>
-#include <string_view>
 #include <cstdint>
-#include <string_view>
+#include <cstdlib>
 
 #include "general.h"
-#include "include/logstream.h"
+#include "interface/logstream.h"
 
 inline uint32_t HashId(const char *name) {
     uint32_t hash = 2166136261u;
@@ -16,7 +14,7 @@ inline uint32_t HashId(const char *name) {
         hash *= 16777619u;
     };
 
-    for (char c : std::string_view(P::mod_name)) {
+    for (char c : std::string_view(A::mod_name)) {
         hash_byte(static_cast<uint8_t>(c));
     }
 
@@ -40,7 +38,7 @@ inline uint32_t HashId(const char *name) {
         (static_cast<uint32_t>(alphabet[(value >>  6) & 0x3F]) << 16) |
         (static_cast<uint32_t>(alphabet[ value        & 0x3F]) << 24);
 
-    P::Log(COL_INFO)
+    A::Log(COL_INFO)
             << "Generated id: "
             << UintToStr(id)
             << " (" << id << ") for: "

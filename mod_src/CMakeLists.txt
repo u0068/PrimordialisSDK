@@ -4,7 +4,7 @@
 #set(MODS_DIR "$ENV{APPDATA}/com.kesomannen.gale/primordialis/profiles/Testing/mods")
 set(MODS_DIR "${CMAKE_SOURCE_DIR}/test_profile/mods")
 
-function(add_plasmid_mod NAME)
+function(add_cpp_mod NAME)
     cmake_parse_arguments(
             MOD
             ""
@@ -18,7 +18,7 @@ function(add_plasmid_mod NAME)
     )
 
     target_link_libraries(${NAME}
-            PRIVATE Plasmid
+            PRIVATE AdapterCPP
     )
 
     set(MOD_DIR "${MODS_DIR}/${NAME}")

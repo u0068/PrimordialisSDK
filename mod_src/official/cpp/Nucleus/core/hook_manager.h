@@ -1,15 +1,15 @@
 #pragma once
-#include "include/plasmid_log.h"
 #include <MinHook.h>
+#include "logging.h"
 
 inline void InitMinHook() {
     if (MH_Initialize() != MH_OK) {
-        Game::Log(COL_CRITICAL) << "MinHook init failed";
-        Game::Log(COL_ERROR) << "Mods will not work!";
-        Game::AttentionToConsole();
+        A::Log(COL_CRITICAL) << "MinHook init failed";
+        A::Log(COL_ERROR) << "Mods will not work!";
+        AttentionToConsole();
         return;
     }
-    Game::Log(COL_MUTED) << "MinHook initialized";
+    A::Log(COL_MUTED) << "MinHook initialized";
 }
 
 inline bool HookWrapper(void* target, void* hook, void** trampoline) {
@@ -20,34 +20,34 @@ inline bool HookWrapper(void* target, void* hook, void** trampoline) {
         trampoline);
 
     if (status != MH_OK) {
-        Game::Log(COL_ERROR) << "MH_CreateHook failed: " << status;
+        A::Log(COL_ERROR) << "MH_CreateHook failed: " << status;
         if (status == MH_ERROR_FUNCTION_NOT_FOUND) {
-            Game::Log(COL_ERROR) << "Specified function was not found!";
+            A::Log(COL_ERROR) << "Specified function was not found!";
         }
         else if (status == MH_ERROR_NOT_EXECUTABLE) {
-            Game::Log(COL_ERROR) << "Specified function is not executable!";
+            A::Log(COL_ERROR) << "Specified function is not executable!";
         }
         else if (status == MH_ERROR_UNSUPPORTED_FUNCTION) {
-            Game::Log(COL_ERROR) << "Specified function cannot be hooked!";
+            A::Log(COL_ERROR) << "Specified function cannot be hooked!";
         }
-        Game::AttentionToConsole();
+        AttentionToConsole();
         return false;
     }
 
     status = MH_EnableHook(target);
 
     if (status != MH_OK) {
-        Game::Log(COL_ERROR) << "MH_EnableHook failed: " << status;
+        A::Log(COL_ERROR) << "MH_EnableHook failed: " << status;
         if (status == MH_ERROR_FUNCTION_NOT_FOUND) {
-            Game::Log(COL_ERROR) << "Specified function was not found!";
+            A::Log(COL_ERROR) << "Specified function was not found!";
         }
         else if (status == MH_ERROR_NOT_EXECUTABLE) {
-            Game::Log(COL_ERROR) << "Specified function is not executable!";
+            A::Log(COL_ERROR) << "Specified function is not executable!";
         }
         else if (status == MH_ERROR_UNSUPPORTED_FUNCTION) {
-            Game::Log(COL_ERROR) << "Specified function cannot be hooked!";
+            A::Log(COL_ERROR) << "Specified function cannot be hooked!";
         }
-        Game::AttentionToConsole();
+        AttentionToConsole();
         return false;
     }
 
@@ -58,7 +58,7 @@ inline void* CreateHook(const char* name, void* hook) {
     void* target = ResolveSymbol(name);
     void* trampoline = nullptr;
 
-    Game::Log(COL_MUTED) << "Creating hook for " << name << " at " << target << " to " << hook;
+    A::Log(COL_MUTED) << "Creating hook for " << name << " at " << target << " to " << hook;
 
     HookWrapper(
         target,
