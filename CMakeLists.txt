@@ -19,7 +19,7 @@ add_subdirectory_if_exists(mod_src)
 
 # If you just want to make mods, you probably wont need the stuff below
 
-add_subdirectory_if_exists(Pilus)
+add_subdirectory_if_exists("Pilus [DEPRECATED]")
 
 #add_subdirectory_if_exists(lua/Luasome)
 
