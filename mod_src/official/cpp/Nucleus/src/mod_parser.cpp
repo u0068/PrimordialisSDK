@@ -1,5 +1,7 @@
 #include <fstream>
 #include <iostream>
+#include <plasmid_api.h>
+
 #include "mods.h"
 #include "nucleus_api.h"
 #include "include/plasmid_log.h"
@@ -69,7 +71,11 @@ void ParseModInfo(Mod& mod) {
 
     std::vector<fs::path> dlls{};
     for (const auto& entry: fs::recursive_directory_iterator(modFolder)) {
-        if (!entry.is_regular_file()) {
+        if (not entry.is_regular_file()) {
+            continue;
+        }
+
+        if (mod.name == "Nucleus" or mod.name == "u0068-Nucleus") {
             continue;
         }
 
@@ -128,10 +134,10 @@ void ModParser::ParseMods() {
     auto mods_yml_path = profile_path / "mods.yml"; // For r2modman profile
     if (exists(mods_yml_path)) {
         YAML::Node mods_yml = YAML::LoadFile(mods_yml_path.string());
-        for (std::size_t i = 0; i < mods_yml.size(); i++) {
+        for (auto && i : mods_yml) {
             for (auto& mod: installed_mods) {
-                if (mod.name == mods_yml[i]["name"].as<std::string>()
-                and mods_yml[i]["enabled"].as<bool>()
+                if (mod.name == i["name"].as<std::string>()
+                and i["enabled"].as<bool>()
                 and mod.is_cpp()) {
                     enabled_mods.push_back(mod);
                 }

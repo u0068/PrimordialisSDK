@@ -18,23 +18,27 @@ function crash()
 	require("ffi").cast("int *", 0)[0] = 0
 end
 
-dofile_once("mods/Luasome/key_codes.lua")
-dofile_once("mods/Luasome/mod_list.lua")
-local api = dofile_once("mods/Luasome/api.lua")
+local mods = get_mods_dir()
+local Luasome = get_own_dir()
+dofile(Luasome.."/key_codes.lua")
+dofile(Luasome.."/mod_list.lua")
+local api = dofile(Luasome.."/api.lua")
 
 for _, v in ipairs(LUA_MODLOADER_MOD_LIST) do
-	if type(v) == "string" then
-		local success, callbacks = pcall(dofile_once, "mods/" .. v .. "/init.lua")
+    if type(v) == "string" then
+	    MOD_NAME = v
+	    MOD_FILEPATH =  mods.."/"..v.."/"
+		local success, callbacks = pcall(dofile_once, mods.."/"..v.."/init.lua")
 		if not success then
-			table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: " .. v .. " got the error " .. callbacks)
+			table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: "..v.." got the error "..callbacks)
 		end
 		table.insert(LUA_MODLOADER_LOADED_MODS, { name = v, callbacks = callbacks, config = {} })
 	elseif type(v) == "table" then
 		LUA_MODLOADER_CONFIG = v[2]
 		local name = v[1]
-		local success, callbacks = pcall(dofile_once, "mods/" .. name .. "/init.lua")
+		local success, callbacks = pcall(dofile_once, mods.."/".. name.."/init.lua")
 		if not success then
-			table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: " .. name .. " got the error " .. callbacks)
+			table.insert(LUA_MODLOADER_ERRORS, "Error loading mod: "..name.." got the error "..callbacks)
 		end
 		LUA_MODLOADER_CONFIG = nil
 		table.insert(LUA_MODLOADER_LOADED_MODS, { name = name, callbacks = callbacks, config = v[2] })
@@ -48,18 +52,17 @@ end
 
 api.log("Active mods:\n")
 for _, v in ipairs(LUA_MODLOADER_LOADED_MODS) do
-	api.log(v.name .. (v.callbacks.version and (" - " .. v.callbacks.version) or "") .. "\n")
+	api.log(v.name .. "\n")
 end
 for _, v in ipairs(LUA_MODLOADER_LOADED_MODS) do
 	if (v.callbacks.api_version or 0) > LUA_MODLOADER_VERSION then
 		table.insert(
 			LUA_MODLOADER_ERRORS,
-			"Mod '" .. v.name .. v.callbacks.version and ("' - " .. v.callbacks.version)
-				or "' "
+			"Mod '" .. v.name .. "' "
 					.. "requires a newer version of the modloader, modloader version is v"
 					.. LUA_MODLOADER_VERSION
 					.. " mod requires v"
-					.. v.callbacks.version
+					.. v.callbacks.api_version
 		)
 	end
 end

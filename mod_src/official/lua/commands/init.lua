@@ -1,4 +1,3 @@
-dofile()
 local ffi = require("ffi")
 
 ffi.cdef[[
@@ -26,3 +25,5 @@ function give_cell(index)
     local item = ffi.new("cell_item", { material_index = index })
     create_cell_item(item)
 end
+
+return {}

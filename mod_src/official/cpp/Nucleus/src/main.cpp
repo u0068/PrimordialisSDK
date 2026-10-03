@@ -10,7 +10,10 @@
 
 using ModInit = void(*)(Nucleus*, const char*, const char*);
 
-void P::InitialiseMod() {}
+void P::InitialiseMod() {
+    P::ELog(COL_WARNING) << "If you see this, Nucleus is somehow loading itself as a mod.\n"
+                                 "This probably wont cause cause any issues, but it should not be happening.";
+}
 
 void LoadMod(Mod& mod) {
     HMODULE mod_handle = LoadLibraryA(mod.dll_path.string().c_str());
@@ -55,7 +58,7 @@ void LoadMods() {
     P::Log(COL_SUCCESS) << "All Mods Initialised!";
 }
 
-void MainHook(void* context) {
+void MainHook() {
     static std::once_flag flag;
     std::call_once(flag, []() {
         P::Log(COL_MUTED) << "Starting Nucleus mod loader.";
@@ -73,7 +76,7 @@ void MainHook(void* context) {
         LoadMods();
     });
 
-    return P::Next<void>(context);
+    // return P::Next<void>(context);
 }
 
 void Bootstrap() {
@@ -91,7 +94,9 @@ void Bootstrap() {
 
     InitDbgHelp();
 
-    P::Hook<"fiber_main">(MainHook);
+    MainHook();
+
+    // P::Hook<"fiber_main">(MainHook);
 }
 
 BOOL APIENTRY DllMain(

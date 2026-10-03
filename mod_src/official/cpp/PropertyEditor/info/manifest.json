@@ -3,5 +3,5 @@
   "description": "A collection of tools for experimenting with material and biome properties in-game.",
   "version_number": "1.0.0",
   "website_url": "https://github.com/u0068/PrimordialisSDK",
-  "dependencies": ["ImGuiAPI"]
+  "dependencies": ["u0068-ImGuiAPI-1.0.0"]
 }

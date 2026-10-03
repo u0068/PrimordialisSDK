@@ -1,10 +1,11 @@
-local api = dofile_once("pilus_files/luasome/api.lua")
+local Luasome = get_own_dir()
+local api = dofile_once(Luasome.."/api.lua")
 
 for _, v in ipairs(LUA_MODLOADER_LOADED_MODS) do
 	if v.callbacks.post ~= nil then
 		local success, err = pcall(v.callbacks.post, api, v.config)
 		if not success then
-			table.insert(LUA_MODLOADER_ERRORS, "Error running prehook for mod " .. v.name .. " got an error: " .. err)
+			table.insert(LUA_MODLOADER_ERRORS, "Error running posthook for mod " .. v.name .. " got an error: " .. err)
 		end
 	end
 end
@@ -14,6 +15,7 @@ if num_errors ~= 0 then
 	api.log("\n\n" .. num_errors .. " ERRORS LOADING MODS:\n\n")
 	for _, v in ipairs(LUA_MODLOADER_ERRORS) do
 		api.log(v .. "\n")
+		elog(v)
 	end
 	api.log("\nYOU NEED TO FIX THESE\n\n")
 
@@ -23,3 +25,4 @@ if num_errors ~= 0 then
 		return old_creature_list(...)
 	end
 end
+

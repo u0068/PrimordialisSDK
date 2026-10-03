@@ -236,5 +236,5 @@ inline void do_imgui_hooks() {
     P::Hook<"draw_cursor">(ImguiHookSoftwareCursor);
     P::Hook<"render_game">(ImguiHookHardwareCursor);
     P::Hook<"update_mouse_pos">(BlockInputs);
-    P::Log() << "Done ImGui Hooks!";
+    P::Log(COL_MUTED) << "Done ImGui Hooks!";
 }
