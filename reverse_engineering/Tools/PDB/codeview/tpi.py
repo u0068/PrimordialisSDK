@@ -126,7 +126,7 @@ def parse_type_record(record):
         reader,
     )
 
-    print(result)
+    # print(result)
 
     remaining = reader.remaining()
     if remaining:
@@ -157,13 +157,13 @@ class TPI:
                 reader,
                 header.minimum_type_index
         ):
-            print(
-                f"index={record.index:#x}: "
-                f"pos={record.position:#x}, "
-                f"kind={record.kind:#x}, "
-                f"name={kind_name(record.kind)}, "
-                f"({len(record.data):#x} bytes)"
-            )
+            # print(
+            #     f"index={record.index:#x}: "
+            #     f"pos={record.position:#x}, "
+            #     f"kind={record.kind:#x}, "
+            #     f"name={kind_name(record.kind)}, "
+            #     f"({len(record.data):#x} bytes)"
+            # )
             try:
                 parsed_record = parse_type_record(record)
                 self.types[record.index] = parsed_record

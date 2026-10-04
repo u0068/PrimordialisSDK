@@ -44,7 +44,7 @@ class MemberPointerInfo:
 
 @dataclass
 class PointerType(Type):
-	pointee: TypeRef
+	underlying: TypeRef
 	attributes: PointerAttributes
 	member_info: MemberPointerInfo | None
 
@@ -67,7 +67,7 @@ def convert_pointer(index, fields, reader):
 
 	return PointerType(
 		index=index,
-		pointee=fields["pointee"],
+		underlying=fields["underlying"],
 		attributes=attributes,
 		member_info=member_info,
 	)
@@ -102,7 +102,7 @@ def parse_pointer_remaining(reader, fields):
 
 POINTER_PARSER = RecordParser(
 	schema=RecordSchema(
-		type_index("pointee"),
+		type_index("underlying"),
 		u32("attributes")
 	),
 	converter=convert_pointer,

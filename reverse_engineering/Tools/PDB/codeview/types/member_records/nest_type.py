@@ -5,7 +5,7 @@ from .base import *
 
 @dataclass
 class NestedTypeMember:
-	type: TypeRef
+	underlying: TypeRef
 	name: str
 
 
@@ -21,7 +21,7 @@ def parse_nest_type(reader: BinaryReader):
 	name = read_cstring(reader)
 
 	return NestedTypeMember(
-		type=type_,
+		underlying=type_,
 		name=name,
 	)
 

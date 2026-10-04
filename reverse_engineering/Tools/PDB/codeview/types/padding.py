@@ -7,7 +7,7 @@ def is_padding_start(reader: BinaryReader) -> bool:
     value = reader.data[reader.offset]
 
     if 0xF0 <= value <= 0xFF:
-        print(f"Found padding start: {value:#x}")
+        # print(f"Found padding start: {value:#x}")
         return True
     return False
 

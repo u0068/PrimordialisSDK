@@ -1,10 +1,15 @@
-#@category PrimordialisSDK
-from util import *
+from PDB.c_exporter.util import indent, is_skipped_name, is_generated_name
+from PDB.codeview.types.array import ArrayType
+from PDB.codeview.types.bitfield import BitFieldType
+from PDB.codeview.types.class_types import StructureType
+from PDB.codeview.types.pointer import PointerType
+from PDB.codeview.types.union import UnionType
 
 class CEmitter:
 
-    def __init__(self):
+    def __init__(self, resolver):
         self.lines = []
+        self.resolver = resolver
         print("C Emitter Initialised!")
 
     def emit(self, line="", level=0):
@@ -14,12 +19,13 @@ class CEmitter:
         print("Writing to:",path)
         with open(path, "w") as f:
             f.write("\n".join(self.lines))
+            print("\n".join(self.lines))
 
 
     def emit_field(self, dt, field_name=None, level=0):
         self.emit(
             "%s %s;" % (
-                c_name(dt),
+                self.resolver.c_name(dt),
                 field_name),
             level)
 
@@ -28,17 +34,17 @@ class CEmitter:
         #     field_name))
 
     def emit_function_pointer(self, dt, field_name, level = 0):
-        ret = c_name(dt.getReturnType())
+        ret = self.resolver.c_name(dt.return_type)
 
         args = []
 
-        for arg in dt.getArguments():
+        for arg in dt.argument_list:
             args.append(
-                c_name(arg.getDataType())
+                self.resolver.c_name(arg)
             )
 
-        if dt.hasVarArgs():
-            args.append("...")
+        # if dt.hasVarArgs():
+        #     args.append("...")
 
         params = ", ".join(args)
 
@@ -52,20 +58,21 @@ class CEmitter:
         forward = set()
 
         for dt in types:
-            if not is_skipped_name(dt.getName()):
-                forward.update(get_pointer_dependencies(dt))
+            # if not is_skipped_name(self.resolver.name(dt)):
+                forward.update(self.resolver.get_pointer_dependencies(dt))
 
 
-        for dt in sorted(forward, key=lambda x: x.getName()):
-            # if not is_skipped_name(dt.getName()):
-                if isinstance(dt, Structure):
+        for dt in sorted(forward, key=lambda x: self.resolver.name(x)):
+            # if not is_skipped_name(resolver.name(dt)):
+                dt = self.resolver.resolve(dt)
+                if isinstance(dt, StructureType):
                     self.emit(
-                        "typedef struct %s %s;" % (c_name(dt), c_name(dt))
+                        "typedef struct %s %s;" % (self.resolver.c_name(dt), self.resolver.c_name(dt))
                     )
 
-                elif isinstance(dt, Union):
+                elif isinstance(dt, UnionType):
                     self.emit(
-                        "typedef union %s %s;" % (c_name(dt), c_name(dt))
+                        "typedef union %s %s;" % (self.resolver.c_name(dt), self.resolver.c_name(dt))
                     )
 
 
@@ -73,48 +80,50 @@ class CEmitter:
             self.emit()
 
 
-    def emit_definition(self, dt, field_name=None, level=0):
+    def emit_definition(self, dt, field_name = None, level=0):
 
         if not dt:
             return
 
-        if level == 0 and is_skipped_name(c_name(dt)):
+        if level == 0 and is_skipped_name(self.resolver.c_name(dt)):
             return
+
+        dt = self.resolver.resolve(dt)
 
         #
         # STRUCT / UNION
         #
 
-        if isinstance(dt, (Structure, Union)):
+        if isinstance(dt, (StructureType, UnionType)):
 
-            anonymous = is_generated_name(dt.getName()) and level > 0
+            anonymous = is_generated_name(self.resolver.name(dt)) and level > 0
 
-            type = "struct" if isinstance(dt, Structure) else "union"
+            data_type = "struct" if isinstance(dt, StructureType) else "union"
 
             if anonymous:
-                self.emit(type, level)
+                self.emit(data_type, level)
             elif level > 0:
                 self.emit_field(dt, field_name, level)
                 return
             else:
-                self.emit("typedef %s %s" % (type, c_name(dt)), level)
+                self.emit("typedef %s %s" % (data_type, self.resolver.c_name(dt)), level)
 
             self.emit("{", level)
 
-            for c in dt.getComponents():
+            for field in self.resolver.fields(dt):
                 self.emit_definition(
-                    c.getDataType(),
-                    c.getFieldName(),
+                    self.resolver.resolve(field.underlying),
+                    field.name,
                     level + 1)
 
-            self.emit("} %s" % c_name(dt), level)
+            self.emit("} %s" % dt.name, level)
 
             if field_name and not is_generated_name(field_name):
                 self.lines[-1] += " " + field_name
 
             self.lines[-1] += ";\n"
 
-            # print("Emitted struct %s" % dt.getName())
+            # print("Emitted struct %s" % self.resolver.name(dt))
 
             return
 
@@ -122,10 +131,10 @@ class CEmitter:
         # ARRAY
         #
 
-        if isinstance(dt, Array):
+        if isinstance(dt, ArrayType):
 
-            element = c_name(dt.getDataType())
-            num_elements = dt.getNumElements()
+            element = self.resolver.c_name(dt)
+            num_elements = dt.size # TODO: Fix this to use the number of elements instead of size in bytes
 
             if num_elements == 0:
                 self.emit(
@@ -142,7 +151,7 @@ class CEmitter:
                     num_elements),
                 level)
 
-            # print("Emitted Array %s" % dt.getName())
+            # print("Emitted Array %s" % resolver.name(dt))
 
             return
 
@@ -153,17 +162,17 @@ class CEmitter:
         # POINTER
         #
 
-        if isinstance(dt, Pointer):
+        if isinstance(dt, PointerType):
 
-            data_type =  dt.getDataType()
+            data_type =  dt.underlying
             if data_type:
-                target = c_name(data_type)
+                target = self.resolver.c_name(data_type)
             else:
                 target = "void"
 
-            if isinstance(data_type, FunctionDefinition):
-                self.emit_function_pointer(data_type, field_name, level)
-                return
+            # if isinstance(data_type, FunctionDefinition):
+            #     self.emit_function_pointer(data_type, field_name, level)
+            #     return
 
             self.emit(
                 "%s* %s;" % (
@@ -179,20 +188,20 @@ class CEmitter:
         # TYPE DEF
         #
 
-        if isinstance(dt, TypeDef):
-            return self.emit_definition(
-                dt.getBaseDataType(),
-                field_name,
-                level)
+        # if isinstance(dt, TypeDef):
+        #     return self.emit_definition(
+        #         dt.getBaseDataType(),
+        #         field_name,
+        #         level)
 
         #
         # BIT FIELD
         #
 
-        if isinstance(dt, BitFieldDataType):
-            type_name = c_name(dt)
+        if isinstance(dt, BitFieldType):
+            type_name = self.resolver.c_name(dt)
 
-            bit_size = dt.getBitSize()
+            bit_size = dt.bit_size
 
             if bit_size > 0:
                 self.emit(f"{type_name} {field_name} : {bit_size};", level)
@@ -205,26 +214,3 @@ class CEmitter:
         #
 
         self.emit_field(dt, field_name, level)
-
-    def emit_printer(self, dt):
-        # This is pretty scuffed, output requires alterations to use
-        # That was acceptable because the printer was a single-use script
-        # If you plan on using this again in the future, consider fixing it first
-
-        if isinstance(dt, (Structure, Union)):
-            for component in dt.getComponents():
-                self.emit_printer(component)
-            return
-
-        data_type = dt.getDataType()
-
-        if isinstance(data_type, (Structure, Union)):
-            for component in data_type.getComponents():
-                self.emit_printer(component)
-            return
-
-        type_format = ""
-        if data_type.getName == "float":
-            type_format = ":.2g"
-
-        self.emit("""outFile << std::format("%s: {%s}\\n", material.%s);""" % (dt.getFieldName(), type_format, dt.getFieldName()), 0)

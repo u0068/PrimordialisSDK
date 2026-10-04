@@ -6,7 +6,7 @@ from .base import *
 @dataclass
 class MethodMember:
 	overload_count: int
-	method_list: TypeRef
+	underlying: TypeRef
 	name: str
 
 
@@ -17,7 +17,7 @@ def parse_method(reader):
 
 	return MethodMember(
 		overload_count=overload_count,
-		method_list=method_list,
+		underlying=method_list,
 		name=name,
 	)
 

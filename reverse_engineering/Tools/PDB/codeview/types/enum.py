@@ -10,7 +10,7 @@ from .registry import register_parser
 class EnumType(Type):
     member_count: int
     properties: int
-    underlying_type: TypeRef
+    underlying: TypeRef
     field_list: TypeRef
     name: str
     unique_name: str | None
@@ -19,7 +19,7 @@ class EnumType(Type):
 ENUM_SCHEMA = RecordSchema(
     u16("member_count"),
     u16("properties"),
-    type_index("underlying_type"),
+    type_index("underlying"),
     type_index("field_list"),
 )
 
@@ -37,7 +37,7 @@ def convert_enum(index, fields, reader):
         index=index,
         member_count=fields["member_count"],
         properties=properties,
-        underlying_type=fields["underlying_type"],
+        underlying=fields["underlying"],
         field_list=fields["field_list"],
         name=name,
         unique_name=unique_name,

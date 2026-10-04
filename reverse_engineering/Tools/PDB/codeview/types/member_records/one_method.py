@@ -6,7 +6,7 @@ from .base import *
 @dataclass
 class OneMethodMember:
 	attributes: int
-	type: TypeRef
+	underlying: TypeRef
 	vtable_offset: int | None
 	name: str
 
@@ -29,7 +29,7 @@ def parse_one_method(reader: BinaryReader):
 
 	return OneMethodMember(
 		attributes=attributes,
-		type=type_,
+		underlying=type_,
 		vtable_offset=vtable_offset,
 		name=name,
 	)

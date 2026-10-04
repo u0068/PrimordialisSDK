@@ -1,7 +1,4 @@
-#@category PrimordialisSDK
 import re
-
-from ghidra.program.model.data import *
 
 def indent(level):
     return "    " * level
@@ -45,13 +42,9 @@ def is_skipped_name(name):
                     "filwbuf_context", "formatting_buffer", "state_transition_pair", "file_options", "lfClass2", "pow_log_data"]
     ) and not "color" in name
 
-def is_primordialis_type(dt, currentProgram):
-    manager = dt.getDataTypeManager()
-
-    if manager is None:
-        return False
-
-    return manager == currentProgram.getDataTypeManager() and "primordialis_avx.pbd" in dt.getCategoryPath()
+# TODO: Implement this
+# def is_primordialis_type(dt):
+#     return True
 
 def convert_type(name):
     if name in ["uint", "dword"]:
@@ -71,99 +64,7 @@ def convert_type(name):
     else:
         return name
 
-def inspect_type(dt, level=0):
-    print(" " * level, dt.getClass().getName())
-    print(" " * level, "name:", dt.getName())
-    print(" " * level, "display:", dt.getDisplayName())
-
-    if hasattr(dt, "getDataType"):
-        base = dt.getDataType()
-        if base and base != dt:
-            inspect_type(base, level + 2)
-
-def c_name(dt):
-    name = dt.getDisplayName()
-
-    if hasattr(dt, "getDataType"):
-        base = dt.getDataType()
-        print("base:", base.getClass().getName())
-        print("base name:", base.getDisplayName())
-
-    if ":" in name:
-        name = name.split(":")[0]
-
-    name = name.replace("<", "").replace(">", "").replace("-","_")
-
-    name = convert_type(name)
-
-    return name
-
-def get_dependencies(dt):
-
-    dependencies = set()
-
-    if not isinstance(dt, (Structure, Union)):
-        return dependencies
-
-    for component in dt.getComponents():
-
-        dep = component.getDataType()
-
-        # Pointers do not require definitions
-        if isinstance(dep, Pointer):
-            continue
-
-
-        # Arrays contain their element type
-        while isinstance(dep, Array):
-            dep = dep.getDataType()
-
-
-        if isinstance(dep, (Structure, Union)):
-            if dep.getName() != dt.getName():
-                dependencies.add(dep)
-
-
-    return dependencies
-
-def get_pointer_dependencies(dt):
-
-    pointers = set()
-
-    if not isinstance(dt, (Structure, Union)):
-        return pointers
-
-
-    for component in dt.getComponents():
-
-        dep = component.getDataType()
-
-        if isinstance(dep, Pointer):
-
-            pointed = dep.getDataType()
-
-            if isinstance(pointed, (Structure, Union)):
-                pointers.add(pointed)
-
-
-        elif isinstance(dep, Array):
-
-            while isinstance(dep, Array):
-                dep = dep.getDataType()
-
-            if isinstance(dep, Pointer):
-                pointed = dep.getDataType()
-
-                if isinstance(pointed, (Structure, Union)):
-                    pointers.add(pointed)
-
-        elif isinstance(dep, (Structure, Union)):
-            pointers.update(get_pointer_dependencies(dep))
-
-
-    return pointers
-
-def sort_types(types):
+def sort_types(types, resolver):
 
     result = []
     visited = set()
@@ -175,14 +76,14 @@ def sort_types(types):
 
         visited.add(dt)
 
-        for dep in get_dependencies(dt):
+        for dep in resolver.get_dependencies(dt):
             visit(dep)
 
-        if not is_generated_name(dt.getName()):
+        if not is_generated_name(resolver.name(dt)):
             result.append(dt)
 
     for dt in types:
-        if not is_skipped_name(dt.getDisplayName()):
+        if not is_skipped_name(resolver.name(dt)):
             visit(dt)
 
     return result

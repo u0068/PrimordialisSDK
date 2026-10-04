@@ -6,7 +6,7 @@ from .base import *
 @dataclass
 class BaseClassMember:
 	attributes: int
-	type: TypeRef
+	underlying: TypeRef
 	offset: int
 
 
@@ -17,7 +17,7 @@ def parse_bclass(reader: BinaryReader):
 
 	return BaseClassMember(
 		attributes=attributes,
-		type=type_,
+		underlying=type_,
 		offset=offset,
 	)
 

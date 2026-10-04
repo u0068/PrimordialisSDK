@@ -14,7 +14,7 @@ class RawMemberRecord:
 def parse_member_record(reader: BinaryReader):
 	kind = reader.u16()
 
-	print(f"Parsing member record {kind_name(kind)}")
+	# print(f"Parsing member record {kind_name(kind)}")
 
 	parser = MEMBER_PARSERS.get(kind)
 

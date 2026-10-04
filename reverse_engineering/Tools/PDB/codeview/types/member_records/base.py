@@ -32,7 +32,7 @@ def read_cstring(reader: BinaryReader) -> str:
 			result = reader.data[start:reader.offset]
 			reader.offset += 1
 			result = result.decode("utf-8", errors="replace")
-			print(f"Found string: {result!r}")
+			# print(f"Found string: {result!r}")
 			return result
 
 		reader.offset += 1

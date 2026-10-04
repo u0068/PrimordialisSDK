@@ -5,7 +5,7 @@ from .base import *
 @dataclass
 class DataMember:
 	attributes: int
-	type: TypeRef
+	underlying: TypeRef
 	offset: int
 	name: str
 
@@ -18,7 +18,7 @@ def parse_member(reader):
 
 	return DataMember(
 		attributes=attributes,
-		type=type_,
+		underlying=type_,
 		offset=offset,
 		name=name,
 	)

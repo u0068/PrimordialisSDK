@@ -5,7 +5,7 @@ from .base import *
 
 @dataclass
 class VFTableMember:
-	type: TypeRef
+	underlying: TypeRef
 
 
 def parse_vfunctab(reader):
@@ -19,7 +19,7 @@ def parse_vfunctab(reader):
 	type_ = TypeRef(reader.u32())
 
 	return VFTableMember(
-		type=type_,
+		underlying=type_,
 	)
 
 

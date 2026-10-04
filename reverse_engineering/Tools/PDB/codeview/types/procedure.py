@@ -31,7 +31,7 @@ def convert_procedure(index, fields, reader):
 		parameter_count=fields["parameter_count"],
 		argument_list=fields["argument_list"],
 	)
-	print(result)
+	# print(result)
 	return result
 
 

@@ -4,7 +4,7 @@ from .base import *
 @dataclass
 class StaticDataMember:
 	attributes: int
-	type: TypeRef
+	underlying: TypeRef
 	name: str
 
 
@@ -15,7 +15,7 @@ def parse_stmember(reader: BinaryReader):
 
 	return StaticDataMember(
 		attributes=attributes,
-		type=type_,
+		underlying=type_,
 		name=name,
 	)
 

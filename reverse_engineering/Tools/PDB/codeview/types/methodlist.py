@@ -14,7 +14,7 @@ METHOD_KIND_PURE_INTRODUCING_VIRTUAL = 0x06
 @dataclass
 class MethodListEntry:
     attributes: int
-    type: TypeRef
+    underlying: TypeRef
     vtable_offset: int | None
 
 
@@ -55,7 +55,7 @@ def convert_methodlist(index, fields, reader):
         methods.append(
             MethodListEntry(
                 attributes=attributes,
-                type=type_ref,
+                underlying=type_ref,
                 vtable_offset=vtable_offset,
             )
         )
