@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Callable, Any
 from PDB.codeview.types.type_names import *
 
-from PDB.binary_reader import BinaryReader
+from PDB.binary_reader import BinaryReader, TypeRef
 from .types.padding import consume_padding, is_padding_start
 
 
@@ -13,11 +13,6 @@ class TPIHeader:
         self.minimum_type_index = reader.u32()
         self.maximum_type_index = reader.u32()
         self.type_record_bytes = reader.u32()
-
-
-@dataclass(frozen=True)
-class TypeRef:
-    index: int
 
 
 @dataclass
@@ -48,27 +43,11 @@ def iter_type_records(reader: BinaryReader, first_index: int):
         payload_len = length - 2
         payload = reader.read(payload_len)
 
-        # padding_amount = 0
-        # try:
-        #     if reader.offset % 4:
-        #         if is_padding_start(reader):
-        #             padding_amount = consume_padding(reader)
-        #         else:
-        #             raise ValueError(
-        #                 f"Expected TPI padding at {reader.offset:#x}, "
-        #                 f"got {reader.data[reader.offset]:#x}"
-        #             )
-        # except Exception as e:
-        #     print(f"Failed to parse padding: {e}")
-        #     reader.offset = record_start
-        #     print(f"Payload: " + reader.read(length+2).hex(' ') + " || " + reader.read(16).hex(' '))
-        #     raise
-
         yield RawTypeRecord(
             index=index,
             position=record_start,
             kind=kind,
-            data=payload#[:payload_len - padding_amount],
+            data=payload,
         )
 
         index += 1
