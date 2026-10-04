@@ -1,7 +1,7 @@
 #@category PrimordialisSDK
 # from ghidra.ghidra_builtins import currentProgram
 
-from cpp_emitter import CppEmitter
+from c_emitter import CEmitter
 from ghidra_types import TypeExporter
 from util import *
 
@@ -9,7 +9,7 @@ exporter = TypeExporter(currentProgram)
 
 types = exporter.get_types(currentProgram)
 
-cpp = CppEmitter()
+cpp = CEmitter()
 
 cpp.emit("#pragma once")
 cpp.emit()

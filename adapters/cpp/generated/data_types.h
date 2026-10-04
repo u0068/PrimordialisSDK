@@ -6,12 +6,9 @@
 namespace Game {
     struct DName;
     struct DNameNode;
-    struct HGLRC__;
-    struct HWND__;
     struct IAudioClient;
     struct IAudioRenderClient;
     struct IMMDevice;
-    struct _RTL_SRWLOCK;
     struct acid_particle_16;
     struct biome_core;
     struct biome_edge;
@@ -24,7 +21,6 @@ namespace Game {
     struct boss_gate;
     struct boss_part_t;
     struct bounding_box_2;
-    struct cachedint;
     struct cell;
     struct cell_item;
     struct cell_pickup;
@@ -73,7 +69,6 @@ namespace Game {
     struct stbtt__hheap_chunk;
     struct stbtt_packedchar;
     struct stbtt_vertex;
-    struct tWAVEFORMATEX;
     struct trace_node;
     struct trace_t;
     struct translation_list;

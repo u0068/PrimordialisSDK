@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
+
 // TODO: Make types consistent everywhere
 
 // typedef unsigned char undefined;

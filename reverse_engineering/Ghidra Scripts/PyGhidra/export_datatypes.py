@@ -1,7 +1,7 @@
 #@category PrimordialisSDK
 # from ghidra.ghidra_builtins import currentProgram
 
-from cpp_emitter import CppEmitter
+from c_emitter import CEmitter
 from ghidra_types import TypeExporter
 from util import *
 
@@ -9,20 +9,19 @@ exporter = TypeExporter(currentProgram)
 
 types = exporter.get_types(currentProgram)
 
-cpp = CppEmitter()
+c_emitter = CEmitter()
 
-cpp.emit("#pragma once")
-cpp.emit()
-cpp.emit("#include <windows.h>")
-cpp.emit("#include \"typedefs.h\"")
-cpp.emit()
+c_emitter.emit("#pragma once")
+c_emitter.emit()
+c_emitter.emit("#include <windows.h>")
+c_emitter.emit("#include <stdint.h>")
+c_emitter.emit("#include <stdbool.h>")
+c_emitter.emit("#include <stddef.h>")
+c_emitter.emit()
 
-# for t in types:
-#     cpp.emit_forward_decl(t)
-
-cpp.emit_forward_declarations(types)
+c_emitter.emit_forward_declarations(types)
 
 for t in sort_types(types):
-    cpp.emit_definition(t)
+    c_emitter.emit_definition(t)
 
-cpp.write(r"C:\Users\g3nio\CLionProjects\PrimordialisSDK\Plasmid\generated\data_types.h")
+c_emitter.write(r"C:\Users\g3nio\CLionProjects\PrimordialisSDK\adapters\c\generated\data_types.h")

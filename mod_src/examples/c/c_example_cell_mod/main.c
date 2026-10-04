@@ -23,7 +23,7 @@ void OnInitMats() {
     // DO NOT call the original function like this: P::init_materials_list()
     // Because the call to the original is replaced with the call to our function,
     // so it will get stuck in an infinite loop of calling itself.
-    if (not Game::IsThreadSafe()) { // Make sure we are only on the main thread
+    if (!IsThreadSafe()) { // Make sure we are only on the main thread
         return;
     }
 

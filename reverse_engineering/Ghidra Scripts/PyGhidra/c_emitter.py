@@ -2,11 +2,11 @@
 from util import *
 
 
-class CppEmitter:
+class CEmitter:
 
     def __init__(self):
         self.lines = []
-        print("CppEmitter Initialised!")
+        print("C Emitter Initialised!")
 
     def emit(self, line="", level=0):
         self.lines.append(indent(level) + line)
@@ -20,7 +20,7 @@ class CppEmitter:
     def emit_field(self, dt, field_name=None, level=0):
         self.emit(
             "%s %s;" % (
-                cpp_name(dt),
+                c_name(dt),
                 field_name),
             level)
 
@@ -29,13 +29,13 @@ class CppEmitter:
         #     field_name))
 
     def emit_function_pointer(self, dt, field_name, level = 0):
-        ret = cpp_name(dt.getReturnType())
+        ret = c_name(dt.getReturnType())
 
         args = []
 
         for arg in dt.getArguments():
             args.append(
-                cpp_name(arg.getDataType())
+                c_name(arg.getDataType())
             )
 
         if dt.hasVarArgs():
@@ -61,12 +61,12 @@ class CppEmitter:
             # if not is_skipped_name(dt.getName()):
                 if isinstance(dt, Structure):
                     self.emit(
-                        "struct %s;" % cpp_name(dt)
+                        "typedef struct %s %s;" % (c_name(dt), c_name(dt))
                     )
 
                 elif isinstance(dt, Union):
                     self.emit(
-                        "union %s;" % cpp_name(dt)
+                        "typedef union %s %s;" % (c_name(dt), c_name(dt))
                     )
 
 
@@ -79,7 +79,7 @@ class CppEmitter:
         if not dt:
             return
 
-        if level == 0 and is_skipped_name(cpp_name(dt)):
+        if level == 0 and is_skipped_name(c_name(dt)):
             return
 
         #
@@ -98,7 +98,7 @@ class CppEmitter:
                 self.emit_field(dt, field_name, level)
                 return
             else:
-                self.emit("%s %s" % (type, cpp_name(dt)), level)
+                self.emit("typedef %s %s" % (type, c_name(dt)), level)
 
             self.emit("{", level)
 
@@ -108,12 +108,12 @@ class CppEmitter:
                     c.getFieldName(),
                     level + 1)
 
-            self.emit("}", level)
+            self.emit("} %s" % c_name(dt), level)
 
             if field_name and not is_generated_name(field_name):
                 self.lines[-1] += " " + field_name
 
-            self.lines[-1] += ";"
+            self.lines[-1] += ";\n"
 
             # print("Emitted struct %s" % dt.getName())
 
@@ -125,7 +125,7 @@ class CppEmitter:
 
         if isinstance(dt, Array):
 
-            element = cpp_name(dt.getDataType())
+            element = c_name(dt.getDataType())
             num_elements = dt.getNumElements()
 
             if num_elements == 0:
@@ -158,7 +158,7 @@ class CppEmitter:
 
             data_type =  dt.getDataType()
             if data_type:
-                target = cpp_name(data_type)
+                target = c_name(data_type)
             else:
                 target = "void"
 
@@ -191,7 +191,7 @@ class CppEmitter:
         #
 
         if isinstance(dt, BitFieldDataType):
-            type_name = cpp_name(dt)
+            type_name = c_name(dt)
 
             bit_size = dt.getBitSize()
 
