@@ -210,7 +210,6 @@ typedef struct uint8_2
 {
     unnamed data[2];
     unnamed operator[];
-    MemberFunctionType(index=10353, return_type=TypeRef(index=10351), class_type=TypeRef(index=10348), this_type=TypeRef(index=10352), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } uint8_2;
 
 typedef struct uint8_3
@@ -223,11 +222,8 @@ typedef struct uint8_3
     uint8_2 yz;
     unnamed data[3];
     unnamed operator[];
-    MemberFunctionType(index=10370, return_type=TypeRef(index=10351), class_type=TypeRef(index=10365), this_type=TypeRef(index=10369), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10371, return_type=TypeRef(index=10365), class_type=TypeRef(index=10365), this_type=TypeRef(index=10369), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10371, return_type=TypeRef(index=10365), class_type=TypeRef(index=10365), this_type=TypeRef(index=10369), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } uint8_3;
 
 typedef struct uint8_4
@@ -242,11 +238,8 @@ typedef struct uint8_4
     uint8_3 yzw;
     unnamed data[4];
     unnamed operator[];
-    MemberFunctionType(index=10386, return_type=TypeRef(index=10351), class_type=TypeRef(index=10382), this_type=TypeRef(index=10385), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10387, return_type=TypeRef(index=10382), class_type=TypeRef(index=10382), this_type=TypeRef(index=10385), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10387, return_type=TypeRef(index=10382), class_type=TypeRef(index=10382), this_type=TypeRef(index=10385), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } uint8_4;
 
 typedef struct int_2
@@ -257,7 +250,6 @@ typedef struct int_2
 {
     unnamed data[8];
     unnamed operator[];
-    MemberFunctionType(index=10403, return_type=TypeRef(index=10401), class_type=TypeRef(index=10398), this_type=TypeRef(index=10402), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } int_2;
 
 typedef struct uint_2
@@ -268,7 +260,6 @@ typedef struct uint_2
 {
     unnamed data[8];
     unnamed operator[];
-    MemberFunctionType(index=10418, return_type=TypeRef(index=7601), class_type=TypeRef(index=10414), this_type=TypeRef(index=10417), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } uint_2;
 
 typedef struct uint_3
@@ -281,11 +272,8 @@ typedef struct uint_3
     uint_2 yz;
     unnamed data[12];
     unnamed operator[];
-    MemberFunctionType(index=10435, return_type=TypeRef(index=7601), class_type=TypeRef(index=10431), this_type=TypeRef(index=10434), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10436, return_type=TypeRef(index=10431), class_type=TypeRef(index=10431), this_type=TypeRef(index=10434), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10436, return_type=TypeRef(index=10431), class_type=TypeRef(index=10431), this_type=TypeRef(index=10434), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } uint_3;
 
 typedef struct uint_4
@@ -300,11 +288,8 @@ typedef struct uint_4
     uint_3 yzw;
     unnamed data[16];
     unnamed operator[];
-    MemberFunctionType(index=10451, return_type=TypeRef(index=7601), class_type=TypeRef(index=10447), this_type=TypeRef(index=10450), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10452, return_type=TypeRef(index=10447), class_type=TypeRef(index=10447), this_type=TypeRef(index=10450), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10452, return_type=TypeRef(index=10447), class_type=TypeRef(index=10447), this_type=TypeRef(index=10450), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } uint_4;
 
 typedef struct int_3
@@ -317,11 +302,8 @@ typedef struct int_3
     int_2 yz;
     unnamed data[12];
     unnamed operator[];
-    MemberFunctionType(index=10467, return_type=TypeRef(index=10401), class_type=TypeRef(index=10463), this_type=TypeRef(index=10466), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10468, return_type=TypeRef(index=10463), class_type=TypeRef(index=10463), this_type=TypeRef(index=10466), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10468, return_type=TypeRef(index=10463), class_type=TypeRef(index=10463), this_type=TypeRef(index=10466), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } int_3;
 
 typedef struct real_2
@@ -332,7 +314,6 @@ typedef struct real_2
 {
     unnamed data[8];
     unnamed operator[];
-    MemberFunctionType(index=10485, return_type=TypeRef(index=10483), class_type=TypeRef(index=10479), this_type=TypeRef(index=10484), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } real_2;
 
 typedef struct int_2x2
@@ -344,7 +325,6 @@ typedef struct int_2x2
     unnamed columns[16];
     unnamed data[16];
     unnamed operator[];
-    MemberFunctionType(index=10504, return_type=TypeRef(index=10502), class_type=TypeRef(index=10498), this_type=TypeRef(index=10503), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } int_2x2;
 
 typedef struct real_2x2
@@ -356,7 +336,6 @@ typedef struct real_2x2
     unnamed columns[16];
     unnamed data[16];
     unnamed operator[];
-    MemberFunctionType(index=10526, return_type=TypeRef(index=10524), class_type=TypeRef(index=10519), this_type=TypeRef(index=10525), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } real_2x2;
 
 typedef struct real_3
@@ -369,11 +348,8 @@ typedef struct real_3
     real_2 yz;
     unnamed data[12];
     unnamed operator[];
-    MemberFunctionType(index=10546, return_type=TypeRef(index=10483), class_type=TypeRef(index=10541), this_type=TypeRef(index=10545), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10547, return_type=TypeRef(index=10541), class_type=TypeRef(index=10541), this_type=TypeRef(index=10545), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10547, return_type=TypeRef(index=10541), class_type=TypeRef(index=10541), this_type=TypeRef(index=10545), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } real_3;
 
 typedef struct real_4
@@ -388,11 +364,8 @@ typedef struct real_4
     real_3 yzw;
     unnamed data[16];
     unnamed operator[];
-    MemberFunctionType(index=10562, return_type=TypeRef(index=10483), class_type=TypeRef(index=10558), this_type=TypeRef(index=10561), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
     unnamed zxy;
-    MemberFunctionType(index=10563, return_type=TypeRef(index=10558), class_type=TypeRef(index=10558), this_type=TypeRef(index=10561), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed yzx;
-    MemberFunctionType(index=10563, return_type=TypeRef(index=10558), class_type=TypeRef(index=10558), this_type=TypeRef(index=10561), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } real_4;
 
 typedef struct real_3x3
@@ -404,7 +377,6 @@ typedef struct real_3x3
     unnamed columns[36];
     unnamed data[36];
     unnamed operator[];
-    MemberFunctionType(index=10581, return_type=TypeRef(index=10579), class_type=TypeRef(index=10574), this_type=TypeRef(index=10580), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } real_3x3;
 
 typedef struct real_4x4
@@ -416,7 +388,6 @@ typedef struct real_4x4
     unnamed columns[64];
     unnamed data[64];
     unnamed operator[];
-    MemberFunctionType(index=10603, return_type=TypeRef(index=10601), class_type=TypeRef(index=10596), this_type=TypeRef(index=10602), calling_convention=0, options=0, parameter_count=1, argument_list=TypeRef(index=4258), this_adjustment=0)
 } real_4x4;
 
 typedef struct context_t
@@ -812,15 +783,10 @@ typedef struct cell
     unnamed wall_temperature_packed[64];
     unnamed extra_fields[2816];
     unnamed extra;
-    MemberFunctionType(index=11060, return_type=TypeRef(index=11058), class_type=TypeRef(index=11041), this_type=TypeRef(index=11059), calling_convention=0, options=0, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed get_x;
-    MemberFunctionType(index=11061, return_type=TypeRef(index=10479), class_type=TypeRef(index=11041), this_type=TypeRef(index=11059), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed get_x_dot;
-    MemberFunctionType(index=11061, return_type=TypeRef(index=10479), class_type=TypeRef(index=11041), this_type=TypeRef(index=11059), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed get_rot;
-    MemberFunctionType(index=11061, return_type=TypeRef(index=10479), class_type=TypeRef(index=11041), this_type=TypeRef(index=11059), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
     unnamed get_curl;
-    MemberFunctionType(index=11061, return_type=TypeRef(index=10479), class_type=TypeRef(index=11041), this_type=TypeRef(index=11059), calling_convention=0, options=1, parameter_count=0, argument_list=TypeRef(index=4101), this_adjustment=0)
 } cell;
 
 typedef struct contact
@@ -1281,7 +1247,6 @@ typedef struct translation_map
     unnamed* keys;
     translation_list* values;
     unnamed operator[];
-    MethodListType(index=11355, methods=[MethodListEntry(attributes=3, underlying=TypeRef(index=11351), vtable_offset=None), MethodListEntry(attributes=3, underlying=TypeRef(index=11354), vtable_offset=None)])
 } translation_map;
 
 typedef struct translation_map_kash_t
@@ -2308,9 +2273,7 @@ typedef struct saver_t
 typedef struct saver_t
 {
     unnamed pending_save;
-    ModifierType(index=5042, underlying=TypeRef(index=117), const=False, volatile=True, unaligned=False)
     unnamed pending_map_edits;
-    ModifierType(index=5042, underlying=TypeRef(index=117), const=False, volatile=True, unaligned=False)
     unnamed temp_player_filename[256];
     unnamed temp_world_filename[256];
     unnamed final_player_filename[256];
@@ -2396,9 +2359,7 @@ typedef struct audio_context
     tWAVEFORMATEX* wfx;
     queued_sound* queued_sounds;
     unnamed next_queued_sound;
-    ModifierType(index=5034, underlying=TypeRef(index=34), const=False, volatile=True, unaligned=False)
     unnamed last_queued_sound;
-    ModifierType(index=5034, underlying=TypeRef(index=34), const=False, volatile=True, unaligned=False)
     queued_sound* playing_sounds;
     looping_sound* looping_sounds;
     brown_sound brown_noise;
@@ -2516,7 +2477,6 @@ typedef struct world
     real_2 gamepad_cursor_x;
     real_2 end_text_x;
     unnamed start_trans;
-    ModifierType(index=9004, underlying=TypeRef(index=64), const=False, volatile=True, unaligned=False)
     unnamed loading_screen : 1;
     unnamed done_loading : 1;
     unnamed starting_game : 1;
@@ -2525,9 +2485,7 @@ typedef struct world
     unnamed has_save : 1;
     unnamed has_sandbox : 1;
     unnamed starting_mode;
-    ModifierType(index=5042, underlying=TypeRef(index=117), const=False, volatile=True, unaligned=False)
     unnamed start_animation_done;
-    ModifierType(index=5042, underlying=TypeRef(index=117), const=False, volatile=True, unaligned=False)
     init_world_params sandbox_start_params;
     unnamed singing_volume[384];
     final_boss_state final_boss;
