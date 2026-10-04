@@ -134,6 +134,7 @@ def parse_type_record(record):
     parser = RECORD_PARSERS.get(record.kind)
 
     if parser is None:
+        raise NotImplementedError(f"No parser for {kind_name(record.kind)}")
         return record
 
     reader = BinaryReader(record.data)
@@ -154,7 +155,7 @@ def parse_type_record(record):
             consume_padding(reader)
             remaining = reader.remaining()
     if remaining != 0:
-        ValueError(
+        raise ValueError(
             f"Parser for {kind_name(record.kind)} left "
             f"{remaining} bytes: {reader.data[-remaining:].hex(' ')}"
         )
@@ -184,8 +185,6 @@ class TPI:
             try:
                 parsed_record = parse_type_record(record)
                 self.types[record.index] = parsed_record
-                # if hasattr(parsed_record, "name") and parsed_record.name == "CsFrame":
-                #     raise Exception("Found CsFrame")
             except Exception as e:
                 prev_offset = reader.offset
                 extra = 64
