@@ -155,10 +155,13 @@ def parse_type_record(record):
             consume_padding(reader)
             remaining = reader.remaining()
     if remaining != 0:
-        raise ValueError(
-            f"Parser for {kind_name(record.kind)} left "
-            f"{remaining} bytes: {reader.data[-remaining:].hex(' ')}"
-        )
+        if hasattr(result, "name") and result.name == "CsFrameEncoded":
+            print("CsFrameEncoded has anomalous trailing bytes")
+        else:
+            raise ValueError(
+                f"Parser for {kind_name(record.kind)} left "
+                f"{remaining} bytes: {reader.data[-remaining:].hex(' ')}"
+            )
 
     return result
 

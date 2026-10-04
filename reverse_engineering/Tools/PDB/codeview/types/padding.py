@@ -1,6 +1,5 @@
 from PDB.binary_reader import BinaryReader
 
-
 def is_padding_start(reader: BinaryReader) -> bool:
     if reader.remaining() == 0:
         return False

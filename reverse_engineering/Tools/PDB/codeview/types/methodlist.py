@@ -3,20 +3,19 @@ from dataclasses import dataclass
 from PDB.codeview.tpi import *
 from .registry import register_parser
 
-CV_FLDATTR_ACCESS_MASK = 0x0003
-CV_FLDATTR_STOCK = 0x0004
-CV_FLDATTR_VIRTUAL = 0x0008
-CV_FLDATTR_STATIC = 0x0010
-CV_FLDATTR_FRIEND = 0x0020
-CV_FLDATTR_INTRO = 0x0040
-CV_FLDATTR_PURE = 0x0080
-CV_FLDATTR_PUREINTRO = 0x0100
+
+METHOD_KIND_SHIFT = 2
+METHOD_KIND_MASK = 0x1C
+
+METHOD_KIND_INTRODUCING_VIRTUAL = 0x04
+METHOD_KIND_PURE_INTRODUCING_VIRTUAL = 0x06
+
 
 @dataclass
 class MethodListEntry:
     attributes: int
     type: TypeRef
-    vbaseoff: int | None
+    vtable_offset: int | None
 
 
 @dataclass
@@ -24,28 +23,42 @@ class MethodListType(Type):
     methods: list[MethodListEntry]
 
 
+METHODLIST_SCHEMA = RecordSchema()
+
+
+def is_introducing_virtual(attributes: int) -> bool:
+    kind = (attributes & METHOD_KIND_MASK) >> METHOD_KIND_SHIFT
+
+    return kind in (
+        METHOD_KIND_INTRODUCING_VIRTUAL,
+        METHOD_KIND_PURE_INTRODUCING_VIRTUAL,
+    )
+
+
 def convert_methodlist(index, fields, reader):
     methods = []
 
     while reader.remaining():
         attributes = reader.u16()
+
+        # LF_METHODLIST contains a reserved/padding u16 between
+        # the attributes and the type index.
+        reader.u16()
+
         type_ref = TypeRef(reader.u32())
 
-        vbaseoff = None
+        vtable_offset = None
 
-        # Intro/virtual/unknown flags determine whether vbaseoff exists.
-        # CV_fldattr_intro = 0x02
-        # CV_fldattr_virt = 0x04
-        # CV_fldattr_pure = 0x10
-        # CV_fldattr_pureintro = 0x20
-        if attributes & 0x08:
-            vbaseoff = reader.i32()
+        if is_introducing_virtual(attributes):
+            vtable_offset = reader.i32()
 
-        methods.append(MethodListEntry(
-            attributes=attributes,
-            type=type_ref,
-            vbaseoff=vbaseoff,
-        ))
+        methods.append(
+            MethodListEntry(
+                attributes=attributes,
+                type=type_ref,
+                vtable_offset=vtable_offset,
+            )
+        )
 
     return MethodListType(
         index=index,
@@ -53,13 +66,10 @@ def convert_methodlist(index, fields, reader):
     )
 
 
-METHODLIST_PARSER = RecordParser(
-    schema=RecordSchema(),
-    converter=convert_methodlist,
-)
-
-
 register_parser(
     LF_METHODLIST,
-    METHODLIST_PARSER,
+    RecordParser(
+        schema=METHODLIST_SCHEMA,
+        converter=convert_methodlist,
+    ),
 )
