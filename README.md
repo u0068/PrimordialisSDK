@@ -33,12 +33,13 @@ enable them to your liking, and launch Primordialis from Pilus by pressing "star
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build
 C++ shared libraries such as Visual Studio, VSCode, or CLion.\
 You can download Plasmid.zip from releases, clone the entire SDK repo,
-or use the following git commands to get only Plasmid and mod source code:
+or use the following git commands to get only Plasmid, mod source code, and dependencies:
 ```bash
 git clone --filter=blob:none --sparse --recurse-submodules https://github.com/u0068/PrimordialisSDK
 cd PrimordialisSDK
 git sparse-checkout add Plasmid
 git sparse-checkout add mod_src
+git sparse-checkout add third_party
 ```
 To peek into the game's code, use a decompiler, such as [Ghidra](http://ghidra.net/).\
 Load the Primordialis PDB before decompiling, by following the steps given in the

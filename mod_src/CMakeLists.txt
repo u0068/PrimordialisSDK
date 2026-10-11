@@ -2,6 +2,7 @@
 
 # This is the directory where the built cpp mods go
 #set(MODS_DIR "$ENV{APPDATA}/com.kesomannen.gale/primordialis/profiles/Testing/mods")
+#set(MODS_DIR "C:/Program Files (x86)/Steam/steamapps/common/Primordialis/mods")
 set(MODS_DIR "${CMAKE_SOURCE_DIR}/test_profile/mods")
 
 function(add_plasmid_mod NAME)
