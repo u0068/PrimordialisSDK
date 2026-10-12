@@ -13,25 +13,19 @@ Primordialis SDK is a modding SDK for Primordialis.
   - Misc SDK dev tools
   - PDB parser (WIP)
 
-## Expect bugs.
+## Expect bugs and breaking changes.
 Everything is in very early development and will break sooner or later.
 
 # Loading Mods into Primordialis:
-To load mods into Primordialis, you need to:
-- Download Pilus.exe from [Releases](https://github.com/u0068/PrimordialisSDK/releases).
-  - Your browser or antivirus might block downloading or running the file because Pilus is new so it hasn't built up security reputation yet.
-    If downloading Pilus is blocked, press "Report as safe" and "Keep" or "Download" or "Trust" or whatever else will let you download it.
-    If running Pilus is blocked, press "More info" and "Run anyway".
-- Put Pilus.exe in the Primordialis folder in your steam library.
-  - Access the correct folder by right-clicking on Primordialis in your steam library, pressing "Manage" and "Browse local files".
-- Launch Pilus.exe which will create a "mods" folder in Primordialis/mods and download everything else it needs.
-- Then, put your installed mods in the "mods" folder, configure and
-enable them to your liking, and launch Primordialis from Pilus by pressing "start".
-- Once installed, Pilus will update itself and its dependencies automatically.
+To load mods into Primordialis, its recommended that you use the [Gale Mod Manager](https://github.com/Kesomannen/gale).\
+Support for R2ModMan is coming soon!\
+For developing mods, it may be more convenient to use the raw Nucleus modloader, with the (now deprecated) Pilus modloader gui, which are avaiable in releases.
 
 # Making Mods:
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build
-C++ shared libraries such as Visual Studio, VSCode, or CLion.\
+C++ shared libraries such as [Visual Studio](https://visualstudio.microsoft.com/), [VSCode](https://code.visualstudio.com/), or [CLion](https://www.jetbrains.com/clion/).\
+I recommend CLion, as it has excellent C++ support and should work out-of-the-box.
+Support for other languages (C, C#, Lua, Python, jai) is planned.
 You can download Plasmid.zip from releases, clone the entire SDK repo,
 or use the following git commands to get only Plasmid, mod source code, and dependencies:
 ```bash
@@ -59,12 +53,12 @@ To contribute, clone the entire repo:
 git clone --recurse-submodules https://github.com/you/PrimordialisSDK
 ```
 Alternatively, you can sparsely checkout only the parts you want to contribute to.\
-For example, this is how you would only get the Pilus source code,
+For example, this is how you would only get the Plasmid source code,
 without anything else. 
 ```bash
 git clone --filter=blob:none --sparse --recurse-submodules https://github.com/u0068/PrimordialisSDK.git
 cd PrimordialisSDK
-git sparse-checkout add Pilus
+git sparse-checkout add Plasmid
 ```
 Use this invite to join the Primordialis Server and get the Mod SDK Dev role:\
 https://discord.gg/Fz5RaRBNj8
@@ -75,7 +69,7 @@ https://discord.gg/Fz5RaRBNj8
 - Commit messages must concisely and adequately describe the changes made.
 - Ask for help if you need any.
 ## AI USE POLICY:
-- AI here refers to any machine learning models such as LLMs.
+- AI here refers to any generative models such as LLMs.
 - This only applies to contributing to the development of the SDK. You can freely use AI for making your own mods. 
 - Contributing using AI is allowed as long as it is used **responsibly**.
 - ### Examples of responsible AI use:
@@ -122,8 +116,9 @@ https://discord.gg/Fz5RaRBNj8
   - Loading mods
   - Making mods
   - Contributing to the SDK
-- Improve error messages everywhere
+  - Multilanguage support
 
 See the README.md's inside the projects for their TO-DO lists.
 # DONE:
 - Put Ghidra scripts in SDK repo (DONE)
+- Improve error messages everywhere
