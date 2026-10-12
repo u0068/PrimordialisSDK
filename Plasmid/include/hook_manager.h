@@ -5,6 +5,9 @@
 // #include "plasmid_log.h"
 
 namespace P {
+    template<typename Ret, typename... Args>
+    Ret Next(Args... args);
+
     namespace Internal {
         template<size_t N>
         struct FixedString {
