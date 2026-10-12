@@ -132,19 +132,6 @@ namespace P {
                 return *pointer;
             }
 
-            T& GetReference() const {
-                if (pointer == nullptr) {
-                    if (index == -1) {
-                        index = GetIndex();
-                    }
-                    if (index == -1) {
-                        return {};
-                    }
-                    pointer = &list[index];
-                }
-                return *pointer;
-            }
-
             operator int() const {
                 return GetIndex();
             }

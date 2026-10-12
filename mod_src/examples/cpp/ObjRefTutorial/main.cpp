@@ -38,8 +38,6 @@ void OnInitCreatures() {
     P::creature_list[ref_to_original.GetIndex()].show_damage_numbers = true;
     // Or you can use a pointer to do the same
     ref_to_original.GetPointer()->show_damage_numbers = true;
-    // Or a reference
-    ref_to_original.GetReference().show_damage_numbers = true;
 }
 
 void P::InitialiseMod() {
