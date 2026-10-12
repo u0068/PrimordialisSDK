@@ -25,6 +25,7 @@ For developing mods, it may be more convenient to use the raw Nucleus modloader,
 To make mods, you need the Plasmid Modding API source code, and any IDE that can build
 C++ shared libraries such as [Visual Studio](https://visualstudio.microsoft.com/), [VSCode](https://code.visualstudio.com/), or [CLion](https://www.jetbrains.com/clion/).\
 I recommend CLion, as it has excellent C++ support and should work out-of-the-box.\
+MSVC compiler toolchain is recommended, but Mingw g++ or Clang should work too for most cases.\ 
 **Release build mods are not compatible with Debug build mods!\
 Make sure that all mods you are loading have matching build modes configurations.**\
 Support for other languages (C, C#, Lua, Python, jai) is planned.\
