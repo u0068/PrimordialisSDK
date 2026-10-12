@@ -5,7 +5,7 @@
 #include "generated/globals.h"
 
 namespace P {
-    inline const char* UintToStr(uint i) {
+    inline std::string UintToStr(uint i) {
         union {
             uint numeric{0};
             char string[5];
