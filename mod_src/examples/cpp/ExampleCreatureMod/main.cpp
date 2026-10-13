@@ -34,7 +34,7 @@ void OnInitCreatures() {
     // To organise your creatures, put the code for each creature in their own files
     // Do #include "path/to/your/creature/code" to import the code from that file (see top of this file)
     // Once you have included a file, you can use the code from it:
-    // AddGreenFish(); // All the green fish code is in creatures/green_fish.h
+    AddGreenFish(); // All the green fish code is in creatures/green_fish.h
 }
 
 void OnInitBiomes() {
@@ -43,8 +43,8 @@ void OnInitBiomes() {
         return;
     }
 
-    P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("TEST")), P::str_to_id("TEST"), 1.0f, 1, 1.0f);
-    // P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("SAFE")), P::str_to_id("GRUB"), 1.0f, 1, 1.0f);
+    // Add creature spawns like this
+    P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("STRT")), P::HashId("Antenna Bug Clone"), 1.0f, 1, 1.0f);
 }
 
 void P::InitialiseMod() {
