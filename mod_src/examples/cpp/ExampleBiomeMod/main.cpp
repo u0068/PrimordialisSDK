@@ -1,6 +1,7 @@
 
 #include "plasmid_api.h"
 #include "generated/game_functions/world.h"
+#include "generated/game_functions/creatures.h"
 
 void OnInitBiomeTypes() {
     P::Next<void>();
@@ -34,6 +35,9 @@ void OnInitBiomeTypes() {
     new_biome_type->cell_chance = 0.5f;
     new_biome_type->cell_max_neighbors = 1;
     //new_biome_type->pool; // TODO: Figure out how cell pools work
+
+    // Add creatures like this:
+    P::add_creature_spawn_chance(P::get_biome_index(new_biome_type->id), P::str_to_id("DUMY"), 1.0f, 1, 1.0f);
 }
 
 // This controls when we insert the biome
