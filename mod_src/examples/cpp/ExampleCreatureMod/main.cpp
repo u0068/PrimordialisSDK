@@ -1,6 +1,7 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/creatures.h"  // These are all the functions related to creatures
 #include "generated/game_functions/brains.h" // These are all the vanilla creature brains
+#include "generated/game_functions/world.h"
 #include "creatures/green_fish.h"
 
 // This function will be hooked to the game's init_creature_list function
@@ -33,10 +34,21 @@ void OnInitCreatures() {
     // To organise your creatures, put the code for each creature in their own files
     // Do #include "path/to/your/creature/code" to import the code from that file (see top of this file)
     // Once you have included a file, you can use the code from it:
-    AddGreenFish(); // All the green fish code is in creatures/green_fish.h
+    // AddGreenFish(); // All the green fish code is in creatures/green_fish.h
+}
+
+void OnInitBiomes() {
+    P::Next<void>();
+    if (not P::IsThreadSafe()) {
+        return;
+    }
+
+    P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("TEST")), P::str_to_id("DUMY"), 1.0f, 1, 1.0f);
+    // P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("SAFE")), P::str_to_id("GRUB"), 1.0f, 1, 1.0f);
 }
 
 void P::InitialiseMod() {
     // Hook our OnInitCreatures function to the game's init_creature_list
     P::Hook<"init_creature_list">(OnInitCreatures);
+    P::Hook<"init_biome_types">(OnInitBiomes);
 }

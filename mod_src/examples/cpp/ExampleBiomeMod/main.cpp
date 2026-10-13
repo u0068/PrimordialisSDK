@@ -3,8 +3,9 @@
 
 void OnInitBiomeTypes() {
     P::Next<void>();
-    if (!P::IsThreadSafe())
+    if (!P::IsThreadSafe()) {
         return;
+    }
 
     // Here we define the biome type, which controls *HOW* it generates
     auto* new_biome_type = P::new_biome_type();
