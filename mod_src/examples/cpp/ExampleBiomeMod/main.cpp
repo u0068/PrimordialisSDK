@@ -1,9 +1,10 @@
+
 #include "plasmid_api.h"
 #include "generated/game_functions/world.h"
 
 void OnInitBiomeTypes() {
     P::Next<void>();
-    if (!P::IsThreadSafe()) {
+    if (not P::IsThreadSafe()) {
         return;
     }
 
@@ -19,7 +20,7 @@ void OnInitBiomeTypes() {
     new_biome_type->tracked = 1;
 
     // Terrain generation
-    // Play around with the Property Editor mode to see what these do!
+    // Play around with the Property Editor mod to see what these do!
     new_biome_type->noise_amount = 0.15f; // Random dithering
     new_biome_type->fbm_amount = 0.10f; // Fractal noise amount
     new_biome_type->fbm_base_frequency = 0.1f; // 1 / noise scale

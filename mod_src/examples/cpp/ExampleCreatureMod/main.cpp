@@ -43,7 +43,7 @@ void OnInitBiomes() {
         return;
     }
 
-    P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("TEST")), P::str_to_id("DUMY"), 1.0f, 1, 1.0f);
+    P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("TEST")), P::str_to_id("TEST"), 1.0f, 1, 1.0f);
     // P::add_creature_spawn_chance(P::get_biome_index(P::str_to_id("SAFE")), P::str_to_id("GRUB"), 1.0f, 1, 1.0f);
 }
 
