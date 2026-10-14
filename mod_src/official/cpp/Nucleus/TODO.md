@@ -1,6 +1,6 @@
 # TO-DO:
 - Mid-function hooks
   - Perhaps use https://github.com/cursey/safetyhook instead of minhook
-- Migrate parts of Plasmid into Nucleus
+- Hook chain priority ordering
 - Support shader replacements
 - Support translations.tsv replacements
