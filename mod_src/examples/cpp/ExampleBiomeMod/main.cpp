@@ -4,6 +4,8 @@
 #include "generated/game_functions/creatures.h"
 #include "generated/game_functions/sound.h"
 
+const int SONG_INDEX = 15; // Vanilla songs use indices up to 14. Mods should use different indices to be compatible. The next Nucleus version will make them automatically use compatible indices.  
+
 void OnLoadSounds() {
     P::Next<void>();
 
@@ -17,7 +19,7 @@ void OnLoadSounds() {
     new_song.n_start_points = 0;
     new_song.ready = true;
 
-    P::sounds->music_loop[15] = new_song;
+    P::sounds->music_loop[SONG_INDEX] = new_song;
 }
 
 void OnInitBiomeTypes() {
@@ -33,7 +35,7 @@ void OnInitBiomeTypes() {
     new_biome_type->light = 1.0f; // Ambient light brightness
     // new_biome_type->flags = 1; // Safe zone
     new_biome_type->bumpyness = 5.0f; // Fine wall bumpiness
-    new_biome_type->ambient_music_id = 15;
+    new_biome_type->ambient_music_id = SONG_INDEX;
     new_biome_type->battle_music_id = 2;
     new_biome_type->tracked = 1;
 
