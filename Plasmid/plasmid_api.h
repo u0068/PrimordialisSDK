@@ -11,6 +11,7 @@
 #include "include/creatures.h"
 #include "include/ui.h"
 #include "include/mutations.h"
+#include "include/sounds.h"
 // #include "include/general.h"
 
 #include "generated/game_functions/essential.h"

@@ -8,7 +8,7 @@ void OnLoadSounds() {
     P::Next<void>();
 
     P::looping_sound new_song{};
-    new_song.sound = P::load_ogg("data/sounds/death.ogg");
+    new_song.sound = P::LoadOgg("data/sounds/player-death-musical-elements.ogg");
     new_song.type = 1;
     new_song.pos = 0.0;
     new_song.lerp_rate = 1e-5f;
@@ -54,7 +54,7 @@ void OnInitBiomeTypes() {
     //new_biome_type->pool; // TODO: Figure out how cell pools work
 
     // Add creatures like this:
-    P::add_creature_spawn_chance(P::get_biome_index(new_biome_type->id), P::str_to_id("DUMY"), 1.0f, 1, 1.0f);
+    P::add_creature_spawn_chance(P::get_biome_index(new_biome_type->id), P::str_to_id("DUMY"), 0.1f, 1, 1.0f);
 }
 
 // This controls when we insert the biome

@@ -27,11 +27,12 @@ namespace P {
         return Resolve<void(*)(real_3*, float)>("play_sound_for_color")(param_1, param_2);
     }
 
-    inline sound_t load_ogg(const char* param_1) {
-      return Resolve<sound_t(*)(const char*)>("load_ogg")(param_1);
-    }
-
-    inline sound_t load_ogg_memory(uchar* param_1, long64 param_2) {
-      return Resolve<sound_t(*)(uchar*, long64)>("load_ogg_memory")(param_1, param_2);
-    }
+    // these are local functions so cant be resolved normally :(
+    // inline sound_t load_ogg(const char* param_1) {
+    //   return Resolve<sound_t(*)(const char*)>("load_ogg")(param_1);
+    // }
+    //
+    // inline sound_t load_ogg_memory(uchar* param_1, long64 param_2) {
+    //   return Resolve<sound_t(*)(uchar*, long64)>("load_ogg_memory")(param_1, param_2);
+    // }
 }
