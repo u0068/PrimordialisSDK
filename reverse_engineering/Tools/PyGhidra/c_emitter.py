@@ -1,7 +1,6 @@
 #@category PrimordialisSDK
 from util import *
 
-
 class CEmitter:
 
     def __init__(self):
