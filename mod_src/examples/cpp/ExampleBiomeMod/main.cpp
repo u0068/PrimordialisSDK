@@ -2,7 +2,6 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/world.h"
 #include "generated/game_functions/creatures.h"
-#include "generated/game_functions/sound.h"
 
 const int SONG_INDEX = 15; // Vanilla songs use indices up to 14. Mods should use different indices to be compatible. The next Nucleus version will make them automatically use compatible indices.  
 
