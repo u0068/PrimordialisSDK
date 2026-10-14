@@ -104,15 +104,8 @@ namespace P {
     }
 
     // inline circular_buffer_t* allocate_circular_buffer(circular_buffer_t* __return_storage_ptr__, ulong64 param_1, int param_2) { return Resolve<circular_buffer_t*(*)(circular_buffer_t*, ulong64, int)>("allocate_circular_buffer")(__return_storage_ptr__, param_1, param_2); }
-    // inline sound_t* load_ogg(sound_t* __return_storage_ptr__, const char* param_1) { return Resolve<sound_t*(*)(sound_t*, const char*)>("load_ogg")(__return_storage_ptr__, param_1); }
-    // inline uchar* dynamic_alloc_clear(ulong64 param_1) { return Resolve<uchar*(*)(ulong64)>("dynamic_alloc_clear")(param_1); }
-    // inline sound_t* load_ogg_memory(sound_t* __return_storage_ptr__, uchar* param_1, long64 param_2) { return Resolve<sound_t*(*)(sound_t*, uchar*, long64)>("load_ogg_memory")(__return_storage_ptr__, param_1, param_2); }
-    inline void adjust_brown_noise(float param_1, float param_2) {
-        return Resolve<void(*)(float, float)>("adjust_brown_noise")(param_1, param_2);
-    }
 
-    inline void set_effects_volume(float param_1) { return Resolve<void(*)(float)>("set_effects_volume")(param_1); }
-    inline void set_song(int param_1) { return Resolve<void(*)(int)>("set_song")(param_1); }
+    // inline uchar* dynamic_alloc_clear(ulong64 param_1) { return Resolve<uchar*(*)(ulong64)>("dynamic_alloc_clear")(param_1); }
     inline void load_settings() { return Resolve<void(*)()>("load_settings")(); }
     inline void save_settings() { return Resolve<void(*)()>("save_settings")(); }
     inline void save_run_stats(run_stats* param_1) { return Resolve<void(*)(run_stats*)>("save_run_stats")(param_1); }

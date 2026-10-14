@@ -333,7 +333,9 @@ public class ExportFunctions extends GhidraScript {
         if (containsAny(name,
             "sound",
             "audio",
-            "music"
+            "music",
+            "ogg",
+            "song"
             ))
             return "sound";
 

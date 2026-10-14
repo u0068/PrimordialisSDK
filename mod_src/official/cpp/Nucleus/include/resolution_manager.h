@@ -43,7 +43,7 @@ inline void* ResolveSymbol(const char* name) {
     }
     addr = reinterpret_cast<void *>(symbol->Address);
     if (addr == nullptr) {
-        P::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
+        P::ELog(COL_CRITICAL) << "Symbol '" << name << "' resolved to nullptr with error: " << GetLastError();
     }
     return addr;
 }

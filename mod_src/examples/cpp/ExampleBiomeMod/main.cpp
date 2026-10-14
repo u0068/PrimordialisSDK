@@ -2,6 +2,23 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/world.h"
 #include "generated/game_functions/creatures.h"
+#include "generated/game_functions/sound.h"
+
+void OnLoadSounds() {
+    P::Next<void>();
+
+    P::looping_sound new_song{};
+    new_song.sound = P::load_ogg("data/sounds/death.ogg");
+    new_song.type = 1;
+    new_song.pos = 0.0;
+    new_song.lerp_rate = 1e-5f;
+    new_song.loop_overlap = 0;
+    new_song.start_points = nullptr; // I'm not sure what those are
+    new_song.n_start_points = 0;
+    new_song.ready = true;
+
+    P::sounds->music_loop[15] = new_song;
+}
 
 void OnInitBiomeTypes() {
     P::Next<void>();
@@ -16,7 +33,7 @@ void OnInitBiomeTypes() {
     new_biome_type->light = 1.0f; // Ambient light brightness
     // new_biome_type->flags = 1; // Safe zone
     new_biome_type->bumpyness = 5.0f; // Fine wall bumpiness
-    new_biome_type->ambient_music_id = 3;
+    new_biome_type->ambient_music_id = 15;
     new_biome_type->battle_music_id = 2;
     new_biome_type->tracked = 1;
 
@@ -82,4 +99,5 @@ P::biome_core* OnCreateBiomeCore(int id, int size) {
 void P::InitialiseMod() {
     P::Hook<"init_biome_types">(OnInitBiomeTypes);
     P::Hook<"create_biome_core">(OnCreateBiomeCore);
+    P::Hook<"load_sounds">(OnLoadSounds);
 }
