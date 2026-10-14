@@ -2,7 +2,9 @@
 #include <mutex>
 #include <windows.h>
 #include <dbghelp.h>
+#include <psapi.h>
 
+#include "enums.h"
 #include "interface/logstream.h"
 
 #pragma comment(lib, "dbghelp.lib")
@@ -47,4 +49,21 @@ inline void* ResolveSymbol(const char* name) {
         A::ELog(COL_CRITICAL) << "Failed to resolve symbol '" << name << "': " << GetLastError();
     }
     return addr;
+}
+
+inline uint64_t GetModuleBaseAddress(const char* moduleName) {
+    HMODULE hModule = GetModuleHandleA(moduleName);
+    if (!hModule) return 0;
+
+    MODULEINFO modInfo;
+    if (GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO))) {
+        return (uint64_t)modInfo.lpBaseOfDll;
+    }
+    return 0;
+}
+
+// Fragile, unsafe workaround until I find a better way to resolve local functions
+template<typename T>
+T ResolveRVA(int rva) {
+    return reinterpret_cast<T>(nucleus->GAME_BASE + rva);
 }

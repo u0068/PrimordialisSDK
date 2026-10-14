@@ -36,11 +36,11 @@ inline Nucleus api
     .AngleDifference = AngleDifference,
     .AngleTo = AngleTo,
 
+    .GAME_BASE = GetModuleBaseAddress("primordialis.exe"),
     .ResolveSymbol = ResolveSymbol,
     .Log = Log,
     .AddTranslation = AddTranslation,
     .UintToStr = UintToStr,
-
 
     .profile_path = ModParser::profile_path.string().c_str()
 };

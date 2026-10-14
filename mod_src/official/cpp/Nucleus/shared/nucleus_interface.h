@@ -38,6 +38,7 @@ struct Nucleus {
     float (*AngleTo)(float a, float b);
 
     // Misc
+    uint64_t GAME_BASE;
     void* (*ResolveSymbol)(const char*);
     void (*Log)(const char* message, int color, bool important);
     void (*AddTranslation)(const char* _key, const char* _value);
