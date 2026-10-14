@@ -76,6 +76,9 @@ def sort_types(types, resolver):
 
         visited.add(dt)
 
+        if resolver.is_forward_reference(dt):
+            return
+
         for dep in resolver.get_dependencies(dt):
             visit(dep)
 

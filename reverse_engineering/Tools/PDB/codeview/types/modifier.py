@@ -1,6 +1,6 @@
+from dataclasses import dataclass
 from PDB.codeview.tpi import *
 from .registry import register_parser
-
 
 @dataclass
 class ModifierType(Type):

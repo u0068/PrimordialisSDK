@@ -2,6 +2,7 @@ from PDB.c_exporter.util import indent, is_skipped_name, is_generated_name
 from PDB.codeview.types.array import ArrayType
 from PDB.codeview.types.bitfield import BitFieldType
 from PDB.codeview.types.class_types import StructureType
+from PDB.codeview.types.modifier import ModifierType
 from PDB.codeview.types.pointer import PointerType
 from PDB.codeview.types.union import UnionType
 

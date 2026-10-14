@@ -3,10 +3,11 @@ from PDB.c_exporter.util import convert_type
 from PDB.codeview.types.array import ArrayType
 from PDB.codeview.types.class_types import StructureType
 from PDB.codeview.types.fieldlist import FieldListIndex
+from PDB.codeview.types.member_records.member import DataMember
 from PDB.codeview.types.modifier import ModifierType
 from PDB.codeview.types.pointer import PointerType
 from PDB.codeview.types.union import UnionType
-
+from PDB.codeview.types.primitives import *
 
 class TypeResolver:
     def __init__(self, types):
@@ -14,12 +15,28 @@ class TypeResolver:
 
     def resolve(self, ref):
         if isinstance(ref, TypeRef):
-            if ref.index not in self.types:
+            index = ref.index
+            if index < 0x1000:
+                return self.resolve_primitive(index)
+            elif index not in self.types:
                 return None
-            return self.types[ref.index]
+            return self.types[index]
         elif isinstance(ref, int):
+            if ref < 0x1000:
+                return self.resolve_primitive(ref)
             return self.types[ref]
         return ref
+
+    def resolve_primitive(self, index):
+        name = PRIMITIVE_TYPES.get(index % 0x100)
+
+        if name is None:
+            return PrimitiveType(index, f"primitive_{index:#x}")
+
+        if index >= 0x100:
+            name += "*"
+
+        return PrimitiveType(index, name)
 
     def unwrap(self, type):
         type = self.resolve(type)
@@ -40,18 +57,19 @@ class TypeResolver:
     def _field_list(self, field_list):
         fields = []
 
-        if not field_list:
+        if not field_list or not hasattr(field_list, "members"):
             return fields
 
         for member in field_list.members:
             if isinstance(member, FieldListIndex):
-                fields.extend(
-                    self._field_list(self.resolve(member.type))
-                )
-            else:
+                fields.extend(self._field_list(self.resolve(member.type)))
+            elif self.is_data_member(member):
                 fields.append(member)
 
         return fields
+
+    def is_data_member(self, member):
+        return isinstance(member, DataMember)
 
     def get_dependencies(self, dt):
 
@@ -115,16 +133,31 @@ class TypeResolver:
         return pointers
 
     def name(self, type):
-        type = self.resolve(type)
-        if hasattr(type, "name"):
-            if not type.name:
-                return "unnamed"
-            return type.name
+        if not type:
+            return "none"
+        type_resolved = self.resolve(type)
+        if not type_resolved:
+            return str(type.index)
+        if hasattr(type_resolved, "name"):
+            if not type_resolved.name:
+                return "unnamed_" + str(type_resolved.index)
+            return type_resolved.name
         else:
-            return "unnamed"
+            return "unnamed_" + str(type_resolved.index)
 
     def c_name(self, dt):
-        name = self.name(dt)
+        name = ""
+
+        if isinstance(dt, ModifierType):
+            name += "const " if dt.const else ""
+            name += "volatile " if dt.volatile else ""
+            name += "unaligned " if dt.unaligned else ""
+            dt = self.resolve(dt.underlying)
+        elif hasattr(dt, "underlying"):
+            name += "type_" + str(dt.index) + "_with_"
+            dt = dt.underlying
+
+        name += self.name(dt)
 
         if ":" in name:
             name = name.split(":")[0]
@@ -134,3 +167,13 @@ class TypeResolver:
         name = convert_type(name)
 
         return name
+
+    def is_forward_reference(self, type):
+        type = self.resolve(type)
+
+        return (
+                isinstance(type, (StructureType, UnionType))
+                and bool(type.properties & CV_PROP_FWDREF)
+        )
+
+CV_PROP_FWDREF = 0x80

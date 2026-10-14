@@ -3,7 +3,7 @@ from typing import Callable, Any
 from PDB.codeview.types.type_names import *
 
 from PDB.binary_reader import BinaryReader, TypeRef
-from .types.padding import consume_padding, is_padding_start
+from PDB.codeview.types.padding import consume_padding, is_padding_start
 
 
 class TPIHeader:
@@ -157,13 +157,13 @@ class TPI:
                 reader,
                 header.minimum_type_index
         ):
-            print(
-                f"index={record.index:#x}: "
-                f"pos={record.position:#x}, "
-                f"kind={record.kind:#x}, "
-                f"name={kind_name(record.kind)}, "
-                f"({len(record.data):#x} bytes)"
-            )
+            # print(
+            #     f"index={record.index:#x}: "
+            #     f"pos={record.position:#x}, "
+            #     f"kind={record.kind:#x}, "
+            #     f"name={kind_name(record.kind)}, "
+            #     f"({len(record.data):#x} bytes)"
+            # )
             try:
                 parsed_record = parse_type_record(record)
                 self.types[record.index] = parsed_record
