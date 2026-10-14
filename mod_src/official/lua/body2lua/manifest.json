@@ -1,0 +1,7 @@
+{
+  "name": "Body2Lua",
+  "description": "Converts creature body plans to lua tables and back.",
+  "version_number": "1.0.2",
+  "website_url": "https://github.com/u0068/PrimordialisSDK",
+  "dependencies": ["u0068-Luasome-1.0.3"]
+}
