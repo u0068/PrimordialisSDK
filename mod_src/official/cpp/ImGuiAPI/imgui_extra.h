@@ -5,9 +5,7 @@
 
 enum ImGuiExtraColorEditFlags_ {
     ImGuiExtraColorEditFlags_PrimordialisStyle =
-    ImGuiColorEditFlags_Float | ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_AlphaBar,
-    ImGuiExtraColorEditFlags_AllInputs =
-    ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_InputHSV
+    ImGuiColorEditFlags_Float | ImGuiColorEditFlags_PickerHueWheel | ImGuiColorEditFlags_AlphaBar
 };
 
 namespace ImGuiExtra {

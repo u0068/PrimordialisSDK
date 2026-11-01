@@ -19,8 +19,7 @@ inline void DrawUI() {
 
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigColorEditFlags =
-            ImGuiExtraColorEditFlags_PrimordialisStyle | ImGuiExtraColorEditFlags_AllInputs |
-            ImGuiColorEditFlags_DisplayRGB;
+            ImGuiExtraColorEditFlags_PrimordialisStyle | ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_DisplayRGB;
 
     DrawMaterialsEditor();
     DrawBiomeTypesEditor();

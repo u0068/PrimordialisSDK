@@ -30,7 +30,7 @@ void OnInitBiomeTypes() {
     // Here we define the biome type, which controls *HOW* it generates
     auto* new_biome_type = P::new_biome_type();
     new_biome_type->id = P::str_to_id("TEST"); // TODO: Generate unique biome ids
-    new_biome_type->color = {1.0, 1.0, 0.5}; // Background color, float RGB
+    new_biome_type->color = {.x = 1.0, .y = 1.0, .z = 0.5}; // Background color, float RGB
     new_biome_type->light = 1.0f; // Ambient light brightness
     // new_biome_type->flags = 1; // Safe zone
     new_biome_type->bumpyness = 5.0f; // Fine wall bumpiness
@@ -79,14 +79,14 @@ P::biome_core* OnCreateBiomeCore(int id, int size) {
     auto node_2 = P::add_biome_node(biome_core); // New node for our biome
     P::biome_edge new_edge{
         nullptr, nullptr,
-        {1, 0},
+        {.x = 1, .y = 0},
         200,
         0.2,
         0.05f,
         0,
         0
     };
-    P::add_biome_edge(node_1, node_2, {1, 0}, &new_edge);
+    P::add_biome_edge(node_1, node_2, {.x = 1, .y = 0}, &new_edge);
 
     P::biome_entrance entrance{
         0, 0, 0, 0, 0, 0, 0, 0,

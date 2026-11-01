@@ -4,8 +4,6 @@
 
 #include "mods.h"
 #include "nucleus_api.h"
-#include "include/plasmid_log.h"
-#include "internal/nucleus_interface.h"
 #include "yaml-cpp/yaml.h"
 
 namespace fs = std::filesystem;

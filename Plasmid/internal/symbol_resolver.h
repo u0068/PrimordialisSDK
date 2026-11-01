@@ -53,7 +53,7 @@ namespace P {
     };
 
     namespace Internal {
-        uint64_t GetModuleBaseAddress(const char* moduleName) {
+        inline uint64_t GetModuleBaseAddress(const char* moduleName) {
             HMODULE hModule = GetModuleHandleA(moduleName);
             if (!hModule) return 0;
 
