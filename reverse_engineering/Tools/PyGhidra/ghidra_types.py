@@ -1,4 +1,10 @@
 #@category PrimordialisSDK
+import ghidra.program.model.data.DataType
+import ghidra.program.model.data.SourceArchive
+def inspect_source_metadata(dt):
+    print("\nDatatype:", dt.getName())
+    print("\nSource:", dt.getPathName())
+
 class TypeExporter:
 
     def __init__(self, currentProgram):
@@ -20,6 +26,7 @@ class TypeExporter:
         def recurse(cat):
 
             for dt in cat.getDataTypes():
+                inspect_source_metadata(dt)
                 result.append(dt)
 
             for sub in cat.getCategories():

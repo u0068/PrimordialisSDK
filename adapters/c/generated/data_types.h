@@ -616,17 +616,6 @@ typedef struct print_buffer_t
     char* buffer;
 } print_buffer_t;
 
-// typedef struct lfClass2
-// {
-//     uint16_t leaf;
-//     CV_prop32_t property;
-//     uint64_t field;
-//     uint64_t derived;
-//     uint64_t vshape;
-//     uint16_t count;
-//     uint8_t data;
-// } lfClass2;
-
 typedef struct texture_t
 {
     uint32_t handle;
@@ -1616,14 +1605,6 @@ typedef struct button_out
     bool clicked;
     bool hovered;
 } button_out;
-
-// typedef struct pow_log_data
-// {
-//     double ln2hi;
-//     double ln2lo;
-//     double poly[7];
-//     unnamed_0092 tab[128];
-// } pow_log_data;
 
 typedef struct material_t
 {
@@ -3160,11 +3141,11 @@ typedef struct static_cell
     uint32_t open_sides;
 } static_cell;
 
-// typedef struct type_info
-// {
-//     int64_t _padding_;
-//     __std_type_info_data _Data;
-// } type_info;
+typedef struct type_info
+{
+    int64_t _padding_;
+    __std_type_info_data _Data;
+} type_info;
 
 typedef union float_conv
 {
@@ -3552,6 +3533,10 @@ typedef struct cell_render_info
     real_2 uv;
     uint32_t open_sides;
 } cell_render_info;
+
+typedef struct in_place_t
+{
+} in_place_t;
 
 typedef struct tss_global_data_t
 {

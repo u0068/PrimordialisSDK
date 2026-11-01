@@ -1,0 +1,41 @@
+-- Workaround for until I add proper config support
+-- This file requires manual editing, and you need to respect lua's syntax
+-- Make sure that you spell everything correctly and don't miss any punctuation!
+-- Anything after -- is ignored
+
+return {
+	player_spawnrate = 0.01,	-- Chance for extra players to spawn naturally in the start zone, to allow for survival mode co-op.
+	binds = {
+		{ -- one extra player
+			FORWARD="UP",
+			BACKWARD="DOWN",
+			LEFT="LEFT",
+			RIGHT="RIGHT",
+			ABILITY1="B",
+			ABILITY2="N",
+			ABILITY3="M",
+			SEEK="COMMA",
+			HIDE="PERIOD",
+			COPY_BODYPLAN="C",
+			MUTATIONS={ -- see data/scripts/mutations.lua for the list of mutations. beware that some may be broken
+				"OVERCHARGE", -- To add a mutation, just add its name to the mutations list
+			}
+		},
+		{ -- another extra player
+			FORWARD="Y",
+			BACKWARD="H",
+			LEFT="G",
+			RIGHT="J",
+			ABILITY1="U",
+			ABILITY2="I",
+			ABILITY3="O",
+			SEEK="R",
+			HIDE="T",
+			COPY_BODYPLAN="K",
+			MUTATIONS={ -- you can have multiple mutations like this
+				"BIGGER",
+				"EXPLOSIVE_RES",
+			}
+		},
+	},
+}
