@@ -3,7 +3,7 @@
 
 inline bool reset_mats_on_reload = false;
 inline bool has_initialised_mats = false;
-constexpr int n_vanilla_mats = 86;
+constexpr int n_vanilla_mats = 88;
 
 inline P::material_t CopyMaterial(P::material_t mat) {
     auto buffer = new char{};

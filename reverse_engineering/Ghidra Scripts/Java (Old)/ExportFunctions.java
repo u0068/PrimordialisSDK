@@ -234,7 +234,8 @@ public class ExportFunctions extends GhidraScript {
             "add_entry",
             "body_auxiliary_data",
             "log_printf",
-            "get_material_index"
+            "get_material_index",
+            "get_creature_index"
             ))
             return "essential";
 

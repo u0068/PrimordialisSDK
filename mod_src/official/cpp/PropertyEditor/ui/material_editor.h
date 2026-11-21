@@ -73,6 +73,7 @@ inline void DrawMaterialEditor(int idx, P::material_t& mat) {
             ImGui::DragFloat("drag", &mat.drag, speed);
             ImGui::DragFloat("tangent_drag", &mat.tangent_drag, speed);
             ImGui::DragFloat("movement_force", &mat.movement_force, speed);
+            ImGui::DragFloat("base_radius", &mat.base_radius, speed);
             ImGui::CheckboxFlags("is_hard", &mat.flags, 1 << 11);
 
             ImGui::TreePop();

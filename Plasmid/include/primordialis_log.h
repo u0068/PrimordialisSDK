@@ -4,7 +4,7 @@
 namespace P {
     // Writes to the primoridalis log
     // There is almost no reason to use this instead of P::Log(), which prints to both console and mod_log.txt
-    inline int PrimordialisLog(std::string text) {
+    inline int PrimordialisLog(const std::string& text) {
         return log_printf(text.c_str());
     }
 
