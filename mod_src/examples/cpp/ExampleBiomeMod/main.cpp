@@ -2,14 +2,15 @@
 #include "plasmid_api.h"
 #include "generated/game_functions/world.h"
 #include "generated/game_functions/creatures.h"
+#include "generated/game_functions/sound.h"
 
-const int SONG_INDEX = 15; // Vanilla songs use indices up to 14. Mods should use different indices to be compatible. The next Nucleus version will make them automatically use compatible indices.  
+const int SONG_INDEX = 15; // Vanilla songs use indices up to 14. Mods should use different indices to be compatible. A future Nucleus version will make them automatically use compatible indices.
 
 void OnLoadSounds() {
     P::Next<void>();
 
     P::looping_sound new_song{};
-    new_song.sound = P::LoadOgg("data/sounds/player-death-musical-elements.ogg");
+    new_song.sound = P::load_ogg("data/sounds/player-death-musical-elements.ogg"); // Example uses the death music
     new_song.type = 1;
     new_song.pos = 0.0;
     new_song.lerp_rate = 1e-5f;

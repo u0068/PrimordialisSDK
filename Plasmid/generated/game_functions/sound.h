@@ -8,8 +8,8 @@ namespace P
 inline void toggle_fullscreen() { return Resolve<void(*)()>("toggle_fullscreen")(); }
 inline bool find_audio_device() { return Resolve<bool(*)()>("find_audio_device")(); }
 inline ulong audio_proc(void* param_1) { return Resolve<ulong(*)(void*)>("audio_proc")(param_1); }
-inline sound_t* load_ogg(sound_t* __return_storage_ptr__, char* param_1) { return Resolve<sound_t*(*)(sound_t*, char*)>("load_ogg")(__return_storage_ptr__, param_1); }
-inline sound_t* load_ogg_memory(sound_t* __return_storage_ptr__, uchar* param_1, long64 param_2) { return Resolve<sound_t*(*)(sound_t*, uchar*, long64)>("load_ogg_memory")(__return_storage_ptr__, param_1, param_2); }
+inline sound_t load_ogg(const char* param_1) { return Resolve<sound_t(*)(const char*)>("load_ogg")(param_1); }
+inline sound_t load_ogg_memory(uchar* param_1, long64 param_2) { return Resolve<sound_t(*)(uchar*, long64)>("load_ogg_memory")(param_1, param_2); }
 inline void play_sound(sound_t* param_1, sound_params* param_2) { return Resolve<void(*)(sound_t*, sound_params*)>("play_sound")(param_1, param_2); }
 inline void adjust_sound_loop(looping_sound* param_1, float param_2) { return Resolve<void(*)(looping_sound*, float)>("adjust_sound_loop")(param_1, param_2); }
 inline void set_music_volume(float param_1) { return Resolve<void(*)(float)>("set_music_volume")(param_1); }
