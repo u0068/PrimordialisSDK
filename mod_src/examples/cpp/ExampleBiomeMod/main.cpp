@@ -61,7 +61,7 @@ void OnInitBiomeTypes() {
 
 void AddTestBiome() {
     auto biome_core = P::create_biome_core(P::str_to_id("TEST"), 1000);
-    auto node_1 = &P::w->map.biome_nodes[P::w->map.n_biome_nodes - 1]; // Existing node at end of ICEE biome
+    auto node_1 = &P::w->map.biome_nodes[P::w->map.n_biome_nodes - 1]; // Existing node at end of the previous biome
     auto node_2 = P::add_biome_node(biome_core); // New node for our biome
     P::biome_edge new_edge{
         nullptr, nullptr,
