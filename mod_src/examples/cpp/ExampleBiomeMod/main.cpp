@@ -59,22 +59,7 @@ void OnInitBiomeTypes() {
     P::add_creature_spawn_chance(P::get_biome_index(new_biome_type->id), P::str_to_id("DUMY"), 0.1f, 1, 1.0f);
 }
 
-// This controls when we insert the biome
-static bool insert_biome = false;
-
-P::biome_core* OnCreateBiomeCore(int id, int size) {
-    // Here we define *WHERE* the biome generates
-
-    auto result = P::Next<P::biome_core *>(id, size);
-    // Execute the hook AFTER the specified biome is defined, so the last node is in a known location
-    if (id == P::str_to_id("ICEE")) {
-        insert_biome = true;
-        return result;
-    }
-    if (not insert_biome)
-        return result;
-    insert_biome = false;
-
+void AddTestBiome() {
     auto biome_core = P::create_biome_core(P::str_to_id("TEST"), 1000);
     auto node_1 = &P::w->map.biome_nodes[P::w->map.n_biome_nodes - 1]; // Existing node at end of ICEE biome
     auto node_2 = P::add_biome_node(biome_core); // New node for our biome
@@ -94,7 +79,19 @@ P::biome_core* OnCreateBiomeCore(int id, int size) {
         0, 0, 1, 0, 1, 1, 0, 0
     };
     P::add_biome_entrance(biome_core, biome_core - 2, &entrance);
+}
 
+static int prev_biome = 0;
+P::biome_core* OnCreateBiomeCore(int id, int size) {
+    auto result = P::Next<P::biome_core *>(id, size);
+
+    // Here we define *WHERE* the biome generates
+    // Execute the hook AFTER the specified biome is defined, so the last node is in a known location
+    if (prev_biome == P::str_to_id("ICEE")) {
+        AddTestBiome();
+    }
+
+    prev_biome = id;
     return result;
 }
 
